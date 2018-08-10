@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    cocoon (1.2.8)
+    cocoon (1.2.11)
 
 GEM
   remote: http://rubygems.org/
