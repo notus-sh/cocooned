@@ -1,27 +1,17 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
 require 'nokogiri'
 
-describe Cocoon do
-  class TestClass < ActionView::Base
-  end
-
-  subject { TestClass.new }
-
-  it { is_expected.to respond_to(:link_to_add_association) }
-  it { is_expected.to respond_to(:link_to_remove_association) }
-
+describe Cocoon::Helpers do
   before(:each) do
-    @tester = TestClass.new
+    @tester = Class.new(ActionView::Base).new
     @post = Post.new
     @form_obj = double(object: @post, object_name: @post.class.name)
   end
 
   context 'link_to_add_association' do
     before(:each) do
-      allow(@tester).to receive(:render_association)
-        .and_return('form<tag>')
+      allow(@tester).to receive(:render_association).and_return('form<tag>')
     end
 
     context 'without a block' do
@@ -73,12 +63,12 @@ describe Cocoon do
             .and_call_original
           expect(@tester).to receive(:render_association)
             .with(anything, anything, anything, 'f', anything, 'shared/partial')
-            .and_return('partiallll')
+            .and_return('partial')
           @html = @tester.link_to_add_association('add something', @form_obj, :comments, partial: 'shared/partial')
         end
 
         it_behaves_like 'a correctly rendered add link',
-                        template: 'partiallll'
+                        template: 'partial'
       end
 
       it 'gives an opportunity to wrap/decorate created objects' do
@@ -178,7 +168,7 @@ describe Cocoon do
             .and_call_original
           expect(@tester).to receive(:render_association)
             .with(anything, anything, anything, 'f', anything, 'shared/partial')
-            .and_return('partiallll')
+            .and_return('partial')
           @html = @tester.link_to_add_association(@form_obj, :comments, class: 'floppy disk', partial: 'shared/partial') do
             'some long name'
           end
@@ -186,148 +176,8 @@ describe Cocoon do
 
         it_behaves_like 'a correctly rendered add link',
                         class: 'floppy disk add_fields',
-                        template: 'partiallll',
+                        template: 'partial',
                         text: 'some long name'
-      end
-    end
-
-    context 'with an irregular plural' do
-      context 'uses the correct plural' do
-        before do
-          @html = @tester.link_to_add_association('add something', @form_obj, :people)
-        end
-        it_behaves_like 'a correctly rendered add link',
-                        association: 'person',
-                        associations: 'people'
-      end
-    end
-
-    context 'when using aliased association and class-name' do
-      context 'uses the correct name' do
-        before do
-          @html = @tester.link_to_add_association('add something', @form_obj, :admin_comments)
-        end
-        it_behaves_like 'a correctly rendered add link',
-                        association: 'admin_comment',
-                        associations: 'admin_comments'
-      end
-    end
-
-    it 'tttt' do
-      expect(@post.class.reflect_on_association(:people).klass.new).to be_a(Person)
-    end
-
-    context 'with extra render-options for rendering the child relation' do
-      context 'uses the correct plural' do
-        before do
-          expect(@tester).to receive(:render_association)
-            .with(:people, @form_obj, anything, 'f', { wrapper: 'inline' }, nil)
-          @html = @tester.link_to_add_association('add something', @form_obj, :people, render_options: { wrapper: 'inline' })
-        end
-        it_behaves_like 'a correctly rendered add link',
-                        association: 'person',
-                        associations: 'people'
-      end
-    end
-
-    context 'passing locals to the partial' do
-      context 'when given: passes the locals to the partials' do
-        before do
-          allow(@tester).to receive(:render_association)
-            .and_call_original
-          expect(@form_obj).to receive(:fields_for) { |_assoc, _object, _options, &block| block.call }
-          expect(@tester).to receive(:render)
-            .with('person_fields', f: nil, dynamic: true, alfred: 'Judoka')
-            .and_return 'partiallll'
-          @html = @tester.link_to_add_association('add something',
-                                                  @form_obj,
-                                                  :people,
-                                                  render_options: {
-                                                    wrapper: 'inline',
-                                                    locals: { alfred: 'Judoka' }
-                                                  })
-        end
-        it_behaves_like 'a correctly rendered add link',
-                        template: 'partiallll',
-                        association: 'person',
-                        associations: 'people'
-      end
-      context 'if no locals are given it still works' do
-        before do
-          allow(@tester).to receive(:render_association)
-            .and_call_original
-          expect(@form_obj).to receive(:fields_for) { |_assoc, _object, _options, &block| block.call }
-          expect(@tester).to receive(:render)
-            .with('person_fields', f: nil, dynamic: true)
-            .and_return 'partiallll'
-          @html = @tester.link_to_add_association('add something', @form_obj, :people, render_options: { wrapper: 'inline' })
-        end
-        it_behaves_like 'a correctly rendered add link',
-                        template: 'partiallll',
-                        association: 'person',
-                        associations: 'people'
-      end
-    end
-
-    context 'overruling the form parameter name' do
-      context 'when given a form_name it passes it correctly to the partials' do
-        before do
-          allow(@tester).to receive(:render_association)
-            .and_call_original
-          expect(@form_obj).to receive(:fields_for) { |_assoc, _object, _options, &block| block.call }
-          expect(@tester).to receive(:render)
-            .with('person_fields', people_form: nil, dynamic: true)
-            .and_return 'partiallll'
-          @html = @tester.link_to_add_association('add something', @form_obj, :people, form_name: 'people_form')
-        end
-        it_behaves_like 'a correctly rendered add link',
-                        template: 'partiallll',
-                        association: 'person',
-                        associations: 'people'
-      end
-    end
-
-    context 'when using formtastic' do
-      before(:each) do
-        allow(@tester).to receive(:render_association)
-          .and_call_original
-        allow(@form_obj).to receive(:semantic_fields_for)
-          .and_return('form<tagzzz>')
-      end
-      context 'calls semantic_fields_for and not fields_for' do
-        before do
-          allow(@form_obj).to receive_message_chain(:class, :ancestors) { ['Formtastic::FormBuilder'] }
-          expect(@form_obj).to receive(:semantic_fields_for)
-          expect(@form_obj).to receive(:fields_for).never
-          @html = @tester.link_to_add_association('add something', @form_obj, :people)
-        end
-        it_behaves_like 'a correctly rendered add link',
-                        template: 'form<tagzzz>',
-                        association: 'person',
-                        associations: 'people'
-      end
-    end
-    context 'when using simple_form' do
-      before(:each) do
-        allow(@tester).to receive(:render_association)
-          .and_call_original
-        allow(@form_obj).to receive(:simple_fields_for)
-          .and_return('form<tagxxx>')
-      end
-      it 'responds_to :simple_fields_for' do
-        expect(@form_obj).to respond_to(:simple_fields_for)
-      end
-      context 'calls simple_fields_for and not fields_for' do
-        before do
-          allow(@form_obj).to receive_message_chain(:class, :ancestors) { ['SimpleForm::FormBuilder'] }
-          expect(@form_obj).to receive(:simple_fields_for)
-          expect(@form_obj).to receive(:fields_for).never
-          @html = @tester.link_to_add_association('add something', @form_obj, :people)
-        end
-        it_behaves_like 'a correctly rendered add link',
-                        template: 'form<tagxxx>',
-                        association: 'person',
-                        associations: 'people'
       end
     end
 
@@ -465,66 +315,6 @@ describe Cocoon do
         it_behaves_like 'a correctly rendered remove link',
                         extra_attributes: { 'data-wrapper-class' => 'another-class' }
       end
-    end
-  end
-
-  context 'create_object' do
-    it 'creates correct association with conditions' do
-      expect(@tester).not_to receive(:create_object_with_conditions)
-      # in rails4 we cannot create an associated object when the object has not been saved before
-      # I submitted a bug for this: https://github.com/rails/rails/issues/11376
-      @post = Post.create(title: 'Testing')
-      @form_obj = double(object: @post, object_name: @post.class.name)
-
-      result = @tester.create_object(@form_obj, :admin_comments)
-      expect(result.author).to eq('Admin')
-      expect(@form_obj.object.admin_comments).to be_empty
-    end
-
-    it 'creates correct association for belongs_to associations' do
-      comment  = Comment.new
-      form_obj = double(object: Comment.new)
-      result   = @tester.create_object(form_obj, :post)
-      expect(result).to be_a Post
-      expect(comment.post).to be_nil
-    end
-
-    it 'creates an object if cannot reflect on association' do
-      object = double('AnyNonActiveRecordObject')
-      expect(object).to receive(:build_non_reflectable)
-        .and_return 'custom'
-      expect(@tester.create_object(double(object: object), :non_reflectable)).to eq('custom')
-    end
-
-    it "creates an association if object responds to 'build_association' as singular" do
-      object = Comment.new
-      expect(object).to receive(:build_custom_item)
-        .and_return 'custom'
-      expect(@tester.create_object(double(object: object), :custom_item)).to eq('custom')
-    end
-
-    it "creates an association if object responds to 'build_association' as plural" do
-      object = Comment.new
-      expect(object).to receive(:build_custom_item)
-        .and_return 'custom'
-      expect(@tester.create_object(double(object: object), :custom_items)).to eq('custom')
-    end
-
-    it 'can create using only conditions not the association' do
-      expect(@tester).to receive(:create_object_with_conditions)
-        .and_return('flappie')
-      expect(@tester.create_object(@form_obj, :comments, true)).to eq('flappie')
-    end
-  end
-
-  context 'get_partial_path' do
-    it 'generates the default partial name if no partial given' do
-      result = @tester.get_partial_path(nil, :admin_comments)
-      expect(result).to eq('admin_comment_fields')
-    end
-    it 'uses the given partial name' do
-      result = @tester.get_partial_path('comment_fields', :admin_comments)
-      expect(result).to eq('comment_fields')
     end
   end
 end

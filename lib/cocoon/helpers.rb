@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Cocoon
-  module ViewHelpers
+  module Helpers
     # this will show a link to remove the current association. This should be placed inside the partial.
     # either you give
     # - *name* : the text of the link
@@ -149,8 +149,6 @@ module Cocoon
       if instance.class.name == 'Mongoid::Relations::Metadata' || force_non_association_create
         create_object_with_conditions(instance)
       else
-        assoc_obj = nil
-
         # assume ActiveRecord or compatible
         if instance.collection?
           assoc_obj = form.object.send(association).build
@@ -161,7 +159,6 @@ module Cocoon
         end
 
         assoc_obj = assoc_obj.dup if assoc_obj.frozen?
-
         assoc_obj
       end
     end

@@ -7,7 +7,7 @@ gemspec
 
 group :development, :test do
   gem 'nokogiri'
-  gem 'rails', '~> 4.2'
+  gem 'rails', '~> 4.0'
   gem 'simplecov', require: false
   gem 'sqlite3'
 end
