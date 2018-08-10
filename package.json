@@ -10,6 +10,9 @@
   "main": "app/assets/javascripts/cocoon.js",
   "files": ["app/assets/javascripts"],
   "bugs": { "url": "https://github.com/notus-sh/cocoon/issues" },
+  "dependencies": {
+    "jquery": "^3.3.1"
+  },
   "devDependencies": {
     "eslint": "^4.19.1",
     "eslint-config-standard": "^11.0.0",
