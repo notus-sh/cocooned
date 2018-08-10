@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CommentDecorator
   def initialize(comment)
     @comment = comment

@@ -1,15 +1,15 @@
+# frozen_string_literal: true
+
 module Cocoon
   module ViewHelpers
-
-
     # this will show a link to remove the current association. This should be placed inside the partial.
     # either you give
     # - *name* : the text of the link
-    # - *f* : the form this link should be placed in
+    # - *form* : the form this link should be placed in
     # - *html_options*:  html options to be passed to link_to (see <tt>link_to</tt>)
     #
     # or you use the form without *name* with a *&block*
-    # - *f* : the form this link should be placed in
+    # - *form* : the form this link should be placed in
     # - *html_options*:  html options to be passed to link_to (see <tt>link_to</tt>)
     # - *&block*:        the output of the block will be show in the link, see <tt>link_to</tt>
 
@@ -23,32 +23,39 @@ module Cocoon
 
         link_to_remove_association(name, *args)
       else
-        name, f, html_options = *args
+        name, form, html_options = *args
         html_options ||= {}
 
-        is_dynamic = f.object.new_record?
+        is_dynamic = form.object.new_record?
 
         classes = []
-        classes << "remove_fields"
+        classes << 'remove_fields'
         classes << (is_dynamic ? 'dynamic' : 'existing')
-        classes << 'destroyed' if f.object.marked_for_destruction?
+        classes << 'destroyed' if form.object.marked_for_destruction?
         html_options[:class] = [html_options[:class], classes.join(' ')].compact.join(' ')
 
         wrapper_class = html_options.delete(:wrapper_class)
         html_options[:'data-wrapper-class'] = wrapper_class if wrapper_class.present?
 
-        hidden_field_tag("#{f.object_name}[_destroy]", f.object._destroy) + link_to(name, '#', html_options)
+        hidden_field_tag("#{form.object_name}[_destroy]", form.object._destroy) + link_to(name, '#', html_options)
       end
     end
 
     # :nodoc:
-    def render_association(association, f, new_object, form_name, render_options={}, custom_partial=nil)
+    def render_association(association, form, new_object, form_name, render_options = {}, custom_partial = nil)
       partial = get_partial_path(custom_partial, association)
       locals =  render_options.delete(:locals) || {}
-      ancestors = f.class.ancestors.map{|c| c.to_s}
-      method_name = ancestors.include?('SimpleForm::FormBuilder') ? :simple_fields_for : (ancestors.include?('Formtastic::FormBuilder') ? :semantic_fields_for : :fields_for)
-      f.send(method_name, association, new_object, {:child_index => "new_#{association}"}.merge(render_options)) do |builder|
-        partial_options = {form_name.to_sym => builder, :dynamic => true}.merge(locals)
+      ancestors = form.class.ancestors.map(&:to_s)
+      method_name = if ancestors.include?('SimpleForm::FormBuilder')
+                      :simple_fields_for
+                    elsif ancestors.include?('Formtastic::FormBuilder')
+                      :semantic_fields_for
+                    else
+                      :fields_for
+                    end
+
+      form.send(method_name, association, new_object, { child_index: "new_#{association}" }.merge(render_options)) do |builder|
+        partial_options = { form_name.to_sym => builder, :dynamic => true }.merge(locals)
         render(partial, partial_options)
       end
     end
@@ -56,7 +63,7 @@ module Cocoon
     # shows a link that will allow to dynamically add a new associated object.
     #
     # - *name* :         the text to show in the link
-    # - *f* :            the form this should come in (the formtastic form)
+    # - *form* :            the form this should come in (the formtastic form)
     # - *association* :  the associated objects, e.g. :tasks, this should be the name of the <tt>has_many</tt> relation.
     # - *html_options*:  html options to be passed to <tt>link_to</tt> (see <tt>link_to</tt>)
     #          - *:render_options* : options passed to `simple_fields_for, semantic_fields_for or fields_for`
@@ -77,7 +84,7 @@ module Cocoon
 
         link_to_add_association(name, *args)
       else
-        name, f, association, html_options = *args
+        name, form, association, html_options = *args
         html_options ||= {}
 
         render_options   = html_options.delete(:render_options)
@@ -89,19 +96,26 @@ module Cocoon
         count = html_options.delete(:count).to_i
         limit = html_options.delete(:limit).to_i
 
-        html_options[:class] = [html_options[:class], "add_fields"].compact.join(' ')
+        html_options[:class] = [html_options[:class], 'add_fields'].compact.join(' ')
         html_options[:'data-association'] = association.to_s.singularize
         html_options[:'data-associations'] = association.to_s.pluralize
 
-        new_object = create_object(f, association, force_non_association_create)
+        new_object = create_object(form, association, force_non_association_create)
         new_object = wrap_object.call(new_object) if wrap_object.respond_to?(:call)
 
-        content = CGI.escapeHTML(render_association(association, f, new_object, form_parameter_name, render_options, override_partial).to_str).html_safe
+        rendered = render_association(association,
+                                      form,
+                                      new_object,
+                                      form_parameter_name,
+                                      render_options,
+                                      override_partial)
+        content = CGI.escapeHTML(rendered.to_str).html_safe
+
         html_options[:'data-association-insertion-template'] = content
         html_options[:'data-wrapper-class'] = /(?<=class=["'])[^"^']*(?=["'])/.match(content)
-        
-        html_options[:'data-count'] = count if count > 0
-        html_options[:'data-limit'] = limit if limit > 0
+
+        html_options[:'data-count'] = count if count.positive?
+        html_options[:'data-limit'] = limit if limit.positive?
 
         link_to(name, '#', html_options)
       end
@@ -111,37 +125,39 @@ module Cocoon
     # `` has_many :admin_comments, class_name: "Comment", conditions: { author: "Admin" }
     # will create new Comment with author "Admin"
 
-    def create_object(f, association, force_non_association_create=false)
-      klass = f.object.class
+    def create_object(form, association, force_non_association_create = false)
+      klass = form.object.class
       assoc = klass.respond_to?(:reflect_on_association) ? klass.reflect_on_association(association) : nil
-      assoc ? create_object_on_association(f, association, assoc, force_non_association_create) : create_object_on_non_association(f, association)
+
+      return create_object_on_association(form, association, assoc, force_non_association_create) if assoc
+      create_object_on_non_association(form, association)
     end
 
     def get_partial_path(partial, association)
-      partial ? partial : association.to_s.singularize + "_fields"
+      partial || association.to_s.singularize + '_fields'
     end
 
     private
 
-    def create_object_on_non_association(f, association)
-      builder_method = %W{build_#{association} build_#{association.to_s.singularize}}.select { |m| f.object.respond_to?(m) }.first
-      return f.object.send(builder_method) if builder_method
-      raise "Association #{association} doesn't exist on #{f.object.class}"
+    def create_object_on_non_association(form, association)
+      builder_method = %W[build_#{association} build_#{association.to_s.singularize}].select { |m| form.object.respond_to?(m) }.first
+      return form.object.send(builder_method) if builder_method
+      raise "Association #{association} doesn't exist on #{form.object.class}"
     end
 
-    def create_object_on_association(f, association, instance, force_non_association_create)
-      if instance.class.name == "Mongoid::Relations::Metadata" || force_non_association_create
+    def create_object_on_association(form, association, instance, force_non_association_create)
+      if instance.class.name == 'Mongoid::Relations::Metadata' || force_non_association_create
         create_object_with_conditions(instance)
       else
         assoc_obj = nil
 
         # assume ActiveRecord or compatible
         if instance.collection?
-          assoc_obj = f.object.send(association).build
-          f.object.send(association).delete(assoc_obj)
+          assoc_obj = form.object.send(association).build
+          form.object.send(association).delete(assoc_obj)
         else
-          assoc_obj = f.object.send("build_#{association}")
-          f.object.send(association).delete
+          assoc_obj = form.object.send("build_#{association}")
+          form.object.send(association).delete
         end
 
         assoc_obj = assoc_obj.dup if assoc_obj.frozen?
@@ -158,6 +174,5 @@ module Cocoon
       conditions = instance.respond_to?(:conditions) ? instance.conditions.flatten : []
       instance.klass.new(*conditions)
     end
-
   end
 end
