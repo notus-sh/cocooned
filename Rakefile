@@ -2,11 +2,16 @@
 
 require 'bundler/gem_tasks'
 
+# Test suites
 require 'rspec/core/rake_task'
 RSpec::Core::RakeTask.new
 
 task default: :spec
 
+require 'jasmine'
+load 'jasmine/tasks/jasmine.rake'
+
+# Linters
 require 'rubocop/rake_task'
 RuboCop::RakeTask.new do |task|
   task.options = ['--config', 'config/linters/ruby.yml']
@@ -27,6 +32,7 @@ task :eslint do
   system("yarnpkg run eslint #{eslint_args.join(' ')} #{eslint_path.join(' ')}")
 end
 
+# Documentation
 require 'rdoc/task'
 
 Rake::RDocTask.new(:rdoc) do |rdoc|

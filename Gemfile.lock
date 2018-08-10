@@ -61,6 +61,12 @@ GEM
     i18n (1.1.0)
       concurrent-ruby (~> 1.0)
     jaro_winkler (1.5.1)
+    jasmine (3.2.0)
+      jasmine-core (= 3.2.0)
+      phantomjs
+      rack (>= 1.2.1)
+      rake
+    jasmine-core (3.2.0)
     json (2.1.0)
     loofah (2.2.2)
       crass (~> 1.0.2)
@@ -80,6 +86,7 @@ GEM
     parallel (1.12.1)
     parser (2.5.1.2)
       ast (~> 2.4.0)
+    phantomjs (2.1.1.0)
     powerpack (0.1.2)
     rack (2.0.5)
     rack-test (1.1.0)
@@ -168,6 +175,7 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 1.16)
   cocoon!
+  jasmine (~> 3.2)
   nokogiri
   rails (~> 5.0)
   rake
