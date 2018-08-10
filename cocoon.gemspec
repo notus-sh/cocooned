@@ -28,9 +28,9 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'rails', '>= 4.0', '<= 6.0'
 
-  spec.add_development_dependency 'bundler',      '~> 1.16'
-  spec.add_development_dependency 'rspec',        '~> 3.8.0'
-  spec.add_development_dependency 'rspec-rails',  '~> 3.8.0'
+  spec.add_development_dependency 'bundler', '~> 1.16'
   spec.add_development_dependency 'rake'
+  spec.add_development_dependency 'rspec', '~> 3.8.0'
+  spec.add_development_dependency 'rspec-rails', '~> 3.8.0'
   spec.add_development_dependency 'rubocop'
 end

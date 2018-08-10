@@ -6,8 +6,8 @@ source 'http://rubygems.org'
 gemspec
 
 group :development, :test do
-  gem 'rails', '~> 4.2'
-  gem 'sqlite3'
   gem 'nokogiri'
+  gem 'rails', '~> 4.2'
   gem 'simplecov', require: false
+  gem 'sqlite3'
 end
