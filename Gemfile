@@ -10,14 +10,4 @@ group :development, :test do
   gem 'sqlite3'
   gem 'nokogiri'
   gem 'simplecov', require: false
-
-  platforms :rbx do
-    gem 'psych', '~> 2.2'
-    gem 'racc'
-    gem 'rubinius-coverage', '< 2.1'
-    gem 'rubinius-developer_tools'
-    gem 'rubysl'
-    gem 'rubysl-coverage', '< 2.1'
-    gem 'rubysl-test-unit'
-  end
 end

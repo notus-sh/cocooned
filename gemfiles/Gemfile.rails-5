@@ -5,12 +5,4 @@ group :development, :test do
   gem 'sqlite3'
   gem 'simplecov', :require => false
   gem 'nokogiri'
-
-  platforms :rbx do
-    gem 'rubysl'
-    gem 'rubysl-test-unit'
-    gem 'psych'
-    gem 'racc'
-    gem 'rubinius-developer_tools'
-  end
 end
