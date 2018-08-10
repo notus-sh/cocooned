@@ -14,27 +14,30 @@
     return '_' + id + '_$1';
   }
 
-  var getInsertionNodeElem = function(insertionNode, insertionTraversal, $this){
+  var getInsertionNodeElem = function(insertionNode, insertionTraversal, $this) {
 
-    if (!insertionNode){
+    if (!insertionNode) {
       return $this.parent();
     }
 
-    if (typeof insertionNode == 'function'){
-      if(insertionTraversal){
+    if (typeof insertionNode == 'function') {
+      if (insertionTraversal) {
         console.warn('association-insertion-traversal is ignored, because association-insertion-node is given as a function.')
       }
       return insertionNode($this);
     }
 
-    if(typeof insertionNode == 'string'){
-      if (insertionTraversal){
+    if (typeof insertionNode == 'string') {
+      if (insertionTraversal) {
         return $this[insertionTraversal](insertionNode);
-      }else{
+      } else {
         return insertionNode == "this" ? $this : $(insertionNode);
       }
     }
+  }
 
+  var nested_fields_counter = function(insertionNode, wrapperClass) {
+    return $(insertionNode).children('.' + wrapperClass).length;
   }
 
   $(document).on('click', '.add_fields', function(e) {
@@ -47,6 +50,8 @@
         insertionNode         = $this.data('association-insertion-node'),
         insertionTraversal    = $this.data('association-insertion-traversal'),
         count                 = parseInt($this.data('count'), 10),
+        limit                 = parseInt($this.data('limit'), 10),
+        wrapperClass          = $this.data('wrapper-class') || 'nested-fields',
         regexp_braced         = new RegExp('\\[new_' + assoc + '\\](.*?\\s)', 'g'),
         regexp_underscord     = new RegExp('_new_' + assoc + '_(\\w*)', 'g'),
         new_id                = create_new_id(),
@@ -83,6 +88,13 @@
 
     $.each(new_contents, function(i, node) {
       var contentNode = $(node);
+
+      if(!isNaN(limit) && nested_fields_counter(insertionNodeElem, wrapperClass) >= limit) {
+        var limit_reached = jQuery.Event('cocoon:lmit-reached');
+        insertionNodeElem.trigger(limit_reached, [contentNode]);
+
+        return false;
+      }
 
       var before_insert = jQuery.Event('cocoon:before-insert');
       insertionNodeElem.trigger(before_insert, [contentNode]);
