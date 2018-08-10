@@ -8,7 +8,24 @@ RSpec::Core::RakeTask.new
 task default: :spec
 
 require 'rubocop/rake_task'
-RuboCop::RakeTask.new
+RuboCop::RakeTask.new do |task|
+  task.options = ['--config', 'config/linters/ruby.yml']
+end
+
+eslint_args = ['--no-eslintrc', '--config config/linters/js.json']
+eslint_path = ['app/assets/**/*.js']
+
+namespace :eslint do
+  desc 'Auto-correct JavaScript files'
+  task :auto_correct do
+    system("yarnpkg run eslint #{(eslint_args + ['--fix']).join(' ')} #{eslint_path.join(' ')}")
+  end
+end
+
+desc 'Lint JavaScript code'
+task :eslint do
+  system("yarnpkg run eslint #{eslint_args.join(' ')} #{eslint_path.join(' ')}")
+end
 
 require 'rdoc/task'
 

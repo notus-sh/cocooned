@@ -9,5 +9,13 @@
   "author": "Gaël-Ian Havard <gael-ian@notus.sh>",
   "main": "app/assets/javascripts/cocoon.js",
   "files": ["app/assets/javascripts"],
-  "bugs": { "url": "https://github.com/notus-sh/cocoon/issues" }
+  "bugs": { "url": "https://github.com/notus-sh/cocoon/issues" },
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1"
+  }
 }

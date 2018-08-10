@@ -1,0 +1,47 @@
+{
+  "extends": "standard",
+  "env": {
+    "browser": true,
+    "jquery": true
+  },
+  "parserOptions": { "ecmaVersion": 5 },
+  "rules": {
+    // Force strict mode
+    "strict": ["error", "function"],
+
+    // Coding style
+    "semi": ["error", "always"], // Keep semi-colon, even if standard so we shouldn't
+    "semi-style": ["error", "last"],
+    "object-curly-newline": ["error", { "consistent": true }],
+    "object-curly-spacing": ["error", "always"],
+    "switch-colon-spacing": ["error"],
+    "linebreak-style": ["error"],
+
+    // Warn on code smells
+    "max-len": ["warn", { "code": 150 }],
+    "max-params": ["warn"],
+
+    // No dead code
+    "no-else-return": ["error"],
+    "no-empty-function": ["error"],
+    "no-empty-pattern": ["error"],
+    "no-unused-expressions": ["error"],
+    "no-lonely-if": ["error"],
+
+    // Prevent stupid errors
+    "array-callback-return": ["error"],
+    "guard-for-in": ["error"],
+    "no-invalid-this": ["error"],
+    "no-loop-func": ["error"],
+    "radix": ["error"],
+    "no-catch-shadow": ["error"],
+    "no-use-before-define": ["error"],
+
+    // Prevent stupid syntaxes
+    "no-useless-concat": ["error"],
+    "no-useless-return": ["error"],
+
+    // No debug code will be commited
+    "no-alert": ["error"]
+  }
+}
