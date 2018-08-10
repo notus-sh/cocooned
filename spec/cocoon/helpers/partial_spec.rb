@@ -7,7 +7,7 @@ describe Cocoon::Helpers do
     @tester = Class.new(ActionView::Base).new
   end
 
-  context 'get_partial_path' do
+  describe '#get_partial_path' do
     it 'generates the default partial name if no partial given' do
       result = @tester.get_partial_path(nil, :admin_comments)
       expect(result).to eq('admin_comment_fields')

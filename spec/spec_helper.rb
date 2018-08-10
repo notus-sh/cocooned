@@ -113,5 +113,8 @@ RSpec.configure do |config|
   # Kernel.srand config.seed
 end
 
+# Load shared examples
+Dir["#{File.dirname(__FILE__)}/shared_examples/**/*.rb"].each { |f| require f }
+
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }

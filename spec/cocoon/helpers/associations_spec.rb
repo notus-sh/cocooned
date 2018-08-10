@@ -9,7 +9,7 @@ describe Cocoon::Helpers do
     @form   = double(object: @person, object_name: @person.class.name)
   end
 
-  context 'link_to_add_association' do
+  describe '#link_to_add_association' do
     before(:each) do
       allow(@tester).to receive(:render_association)
         .and_return('form<tag>')
@@ -118,7 +118,7 @@ describe Cocoon::Helpers do
     end
   end
 
-  context 'create_object' do
+  describe '#create_object' do
     it 'creates correct association for belongs_to associations' do
       comment  = Comment.new
       form_obj = double(object: Comment.new)

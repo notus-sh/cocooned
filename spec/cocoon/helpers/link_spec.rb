@@ -9,7 +9,7 @@ describe Cocoon::Helpers do
     @form_obj = double(object: @post, object_name: @post.class.name)
   end
 
-  context 'link_to_add_association' do
+  describe '#link_to_add_association' do
     before(:each) do
       allow(@tester).to receive(:render_association).and_return('form<tag>')
     end
@@ -198,7 +198,7 @@ describe Cocoon::Helpers do
     end
   end
 
-  context 'link_to_remove_association' do
+  describe '#link_to_remove_association' do
     context 'without a block' do
       context 'accepts a name' do
         before do
