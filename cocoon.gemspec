@@ -1,16 +1,21 @@
-Gem::Specification.new do |s|
-  s.name = "cocoon"
-  s.version = "1.2.8"
+Gem::Specification.new do |spec|
+  spec.name = "cocoon"
+  spec.version = "1.2.8"
 
-  s.authors = ["Nathan Van der Auwera"]
-  s.email = "nathan@dixis.com"
+  spec.authors = ["Nathan Van der Auwera"]
+  spec.email = "nathan@dixis.com"
 
-  s.description = "Unobtrusive nested forms handling, using jQuery. Use this and discover cocoon-heaven."
-  s.summary = "gem that enables easier nested forms with standard forms, formtastic and simple-form"
-  s.homepage = "http://github.com/nathanvda/cocoon"
-  s.licenses = ["MIT"]
+  spec.description = "Unobtrusive nested forms handling, using jQuery. Use this and discover cocoon-heaven."
+  spec.summary = "gem that enables easier nested forms with standard forms, formtastic and simple-form"
+  spec.homepage = "http://github.com/nathanvda/cocoon"
+  spec.licenses = ["MIT"]
 
-  s.extra_rdoc_files = ["README.markdown"]
-  s.files = `git ls-files`.split("\n").sort
-  s.require_paths = ["lib"]
+  spec.extra_rdoc_files = ["README.markdown"]
+  spec.files = `git ls-files`.split("\n").sort
+  spec.require_paths = ["lib"]
+
+  spec.add_development_dependency 'rake'
+  spec.add_development_dependency 'bundler',      '~> 1.16'
+  spec.add_development_dependency 'rspec',        '~> 3.8.0'
+  spec.add_development_dependency 'rspec-rails',  '~> 3.8.0'
 end
