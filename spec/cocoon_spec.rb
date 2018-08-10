@@ -158,18 +158,17 @@ describe Cocoon do
                           text: 'some long name',
                           extra_attributes: { 'data-something' => 'bla' }
         end
-        if Rails.rails4?
-          context 'when using the new notation' do
-            before do
-              @html = @tester.link_to_add_association(@form_obj, :comments, class: 'floppy disk', data: { 'association-something': 'foobar' }) do
-                'some long name'
-              end
+
+        context 'when using the new notation' do
+          before do
+            @html = @tester.link_to_add_association(@form_obj, :comments, class: 'floppy disk', data: { 'association-something': 'foobar' }) do
+              'some long name'
             end
-            it_behaves_like 'a correctly rendered add link',
-                            class: 'floppy disk add_fields',
-                            text: 'some long name',
-                            extra_attributes: { 'data-association-something' => 'foobar' }
           end
+          it_behaves_like 'a correctly rendered add link',
+                          class: 'floppy disk add_fields',
+                          text: 'some long name',
+                          extra_attributes: { 'data-association-something' => 'foobar' }
         end
       end
 
@@ -474,10 +473,9 @@ describe Cocoon do
       expect(@tester).not_to receive(:create_object_with_conditions)
       # in rails4 we cannot create an associated object when the object has not been saved before
       # I submitted a bug for this: https://github.com/rails/rails/issues/11376
-      if Rails.rails4?
-        @post = Post.create(title: 'Testing')
-        @form_obj = double(object: @post, object_name: @post.class.name)
-      end
+      @post = Post.create(title: 'Testing')
+      @form_obj = double(object: @post, object_name: @post.class.name)
+
       result = @tester.create_object(@form_obj, :admin_comments)
       expect(result.author).to eq('Admin')
       expect(@form_obj.object.admin_comments).to be_empty

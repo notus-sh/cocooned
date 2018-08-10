@@ -6,13 +6,10 @@ source 'http://rubygems.org'
 gemspec
 
 group :development, :test do
-  gem 'json_pure'
   gem 'rails', '~> 4.2'
-  gem 'simplecov', require: false
   gem 'sqlite3'
-
-  gem 'generator_spec'
   gem 'nokogiri'
+  gem 'simplecov', require: false
 
   platforms :rbx do
     gem 'psych', '~> 2.2'

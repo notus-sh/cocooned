@@ -1,0 +1,8 @@
+source 'http://rubygems.org'
+
+group :development, :test do
+  gem 'rails', '~> 4.0.2'
+  gem 'sqlite3'
+  gem 'simplecov', :require => false
+  gem 'nokogiri'
+end
