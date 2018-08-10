@@ -1,17 +1,13 @@
 {
   "name": "cocoon",
-  "version": "1.2.10",
+  "version": "1.2.8",
   "private": true,
-  "description": "Dynamic nested forms using jQuery made easy; works with formtastic, simple_form or default forms",
+  "license": "APACHE-2.0",
+  "description": "Unobtrusive nested forms handling using jQuery.",
+  "homepage": "https://github.com/notus-sh/cocoon#readme",
+  "repository": "https://github.com/notus-sh/cocoon",
+  "author": "Gaël-Ian Havard <gael-ian@notus.sh>",
   "main": "app/assets/javascripts/cocoon.js",
-  "files": [
-    "app/assets/javascripts"
-  ],
-  "repository": "https://github.com/nathanvda/cocoon",
-  "author": "Nathan Van der Auwera <nathan@dixis.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/nathanvda/cocoon/issues"
-  },
-  "homepage": "https://github.com/nathanvda/cocoon#readme"
+  "files": ["app/assets/javascripts"],
+  "bugs": { "url": "https://github.com/notus-sh/cocoon/issues" }
 }
