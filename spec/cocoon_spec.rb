@@ -410,8 +410,8 @@ describe Cocoon do
 
     it "creates an object if cannot reflect on association" do
       object = double("AnyNonActiveRecordObject")
-      object.should_receive(:build_non_reflectable).and_return 'custom'
-      @tester.create_object(double(:object => object), :non_reflectable).should == 'custom'
+      expect(object).to receive(:build_non_reflectable).and_return 'custom'
+      expect(@tester.create_object(double(:object => object), :non_reflectable)).to eq('custom')
     end
 
     it "creates an association if object responds to 'build_association' as singular" do
