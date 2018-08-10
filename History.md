@@ -1,5 +1,37 @@
 # Change History / Release Notes
 
+## Version 2.0.0 (Unreleased)
+
+* Automatically remove `required` attributes on destroyed elements (thanks @markkhair)
+* Add extra properties on events (thanks @ayaman)
+* Add a basic package.json to be used with Webpack (thanks @dmfrancisco)
+* Compatibility with jQuery 3 (thanks @mstmfm)
+* Namespace click handlers (thanks @chrise86)
+* Drop support for Ruby 1.9 (thanks @simi)
+* Add a `limit` condition on node insertion (thanks @rubensmabueno)
+* Remove Jeweller (thanks @brixen, @tlynam)
+
+## Version 1.2.11
+
+* Allow events to be cancelled in the 'before' callbacks (thanks @wgordon17)
+
+## Version 1.2.10
+
+* Use lazy-loading in initializer
+
+## Version 1.2.9
+
+* Allow function pass to association-insertion-node (thanks @Liooo)
+
+## Version 1.2.8
+
+* Compatibility with Turbolinks
+
+## Version 1.2.7
+
+* Fix SimpleForm/Formtastic detections (thanks @mfrederickson)
+* Add default captions for add and remove links through I18n (thanks @ViliusLuneckas)
+
 ## Version 1.2.6
 
 * added some explicit documentation we use haml. Fixed the formtastic example.
