@@ -90,13 +90,13 @@
       var contentNode = $(node);
 
       if(!isNaN(limit) && nested_fields_counter(insertionNodeElem, wrapperClass) >= limit) {
-        var limit_reached = jQuery.Event('cocoon:lmit-reached');
+        var limit_reached = jQuery.Event('cocoon:lmit-reached', { link: $this });
         insertionNodeElem.trigger(limit_reached, [contentNode]);
 
         return false;
       }
 
-      var before_insert = jQuery.Event('cocoon:before-insert');
+      var before_insert = jQuery.Event('cocoon:before-insert', { link: $this });
       insertionNodeElem.trigger(before_insert, [contentNode]);
 
       if (!before_insert.isDefaultPrevented()) {
@@ -105,7 +105,8 @@
         // code and doesn't force it to be a sibling like after/before does. default: 'before'
         var addedContent = insertionNodeElem[insertionMethod](contentNode);
 
-        insertionNodeElem.trigger('cocoon:after-insert', [contentNode]);
+        var after_insert = jQuery.Event('cocoon:after-insert', { link: $this });
+        insertionNodeElem.trigger(after_insert, [contentNode]);
       }
     });
   });
