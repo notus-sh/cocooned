@@ -16,6 +16,27 @@ describe('cocoon', function () {
     it("should do nothing", function() {
       expect(itemsWrapper.children().length).toEqual(1);
     });
+
+    describe('the pre-existing nested item', function() {
+      beforeEach(function() {
+        this.subject = itemsWrapper.children().first();
+      });
+
+      describe('fields', shouldBeCorrectlyNamed('[0-9]+'));
+
+      it("should have an id field", function() {
+        var nameRegExp = nestedFieldNameRegexp('[0-9]+', 'id');
+        var idRegExp = nestedFieldIdRegexp('[0-9]+', 'id');
+
+        expect(this.subject.find('input[type="hidden"]').filter(function() {
+          return this.name.match(nameRegExp) && this.id.match(idRegExp);
+        }).length).toEqual(1);
+      });
+
+      it("should have correctly tagged remove link", function() {
+        expect(this.subject.find('.remove_fields').attr('class')).toMatch(/existing/);
+      });
+    });
   });
 
   describe('on click on the association add link', function() {
@@ -25,6 +46,29 @@ describe('cocoon', function () {
 
     it("should add an item", function() {
       expect(itemsWrapper.children().length).toEqual(2);
+    });
+
+    describe('the newly added item', function() {
+      var item;
+
+      beforeEach(function() {
+        this.subject = itemsWrapper.children().last();
+      });
+
+      describe('fields', shouldBeCorrectlyNamed('[0-9]{10,}'));
+
+      it("should not have an id field", function() {
+        var nameRegExp = nestedFieldNameRegexp('[0-9]{10,}', 'id');
+        var idRegExp = nestedFieldIdRegexp('[0-9]{10,}', 'id');
+
+        expect(this.subject.find('input[type="hidden"]').filter(function() {
+          return this.name.match(nameRegExp) && this.id.match(idRegExp);
+        }).length).toEqual(0);
+      });
+
+      it("should have correctly tagged remove link", function() {
+        expect(this.subject.find('.remove_fields').attr('class')).toMatch(/dynamic/);
+      });
     });
   });
 
