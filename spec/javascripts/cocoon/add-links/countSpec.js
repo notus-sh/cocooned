@@ -1,3 +1,5 @@
+/* globals jasmine, describe, it, beforeEach, afterEach, expect, templates */
+
 describe('With a count', function () {
 
   var itemsWrapper;

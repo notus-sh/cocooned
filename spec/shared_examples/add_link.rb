@@ -4,13 +4,13 @@ shared_examples_for 'a correctly rendered add link' do |options|
   context 'the rendered link' do
     before do
       default_options = {
-          href: '#',
-          class: 'add_fields',
-          template: 'form<tag>',
-          association: 'comment',
-          associations: 'comments',
-          text: 'add something',
-          extra_attributes: {}
+        href: '#',
+        class: 'add_fields',
+        template: 'form<tag>',
+        association: 'comment',
+        associations: 'comments',
+        text: 'add something',
+        extra_attributes: {}
       }
       @options = default_options.merge options
 

@@ -18,7 +18,7 @@ RuboCop::RakeTask.new do |task|
 end
 
 eslint_args = ['--no-eslintrc', '--config config/linters/js.json']
-eslint_path = ['app/assets/**/*.js']
+eslint_path = ['app/assets/**/*.js', 'spec/javascripts/**/*.js']
 
 namespace :eslint do
   desc 'Auto-correct JavaScript files'

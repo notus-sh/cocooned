@@ -1,82 +1,81 @@
-describe('A basic cocoon setup', function () {
+/* globals jasmine, describe, it, beforeEach, afterEach, expect, templates */
+/* globals shouldBeCorrectlyNamed, nestedFieldNameRegexp, nestedFieldIdRegexp */
 
+describe('A basic cocoon setup', function () {
   var itemsWrapper;
 
-  beforeEach(function(){
+  beforeEach(function () {
     $(templates['basic']).appendTo('body');
     itemsWrapper = $('.nested-form');
   });
 
-  afterEach(function(){
-    $('#form-template').remove()
+  afterEach(function () {
+    $('#form-template').remove();
   });
 
-
-  describe('on page load', function() {
-    it("should do nothing", function() {
+  describe('on page load', function () {
+    it('should do nothing', function () {
       expect(itemsWrapper.children('.nested-fields').length).toEqual(1);
     });
 
-    describe('the pre-existing nested item', function() {
-      beforeEach(function() {
+    describe('the pre-existing nested item', function () {
+      beforeEach(function () {
         this.subject = itemsWrapper.children('.nested-fields').first();
       });
 
       describe('fields', shouldBeCorrectlyNamed('[0-9]+'));
 
-      it("should have an id field", function() {
+      it('should have an id field', function () {
         var nameRegExp = nestedFieldNameRegexp('[0-9]+', 'id');
         var idRegExp = nestedFieldIdRegexp('[0-9]+', 'id');
 
-        expect(this.subject.find('input[type="hidden"]').filter(function() {
+        expect(this.subject.find('input[type="hidden"]').filter(function () {
           return this.name.match(nameRegExp) && this.id.match(idRegExp);
         }).length).toEqual(1);
       });
 
-      it("should have correctly tagged remove link", function() {
+      it('should have correctly tagged remove link', function () {
         expect(this.subject.find('.remove_fields').attr('class')).toMatch(/existing/);
       });
     });
   });
 
-  describe('on click on the association add link', function() {
-
-    beforeEach(function() {
+  describe('on click on the association add link', function () {
+    beforeEach(function () {
       $('.add_fields').trigger('click');
     });
 
-    it("should add an item", function() {
+    it('should add an item', function () {
       expect(itemsWrapper.children('.nested-fields').length).toEqual(2);
     });
 
-    describe('the newly added item', function() {
-
-      beforeEach(function() {
+    describe('the newly added item', function () {
+      beforeEach(function () {
         this.subject = itemsWrapper.children('.nested-fields').last();
       });
 
       describe('fields', shouldBeCorrectlyNamed('[0-9]{10,}'));
 
-      it("should not have an id field", function() {
+      it('should not have an id field', function () {
         var nameRegExp = nestedFieldNameRegexp('[0-9]{10,}', 'id');
         var idRegExp = nestedFieldIdRegexp('[0-9]{10,}', 'id');
 
-        expect(this.subject.find('input[type="hidden"]').filter(function() {
+        expect(this.subject.find('input[type="hidden"]').filter(function () {
           return this.name.match(nameRegExp) && this.id.match(idRegExp);
         }).length).toEqual(0);
       });
 
-      it("should have correctly tagged remove link", function() {
+      it('should have correctly tagged remove link', function () {
         expect(this.subject.find('.remove_fields').attr('class')).toMatch(/dynamic/);
       });
     });
   });
 
-  describe('on click on the association add link with event handlers', function() {
+  describe('on click on the association add link with event handlers', function () {
     var beforeEventSpy;
     var afterEventSpy;
 
-    beforeEach(function() {
+    beforeEach(function () {
       beforeEventSpy = jasmine.createSpy('beforeEventSpy');
       $(document).on('cocoon:before-insert', beforeEventSpy);
 
@@ -86,7 +85,7 @@ describe('A basic cocoon setup', function () {
       $('.add_fields').trigger('click');
     });
 
-    afterEach(function() {
+    afterEach(function () {
       $(document).off('cocoon:before-insert');
       $(document).off('cocoon:after-insert');
     });
@@ -116,12 +115,12 @@ describe('A basic cocoon setup', function () {
     });
   });
 
-  describe("on click on the association add link with canceling event handlers", function() {
+  describe('on click on the association add link with canceling event handlers', function () {
     var beforeEventSpy;
     var afterEventSpy;
 
-    beforeEach(function() {
-      beforeEventSpy = jasmine.createSpy('beforeEventSpy').and.callFake(function(e) {
+    beforeEach(function () {
+      beforeEventSpy = jasmine.createSpy('beforeEventSpy').and.callFake(function (e) {
         e.preventDefault();
       });
       $(document).on('cocoon:before-insert', beforeEventSpy);
@@ -132,7 +131,7 @@ describe('A basic cocoon setup', function () {
       $('.add_fields').trigger('click');
     });
 
-    afterEach(function() {
+    afterEach(function () {
       $(document).off('cocoon:before-insert');
       $(document).off('cocoon:after-insert');
     });
@@ -141,7 +140,7 @@ describe('A basic cocoon setup', function () {
       expect(beforeEventSpy).toHaveBeenCalled();
     });
 
-    it("should not add an item", function () {
+    it('should not add an item', function () {
       expect(itemsWrapper.children('.nested-fields').length).toEqual(1);
     });
 
@@ -150,27 +149,27 @@ describe('A basic cocoon setup', function () {
     });
   });
 
-  describe('on click on an association remove link', function() {
-    beforeEach(function() {
+  describe('on click on an association remove link', function () {
+    beforeEach(function () {
       jasmine.clock().install();
     });
 
-    afterEach(function() {
+    afterEach(function () {
       jasmine.clock().uninstall();
     });
 
-    it("should remove an item", function() {
+    it('should remove an item', function () {
       $('.remove_fields').first().trigger('click');
       jasmine.clock().tick(1);
       expect(itemsWrapper.children('.nested-fields:visible').length).toEqual(0);
     });
 
-    describe('on a pre-existing item', function() {
-      beforeEach(function() {
+    describe('on a pre-existing item', function () {
+      beforeEach(function () {
         this.subject = itemsWrapper.find('.remove_fields.existing').first().closest('.nested-fields');
       });
 
-      it('should mark the item to be destroyed', function() {
+      it('should mark the item to be destroyed', function () {
         $('.remove_fields', this.subject).trigger('click');
         jasmine.clock().tick(1);
 
@@ -179,13 +178,13 @@ describe('A basic cocoon setup', function () {
       });
     });
 
-    describe('on a just added item', function() {
-      beforeEach(function() {
+    describe('on a just added item', function () {
+      beforeEach(function () {
         $('.add_fields').trigger('click');
         this.subject = itemsWrapper.children('.remove_fields.dynamic').first().closest('.nested-fields');
       });
 
-      it('should remove the item from the DOM', function() {
+      it('should remove the item from the DOM', function () {
         $('.remove_fields', this.subject).trigger('click');
         jasmine.clock().tick(1);
         expect($.contains(itemsWrapper.get(0), this.subject.get(0))).toBeFalsy();
@@ -193,11 +192,11 @@ describe('A basic cocoon setup', function () {
     });
   });
 
-  describe('on click on an association remove link with event handlers', function() {
+  describe('on click on an association remove link with event handlers', function () {
     var beforeEventSpy;
     var afterEventSpy;
 
-    beforeEach(function() {
+    beforeEach(function () {
       jasmine.clock().install();
 
       beforeEventSpy = jasmine.createSpy('beforeEventSpy');
@@ -213,7 +212,7 @@ describe('A basic cocoon setup', function () {
       jasmine.clock().tick(1);
     });
 
-    afterEach(function() {
+    afterEach(function () {
       jasmine.clock().uninstall();
       $(document).off('cocoon:before-remove');
       $(document).off('cocoon:after-remove');
@@ -242,14 +241,14 @@ describe('A basic cocoon setup', function () {
     });
   });
 
-  describe("on click on an association remove link with canceling event handlers", function() {
+  describe('on click on an association remove link with canceling event handlers', function () {
     var beforeEventSpy;
     var afterEventSpy;
 
-    beforeEach(function() {
+    beforeEach(function () {
       jasmine.clock().install();
 
-      beforeEventSpy = jasmine.createSpy('beforeEventSpy').and.callFake(function(e) {
+      beforeEventSpy = jasmine.createSpy('beforeEventSpy').and.callFake(function (e) {
         e.preventDefault();
       });
       $(document).on('cocoon:before-remove', beforeEventSpy);
@@ -264,7 +263,7 @@ describe('A basic cocoon setup', function () {
       jasmine.clock().tick(1);
     });
 
-    afterEach(function() {
+    afterEach(function () {
       jasmine.clock().uninstall();
       $(document).off('cocoon:before-remove');
       $(document).off('cocoon:after-remove');
@@ -274,7 +273,7 @@ describe('A basic cocoon setup', function () {
       expect(beforeEventSpy).toHaveBeenCalled();
     });
 
-    it("should not remove the item", function () {
+    it('should not remove the item', function () {
       expect(itemsWrapper.children('.nested-fields').length).toEqual(1);
     });
 

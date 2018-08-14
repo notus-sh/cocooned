@@ -1,3 +1,5 @@
+/* globals jasmine, describe, it, beforeEach, afterEach, expect, templates */
+
 describe('With a limit', function () {
   describe('and a basic setup', function () {
 

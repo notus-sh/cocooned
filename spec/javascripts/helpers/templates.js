@@ -1,3 +1,5 @@
+/* eslint no-unused-vars: "off", max-len: "off" */
+
 var templates = {
   'basic': `
     <form id="form-template" novalidate="novalidate" action="" accept-charset="UTF-8" method="post">

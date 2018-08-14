@@ -4,10 +4,10 @@ shared_examples_for 'a correctly rendered remove link' do |options|
   context 'the rendered link' do
     before do
       default_options = {
-          href: '#',
-          class: 'remove_fields dynamic',
-          text: 'remove something',
-          extra_attributes: {}
+        href: '#',
+        class: 'remove_fields dynamic',
+        text: 'remove something',
+        extra_attributes: {}
       }
       @options = default_options.merge options
 
