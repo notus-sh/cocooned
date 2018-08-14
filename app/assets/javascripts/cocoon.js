@@ -89,7 +89,7 @@
       var contentNode = $(node);
 
       if (!isNaN(limit) && nestedFieldsCounter(insertionNodeElem, wrapperClass) >= limit) {
-        var limitReached = jQuery.Event('cocoon:lmit-reached', { link: $this });
+        var limitReached = jQuery.Event('cocoon:limit-reached', { link: $this });
         insertionNodeElem.trigger(limitReached, [contentNode]);
 
         return false;
