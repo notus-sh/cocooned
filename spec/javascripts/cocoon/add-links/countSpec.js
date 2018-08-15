@@ -2,17 +2,8 @@
 
 describe('With a count', function () {
 
-  var itemsWrapper;
-
-  beforeEach(function() {
-    $(templates['add-links-count']).appendTo('body');
-    itemsWrapper = $('.nested-form');
-  });
-
-  afterEach(function(){
-    $('#form-template').remove()
-  });
-
+  beforeEach(setup('add-links-count'));
+  afterEach(teardown());
 
   describe('a click on the association add link', function() {
     beforeEach(function() {
@@ -20,7 +11,7 @@ describe('With a count', function () {
     });
 
     it("should add the requested number of items", function() {
-      expect(itemsWrapper.children('.nested-fields').length).toEqual(3);
+      expect(this.wrapper.children('.nested-fields').length).toEqual(3);
     });
   });
 });

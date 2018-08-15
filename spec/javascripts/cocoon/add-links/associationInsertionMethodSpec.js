@@ -2,17 +2,8 @@
 
 describe('With a different association insertion method', function () {
 
-  var itemsWrapper;
-
-  beforeEach(function(){
-    $(templates['add-links-insertion-method']).appendTo('body');
-    itemsWrapper = $('.nested-form');
-  });
-
-  afterEach(function(){
-    $('#form-template').remove()
-  });
-
+  beforeEach(setup('add-links-association-insertion-method'));
+  afterEach(teardown());
 
   describe('a click on the association add link', function() {
     beforeEach(function() {
@@ -21,7 +12,7 @@ describe('With a different association insertion method', function () {
 
     it("should add an item at the right place", function() {
       var addLink = $('.add_fields');
-      var addedItem = itemsWrapper.children('.nested-fields').last();
+      var addedItem = this.wrapper.children('.nested-fields').last();
 
       expect(addLink.parent().next().get(0)).toEqual(addedItem.get(0));
     });

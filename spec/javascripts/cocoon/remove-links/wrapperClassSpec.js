@@ -2,17 +2,8 @@
 
 describe('With a different items wrapper class', function () {
 
-  var itemsWrapper;
-
-  beforeEach(function(){
-    $(templates['remove-links-wrapper-class']).appendTo('body');
-    itemsWrapper = $('.nested-form');
-  });
-
-  afterEach(function(){
-    $('#form-template').remove()
-  });
-
+  beforeEach(setup('remove-links-wrapper-class'));
+  afterEach(teardown());
 
   describe('a click on an association remove link', function() {
     beforeEach(function() {
@@ -26,7 +17,7 @@ describe('With a different items wrapper class', function () {
     it("should remove an item", function() {
       $('.remove_fields').first().trigger('click');
       jasmine.clock().tick(1);
-      expect(itemsWrapper.children('.nested-item:visible').length).toEqual(0);
+      expect(this.wrapper.children('.nested-item:visible').length).toEqual(0);
     });
   });
 });

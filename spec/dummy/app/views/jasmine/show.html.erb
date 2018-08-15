@@ -1,3 +1,11 @@
+<% content_for(:stylesheets) do %>
+  <%= stylesheet_link_tag 'jasmine', media: 'all' %>
+<% end %>
+
+<% content_for(:javascripts) do %>
+  <%= javascript_include_tag 'jasmine' %>
+<% end %>
+
 <%
 
 test_templates = [
@@ -12,8 +20,7 @@ test_templates = [
 ]
 
 test_templates.each do |name| %>
-  <%= render 'lists/form',
-             list: @list,
-             form_id: "form-template-#{name}",
-             form_partial: name %>
+  <template id="template-<%= name %>">
+    <%= render 'lists/form', list: @list, form_partial: name %>
+  </template>
 <% end %>

@@ -1,0 +1,9 @@
+
+.cocoon-visible-item {
+  transition: opacity .45s ease-out;
+  opacity: 1;
+}
+
+.cocoon-hidden-item {
+  opacity: 0;
+}

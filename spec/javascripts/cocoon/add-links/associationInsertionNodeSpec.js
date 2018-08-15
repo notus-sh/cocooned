@@ -2,17 +2,8 @@
 
 describe('With a different association insertion node', function () {
 
-  var itemsWrapper;
-
-  beforeEach(function(){
-    $(templates['add-links-insertion-node']).appendTo('body');
-    itemsWrapper = $('.nested-form');
-  });
-
-  afterEach(function(){
-    $('#form-template').remove()
-  });
-
+  beforeEach(setup('add-links-association-insertion-node'));
+  afterEach(teardown());
 
   describe('a click on the association add link', function() {
     beforeEach(function() {
@@ -21,7 +12,7 @@ describe('With a different association insertion node', function () {
 
     it("should add an item at the right place", function() {
       var insertionNode = $('.insertion-node');
-      var addedItem = itemsWrapper.children('.nested-fields').last();
+      var addedItem = this.wrapper.children('.nested-fields').last();
 
       expect(insertionNode.prev().get(0)).toEqual(addedItem.get(0));
     });

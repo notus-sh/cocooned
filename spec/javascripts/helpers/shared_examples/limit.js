@@ -16,12 +16,15 @@ function shouldHonoreTheLimit (pendingSpec) {
 
     it("should not add more items than allowed", function() {
       pendingSpec && pending("The limit option only works with insertion methods that add childs to the insertion node");
-      expect(this.subject.children('.nested-fields').length).toEqual(2);
+      expect(this.wrapper.children('.nested-fields').length).toEqual(2);
     });
 
     it("should raise a 'cocoon:limit-reached' event", function() {
       pendingSpec && pending("The limit option only works with insertion methods that add childs to the insertion node");
       expect(eventSpy).toHaveBeenCalled();
+      if (!eventSpy.calls.any()) {
+        return;
+      }
 
       var event = eventSpy.calls.first().args[0];
       expect(event.type).toEqual('cocoon:limit-reached');

@@ -1,4 +1,4 @@
-<%= form_with(model: list, local: true, id: form_id) do |form| %>
+<%= form_with(model: list, local: true, id: 'form-template') do |form| %>
   <% if list.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(list.errors.count, "error") %> prohibited this list from being saved:</h2>
@@ -17,7 +17,7 @@
   </div>
 
   <h3>Items</h3>
-  <%= render partial: "lists/forms/#{form_partial || 'basic'}", locals: { form: form } %>
+  <%= render partial: "lists/forms/#{(defined?(form_partial) ? form_partial : 'basic')}", locals: { form: form } %>
 
   <div class="actions">
     <%= form.submit %>
