@@ -7,8 +7,8 @@ shared_examples_for 'a correctly rendered add link' do |options|
         href: '#',
         class: 'add_fields',
         template: 'form<tag>',
-        association: 'comment',
-        associations: 'comments',
+        association: 'post',
+        associations: 'posts',
         text: 'add something',
         extra_attributes: {}
       }

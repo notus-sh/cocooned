@@ -8,8 +8,8 @@ class CreatePosts < (Rails.version.start_with?('5.') ? ActiveRecord::Migration[5
       t.text :body
 
       # Relations
-      t.integer :author_id, null: false, index: true
-      t.integer :person_id, index: true
+      t.belongs_to :author, index: true
+      t.belongs_to :person, index: true, null: true
 
       t.timestamps null: false
     end

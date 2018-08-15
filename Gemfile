@@ -6,8 +6,11 @@ source 'http://rubygems.org'
 gemspec
 
 group :development, :test do
-  gem 'nokogiri'
+  # Dummy app dependencies
+  gem 'jquery-rails'
   gem 'rails', '~> 5.0'
-  gem 'simplecov', require: false
   gem 'sqlite3'
+
+  gem 'nokogiri'
+  gem 'simplecov', require: false
 end

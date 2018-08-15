@@ -16,6 +16,23 @@
     <%= form.text_field :name %>
   </div>
 
+  <div class="field">
+    <%= form.label :status %>
+    <%= form.select(:status, options_for_select([['student', 1], ['other', 2]])) %>
+  </div>
+
+  <h3>Posts</h3>
+
+  <div id='posts'>
+    <%= form.fields_for :posts do |post_form| %>
+      <%= render 'posts/fields', :form => post_form %>
+    <% end %>
+
+    <div class='links'>
+      <%= link_to_add_association 'Add post', form, :posts, form_name: :form %>
+    </div>
+  </div>
+
   <div class="actions">
     <%= form.submit %>
   </div>

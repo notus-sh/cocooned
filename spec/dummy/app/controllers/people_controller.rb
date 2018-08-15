@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class PeopleController < ApplicationController
-  before_action :set_person, only: [:show, :edit, :update, :destroy]
+  before_action :set_person, only: %i[show edit update destroy]
 
   # GET /people
   def index
@@ -7,8 +9,7 @@ class PeopleController < ApplicationController
   end
 
   # GET /people/1
-  def show
-  end
+  def show; end
 
   # GET /people/new
   def new
@@ -16,8 +17,7 @@ class PeopleController < ApplicationController
   end
 
   # GET /people/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /people
   def create
@@ -46,13 +46,18 @@ class PeopleController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_person
-      @person = Person.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def person_params
-      params.require(:person).permit(:name)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_person
+    @person = Person.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def person_params
+    params.require(:person).permit(
+      :name,
+      :status,
+      posts_attributes: %i[id title body person_id _destroy]
+    )
+  end
 end

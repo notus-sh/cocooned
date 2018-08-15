@@ -9,13 +9,13 @@ describe Cocoon::Helpers do
 
   describe '#get_partial_path' do
     it 'generates the default partial name if no partial given' do
-      result = @tester.get_partial_path(nil, :admin_comments)
-      expect(result).to eq('admin_comment_fields')
+      result = @tester.get_partial_path(nil, :contacts)
+      expect(result).to eq('contact_fields')
     end
 
     it 'uses the given partial name' do
-      result = @tester.get_partial_path('comment_fields', :admin_comments)
-      expect(result).to eq('comment_fields')
+      result = @tester.get_partial_path('sub_fields', :contacts)
+      expect(result).to eq('sub_fields')
     end
   end
 end

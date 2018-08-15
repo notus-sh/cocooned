@@ -21,13 +21,13 @@ describe Cocoon::Helpers do
           expect(@form_obj).to receive(:semantic_fields_for)
           expect(@form_obj).to receive(:fields_for).never
 
-          @html = @tester.link_to_add_association('add something', @form_obj, :children)
+          @html = @tester.link_to_add_association('add something', @form_obj, :contacts)
         end
 
         it_behaves_like 'a correctly rendered add link',
                         template: 'form<tagzzz>',
-                        association: 'child',
-                        associations: 'children'
+                        association: 'contact',
+                        associations: 'contacts'
       end
     end
   end

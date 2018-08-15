@@ -5,13 +5,14 @@ class CreatePeople < (Rails.version.start_with?('5.') ? ActiveRecord::Migration[
     create_table :people do |t|
       # Attributes
       t.string :name
+      t.string :status
 
       t.timestamps null: false
     end
 
     create_table :people_people do |t|
       # Relations
-      t.integer :child_id, null: false
+      t.integer :contact_id, null: false
       t.integer :person_id, null: false
 
       t.timestamps null: false

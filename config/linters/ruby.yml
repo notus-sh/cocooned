@@ -1,2 +1,16 @@
+inherit_mode:
+  merge:
+    - Exclude
+
+AllCops:
+  Exclude:
+    - 'spec/dummy/bin/*'
+
 Metrics/LineLength:
   Max: 150
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/dummy/db/schema.rb'
+    - 'spec/cocoon/**/*_spec.rb'
+    - 'spec/shared_examples/**/*.rb'

@@ -1,0 +1,14 @@
+<div class="field">
+  <%= form.label :title %>
+  <%= form.text_field :title %>
+</div>
+
+<div class="field">
+  <%= form.label :body %>
+  <%= form.text_area :body %>
+</div>
+
+<div class="field">
+  <%= form.label :person %>
+  <%= form.collection_select(:person_id, Person.all, :id, :name, prompt: true) %>
+</div>

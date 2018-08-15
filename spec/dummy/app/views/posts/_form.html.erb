@@ -12,14 +12,11 @@
   <% end %>
 
   <div class="field">
-    <%= form.label :title %>
-    <%= form.text_field :title %>
+    <%= form.label :author %>
+    <%= form.collection_select(:author_id, Person.all, :id, :name) %>
   </div>
 
-  <div class="field">
-    <%= form.label :body %>
-    <%= form.text_area :body %>
-  </div>
+  <%= render 'fields', form: form %>
 
   <div class="actions">
     <%= form.submit %>
