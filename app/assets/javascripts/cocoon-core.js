@@ -125,6 +125,12 @@ Cocoon.prototype = {
     }
   },
 
+  findItem: function(removeLink) {
+    var $remover = $(removeLink);
+    var selector = '.' + ($remover.data('wrapper-class') || 'nested-fields');
+    return $remover.closest(selector);
+  },
+
   init: function() {
     var self = this;
 
@@ -153,10 +159,14 @@ Cocoon.prototype = {
 
   initUi: function() {
     var self = this;
+
     if (!this.container.attr('id')) {
       this.container.attr('id', this.buildId());
     }
     this.container.addClass('cocoon-container');
+
+    $(function() { self.hideMarkedForDestruction(); });
+    $(document).on('page:load turbolinks:load', function() { self.hideMarkedForDestruction(); });
   },
 
   bindEvents: function() {
@@ -177,7 +187,6 @@ Cocoon.prototype = {
   },
 
   add: function(adder) {
-    var preventInsert = false;
     var $adder = $(adder);
     var insertionMethod = this.getInsertionMethod($adder);
     var insertionNode = this.getInsertionNode($adder);
@@ -203,8 +212,7 @@ Cocoon.prototype = {
   remove: function(remover) {
     var self = this;
     var $remover = $(remover);
-    var selector = '.' + ($remover.data('wrapper-class') || 'nested-fields');
-    var nodeToDelete = $remover.closest(selector);
+    var nodeToDelete = this.findItem($remover);
     var triggerNode = nodeToDelete.parent();
     var eventData = { link: $remover, node: nodeToDelete, cocoon: this };
 
@@ -227,5 +235,12 @@ Cocoon.prototype = {
       }
       self.notify(triggerNode, 'cocoon:after-remove', eventData);
     }, timeout);
+  },
+
+  hideMarkedForDestruction: function() {
+    $('.remove_fields.existing.destroyed', this.container).each(function(i, removeLink) {
+      var node = this.findItem(removeLink);
+      node.hide();
+    });
   }
 };
