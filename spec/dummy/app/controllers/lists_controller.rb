@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class ListsController < ApplicationController
-  before_action :set_list, only: [:show, :edit, :update, :destroy]
+  before_action :set_list, only: %i[show edit update destroy]
 
   # GET /lists
   def index
@@ -7,8 +9,7 @@ class ListsController < ApplicationController
   end
 
   # GET /lists/1
-  def show
-  end
+  def show; end
 
   # GET /lists/new
   def new
@@ -16,8 +17,7 @@ class ListsController < ApplicationController
   end
 
   # GET /lists/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /lists
   def create
@@ -46,16 +46,17 @@ class ListsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_list
-      @list = List.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def list_params
-      params.require(:list).permit(
-        :name,
-        items_attributes: %i[id label position _destroy]
-      )
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_list
+    @list = List.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def list_params
+    params.require(:list).permit(
+      :name,
+      items_attributes: %i[id label position _destroy]
+    )
+  end
 end
