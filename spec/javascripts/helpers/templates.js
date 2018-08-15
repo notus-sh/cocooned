@@ -11,8 +11,8 @@ var templates = {
           <label for="list_items_attributes_1_label">Label</label>
           <input type="text" name="list[items_attributes][1][label]" id="list_items_attributes_1_label" />
           <input type="hidden" value="0" name="list[items_attributes][1][position]" id="list_items_attributes_1_position" />
-          <input type="hidden" value="1" name="list[items_attributes][1][id]" id="list_items_attributes_1_id" />
         </div>
+        <input type="hidden" value="1" name="list[items_attributes][1][id]" id="list_items_attributes_1_id" />
     
         <div class="links">
           <a  class="add_fields"
@@ -40,8 +40,8 @@ var templates = {
           <label for="list_items_attributes_1_label">Label</label>
           <input type="text" name="list[items_attributes][1][label]" id="list_items_attributes_1_label" />
           <input type="hidden" value="0" name="list[items_attributes][1][position]" id="list_items_attributes_1_position" />
-          <input type="hidden" value="1" name="list[items_attributes][1][id]" id="list_items_attributes_1_id" />
         </div>
+        <input type="hidden" value="1" name="list[items_attributes][1][id]" id="list_items_attributes_1_id" />
         
         <div class="links">
           <a  class="add_fields"
@@ -69,8 +69,8 @@ var templates = {
           <label for="list_items_attributes_1_label">Label</label>
           <input type="text" name="list[items_attributes][1][label]" id="list_items_attributes_1_label" />
           <input type="hidden" value="0" name="list[items_attributes][1][position]" id="list_items_attributes_1_position" />
-          <input type="hidden" value="1" name="list[items_attributes][1][id]" id="list_items_attributes_1_id" />
         </div>
+        <input type="hidden" value="1" name="list[items_attributes][1][id]" id="list_items_attributes_1_id" />
     
         <div class="links">
           <a  class="add_fields"
@@ -99,8 +99,9 @@ var templates = {
           <label for="list_items_attributes_1_label">Label</label>
           <input type="text" name="list[items_attributes][1][label]" id="list_items_attributes_1_label" />
           <input type="hidden" value="0" name="list[items_attributes][1][position]" id="list_items_attributes_1_position" />
-          <input type="hidden" value="1" name="list[items_attributes][1][id]" id="list_items_attributes_1_id" />
         </div>
+        <input type="hidden" value="1" name="list[items_attributes][1][id]" id="list_items_attributes_1_id" />
+        
         <div class="insertion-node"></div>
       </div>
         
@@ -128,8 +129,8 @@ var templates = {
           <label for="list_items_attributes_1_label">Label</label>
           <input type="text" name="list[items_attributes][1][label]" id="list_items_attributes_1_label" />
           <input type="hidden" value="0" name="list[items_attributes][1][position]" id="list_items_attributes_1_position" />
-          <input type="hidden" value="1" name="list[items_attributes][1][id]" id="list_items_attributes_1_id" />
         </div>
+        <input type="hidden" value="1" name="list[items_attributes][1][id]" id="list_items_attributes_1_id" />
         
         <div class="insertion-node"></div>
         
@@ -159,8 +160,8 @@ var templates = {
           <label for="list_items_attributes_1_label">Label</label>
           <input type="text" name="list[items_attributes][1][label]" id="list_items_attributes_1_label" />
           <input type="hidden" value="0" name="list[items_attributes][1][position]" id="list_items_attributes_1_position" />
-          <input type="hidden" value="1" name="list[items_attributes][1][id]" id="list_items_attributes_1_id" />
         </div>
+        <input type="hidden" value="1" name="list[items_attributes][1][id]" id="list_items_attributes_1_id" />
     
         <div class="links">
           <a  class="add_fields"
@@ -189,8 +190,8 @@ var templates = {
           <label for="list_items_attributes_1_label">Label</label>
           <input type="text" name="list[items_attributes][1][label]" id="list_items_attributes_1_label" />
           <input type="hidden" value="0" name="list[items_attributes][1][position]" id="list_items_attributes_1_position" />
-          <input type="hidden" value="1" name="list[items_attributes][1][id]" id="list_items_attributes_1_id" />
         </div>
+        <input type="hidden" value="1" name="list[items_attributes][1][id]" id="list_items_attributes_1_id" />
     
         <div class="links">
           <a  class="add_fields"
@@ -219,8 +220,8 @@ var templates = {
           <label for="list_items_attributes_1_label">Label</label>
           <input type="text" name="list[items_attributes][1][label]" id="list_items_attributes_1_label" />
           <input type="hidden" value="0" name="list[items_attributes][1][position]" id="list_items_attributes_1_position" />
-          <input type="hidden" value="1" name="list[items_attributes][1][id]" id="list_items_attributes_1_id" />
         </div>
+        <input type="hidden" value="1" name="list[items_attributes][1][id]" id="list_items_attributes_1_id" />
       </div>
       
       <a  class="add_fields"

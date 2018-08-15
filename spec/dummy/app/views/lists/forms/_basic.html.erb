@@ -1,0 +1,12 @@
+<div id='items' class="nested-form">
+  <%= form.fields_for :items do |item_form| %>
+    <%= render 'lists/item_fields', :form => item_form %>
+  <% end %>
+
+  <div class='links'>
+    <%= link_to_add_association 'Add item', form, :items,
+                                form_name: :form,
+                                partial: 'lists/item_fields'
+    %>
+  </div>
+</div>

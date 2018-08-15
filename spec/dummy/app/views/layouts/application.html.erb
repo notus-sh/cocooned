@@ -5,11 +5,16 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag    'application', media: 'all' %>
+    <%= stylesheet_link_tag 'application', media: 'all' %>
+    <%= yield :stylesheets %>
+
     <%= javascript_include_tag 'application' %>
+    <%= yield :javascripts %>
   </head>
 
-  <body>
+  <body data-no-turbolink data-turbolinks="false">
     <%= yield %>
+
+    <div id="jasmine_content"></div>
   </body>
 </html>

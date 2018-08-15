@@ -1,0 +1,19 @@
+<%
+
+test_templates = [
+  'basic',
+  'remove-links-wrapper-class',
+  'add-links-association-insertion-method',
+  'add-links-association-insertion-node',
+  'add-links-association-insertion-traversal',
+  'add-links-count',
+  'add-links-limit-basic',
+  'add-links-limit-valid'
+]
+
+test_templates.each do |name| %>
+  <%= render 'lists/form',
+             list: @list,
+             form_id: "form-template-#{name}",
+             form_partial: name %>
+<% end %>

@@ -29,7 +29,7 @@ describe('A basic cocoon setup', function () {
         var nameRegExp = nestedFieldNameRegexp('[0-9]+', 'id');
         var idRegExp = nestedFieldIdRegexp('[0-9]+', 'id');
 
-        expect(this.subject.find('input[type="hidden"]').filter(function () {
+        expect(itemsWrapper.find('input[type="hidden"]').filter(function () {
           return this.name.match(nameRegExp) && this.id.match(idRegExp);
         }).length).toEqual(1);
       });
@@ -60,7 +60,7 @@ describe('A basic cocoon setup', function () {
         var nameRegExp = nestedFieldNameRegexp('[0-9]{10,}', 'id');
         var idRegExp = nestedFieldIdRegexp('[0-9]{10,}', 'id');
 
-        expect(this.subject.find('input[type="hidden"]').filter(function () {
+        expect(itemsWrapper.find('input[type="hidden"]').filter(function () {
           return this.name.match(nameRegExp) && this.id.match(idRegExp);
         }).length).toEqual(0);
       });
