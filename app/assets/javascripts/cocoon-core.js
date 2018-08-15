@@ -184,6 +184,14 @@ Cocoon.prototype = {
       e.preventDefault();
       self.remove(this);
     });
+
+    // Bind options events
+    $.each(this.options, function(name, value) {
+      var bindMethod = 'bind' + name.charAt(0).toUpperCase() + name.slice(1);
+      if (value && self[bindMethod]) {
+        self[bindMethod]();
+      }
+    });
   },
 
   add: function(adder) {

@@ -6,7 +6,9 @@
 function initCocoon() {
   $(Cocoon.prototype.addLinkSelector).each(function(_i, addLink) {
     var container = Cocoon.prototype.findContainer.apply(Cocoon.prototype, [addLink]);
-    container.cocoon($(container).data('cocoon-options'));
+    var limit = parseInt($(addLink).data('limit'), 10) || false;
+
+    container.cocoon({ limit: limit });
   });
 }
 

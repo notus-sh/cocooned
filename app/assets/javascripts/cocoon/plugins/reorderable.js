@@ -56,7 +56,7 @@ Cocoon.Plugins.Reorderable = {
     var self = this;
     var i = 0;
     var nodes = this.getNodes(':visible');
-    var eventData = { link: $mover, nodes: nodes, cocoon: this };
+    var eventData = { link: null, nodes: nodes, cocoon: this };
 
     // Reindex can be prevented through a 'cocoon:before-reindex' event handler
     if (!this.notify(this.container, 'cocoon:before-reindex', eventData)) {

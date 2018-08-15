@@ -6,7 +6,7 @@ describe('With a limit', function () {
     beforeEach(setup('add-links-limit-basic'));
     afterEach(teardown());
 
-    describe('too much clicks on the association add link', shouldHonoreTheLimit(true));
+    describe('too much clicks on the association add link', shouldHonoreTheLimit(false));
   });
 
   describe('and appropriate association insertion node and method', function () {
