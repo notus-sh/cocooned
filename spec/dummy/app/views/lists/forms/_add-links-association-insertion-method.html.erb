@@ -4,10 +4,10 @@
   <% end %>
 
   <div class='links'>
-    <%= link_to_add_association 'Add item', form, :items,
-                                form_name: :form,
-                                partial: 'lists/item_fields',
-                                data: { association_insertion_method: 'after' }
+    <%= cocooned_add_item_link 'Add item', form, :items,
+                               form_name: :form,
+                               partial: 'lists/item_fields',
+                               data: { association_insertion_method: 'after' }
     %>
   </div>
 </div>

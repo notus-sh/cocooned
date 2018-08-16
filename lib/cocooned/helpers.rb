@@ -1,7 +1,14 @@
 # frozen_string_literal: true
 
+require 'cocooned/helpers/deprecate'
+require 'cocooned/helpers/cocoon_compatibility'
+
 module Cocooned
   module Helpers
+    # Create aliases to old Cocoon method name
+    # TODO: Remove in 2.0
+    include Cocooned::Helpers::CocoonCompatibility
+
     # this will show a link to remove the current association. This should be placed inside the partial.
     # either you give
     # - *name* : the text of the link
@@ -13,15 +20,15 @@ module Cocooned
     # - *html_options*:  html options to be passed to link_to (see <tt>link_to</tt>)
     # - *&block*:        the output of the block will be show in the link, see <tt>link_to</tt>
 
-    def link_to_remove_association(*args, &block)
+    def cocooned_remove_item_link(*args, &block)
       if block_given?
-        link_to_remove_association(capture(&block), *args)
+        cocooned_remove_item_link(capture(&block), *args)
+
       elsif args.first.respond_to?(:object)
         form = args.first
         association = form.object.class.to_s.tableize
-        name = I18n.translate("cocooned.#{association}.remove", default: I18n.translate('cocooned.defaults.remove'))
+        cocooned_remove_item_link(cocooned_default_label(association, :remove), *args)
 
-        link_to_remove_association(name, *args)
       else
         name, form, html_options = *args
         html_options ||= {}
@@ -41,25 +48,6 @@ module Cocooned
       end
     end
 
-    # :nodoc:
-    def render_association(association, form, new_object, form_name, render_options = {}, custom_partial = nil)
-      partial = get_partial_path(custom_partial, association)
-      locals =  render_options.delete(:locals) || {}
-      ancestors = form.class.ancestors.map(&:to_s)
-      method_name = if ancestors.include?('SimpleForm::FormBuilder')
-                      :simple_fields_for
-                    elsif ancestors.include?('Formtastic::FormBuilder')
-                      :semantic_fields_for
-                    else
-                      :fields_for
-                    end
-
-      form.send(method_name, association, new_object, { child_index: "new_#{association}" }.merge(render_options)) do |builder|
-        partial_options = { form_name.to_sym => builder, :dynamic => true }.merge(locals)
-        render(partial, partial_options)
-      end
-    end
-
     # shows a link that will allow to dynamically add a new associated object.
     #
     # - *name* :         the text to show in the link
@@ -75,14 +63,14 @@ module Cocooned
     #          - *:count*          : Count of how many objects will be added on a single click. Default `1`.
     # - *&block*:        see <tt>link_to</tt>
 
-    def link_to_add_association(*args, &block)
+    def cocooned_add_item_link(*args, &block)
       if block_given?
-        link_to_add_association(capture(&block), *args)
+        cocooned_add_item_link(capture(&block), *args)
+
       elsif args.first.respond_to?(:object)
         association = args.second
-        name = I18n.translate("cocooned.#{association}.add", default: I18n.translate('cocooned.defaults.add'))
+        cocooned_add_item_link(cocooned_default_label(association, :add), *args)
 
-        link_to_add_association(name, *args)
       else
         name, form, association, html_options = *args
         html_options ||= {}
@@ -133,11 +121,40 @@ module Cocooned
       create_object_on_non_association(form, association)
     end
 
-    def get_partial_path(partial, association)
-      partial || association.to_s.singularize + '_fields'
+    private
+
+    def cocooned_default_label(association, action)
+      # TODO: Remove in 2.0
+      if I18n.exists?(:cocoon)
+        msg = Cocooned::Helpers::Deprecate.deprecate_release_message('the :cocoon i18n scope', ':cocooned')
+        warn msg
+      end
+
+      I18n.translate("cocooned.#{association}.#{action}",
+                     default: [:"cocoon.#{association}.#{action}",
+                               :"cocooned.defaults.#{action}",
+                               :"cocoon.defaults.#{action}",
+                               action.to_s.humanize])
     end
 
-    private
+    # :nodoc:
+    def render_association(association, form, new_object, form_name, render_options = {}, custom_partial = nil)
+      partial = custom_partial || association.to_s.singularize + '_fields'
+      locals =  render_options.delete(:locals) || {}
+      ancestors = form.class.ancestors.map(&:to_s)
+      method_name = if ancestors.include?('SimpleForm::FormBuilder')
+                      :simple_fields_for
+                    elsif ancestors.include?('Formtastic::FormBuilder')
+                      :semantic_fields_for
+                    else
+                      :fields_for
+                    end
+
+      form.send(method_name, association, new_object, { child_index: "new_#{association}" }.merge(render_options)) do |builder|
+        partial_options = { form_name.to_sym => builder, :dynamic => true }.merge(locals)
+        render(partial, partial_options)
+      end
+    end
 
     def create_object_on_non_association(form, association)
       builder_method = %W[build_#{association} build_#{association.to_s.singularize}].select { |m| form.object.respond_to?(m) }.first

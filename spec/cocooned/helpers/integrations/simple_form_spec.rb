@@ -9,7 +9,7 @@ describe Cocooned::Helpers do
     @form_obj = double(object: @person, object_name: @person.class.name)
   end
 
-  context 'link_to_add_association' do
+  context 'cocooned_add_item_link' do
     context 'when using simple_form' do
       before(:each) do
         allow(@form_obj).to receive(:simple_fields_for).and_return('form<tagxxx>')
@@ -21,7 +21,7 @@ describe Cocooned::Helpers do
           expect(@form_obj).to receive(:simple_fields_for)
           expect(@form_obj).to receive(:fields_for).never
 
-          @html = @tester.link_to_add_association('add something', @form_obj, :contacts)
+          @html = @tester.cocooned_add_item_link('add something', @form_obj, :contacts)
         end
 
         it_behaves_like 'a correctly rendered add link',

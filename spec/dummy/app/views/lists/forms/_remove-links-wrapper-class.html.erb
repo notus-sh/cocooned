@@ -4,9 +4,9 @@
   <% end %>
 
   <div class='links'>
-    <%= link_to_add_association 'Add item', form, :items,
-                                form_name: :form,
-                                partial: 'lists/wrapped_item_fields'
+    <%= cocooned_add_item_link 'Add item', form, :items,
+                               form_name: :form,
+                               partial: 'lists/wrapped_item_fields'
     %>
   </div>
 </div>

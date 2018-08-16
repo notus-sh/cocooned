@@ -6,7 +6,7 @@
   <div class="insertion-node"></div>
 </div>
 
-<%= link_to_add_association 'Add item', form, :items,
-                            form_name: :form,
-                            partial: 'lists/item_fields',
-                            data: { association_insertion_node: '.insertion-node' } %>
+<%= cocooned_add_item_link 'Add item', form, :items,
+                           form_name: :form,
+                           partial: 'lists/item_fields',
+                           data: { association_insertion_node: '.insertion-node' } %>

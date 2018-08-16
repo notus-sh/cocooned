@@ -9,7 +9,7 @@ describe Cocooned::Helpers do
     @form_obj = double(object: @person, object_name: @person.class.name)
   end
 
-  describe '#link_to_add_association' do
+  describe '#cocooned_add_item_link' do
     before(:each) do
       allow(@tester).to receive(:render_association).and_return('form<tag>')
     end
@@ -17,7 +17,7 @@ describe Cocooned::Helpers do
     context 'without a block' do
       context 'and given a name' do
         before do
-          @html = @tester.link_to_add_association('add something', @form_obj, :posts)
+          @html = @tester.cocooned_add_item_link('add something', @form_obj, :posts)
         end
 
         it_behaves_like 'a correctly rendered add link',
@@ -29,7 +29,11 @@ describe Cocooned::Helpers do
           before do
             I18n.backend.store_translations(:en, cocooned: { posts: { add: 'Add a post' } })
 
-            @html = @tester.link_to_add_association(@form_obj, :posts)
+            @html = @tester.cocooned_add_item_link(@form_obj, :posts)
+          end
+
+          after(:each) do
+            I18n.reload!
           end
 
           it_behaves_like 'a correctly rendered add link',
@@ -40,7 +44,11 @@ describe Cocooned::Helpers do
           before do
             I18n.backend.store_translations(:en, cocooned: { defaults: { add: 'Add' } })
 
-            @html = @tester.link_to_add_association(@form_obj, :posts)
+            @html = @tester.cocooned_add_item_link(@form_obj, :posts)
+          end
+
+          after(:each) do
+            I18n.reload!
           end
 
           it_behaves_like 'a correctly rendered add link',
@@ -50,7 +58,7 @@ describe Cocooned::Helpers do
 
       context 'and given html options to pass them to link_to' do
         before do
-          @html = @tester.link_to_add_association('add something', @form_obj, :posts, class: 'something silly')
+          @html = @tester.cocooned_add_item_link('add something', @form_obj, :posts, class: 'something silly')
         end
 
         it_behaves_like 'a correctly rendered add link',
@@ -64,7 +72,7 @@ describe Cocooned::Helpers do
           expect(@tester).to receive(:render_association)
             .with(anything, anything, anything, 'f', anything, 'shared/partial')
             .and_return('partial')
-          @html = @tester.link_to_add_association('add something', @form_obj, :posts, partial: 'shared/partial')
+          @html = @tester.cocooned_add_item_link('add something', @form_obj, :posts, partial: 'shared/partial')
         end
 
         it_behaves_like 'a correctly rendered add link',
@@ -77,8 +85,8 @@ describe Cocooned::Helpers do
         expect(@tester).to receive(:render_association)
           .with(anything, anything, kind_of(PostDecorator), 'f', anything, anything)
           .and_return('partiallll')
-        @tester.link_to_add_association('add something', @form_obj, :posts,
-                                        wrap_object: proc { |p| PostDecorator.new(p) })
+        @tester.cocooned_add_item_link('add something', @form_obj, :posts,
+                                       wrap_object: proc { |p| PostDecorator.new(p) })
       end
 
       context 'force non association create' do
@@ -86,7 +94,7 @@ describe Cocooned::Helpers do
           before do
             expect(@tester).to receive(:create_object)
               .with(anything, :posts, false)
-            @html = @tester.link_to_add_association('add something', @form_obj, :posts)
+            @html = @tester.cocooned_add_item_link('add something', @form_obj, :posts)
           end
 
           it_behaves_like 'a correctly rendered add link',
@@ -97,7 +105,7 @@ describe Cocooned::Helpers do
           before do
             expect(@tester).to receive(:create_object)
               .with(anything, :posts, false)
-            @html = @tester.link_to_add_association('add something', @form_obj, :posts, force_non_association_create: false)
+            @html = @tester.cocooned_add_item_link('add something', @form_obj, :posts, force_non_association_create: false)
           end
           it_behaves_like 'a correctly rendered add link',
                           {}
@@ -107,7 +115,7 @@ describe Cocooned::Helpers do
           before do
             expect(@tester).to receive(:create_object)
               .with(anything, :posts, true)
-            @html = @tester.link_to_add_association('add something', @form_obj, :posts, force_non_association_create: true)
+            @html = @tester.cocooned_add_item_link('add something', @form_obj, :posts, force_non_association_create: true)
           end
           it_behaves_like 'a correctly rendered add link',
                           {}
@@ -118,7 +126,7 @@ describe Cocooned::Helpers do
     context 'with a block' do
       context 'and the block specifies the link text' do
         before do
-          @html = @tester.link_to_add_association(@form_obj, :posts) do
+          @html = @tester.cocooned_add_item_link(@form_obj, :posts) do
             'some long name'
           end
         end
@@ -128,7 +136,7 @@ describe Cocooned::Helpers do
 
       context 'accepts html options and pass them to link_to' do
         before do
-          @html = @tester.link_to_add_association(@form_obj, :posts, class: 'floppy disk') do
+          @html = @tester.cocooned_add_item_link(@form_obj, :posts, class: 'floppy disk') do
             'some long name'
           end
         end
@@ -140,7 +148,7 @@ describe Cocooned::Helpers do
       context 'accepts extra attributes and pass them to link_to' do
         context 'when using the old notation' do
           before do
-            @html = @tester.link_to_add_association(@form_obj, :posts, :class => 'floppy disk', 'data-something' => 'bla') do
+            @html = @tester.cocooned_add_item_link(@form_obj, :posts, :class => 'floppy disk', 'data-something' => 'bla') do
               'some long name'
             end
           end
@@ -152,7 +160,7 @@ describe Cocooned::Helpers do
 
         context 'when using the new notation' do
           before do
-            @html = @tester.link_to_add_association(@form_obj, :posts, class: 'floppy disk', data: { 'association-something': 'foobar' }) do
+            @html = @tester.cocooned_add_item_link(@form_obj, :posts, class: 'floppy disk', data: { 'association-something': 'foobar' }) do
               'some long name'
             end
           end
@@ -170,7 +178,7 @@ describe Cocooned::Helpers do
           expect(@tester).to receive(:render_association)
             .with(anything, anything, anything, 'f', anything, 'shared/partial')
             .and_return('partial')
-          @html = @tester.link_to_add_association(@form_obj, :posts, class: 'floppy disk', partial: 'shared/partial') do
+          @html = @tester.cocooned_add_item_link(@form_obj, :posts, class: 'floppy disk', partial: 'shared/partial') do
             'some long name'
           end
         end
@@ -184,7 +192,7 @@ describe Cocooned::Helpers do
 
     context 'when adding a count' do
       before do
-        @html = @tester.link_to_add_association('add something', @form_obj, :posts, count: 3)
+        @html = @tester.cocooned_add_item_link('add something', @form_obj, :posts, count: 3)
       end
       it_behaves_like 'a correctly rendered add link',
                       extra_attributes: { 'data-count' => '3' }
@@ -192,14 +200,14 @@ describe Cocooned::Helpers do
 
     context 'when adding a limit' do
       before do
-        @html = @tester.link_to_add_association('add something', @form_obj, :posts, limit: 3)
+        @html = @tester.cocooned_add_item_link('add something', @form_obj, :posts, limit: 3)
       end
       it_behaves_like 'a correctly rendered add link',
                       extra_attributes: { 'data-limit' => '3' }
     end
   end
 
-  describe '#link_to_remove_association' do
+  describe '#cocooned_remove_item_link' do
     before do
       @post = Post.new
       @form_obj = double(object: @post, object_name: @post.class.name)
@@ -208,7 +216,7 @@ describe Cocooned::Helpers do
     context 'without a block' do
       context 'accepts a name' do
         before do
-          @html = @tester.link_to_remove_association('remove something', @form_obj)
+          @html = @tester.cocooned_remove_item_link('remove something', @form_obj)
         end
 
         it 'is rendered inside a input element' do
@@ -227,7 +235,11 @@ describe Cocooned::Helpers do
         context 'custom translation exists' do
           before do
             I18n.backend.store_translations(:en, cocooned: { posts: { remove: 'Remove this post' } })
-            @html = @tester.link_to_remove_association(@form_obj)
+            @html = @tester.cocooned_remove_item_link(@form_obj)
+          end
+
+          after(:each) do
+            I18n.reload!
           end
 
           it_behaves_like 'a correctly rendered remove link',
@@ -237,7 +249,11 @@ describe Cocooned::Helpers do
         context 'uses default translation' do
           before do
             I18n.backend.store_translations(:en, cocooned: { defaults: { remove: 'Remove' } })
-            @html = @tester.link_to_remove_association(@form_obj)
+            @html = @tester.cocooned_remove_item_link(@form_obj)
+          end
+
+          after(:each) do
+            I18n.reload!
           end
 
           it_behaves_like 'a correctly rendered remove link',
@@ -247,7 +263,7 @@ describe Cocooned::Helpers do
 
       context 'accepts html options and pass them to link_to' do
         before do
-          @html = @tester.link_to_remove_association('remove something', @form_obj, class: 'add_some_class', 'data-something': 'bla')
+          @html = @tester.cocooned_remove_item_link('remove something', @form_obj, class: 'add_some_class', 'data-something': 'bla')
         end
         it_behaves_like 'a correctly rendered remove link',
                         class: 'add_some_class remove_fields dynamic',
@@ -260,7 +276,7 @@ describe Cocooned::Helpers do
     context 'for a object marked for destruction' do
       before do
         @post.mark_for_destruction
-        @html = @tester.link_to_remove_association('remove something', @form_obj)
+        @html = @tester.cocooned_remove_item_link('remove something', @form_obj)
       end
 
       it 'is rendered inside a input element' do
@@ -278,7 +294,7 @@ describe Cocooned::Helpers do
     context 'with a block' do
       context 'the block gives the name' do
         before do
-          @html = @tester.link_to_remove_association(@form_obj) do
+          @html = @tester.cocooned_remove_item_link(@form_obj) do
             'remove some long name'
           end
         end
@@ -288,7 +304,7 @@ describe Cocooned::Helpers do
 
       context 'accepts html options and pass them to link_to' do
         before do
-          @html = @tester.link_to_remove_association(@form_obj, class: 'add_some_class', 'data-something': 'bla') do
+          @html = @tester.cocooned_remove_item_link(@form_obj, class: 'add_some_class', 'data-something': 'bla') do
             'remove some long name'
           end
         end
@@ -302,7 +318,7 @@ describe Cocooned::Helpers do
     context 'when changing the wrapper class' do
       context 'should use the default nested-fields class' do
         before do
-          @html = @tester.link_to_remove_association('remove something', @form_obj)
+          @html = @tester.cocooned_remove_item_link('remove something', @form_obj)
         end
 
         it_behaves_like 'a correctly rendered remove link',
@@ -311,7 +327,7 @@ describe Cocooned::Helpers do
 
       context 'should use the given wrapper class' do
         before do
-          @html = @tester.link_to_remove_association('remove something', @form_obj, wrapper_class: 'another-class')
+          @html = @tester.cocooned_remove_item_link('remove something', @form_obj, wrapper_class: 'another-class')
         end
 
         it_behaves_like 'a correctly rendered remove link',

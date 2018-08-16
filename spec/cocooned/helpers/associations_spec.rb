@@ -9,7 +9,7 @@ describe Cocooned::Helpers do
     @form   = double(object: @person, object_name: @person.class.name)
   end
 
-  describe '#link_to_add_association' do
+  describe '#cocooned_add_item_link' do
     before(:each) do
       allow(@tester).to receive(:render_association)
         .and_return('form<tag>')
@@ -18,7 +18,7 @@ describe Cocooned::Helpers do
     context 'with an irregular plural' do
       context 'uses the correct plural' do
         before do
-          @html = @tester.link_to_add_association('add something', @form, :alumni)
+          @html = @tester.cocooned_add_item_link('add something', @form, :alumni)
         end
 
         it_behaves_like 'a correctly rendered add link',
@@ -30,7 +30,7 @@ describe Cocooned::Helpers do
     context 'when using aliased association and class-name' do
       context 'uses the correct name' do
         before do
-          @html = @tester.link_to_add_association('add something', @form, :alumni)
+          @html = @tester.cocooned_add_item_link('add something', @form, :alumni)
         end
 
         it_behaves_like 'a correctly rendered add link',
@@ -45,7 +45,7 @@ describe Cocooned::Helpers do
           expect(@tester).to receive(:render_association)
             .with(:contacts, @form, anything, 'f', { wrapper: 'inline' }, nil)
 
-          @html = @tester.link_to_add_association('add something', @form, :contacts, render_options: { wrapper: 'inline' })
+          @html = @tester.cocooned_add_item_link('add something', @form, :contacts, render_options: { wrapper: 'inline' })
         end
 
         it_behaves_like 'a correctly rendered add link',
@@ -63,13 +63,13 @@ describe Cocooned::Helpers do
             .with('contact_fields', f: nil, dynamic: true, alfred: 'Judoka')
             .and_return 'partial'
 
-          @html = @tester.link_to_add_association('add something',
-                                                  @form,
-                                                  :contacts,
-                                                  render_options: {
-                                                    wrapper: 'inline',
-                                                    locals: { alfred: 'Judoka' }
-                                                  })
+          @html = @tester.cocooned_add_item_link('add something',
+                                                 @form,
+                                                 :contacts,
+                                                 render_options: {
+                                                   wrapper: 'inline',
+                                                   locals: { alfred: 'Judoka' }
+                                                 })
         end
 
         it_behaves_like 'a correctly rendered add link',
@@ -86,7 +86,7 @@ describe Cocooned::Helpers do
             .with('contact_fields', f: nil, dynamic: true)
             .and_return 'partial'
 
-          @html = @tester.link_to_add_association('add something', @form, :contacts, render_options: { wrapper: 'inline' })
+          @html = @tester.cocooned_add_item_link('add something', @form, :contacts, render_options: { wrapper: 'inline' })
         end
 
         it_behaves_like 'a correctly rendered add link',
@@ -105,7 +105,7 @@ describe Cocooned::Helpers do
             .with('contact_fields', student_form: nil, dynamic: true)
             .and_return 'partial'
 
-          @html = @tester.link_to_add_association('add something', @form, :contacts, form_name: 'student_form')
+          @html = @tester.cocooned_add_item_link('add something', @form, :contacts, form_name: 'student_form')
         end
 
         it_behaves_like 'a correctly rendered add link',
