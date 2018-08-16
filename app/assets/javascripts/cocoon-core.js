@@ -246,8 +246,9 @@ Cocoon.prototype = {
   },
 
   hideMarkedForDestruction: function() {
+    var self = this;
     $('.remove_fields.existing.destroyed', this.container).each(function(i, removeLink) {
-      var node = this.findItem(removeLink);
+      var node = self.findItem(removeLink);
       node.hide();
     });
   }
