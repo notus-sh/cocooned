@@ -76,6 +76,12 @@ Cocooned.prototype = {
     return this.classes[type].map(function(klass) { return s.replace(/&/, '.' + klass); }).join(', ');
   },
 
+  namespacedNativeEvents: function (type) {
+    var namespaces = this.namespaces.events.map(function(ns) { return '.' + ns; });
+    namespaces.unshift(type);
+    return namespaces.join('');
+  },
+
   buildId: function () {
     return (new Date().getTime() + this.elementsCounter++);
   },
@@ -191,17 +197,22 @@ Cocooned.prototype = {
     var self = this;
 
     // Bind add links
-    this.addLinks.on('click.cocooned', function (e) {
-      e.preventDefault();
-      self.add(this);
-    });
+    this.addLinks.on(
+      this.namespacedNativeEvents('click'),
+      function (e) {
+        e.preventDefault();
+        self.add(this);
+      });
 
     // Bind remove links
     // (Binded on document instead of container to not bypass click handler defined in jquery_ujs)
-    $(document).on('click.cocooned', this.selector('remove', '#' + this.container.attr('id') + ' &'), function (e) {
-      e.preventDefault();
-      self.remove(this);
-    });
+    $(document).on(
+      this.namespacedNativeEvents('click'),
+      this.selector('remove', '#' + this.container.attr('id') + ' &'),
+      function (e) {
+        e.preventDefault();
+        self.remove(this);
+      });
 
     // Bind options events
     $.each(this.options, function (name, value) {

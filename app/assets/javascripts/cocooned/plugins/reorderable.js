@@ -5,12 +5,17 @@ Cocooned.Plugins.Reorderable = {
   bindReorderable: function() {
     var self = this;
 
+    // Maintain indexes
     this.container
-      // Maintain indexes
       .on('cocooned:after-insert',  function(e) { self.reindex(); })
       .on('cocooned:after-remove',  function(e) { self.reindex(); })
-      .on('cocooned:after-move',    function(e) { self.reindex(); })
-      .on('click.cocooned', [this.selector('up'), this.selector('down')].join(', '), function(e) {
+      .on('cocooned:after-move',    function(e) { self.reindex(); });
+
+    // Move items
+    this.container.on(
+      this.namespacedNativeEvents('click'),
+      [this.selector('up'), this.selector('down')].join(', '),
+      function(e) {
         e.preventDefault();
         var node = this;
         var up = self.classes['up'].some(function(klass) {
@@ -20,7 +25,11 @@ Cocooned.Plugins.Reorderable = {
       });
 
     // Ensure positions are unique before save
-    this.container.closest('form').on('submit', function(e) { self.reindex(); });
+    this.container.closest('form').on(
+      this.namespacedNativeEvents('submit'),
+      function(e) {
+        self.reindex();
+      });
   },
 
   move: function(moveLink, direction) {
