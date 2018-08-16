@@ -17,6 +17,6 @@ Cocooned.Plugins.Limit = {
   },
 
   getLength: function() {
-    return this.getNodes(':visible').length;
+    return this.getItems('&:visible').length;
   }
 };

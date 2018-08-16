@@ -26,8 +26,23 @@ Cocooned.prototype = {
 
   elementsCounter: 0,
 
+  // Compatibility with Cocoon
+  // TODO: Remove in 2.0 (Only Cocoon namespaces).
   namespaces: {
     events: ['cocooned', 'cocoon']
+  },
+
+  // Compatibility with Cocoon
+  // TODO: Remove in 2.0 (Only Cocoon class names).
+  classes: {
+    // Actions link
+    add:        ['cocooned-add', 'add_fields'],
+    remove:     ['cocooned-remove', 'remove_fields'],
+    up:         ['cocooned-move-up'],
+    down:       ['cocooned-move-down'],
+    // Containers
+    container:  ['cocooned-container'],
+    item:       ['cocooned-item', 'nested-fields'],
   },
 
   addLinkSelector: '.add_fields',
@@ -58,6 +73,11 @@ Cocooned.prototype = {
 
       return (event.isPropagationStopped() || event.isDefaultPrevented());
     }));
+  },
+
+  selector: function (type, selector) {
+    var s = selector || '&';
+    return this.classes[type].map(function(klass) { return s.replace(/&/, '.' + klass); }).join(', ');
   },
 
   buildId: function () {
@@ -103,11 +123,11 @@ Cocooned.prototype = {
     return $adder.data('association-insertion-method') || 'before';
   },
 
-  getNodes: function (selector) {
+  getItems: function (selector) {
     selector = selector || '';
     var self = this;
-    return $(this.siblingsSelector + selector, this.container).filter(function () {
-      return ($(this).closest('.cocooned-container').get(0) === self.container.get(0));
+    return $(this.selector('item', selector), this.container).filter(function () {
+      return ($(this).closest(self.selector('container')).get(0) === self.container.get(0));
     });
   },
 
@@ -138,7 +158,7 @@ Cocooned.prototype = {
   init: function () {
     var self = this;
 
-    this.addLinks = $(this.addLinkSelector).filter(function () {
+    this.addLinks = $(this.selector('add')).filter(function () {
       var container = self.findContainer(this);
       return (container.get(0) === self.container.get(0));
     });
@@ -167,7 +187,7 @@ Cocooned.prototype = {
     if (!this.container.attr('id')) {
       this.container.attr('id', this.buildId());
     }
-    this.container.addClass('cocooned-container');
+    this.container.addClass(this.classes['container'].join(' '));
 
     $(function () { self.hideMarkedForDestruction(); });
     $(document).on('page:load turbolinks:load', function () { self.hideMarkedForDestruction(); });
@@ -184,7 +204,7 @@ Cocooned.prototype = {
 
     // Bind remove links
     // (Binded on document instead of container to not bypass click handler defined in jquery_ujs)
-    $(document).on('click.cocooned', ('#' + this.container.attr('id') + ' ' + this.removeLinkSelector), function (e) {
+    $(document).on('click.cocooned', this.selector('remove', '#' + this.container.attr('id') + ' &'), function (e) {
       e.preventDefault();
       self.remove(this);
     });
@@ -251,7 +271,7 @@ Cocooned.prototype = {
 
   hideMarkedForDestruction: function () {
     var self = this;
-    $('.remove_fields.existing.destroyed', this.container).each(function (i, removeLink) {
+    $(this.selector('remove', '&.existing.destroyed'), this.container).each(function (i, removeLink) {
       var node = self.findItem(removeLink);
       node.hide();
     });

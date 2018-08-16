@@ -15,7 +15,7 @@ describe('With a different items wrapper class', function () {
     });
 
     it("should remove an item", function() {
-      $('.remove_fields').first().trigger('click');
+      $('.cocooned-remove').first().trigger('click');
       jasmine.clock().tick(1);
       expect(this.wrapper.children('.nested-item:visible').length).toEqual(0);
     });

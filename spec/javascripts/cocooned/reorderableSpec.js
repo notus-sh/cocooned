@@ -8,7 +8,7 @@ describe('A reorderable cocooned setup', function () {
   describe('with at least two items', function () {
     beforeEach(function () {
       for (var i = 0, count = Math.ceil(Math.random() * 12); i <= count; i++) {
-        $('.add_fields').trigger('click');
+        $('.cocooned-add').trigger('click');
       }
     });
 
@@ -27,13 +27,13 @@ describe('A reorderable cocooned setup', function () {
       });
 
       it('on the association add link', function () {
-        $('.add_fields').trigger('click');
+        $('.cocooned-add').trigger('click');
         jasmine.clock().tick(1);
         expect(cocooned.reindex).toHaveBeenCalled();
       });
 
       it('on an association remove link', function () {
-        $('.remove_fields').first().trigger('click');
+        $('.cocooned-remove').first().trigger('click');
         jasmine.clock().tick(1);
         expect(cocooned.reindex).toHaveBeenCalled();
       });
@@ -60,7 +60,7 @@ describe('A reorderable cocooned setup', function () {
 
       describe('and reindexed items', function () {
         beforeEach(function () {
-          $('.add_fields').trigger('click');
+          $('.cocooned-add').trigger('click');
           jasmine.clock().tick(1);
         });
 

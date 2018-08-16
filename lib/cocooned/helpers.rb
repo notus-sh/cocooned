@@ -4,6 +4,14 @@ require 'cocooned/helpers/deprecate'
 require 'cocooned/helpers/cocoon_compatibility'
 
 module Cocooned
+  # TODO: Remove in 2.0 (Only Cocoon class names).
+  HELPER_CLASSES = {
+    add:    ['cocooned-add', 'add_fields'],
+    remove: ['cocooned-remove', 'remove_fields'],
+    up:     ['cocooned-up'],
+    down:   ['cocooned-down']
+  }.freeze
+
   module Helpers
     # Create aliases to old Cocoon method name
     # TODO: Remove in 2.0
@@ -35,11 +43,10 @@ module Cocooned
 
         is_dynamic = form.object.new_record?
 
-        classes = []
-        classes << 'remove_fields'
+        classes = Cocooned::HELPER_CLASSES[:remove] + Array(html_options.delete(:class))
         classes << (is_dynamic ? 'dynamic' : 'existing')
         classes << 'destroyed' if form.object.marked_for_destruction?
-        html_options[:class] = [html_options[:class], classes.join(' ')].compact.join(' ')
+        html_options[:class] = classes.compact
 
         wrapper_class = html_options.delete(:wrapper_class)
         html_options[:'data-wrapper-class'] = wrapper_class if wrapper_class.present?
@@ -84,7 +91,7 @@ module Cocooned
         count = html_options.delete(:count).to_i
         limit = html_options.delete(:limit).to_i
 
-        html_options[:class] = [html_options[:class], 'add_fields'].compact.join(' ')
+        html_options[:class] = [html_options[:class], Cocooned::HELPER_CLASSES[:add]].flatten.compact.join(' ')
         html_options[:'data-association'] = association.to_s.singularize
         html_options[:'data-associations'] = association.to_s.pluralize
 

@@ -3,7 +3,7 @@
 
 // TODO: Remove in 2.0
 describe('Compatibility with a cocoon setup', function () {
-  beforeEach(setup('basic'));
+  beforeEach(setup('compatibility'));
   afterEach(teardown());
 
   describe('on events', function () {
@@ -21,6 +21,34 @@ describe('Compatibility with a cocoon setup', function () {
 
     it("should raise an event with the 'cocoon' namespace", function () {
       expect(beforeEventSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe('with old action links class names', function () {
+    describe('on click on the association add link', function () {
+      beforeEach(function () {
+        $('.add_fields').trigger('click');
+      });
+
+      it('should add an item', function () {
+        expect(this.wrapper.children('.nested-fields').length).toEqual(2);
+      });
+    });
+
+    describe('on click on an association remove link', function () {
+      beforeEach(function () {
+        jasmine.clock().install();
+      });
+
+      afterEach(function () {
+        jasmine.clock().uninstall();
+      });
+
+      it('should remove an item', function () {
+        $('.remove_fields').first().trigger('click');
+        jasmine.clock().tick(1);
+        expect(this.wrapper.children('.nested-fields:visible').length).toEqual(0);
+      });
     });
   });
 });

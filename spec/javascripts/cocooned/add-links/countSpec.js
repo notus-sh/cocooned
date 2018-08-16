@@ -7,7 +7,7 @@ describe('With a count', function () {
 
   describe('a click on the association add link', function() {
     beforeEach(function() {
-      $('.add_fields').trigger('click');
+      $('.cocooned-add').trigger('click');
     });
 
     it("should add the requested number of items", function() {

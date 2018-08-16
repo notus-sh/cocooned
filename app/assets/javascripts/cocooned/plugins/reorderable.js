@@ -10,9 +10,13 @@ Cocooned.Plugins.Reorderable = {
       .on('cocooned:after-insert',  function(e) { self.reindex(); })
       .on('cocooned:after-remove',  function(e) { self.reindex(); })
       .on('cocooned:after-move',    function(e) { self.reindex(); })
-      .on('click.cocooned', '.cocooned-move-up, .cocooned-move-down', function(e) {
+      .on('click.cocooned', [this.selector('up'), this.selector('down')].join(', '), function(e) {
         e.preventDefault();
-        self.move(this, this.className.indexOf('cocooned-move-up') != -1 ? 'up' : 'down');
+        var node = this;
+        var up = self.classes['up'].some(function(klass) {
+          return node.className.indexOf(klass) != -1;
+        });
+        self.move(this, up ? 'up' : 'down');
       });
 
     // Ensure positions are unique before save
@@ -22,10 +26,10 @@ Cocooned.Plugins.Reorderable = {
   move: function(moveLink, direction) {
     var self = this;
     var $mover = $(moveLink);
-    var node = $mover.closest(this.siblingsSelector);
+    var node = $mover.closest(this.selector('item'));
     var siblings = (direction == 'up'
-        ? node.prevAll(this.siblingsSelector + ':eq(0)')
-        : node.nextAll(this.siblingsSelector + ':eq(0)'));
+        ? node.prevAll(this.selector('item', '&:eq(0)'))
+        : node.nextAll(this.selector('item', '&:eq(0)')));
 
     if (siblings.length == 0) {
       return;
@@ -55,7 +59,7 @@ Cocooned.Plugins.Reorderable = {
   reindex: function() {
     var self = this;
     var i = 0;
-    var nodes = this.getNodes(':visible');
+    var nodes = this.getItems('&:visible');
     var eventData = { link: null, nodes: nodes, cocooned: this };
 
     // Reindex can be prevented through a 'cocooned:before-reindex' event handler

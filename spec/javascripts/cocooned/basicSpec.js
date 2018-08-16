@@ -27,14 +27,14 @@ describe('A basic cocooned setup', function () {
       });
 
       it('should have correctly tagged remove link', function () {
-        expect(this.subject.find('.remove_fields').attr('class')).toMatch(/existing/);
+        expect(this.subject.find('.cocooned-remove').attr('class')).toMatch(/existing/);
       });
     });
   });
 
   describe('on click on the association add link', function () {
     beforeEach(function () {
-      $('.add_fields').trigger('click');
+      $('.cocooned-add').trigger('click');
     });
 
     it('should add an item', function () {
@@ -58,7 +58,7 @@ describe('A basic cocooned setup', function () {
       });
 
       it('should have correctly tagged remove link', function () {
-        expect(this.subject.find('.remove_fields').attr('class')).toMatch(/dynamic/);
+        expect(this.subject.find('.cocooned-remove').attr('class')).toMatch(/dynamic/);
       });
     });
   });
@@ -74,7 +74,7 @@ describe('A basic cocooned setup', function () {
       afterEventSpy = jasmine.createSpy('afterEventSpy');
       $(document).on('cocooned:after-insert', afterEventSpy);
 
-      $('.add_fields').trigger('click');
+      $('.cocooned-add').trigger('click');
     });
 
     afterEach(function () {
@@ -91,7 +91,7 @@ describe('A basic cocooned setup', function () {
       var args = beforeEventSpy.calls.first().args;
       var event = args[0];
       expect(event.type).toEqual('cocooned:before-insert');
-      expect(event.link.get(0)).toEqual($('.add_fields').get(0));
+      expect(event.link.get(0)).toEqual($('.cocooned-add').get(0));
 
       var node = args[1];
       expect(node.get(0)).toEqual(this.wrapper.children('.nested-fields').last().get(0));
@@ -106,7 +106,7 @@ describe('A basic cocooned setup', function () {
       var args = afterEventSpy.calls.first().args;
       var event = args[0];
       expect(event.type).toEqual('cocooned:after-insert');
-      expect(event.link.get(0)).toEqual($('.add_fields').get(0));
+      expect(event.link.get(0)).toEqual($('.cocooned-add').get(0));
 
       var node = args[1];
       expect(node.get(0)).toEqual(this.wrapper.children('.nested-fields').last().get(0));
@@ -126,7 +126,7 @@ describe('A basic cocooned setup', function () {
       afterEventSpy = jasmine.createSpy('afterEventSpy');
       $(document).on('cocooned:after-insert', afterEventSpy);
 
-      $('.add_fields').trigger('click');
+      $('.cocooned-add').trigger('click');
     });
 
     afterEach(function () {
@@ -157,18 +157,18 @@ describe('A basic cocooned setup', function () {
     });
 
     it('should remove an item', function () {
-      $('.remove_fields').first().trigger('click');
+      $('.cocooned-remove').first().trigger('click');
       jasmine.clock().tick(1);
       expect(this.wrapper.children('.nested-fields:visible').length).toEqual(0);
     });
 
     describe('on a pre-existing item', function () {
       beforeEach(function () {
-        this.subject = this.wrapper.find('.remove_fields.existing').first().closest('.nested-fields');
+        this.subject = this.wrapper.find('.cocooned-remove.existing').first().closest('.nested-fields');
       });
 
       it('should mark the item to be destroyed', function () {
-        $('.remove_fields', this.subject).trigger('click');
+        $('.cocooned-remove', this.subject).trigger('click');
         jasmine.clock().tick(1);
 
         expect($.contains(this.wrapper.get(0), this.subject.get(0))).toBeTruthy();
@@ -178,12 +178,12 @@ describe('A basic cocooned setup', function () {
 
     describe('on a just added item', function () {
       beforeEach(function () {
-        $('.add_fields').trigger('click');
-        this.subject = this.wrapper.children('.remove_fields.dynamic').first().closest('.nested-fields');
+        $('.cocooned-add').trigger('click');
+        this.subject = this.wrapper.children('.cocooned-remove.dynamic').first().closest('.nested-fields');
       });
 
       it('should remove the item from the DOM', function () {
-        $('.remove_fields', this.subject).trigger('click');
+        $('.cocooned-remove', this.subject).trigger('click');
         jasmine.clock().tick(1);
         expect($.contains(this.wrapper.get(0), this.subject.get(0))).toBeFalsy();
       });
@@ -203,7 +203,7 @@ describe('A basic cocooned setup', function () {
       afterEventSpy = jasmine.createSpy('afterEventSpy');
       $(document).on('cocooned:after-remove', afterEventSpy);
 
-      var removeLink = $('.remove_fields').first();
+      var removeLink = $('.cocooned-remove').first();
       this.subject = removeLink.closest('.nested-fields').get(0);
 
       removeLink.trigger('click');
@@ -260,7 +260,7 @@ describe('A basic cocooned setup', function () {
       afterEventSpy = jasmine.createSpy('afterEventSpy');
       $(document).on('cocooned:after-remove', afterEventSpy);
 
-      var removeLink = $('.remove_fields').first();
+      var removeLink = $('.cocooned-remove').first();
       this.subject = removeLink.closest('.nested-fields').get(0);
 
       removeLink.trigger('click');

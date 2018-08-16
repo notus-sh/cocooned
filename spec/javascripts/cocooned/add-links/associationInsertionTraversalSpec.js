@@ -7,7 +7,7 @@ describe('With a different association insertion traversal (and node)', function
 
   describe('a click on the association add link', function() {
     beforeEach(function() {
-      $('.add_fields').trigger('click');
+      $('.cocooned-add').trigger('click');
     });
 
     it("should add an item at the right place", function() {

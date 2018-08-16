@@ -8,8 +8,8 @@ function shouldHonoreTheLimit (pendingSpec) {
       eventSpy = jasmine.createSpy('eventSpy');
       $(document).on('cocooned:limit-reached', eventSpy);
 
-      $('.add_fields').trigger('click');
-      $('.add_fields').trigger('click');
+      $('.cocooned-add').trigger('click');
+      $('.cocooned-add').trigger('click');
     });
 
     afterEach(function() {
@@ -30,7 +30,7 @@ function shouldHonoreTheLimit (pendingSpec) {
 
       var event = eventSpy.calls.first().args[0];
       expect(event.type).toEqual('cocooned:limit-reached');
-      expect(event.link.get(0)).toEqual($('.add_fields').get(0));
+      expect(event.link.get(0)).toEqual($('.cocooned-add').get(0));
     });
   };
 }
