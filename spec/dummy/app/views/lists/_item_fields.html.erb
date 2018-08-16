@@ -1,8 +1,8 @@
 <div class="cocooned-item">
 
   <%= cocooned_remove_item_link "Remove", form %>
-  <%= link_to 'Move up', '#', class: 'cocooned-move-up' %>
-  <%= link_to 'Move down', '#', class: 'cocooned-move-down' %>
+  <%= cocooned_move_item_up_link 'Move up', form %>
+  <%= cocooned_move_item_down_link 'Move down', form %>
 
   <%= form.label :label %>
   <%= form.text_field :label %>

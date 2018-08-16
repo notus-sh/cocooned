@@ -315,4 +315,42 @@ describe Cocooned::Helpers do
       end
     end
   end
+
+  describe '#cocooned_move_item_up_link' do
+    it 'should have the appropriate class' do
+      expect(@tester.cocooned_move_item_up_link('Up', @form_obj)).to match(/class="cocooned-move-up"/)
+      expect(@tester.cocooned_move_item_down_link('Up', @form_obj)).to match(/class="cocooned-move-down"/)
+    end
+
+    it 'should support additional html options' do
+      expect(@tester.cocooned_move_item_up_link('Up', @form_obj, data: { test: 1 })).to match(/data-test="1"/)
+    end
+
+    context 'with a block' do
+      it 'should capture its content and use it as label' do
+        expect(@tester.cocooned_move_item_up_link(@form_obj) { 'Move upper' }).to match(%r{>Move upper</a>$})
+      end
+    end
+
+    context 'with an explicit name' do
+      it 'should use it as label' do
+        expect(@tester.cocooned_move_item_up_link('Move upper', @form_obj)).to match(%r{>Move upper</a>$})
+      end
+    end
+
+    context 'with neither a block nor a given name' do
+      before(:each) do
+        I18n.backend.store_translations(:en, cocooned: { defaults: { up: 'Move up' } })
+      end
+
+      after(:each) do
+        I18n.reload!
+      end
+
+      it 'should use translations if available' do
+        expect(@tester.cocooned_move_item_up_link(@form_obj)).to match(%r{>Move up</a>$})
+        expect(@tester.cocooned_move_item_down_link(@form_obj)).to match(%r{>Down</a>$})
+      end
+    end
+  end
 end

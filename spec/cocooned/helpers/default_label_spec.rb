@@ -19,17 +19,17 @@ describe Cocooned::Helpers do
       end
 
       it 'should use custom translations when available' do
-        expect(@tester.send(:cocooned_default_label, :posts, :remove)).to eq('Remove this post')
+        expect(@tester.send(:cocooned_default_label, :remove, :posts)).to eq('Remove this post')
       end
 
       it 'should use default translations when not' do
-        expect(@tester.send(:cocooned_default_label, :people, :remove)).to eq('Remove')
+        expect(@tester.send(:cocooned_default_label, :remove, :people)).to eq('Remove')
       end
     end
 
     context 'when no translation exist' do
       it 'should return the humanized name of the action' do
-        expect(@tester.send(:cocooned_default_label, :posts, :remove)).to eq('Remove')
+        expect(@tester.send(:cocooned_default_label, :remove, :posts)).to eq('Remove')
       end
     end
   end

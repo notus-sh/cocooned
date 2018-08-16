@@ -22,8 +22,10 @@ shared_examples_for 'a correctly rendered add link' do |options|
       expect(@link.attribute('href').value).to eq(@options[:href])
     end
 
-    it 'has a correct class' do
-      expect(@link.attribute('class').value).to eq(@options[:class])
+    it 'has a correct classes' do
+      expected = Array(@options[:class]).collect { |k| k.split(' ') }.flatten.uniq
+      actual = Array(@link.attribute('class').value).collect { |k| k.split(' ') }.flatten.uniq
+      expect(expected - actual).to be_empty
     end
 
     it 'has a correct template' do

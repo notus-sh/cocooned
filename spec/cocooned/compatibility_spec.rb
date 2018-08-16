@@ -31,18 +31,18 @@ describe Cocooned::Helpers do
 
       it 'should use custom translations when available' do
         capture_stderr do
-          expect(@tester.send(:cocooned_default_label, :posts, :remove)).to eq('Remove this post')
+          expect(@tester.send(:cocooned_default_label, :remove, :posts)).to eq('Remove this post')
         end
       end
 
       it 'should use default translations when not' do
         capture_stderr do
-          expect(@tester.send(:cocooned_default_label, :people, :remove)).to eq('Remove')
+          expect(@tester.send(:cocooned_default_label, :remove, :people)).to eq('Remove')
         end
       end
 
       it 'should emit a warning' do
-        expect(capture_stderr { @tester.send(:cocooned_default_label, :people, :remove) }).not_to be_empty
+        expect(capture_stderr { @tester.send(:cocooned_default_label, :remove, :people) }).not_to be_empty
       end
     end
   end

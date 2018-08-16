@@ -8,49 +8,14 @@ module Cocooned
   HELPER_CLASSES = {
     add:    ['cocooned-add', 'add_fields'],
     remove: ['cocooned-remove', 'remove_fields'],
-    up:     ['cocooned-up'],
-    down:   ['cocooned-down']
+    up:     ['cocooned-move-up'],
+    down:   ['cocooned-move-down']
   }.freeze
 
   module Helpers
     # Create aliases to old Cocoon method name
     # TODO: Remove in 2.0
     include Cocooned::Helpers::CocoonCompatibility
-
-    # this will show a link to remove the current association. This should be placed inside the partial.
-    # either you give
-    # - *name* : the text of the link
-    # - *form* : the form this link should be placed in
-    # - *html_options*:  html options to be passed to link_to (see <tt>link_to</tt>)
-    #
-    # or you use the form without *name* with a *&block*
-    # - *form* : the form this link should be placed in
-    # - *html_options*:  html options to be passed to link_to (see <tt>link_to</tt>)
-    # - *&block*:        the output of the block will be show in the link, see <tt>link_to</tt>
-
-    def cocooned_remove_item_link(*args, &block)
-      if block_given?
-        cocooned_remove_item_link(capture(&block), *args)
-
-      elsif args.first.respond_to?(:object)
-        form = args.first
-        association = form.object.class.to_s.tableize
-        cocooned_remove_item_link(cocooned_default_label(association, :remove), *args)
-
-      else
-        name, form, html_options = *args
-        html_options ||= {}
-
-        is_dynamic = form.object.new_record?
-
-        classes = Cocooned::HELPER_CLASSES[:remove] + Array(html_options.delete(:class))
-        classes << (is_dynamic ? 'dynamic' : 'existing')
-        classes << 'destroyed' if form.object.marked_for_destruction?
-        html_options[:class] = classes.compact
-
-        hidden_field_tag("#{form.object_name}[_destroy]", form.object._destroy) + link_to(name, '#', html_options)
-      end
-    end
 
     # shows a link that will allow to dynamically add a new associated object.
     #
@@ -66,14 +31,13 @@ module Cocooned
     #          - *:form_name*      : the parameter for the form in the nested form partial. Default `f`.
     #          - *:count*          : Count of how many objects will be added on a single click. Default `1`.
     # - *&block*:        see <tt>link_to</tt>
-
     def cocooned_add_item_link(*args, &block)
       if block_given?
         cocooned_add_item_link(capture(&block), *args)
 
       elsif args.first.respond_to?(:object)
         association = args.second
-        cocooned_add_item_link(cocooned_default_label(association, :add), *args)
+        cocooned_add_item_link(cocooned_default_label(:add, association), *args)
 
       else
         name, form, association, html_options = *args
@@ -113,6 +77,79 @@ module Cocooned
       end
     end
 
+    # this will show a link to remove the current association. This should be placed inside the partial.
+    # either you give
+    # - *name* : the text of the link
+    # - *form* : the form this link should be placed in
+    # - *html_options*:  html options to be passed to link_to (see <tt>link_to</tt>)
+    #
+    # or you use the form without *name* with a *&block*
+    # - *form* : the form this link should be placed in
+    # - *html_options*:  html options to be passed to link_to (see <tt>link_to</tt>)
+    # - *&block*:        the output of the block will be show in the link, see <tt>link_to</tt>
+
+    def cocooned_remove_item_link(*args, &block)
+      if block_given?
+        cocooned_remove_item_link(capture(&block), *args)
+
+      elsif args.first.respond_to?(:object)
+        form = args.first
+        association = form.object.class.to_s.tableize
+        cocooned_remove_item_link(cocooned_default_label(:remove, association), *args)
+
+      else
+        name, form, html_options = *args
+        html_options ||= {}
+
+        is_dynamic = form.object.new_record?
+
+        classes = Cocooned::HELPER_CLASSES[:remove] + Array(html_options.delete(:class))
+        classes << (is_dynamic ? 'dynamic' : 'existing')
+        classes << 'destroyed' if form.object.marked_for_destruction?
+        html_options[:class] = classes.compact
+
+        hidden_field_tag("#{form.object_name}[_destroy]", form.object._destroy) + link_to(name, '#', html_options)
+      end
+    end
+
+    # Output an action link to move an item up.
+    #
+    # ==== Signatures
+    #
+    #   cocooned_move_item_up_link(label, form, html_options = {})
+    #     # Explicit name
+    #
+    #   cocooned_move_item_up_link(form, html_options = {}) do
+    #     # Name as a block
+    #   end
+    #
+    #   cocooned_move_item_up_link(form, html_options = {})
+    #     # Use default name
+    #
+    # See the documentation of +link_to+ for valid options.
+    def cocooned_move_item_up_link(name, form = nil, html_options = {}, &block)
+      cocooned_move_item_link(:up, name, form, html_options, &block)
+    end
+
+    # Output an action link to move an item down.
+    #
+    # ==== Signatures
+    #
+    #   cocooned_move_item_down_link(label, html_options = {})
+    #     # Explicit name
+    #
+    #   cocooned_move_item_down_link(html_options = {}) do
+    #     # Name as a block
+    #   end
+    #
+    #   cocooned_move_item_down_link(html_options = {})
+    #     # Use default name
+    #
+    # See the documentation of +link_to+ for valid options.
+    def cocooned_move_item_down_link(name, form = nil, html_options = {}, &block)
+      cocooned_move_item_link(:down, name, form, html_options, &block)
+    end
+
     # creates new association object with its conditions, like
     # `` has_many :admin_comments, class_name: "Comment", conditions: { author: "Admin" }
     # will create new Comment with author "Admin"
@@ -127,18 +164,28 @@ module Cocooned
 
     private
 
-    def cocooned_default_label(association, action)
+    def cocooned_move_item_link(direction, name, form = nil, html_options = {}, &block)
+      form, name = name, form if form.nil?
+      return cocooned_move_item_link(direction, capture(&block), form, html_options) if block_given?
+      return cocooned_move_item_link(direction, cocooned_default_label(direction), form, html_options) if name.nil?
+
+      html_options[:class] = [html_options[:class], Cocooned::HELPER_CLASSES[direction]].flatten.compact.join(' ')
+      link_to name, '#', html_options
+    end
+
+    def cocooned_default_label(action, association = nil)
       # TODO: Remove in 2.0
       if I18n.exists?(:cocoon)
         msg = Cocooned::Helpers::Deprecate.deprecate_release_message('the :cocoon i18n scope', ':cocooned')
         warn msg
       end
 
-      I18n.translate("cocooned.#{association}.#{action}",
-                     default: [:"cocoon.#{association}.#{action}",
-                               :"cocooned.defaults.#{action}",
-                               :"cocoon.defaults.#{action}",
-                               action.to_s.humanize])
+      keys = ["cocooned.defaults.#{action}", "cocoon.defaults.#{action}"]
+      keys.unshift("cocooned.#{association}.#{action}", "cocoon.#{association}.#{action}") unless association.nil?
+      keys.collect!(&:to_sym)
+      keys << action.to_s.humanize
+
+      I18n.translate(keys.take(1).first, default: keys.drop(1))
     end
 
     # :nodoc:
