@@ -11,7 +11,7 @@ describe Cocooned::Helpers do
 
   describe '#cocooned_add_item_link' do
     before(:each) do
-      allow(@tester).to receive(:render_association).and_return('form<tag>')
+      allow(@tester).to receive(:cocooned_render_association).and_return('form<tag>')
     end
 
     context 'without a block' do
@@ -67,10 +67,10 @@ describe Cocooned::Helpers do
 
       context 'and explicitly specifying the wanted partial' do
         before do
-          allow(@tester).to receive(:render_association)
+          allow(@tester).to receive(:cocooned_render_association)
             .and_call_original
-          expect(@tester).to receive(:render_association)
-            .with(anything, anything, anything, 'f', anything, 'shared/partial')
+          expect(@tester).to receive(:cocooned_render_association)
+            .with(instance_of(Cocooned::AssociationBuilder), hash_including(partial: 'shared/partial'))
             .and_return('partial')
           @html = @tester.cocooned_add_item_link('add something', @form_obj, :posts, partial: 'shared/partial')
         end
@@ -80,10 +80,10 @@ describe Cocooned::Helpers do
       end
 
       it 'gives an opportunity to wrap/decorate created objects' do
-        allow(@tester).to receive(:render_association)
+        allow(@tester).to receive(:cocooned_render_association)
           .and_call_original
-        expect(@tester).to receive(:render_association)
-          .with(anything, anything, kind_of(PostDecorator), 'f', anything, anything)
+        expect(@tester).to receive(:cocooned_render_association)
+          .with(instance_of(Cocooned::AssociationBuilder), anything)
           .and_return('partiallll')
         @tester.cocooned_add_item_link('add something', @form_obj, :posts,
                                        wrap_object: proc { |p| PostDecorator.new(p) })
@@ -173,10 +173,10 @@ describe Cocooned::Helpers do
 
       context 'and explicitly specifying the wanted partial' do
         before do
-          allow(@tester).to receive(:render_association)
+          allow(@tester).to receive(:cocooned_render_association)
             .and_call_original
-          expect(@tester).to receive(:render_association)
-            .with(anything, anything, anything, 'f', anything, 'shared/partial')
+          expect(@tester).to receive(:cocooned_render_association)
+            .with(instance_of(Cocooned::AssociationBuilder), hash_including(partial: 'shared/partial'))
             .and_return('partial')
           @html = @tester.cocooned_add_item_link(@form_obj, :posts, class: 'floppy disk', partial: 'shared/partial') do
             'some long name'

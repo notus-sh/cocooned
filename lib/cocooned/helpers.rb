@@ -18,20 +18,63 @@ module Cocooned
     # TODO: Remove in 2.0
     include Cocooned::Helpers::CocoonCompatibility
 
-    # shows a link that will allow to dynamically add a new associated object.
+    # Output an action link to add an item in a nested form.
     #
-    # - *name* :         the text to show in the link
-    # - *form* :            the form this should come in (the formtastic form)
-    # - *association* :  the associated objects, e.g. :tasks, this should be the name of the <tt>has_many</tt> relation.
-    # - *html_options*:  html options to be passed to <tt>link_to</tt> (see <tt>link_to</tt>)
-    #          - *:render_options* : options passed to `simple_fields_for, semantic_fields_for or fields_for`
-    #              - *:locals*     : the locals hash in the :render_options is handed to the partial
-    #          - *:partial*        : explicitly override the default partial name
-    #          - *:wrap_object*    : a proc that will allow to wrap your object, especially suited when using
-    #                                decorators, or if you want special initialisation
-    #          - *:form_name*      : the parameter for the form in the nested form partial. Default `f`.
-    #          - *:count*          : Count of how many objects will be added on a single click. Default `1`.
-    # - *&block*:        see <tt>link_to</tt>
+    # ==== Signatures
+    #
+    #   cocooned_add_item_link(label, form, association, options = {})
+    #     # Explicit name
+    #
+    #   cocooned_add_item_link(form, association, options = {}) do
+    #     # Name as a block
+    #   end
+    #
+    #   cocooned_add_item_link(form, association, options = {})
+    #     # Use default name
+    #
+    # `form` is your form builder. Can be a SimpleForm::Builder, Formtastic::Builder
+    # or a standard Rails FormBuilder.
+    #
+    # `association` is the name of the nested association.
+    # Ex: cocooned_add_item_link "Add an item", form, :items
+    #
+    # ==== Options
+    #
+    # `options` can be any of the following.
+    #
+    # Rendering options:
+    #
+    # - **partial**: the nested form partial.
+    #   Defaults to `{association.singular_name}_fields`.
+    # - **form_name**: name used to access the form builder in the nested form partial.
+    #   Defaults to `:f`.
+    # - **locals**: a hash of local variables, will be forwarded to the partial.
+    #   No default.
+    #
+    # Association options:
+    #
+    # - **count**: how many item will be inserted on clic.
+    #   Defaults to 1.
+    # - **wrap_object**: a proc used to wrap item instance. Can be useful with decorators
+    #   or special initialisations.
+    #   No default.
+    # - **force_non_association_create**: force to build instances of the nested model
+    #   outside association (i.e. without calling `build_{association}` or `{association}.build`)
+    #   Defaults to false.
+    #
+    # Link HTML options:
+    #
+    # You can pass any option supported by +link_to+. It will be politely forwarded.
+    # See the documentation of +link_to+ for more informations.
+    #
+    # Compatibility options:
+    #
+    # These options are supported for backward compatibility with the original Cocoon.
+    # **Support for these options will be removed in the next major release !**.
+    #
+    # - **limit**: how many items are allowed in the nested form.
+    #   No default.
+    #
     def cocooned_add_item_link(*args, &block)
       if block_given?
         cocooned_add_item_link(capture(&block), *args)
@@ -44,37 +87,23 @@ module Cocooned
         name, form, association, html_options = *args
         html_options ||= {}
 
-        builder_options = %i[wrap_object force_non_association_create].each_with_object({}) do |option_name, opts|
-          opts[option_name] = html_options.delete(option_name) if html_options.key?(option_name)
-        end
+        builder_options = cocooned_extract_builder_options!(html_options)
+        render_options = cocooned_extract_render_options!(html_options)
+
         builder = Cocooned::AssociationBuilder.new(form, association, builder_options)
+        rendered = cocooned_render_association(builder, render_options)
 
-        render_options   = html_options.delete(:render_options)
-        render_options ||= {}
-        override_partial = html_options.delete(:partial)
-        form_parameter_name = html_options.delete(:form_name) || 'f'
-        count = html_options.delete(:count).to_i
-        limit = html_options.delete(:limit).to_i
+        data = cocooned_extract_data!(html_options).merge!(
+          association: builder.singular_name,
+          associations: builder.plural_name,
+          association_insertion_template: CGI.escapeHTML(rendered.to_str).html_safe
+        )
 
-        html_options[:class] = [html_options[:class], Cocooned::HELPER_CLASSES[:add]].flatten.compact.join(' ')
-        html_options[:'data-association'] = builder.singular_name
-        html_options[:'data-associations'] = builder.plural_name
-
-        new_object = builder.build_object
-
-        rendered = render_association(association,
-                                      form,
-                                      new_object,
-                                      form_parameter_name,
-                                      render_options,
-                                      override_partial)
-        content = CGI.escapeHTML(rendered.to_str).html_safe
-
-        html_options[:'data-association-insertion-template'] = content
-        html_options[:'data-wrapper-class'] = /(?<=class=["'])[^"^']*(?=["'])/.match(content)
-
-        html_options[:'data-count'] = count if count.positive?
-        html_options[:'data-limit'] = limit if limit.positive?
+        html_options = {
+          class: [Array(html_options.delete(:class)).collect { |k| k.to_s.split(' ') },
+                  Cocooned::HELPER_CLASSES[:add]].flatten.compact.uniq.join(' '),
+          data: data
+        }.deep_merge(html_options)
 
         link_to(name, '#', html_options)
       end
@@ -179,23 +208,55 @@ module Cocooned
       I18n.translate(keys.take(1).first, default: keys.drop(1))
     end
 
-    # :nodoc:
-    def render_association(association, form, new_object, form_name, render_options = {}, custom_partial = nil)
-      partial = custom_partial || association.to_s.singularize + '_fields'
+    def cocooned_render_association(builder, render_options = {})
+      partial = render_options.delete(:partial) || builder.singular_name + '_fields'
       locals =  render_options.delete(:locals) || {}
-      ancestors = form.class.ancestors.map(&:to_s)
-      method_name = if ancestors.include?('SimpleForm::FormBuilder')
-                      :simple_fields_for
-                    elsif ancestors.include?('Formtastic::FormBuilder')
-                      :semantic_fields_for
-                    else
-                      :fields_for
-                    end
+      form_name = render_options.delete(:form_name)
 
-      form.send(method_name, association, new_object, { child_index: "new_#{association}" }.merge(render_options)) do |builder|
-        partial_options = { form_name.to_sym => builder, :dynamic => true }.merge(locals)
+      form_options = { child_index: "new_#{builder.association}" }.merge(render_options)
+      builder.form.send(cocooned_form_method(builder.form),
+                        builder.association,
+                        builder.build_object,
+                        form_options) do |form_builder|
+
+        partial_options = { form_name.to_sym => form_builder, :dynamic => true }.merge(locals)
         render(partial, partial_options)
       end
+    end
+
+    def cocooned_form_method(form)
+      ancestors = form.class.ancestors.map(&:to_s)
+      if ancestors.include?('SimpleForm::FormBuilder')
+        :simple_fields_for
+      elsif ancestors.include?('Formtastic::FormBuilder')
+        :semantic_fields_for
+      else
+        :fields_for
+      end
+    end
+
+    def cocooned_extract_builder_options!(html_options)
+      %i[wrap_object force_non_association_create].each_with_object({}) do |option_name, opts|
+        opts[option_name] = html_options.delete(option_name) if html_options.key?(option_name)
+      end
+    end
+
+    def cocooned_extract_render_options!(html_options)
+      render_options = html_options.delete(:render_options) || {}
+      render_options[:locals] = html_options.delete(:locals) if html_options.key?(:locals)
+      render_options[:partial] = html_options.delete(:partial) if html_options.key?(:partial)
+      render_options[:form_name] = html_options.delete(:form_name) || :f
+      render_options
+    end
+
+    def cocooned_extract_data!(html_options)
+      data = {
+        count: [html_options.delete(:count).to_i, 1].compact.max
+      }
+
+      limit = html_options.delete(:limit).to_i
+      data[:limit] = limit if limit.positive?
+      data
     end
   end
 end
