@@ -1,4 +1,7 @@
-function setup(templateName) {
+/* eslint no-unused-vars: 0 */
+/* globals templates, initCocoon */
+
+function setup (templateName) {
   return function () {
     if (!templates.hasOwnProperty(templateName)) {
       console.warn('Empty template:' + templateName);
@@ -9,7 +12,7 @@ function setup(templateName) {
   };
 }
 
-function teardown() {
+function teardown () {
   return function () {
     $('#form-template').detach();
   };

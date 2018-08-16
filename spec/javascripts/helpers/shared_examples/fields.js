@@ -1,3 +1,5 @@
+/* eslint no-unused-vars: 0 */
+
 function nestedFieldNameRegexp (pseudoIdPattern, namePattern) {
   return new RegExp('^list\\[items_attributes\\]\\[(' + pseudoIdPattern + ')\\]\\[(' + namePattern + ')\\]$');
 }

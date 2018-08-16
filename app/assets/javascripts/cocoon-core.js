@@ -1,17 +1,17 @@
 //= require_self
 //= require_tree './cocoon/plugins'
 
-Cocoon = function(container, options) {
+var Cocoon = function (container, options) {
   this.container = jQuery(container);
   this.options = jQuery.extend({}, this.defaultOptions(), (options || {}));
 
   // Autoload plugins
-  for(var module_name in Cocoon.Plugins) {
-    if (Cocoon.Plugins.hasOwnProperty(module_name)) {
-      var module = Cocoon.Plugins[module_name];
-      var option_name = module_name.charAt(0).toLowerCase() + module_name.slice(1);
+  for (var moduleName in Cocoon.Plugins) {
+    if (Cocoon.Plugins.hasOwnProperty(moduleName)) {
+      var module = Cocoon.Plugins[moduleName];
+      var optionName = moduleName.charAt(0).toLowerCase() + moduleName.slice(1);
 
-      if (this.options[option_name]) {
+      if (this.options[optionName]) {
         for (var method in module) {
           if (module.hasOwnProperty(method) && typeof module[method] === 'function') {
             this[method] = module[method];
@@ -27,52 +27,52 @@ Cocoon = function(container, options) {
 Cocoon.Plugins = {};
 Cocoon.prototype = {
 
-  elementsCounter:    0,
+  elementsCounter: 0,
 
-  addLinkSelector:    '.add_fields',
+  addLinkSelector: '.add_fields',
   removeLinkSelector: '.remove_fields',
-  siblingsSelector:   '.nested-fields',
+  siblingsSelector: '.nested-fields',
 
-  defaultOptions: function() {
+  defaultOptions: function () {
     var options = {};
 
-    for(var module_name in Cocoon.Plugins) {
-      if (Cocoon.Plugins.hasOwnProperty(module_name)) {
-        var module = Cocoon.Plugins[module_name];
-        var option_name = module_name.charAt(0).toLowerCase() + module_name.slice(1);
+    for (var moduleName in Cocoon.Plugins) {
+      if (Cocoon.Plugins.hasOwnProperty(moduleName)) {
+        var module = Cocoon.Plugins[moduleName];
+        var optionName = moduleName.charAt(0).toLowerCase() + moduleName.slice(1);
 
-        options[option_name] = module.defaultOptionValue;
+        options[optionName] = module.defaultOptionValue;
       }
     }
 
     return options;
   },
 
-  notify: function(node, event_type, event_data) {
-    var event = jQuery.Event(event_type, event_data);
-    node.trigger(event, [event_data.node, event_data.cocoon]);
+  notify: function (node, eventType, eventData) {
+    var event = jQuery.Event(eventType, eventData);
+    node.trigger(event, [eventData.node, eventData.cocoon]);
     return !(event.isPropagationStopped() || event.isDefaultPrevented());
   },
 
   buildId: function () {
-    return (new Date().getTime() + this.elementsCounter++)
+    return (new Date().getTime() + this.elementsCounter++);
   },
 
-  buildContentNode: function(content) {
+  buildContentNode: function (content) {
     var id = this.buildId();
-    var content = (content || this.content);
+    var html = (content || this.content);
     var braced = '[' + id + ']';
-    var underscord = '_' + id + '_';
+    var underscored = '_' + id + '_';
 
-    ['associations', 'association'].forEach(function(a) {
-      content = content.replace(this.regexps[a]['braced'], braced + '$1');
-      content = content.replace(this.regexps[a]['underscord'], underscord + '$1');
+    ['associations', 'association'].forEach(function (a) {
+      html = html.replace(this.regexps[a]['braced'], braced + '$1');
+      html = html.replace(this.regexps[a]['underscored'], underscored + '$1');
     }, this);
 
-    return $(content);
+    return $(html);
   },
 
-  getInsertionNode: function(adder) {
+  getInsertionNode: function (adder) {
     var $adder = $(adder);
     var insertionNode = $adder.data('association-insertion-node');
     var insertionTraversal = $adder.data('association-insertion-traversal');
@@ -97,15 +97,15 @@ Cocoon.prototype = {
     return $adder.data('association-insertion-method') || 'before';
   },
 
-  getNodes: function(selector) {
+  getNodes: function (selector) {
     selector = selector || '';
     var self = this;
-    return $(this.siblingsSelector + selector, this.container).filter(function() {
+    return $(this.siblingsSelector + selector, this.container).filter(function () {
       return ($(this).closest('.cocoon-container').get(0) === self.container.get(0));
     });
   },
 
-  findContainer: function(addLink) {
+  findContainer: function (addLink) {
     var $adder = $(addLink);
     var insertionNode = this.getInsertionNode($adder);
     var insertionMethod = this.getInsertionMethod($adder);
@@ -115,28 +115,26 @@ Cocoon.prototype = {
       case 'after':
       case 'replaceWith':
         return insertionNode.parent();
-        break;
 
       case 'append':
       case 'prepend':
       default:
         return insertionNode;
-        break;
     }
   },
 
-  findItem: function(removeLink) {
+  findItem: function (removeLink) {
     var $remover = $(removeLink);
     var selector = '.' + ($remover.data('wrapper-class') || 'nested-fields');
     return $remover.closest(selector);
   },
 
-  init: function() {
+  init: function () {
     var self = this;
 
-    this.addLinks = $(this.addLinkSelector).filter(function() {
+    this.addLinks = $(this.addLinkSelector).filter(function () {
       var container = self.findContainer(this);
-      return (container.get(0) == self.container.get(0));
+      return (container.get(0) === self.container.get(0));
     });
 
     var addLink = $(this.addLinks.get(0));
@@ -144,12 +142,12 @@ Cocoon.prototype = {
     this.content = addLink.data('association-insertion-template');
     this.regexps = {
       association: {
-        braced:     new RegExp('\\[new_' + addLink.data('association') + '\\](.*?\\s)', 'g'),
-        underscord: new RegExp('_new_' + addLink.data('association') + '_(\\w*)', 'g')
+        braced: new RegExp('\\[new_' + addLink.data('association') + '\\](.*?\\s)', 'g'),
+        underscored: new RegExp('_new_' + addLink.data('association') + '_(\\w*)', 'g')
       },
       associations: {
-        braced:     new RegExp('\\[new_' + addLink.data('associations') + '\\](.*?\\s)', 'g'),
-        underscord: new RegExp('_new_' + addLink.data('associations') + '_(\\w*)', 'g')
+        braced: new RegExp('\\[new_' + addLink.data('associations') + '\\](.*?\\s)', 'g'),
+        underscored: new RegExp('_new_' + addLink.data('associations') + '_(\\w*)', 'g')
       }
     };
 
@@ -157,7 +155,7 @@ Cocoon.prototype = {
     this.bindEvents();
   },
 
-  initUi: function() {
+  initUi: function () {
     var self = this;
 
     if (!this.container.attr('id')) {
@@ -165,28 +163,28 @@ Cocoon.prototype = {
     }
     this.container.addClass('cocoon-container');
 
-    $(function() { self.hideMarkedForDestruction(); });
-    $(document).on('page:load turbolinks:load', function() { self.hideMarkedForDestruction(); });
+    $(function () { self.hideMarkedForDestruction(); });
+    $(document).on('page:load turbolinks:load', function () { self.hideMarkedForDestruction(); });
   },
 
-  bindEvents: function() {
+  bindEvents: function () {
     var self = this;
 
     // Bind add links
-    this.addLinks.on('click.cocoon', function(e) {
+    this.addLinks.on('click.cocoon', function (e) {
       e.preventDefault();
       self.add(this);
     });
 
     // Bind remove links
     // (Binded on document instead of container to not bypass click handler defined in jquery_ujs)
-    $(document).on('click.cocoon', ('#' + this.container.attr('id') + ' ' + this.removeLinkSelector), function(e) {
+    $(document).on('click.cocoon', ('#' + this.container.attr('id') + ' ' + this.removeLinkSelector), function (e) {
       e.preventDefault();
       self.remove(this);
     });
 
     // Bind options events
-    $.each(this.options, function(name, value) {
+    $.each(this.options, function (name, value) {
       var bindMethod = 'bind' + name.charAt(0).toUpperCase() + name.slice(1);
       if (value && self[bindMethod]) {
         self[bindMethod]();
@@ -194,7 +192,7 @@ Cocoon.prototype = {
     });
   },
 
-  add: function(adder) {
+  add: function (adder) {
     var $adder = $(adder);
     var insertionMethod = this.getInsertionMethod($adder);
     var insertionNode = this.getInsertionNode($adder);
@@ -217,7 +215,7 @@ Cocoon.prototype = {
     }
   },
 
-  remove: function(remover) {
+  remove: function (remover) {
     var self = this;
     var $remover = $(remover);
     var nodeToDelete = this.findItem($remover);
@@ -231,23 +229,23 @@ Cocoon.prototype = {
 
     var timeout = triggerNode.data('remove-timeout') || 0;
 
-    setTimeout(function() {
+    setTimeout(function () {
       if ($remover.hasClass('dynamic')) {
         nodeToDelete.remove();
       } else {
         nodeToDelete.find('input[required], select[required]').each(function (index, element) {
           $(element).removeAttr('required');
         });
-        $remover.siblings('input[type=hidden][name$="[_destroy]"]').val("true");
+        $remover.siblings('input[type=hidden][name$="[_destroy]"]').val('true');
         nodeToDelete.hide();
       }
       self.notify(triggerNode, 'cocoon:after-remove', eventData);
     }, timeout);
   },
 
-  hideMarkedForDestruction: function() {
+  hideMarkedForDestruction: function () {
     var self = this;
-    $('.remove_fields.existing.destroyed', this.container).each(function(i, removeLink) {
+    $('.remove_fields.existing.destroyed', this.container).each(function (i, removeLink) {
       var node = self.findItem(removeLink);
       node.hide();
     });

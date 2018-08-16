@@ -1,4 +1,5 @@
 // Jasmine setup
+/* globals beforeAll */
 //= require 'jasmine-core/jasmine'
 //= require 'jasmine-core/json2'
 //= require 'jasmine-core/jasmine-html'
@@ -18,7 +19,6 @@
 //= require 'cocoon/reorderableSpec'
 
 var templates = {};
-
 
 beforeAll(function () {
   var templateNames = [

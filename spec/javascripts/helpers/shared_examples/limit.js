@@ -1,3 +1,5 @@
+/* eslint no-unused-vars: 0 */
+
 function shouldHonoreTheLimit (pendingSpec) {
   return function() {
     var eventSpy;

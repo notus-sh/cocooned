@@ -1,13 +1,11 @@
-/* globals jasmine, describe, it, beforeEach, afterEach, expect, templates */
-/* globals shouldBeCorrectlyNamed, nestedFieldNameRegexp, nestedFieldIdRegexp */
+/* globals jasmine, describe, it, beforeEach, afterEach, expect, spyOn */
+/* globals setup, teardown */
 
 describe('A reorderable cocoon setup', function () {
-
   beforeEach(setup('reorderable'));
   afterEach(teardown());
 
   describe('with at least two items', function () {
-
     beforeEach(function () {
       $('.add_fields').trigger('click');
     });
@@ -26,38 +24,37 @@ describe('A reorderable cocoon setup', function () {
         jasmine.clock().uninstall();
       });
 
-      it("on the association add link", function () {
+      it('on the association add link', function () {
         $('.add_fields').trigger('click');
         jasmine.clock().tick(1);
         expect(cocoon.reindex).toHaveBeenCalled();
       });
 
-      it("on an association remove link", function () {
+      it('on an association remove link', function () {
         $('.remove_fields').first().trigger('click');
         jasmine.clock().tick(1);
         expect(cocoon.reindex).toHaveBeenCalled();
       });
 
-      it("on an association move up link", function () {
+      it('on an association move up link', function () {
         $('.cocoon-move-up').last().trigger('click');
         jasmine.clock().tick(1000);
         expect(cocoon.reindex).toHaveBeenCalled();
       });
 
-      it("on an association move down link", function () {
+      it('on an association move down link', function () {
         $('.cocoon-move-down').first().trigger('click');
         jasmine.clock().tick(1000);
         expect(cocoon.reindex).toHaveBeenCalled();
       });
 
       describe('and reindexed items', function () {
-
         beforeEach(function () {
           $('.add_fields').trigger('click');
           jasmine.clock().tick(1);
         });
 
-        it("sould have correct positions", function () {
+        it('sould have correct positions', function () {
           this.wrapper.find('.nested-fields:visible').each(function (i, item) {
             expect(parseInt($(item).find('input[name$="[position]"]').val(), 10)).toEqual(i + 1);
           });
@@ -65,8 +62,7 @@ describe('A reorderable cocoon setup', function () {
       });
     });
 
-    describe('on click on an association move link', function() {
-
+    describe('on click on an association move link', function () {
       beforeEach(function () {
         for (var i = 0, count = Math.ceil(Math.random() * 12); i <= count; i++) {
           $('.add_fields').trigger('click');
@@ -78,7 +74,7 @@ describe('A reorderable cocoon setup', function () {
         jasmine.clock().uninstall();
       });
 
-      describe("moving an item down", function () {
+      describe('moving an item down', function () {
         it('should move the matching item down', function () {
           var movableItems = this.wrapper.find('.nested-fields:visible:not(:last)');
           var originalIndex = Math.floor(Math.random() * movableItems.length);
@@ -94,8 +90,8 @@ describe('A reorderable cocoon setup', function () {
         });
       });
 
-      describe("moving an item up", function () {
-        it('should move the matching item up', function() {
+      describe('moving an item up', function () {
+        it('should move the matching item up', function () {
           var movableItems = this.wrapper.find('.nested-fields:visible:not(:first)');
           var originalIndex = Math.floor(Math.random() * movableItems.length);
           var originalPosition = originalIndex + 2; // :not(:first)

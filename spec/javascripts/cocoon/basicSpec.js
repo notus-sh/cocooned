@@ -1,8 +1,7 @@
-/* globals jasmine, describe, it, beforeEach, afterEach, expect, templates */
-/* globals shouldBeCorrectlyNamed, nestedFieldNameRegexp, nestedFieldIdRegexp */
+/* globals jasmine, describe, it, beforeEach, afterEach, expect */
+/* globals setup, teardown, shouldBeCorrectlyNamed, nestedFieldNameRegexp, nestedFieldIdRegexp */
 
 describe('A basic cocoon setup', function () {
-
   beforeEach(setup('basic'));
   afterEach(teardown());
 

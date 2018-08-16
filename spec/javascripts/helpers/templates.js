@@ -1,4 +1,4 @@
-/* eslint no-unused-vars: "off", max-len: "off" */
+/* eslint no-unused-vars: 0, max-len: 0 */
 
 var templates = {
   'basic': `
@@ -272,7 +272,6 @@ var templates = {
         &lt;/div&gt;">Add</a>
     </form>`,
 
-
   'reorderable': `
     <form id="form-template" novalidate="novalidate" action="" accept-charset="UTF-8" method="post">
   
@@ -308,5 +307,5 @@ var templates = {
           &lt;input type=&quot;text&quot; name=&quot;list[items_attributes][new_items][label]&quot; id=&quot;list_items_attributes_new_items_label&quot; /&gt;
           &lt;input type=&quot;hidden&quot; value=&quot;0&quot; name=&quot;list[items_attributes][new_items][position]&quot; id=&quot;list_items_attributes_new_items_position&quot; /&gt;
         &lt;/div&gt;">Add</a>
-    </form>`,
+    </form>`
 };
