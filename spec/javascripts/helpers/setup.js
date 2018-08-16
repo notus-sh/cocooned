@@ -3,7 +3,6 @@ function setup(templateName) {
     if (!templates.hasOwnProperty(templateName)) {
       console.warn('Empty template:' + templateName);
     }
-    console.debug($(templates[templateName]).get(0).outerHTML);
     $(templates[templateName]).appendTo('body');
     this.wrapper = $('.nested-form');
     initCocoon();

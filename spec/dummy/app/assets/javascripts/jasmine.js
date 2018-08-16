@@ -15,6 +15,7 @@
 //= require 'cocoon/add-links/associationInsertionTraversalSpec'
 //= require 'cocoon/add-links/countSpec'
 //= require 'cocoon/add-links/limitSpec'
+//= require 'cocoon/reorderableSpec'
 
 var templates = {};
 
@@ -28,7 +29,8 @@ beforeAll(function () {
     'add-links-association-insertion-traversal',
     'add-links-count',
     'add-links-limit-basic',
-    'add-links-limit-valid'
+    'add-links-limit-valid',
+    'reorderable'
   ];
 
   templateNames.forEach(function (templateName) {
