@@ -33,7 +33,7 @@ Cocooned.Plugins.Reorderable = {
 
     // Move can be prevented through a 'cocooned:before-move' event handler
     var eventData = { link: $mover, node: node, cocooned: this };
-    if (!self.notify(node, 'cocooned:before-move', eventData)) {
+    if (!self.notify(node, 'before-move', eventData)) {
       return false;
     }
 
@@ -47,7 +47,7 @@ Cocooned.Plugins.Reorderable = {
 
       self.show(movedNode, function() {
         self.container.css('height', '').css('width', ''); // Object notation does not work here.
-        self.notify(movedNode, 'cocooned:after-move', eventData);
+        self.notify(movedNode, 'after-move', eventData);
       });
     });
   },
@@ -59,12 +59,12 @@ Cocooned.Plugins.Reorderable = {
     var eventData = { link: null, nodes: nodes, cocooned: this };
 
     // Reindex can be prevented through a 'cocooned:before-reindex' event handler
-    if (!this.notify(this.container, 'cocooned:before-reindex', eventData)) {
+    if (!this.notify(this.container, 'before-reindex', eventData)) {
       return false;
     }
 
     nodes.each(function() { $('input[id$=_position]', this).val(++i); });
-    this.notify(this.container, 'cocooned:after-reindex', eventData);
+    this.notify(this.container, 'after-reindex', eventData);
   },
 
   show: function(node, callback) {

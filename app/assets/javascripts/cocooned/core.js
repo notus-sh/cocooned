@@ -26,6 +26,10 @@ Cocooned.prototype = {
 
   elementsCounter: 0,
 
+  namespaces: {
+    events: ['cocooned', 'cocoon']
+  },
+
   addLinkSelector: '.add_fields',
   removeLinkSelector: '.remove_fields',
   siblingsSelector: '.nested-fields',
@@ -46,9 +50,14 @@ Cocooned.prototype = {
   },
 
   notify: function (node, eventType, eventData) {
-    var event = jQuery.Event(eventType, eventData);
-    node.trigger(event, [eventData.node, eventData.cocooned]);
-    return !(event.isPropagationStopped() || event.isDefaultPrevented());
+    return !(this.namespaces.events.some(function(namespace) {
+      var namespacedEventType = [namespace, eventType].join(':');
+      var event = jQuery.Event(namespacedEventType, eventData);
+
+      node.trigger(event, [eventData.node, eventData.cocooned]);
+
+      return (event.isPropagationStopped() || event.isDefaultPrevented());
+    }));
   },
 
   buildId: function () {
@@ -202,13 +211,13 @@ Cocooned.prototype = {
       var afterNode = (insertionMethod === 'replaceWith' ? contentNode : insertionNode);
 
       // Insertion can be prevented through a 'cocooned:before-insert' event handler
-      if (!this.notify(insertionNode, 'cocooned:before-insert', eventData)) {
+      if (!this.notify(insertionNode, 'before-insert', eventData)) {
         return false;
       }
 
       insertionNode[insertionMethod](contentNode);
 
-      this.notify(afterNode, 'cocooned:after-insert', eventData);
+      this.notify(afterNode, 'after-insert', eventData);
     }
   },
 
@@ -220,7 +229,7 @@ Cocooned.prototype = {
     var eventData = { link: $remover, node: nodeToDelete, cocooned: this };
 
     // Deletion can be prevented through a 'cocooned:before-remove' event handler
-    if (!this.notify(triggerNode, 'cocooned:before-remove', eventData)) {
+    if (!this.notify(triggerNode, 'before-remove', eventData)) {
       return false;
     }
 
@@ -236,7 +245,7 @@ Cocooned.prototype = {
         $remover.siblings('input[type=hidden][name$="[_destroy]"]').val('true');
         nodeToDelete.hide();
       }
-      self.notify(triggerNode, 'cocooned:after-remove', eventData);
+      self.notify(triggerNode, 'after-remove', eventData);
     }, timeout);
   },
 

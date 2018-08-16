@@ -12,7 +12,7 @@ Cocooned.Plugins.Limit = {
 
       e.stopPropagation();
       var eventData = { link: e.link, node: e.node, cocooned: cocooned };
-      cocooned.notify(cocooned.container, 'cocooned:limit-reached', eventData);
+      cocooned.notify(cocooned.container, 'limit-reached', eventData);
     });
   },
 
