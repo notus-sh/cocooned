@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 require 'rails'
-require 'cocoon/helpers'
+require 'cocooned/helpers'
 
-module Cocoon
+module Cocooned
   class Railtie < ::Rails::Engine
-    initializer 'cocoon.initialize' do |_app|
+    initializer 'cocooned.initialize' do |_app|
       ActiveSupport.on_load :action_view do
-        ActionView::Base.send :include, Cocoon::Helpers
+        ActionView::Base.send :include, Cocooned::Helpers
       end
     end
   end

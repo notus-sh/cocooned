@@ -12,5 +12,5 @@ Metrics/LineLength:
 Metrics/BlockLength:
   Exclude:
     - 'spec/dummy/db/schema.rb'
-    - 'spec/cocoon/**/*_spec.rb'
+    - 'spec/cocooned/**/*_spec.rb'
     - 'spec/shared_examples/**/*.rb'

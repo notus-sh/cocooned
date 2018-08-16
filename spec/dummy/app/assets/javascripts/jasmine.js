@@ -9,14 +9,14 @@
 // Templates capture
 //= require_self
 // Test suites
-//= require 'cocoon/basicSpec'
-//= require 'cocoon/remove-links/wrapperClassSpec'
-//= require 'cocoon/add-links/associationInsertionMethodSpec'
-//= require 'cocoon/add-links/associationInsertionNodeSpec'
-//= require 'cocoon/add-links/associationInsertionTraversalSpec'
-//= require 'cocoon/add-links/countSpec'
-//= require 'cocoon/add-links/limitSpec'
-//= require 'cocoon/reorderableSpec'
+//= require 'cocooned/basicSpec'
+//= require 'cocooned/remove-links/wrapperClassSpec'
+//= require 'cocooned/add-links/associationInsertionMethodSpec'
+//= require 'cocooned/add-links/associationInsertionNodeSpec'
+//= require 'cocooned/add-links/associationInsertionTraversalSpec'
+//= require 'cocooned/add-links/countSpec'
+//= require 'cocooned/add-links/limitSpec'
+//= require 'cocooned/reorderableSpec'
 
 var templates = {};
 

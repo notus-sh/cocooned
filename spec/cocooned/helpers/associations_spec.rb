@@ -2,7 +2,7 @@
 
 require 'nokogiri'
 
-describe Cocoon::Helpers do
+describe Cocooned::Helpers do
   before(:each) do
     @tester = Class.new(ActionView::Base).new
     @person = Person.new

@@ -2,7 +2,7 @@
 
 source 'http://rubygems.org'
 
-# Specify your gem's dependencies in rack-address_munging.gemspec
+# Specify your gem's dependencies in cocooned.gemspec
 gemspec
 
 group :development, :test do

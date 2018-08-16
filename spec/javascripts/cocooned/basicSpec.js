@@ -1,7 +1,7 @@
 /* globals jasmine, describe, it, beforeEach, afterEach, expect */
 /* globals setup, teardown, shouldBeCorrectlyNamed, nestedFieldNameRegexp, nestedFieldIdRegexp */
 
-describe('A basic cocoon setup', function () {
+describe('A basic cocooned setup', function () {
   beforeEach(setup('basic'));
   afterEach(teardown());
 
@@ -69,20 +69,20 @@ describe('A basic cocoon setup', function () {
 
     beforeEach(function () {
       beforeEventSpy = jasmine.createSpy('beforeEventSpy');
-      $(document).on('cocoon:before-insert', beforeEventSpy);
+      $(document).on('cocooned:before-insert', beforeEventSpy);
 
       afterEventSpy = jasmine.createSpy('afterEventSpy');
-      $(document).on('cocoon:after-insert', afterEventSpy);
+      $(document).on('cocooned:after-insert', afterEventSpy);
 
       $('.add_fields').trigger('click');
     });
 
     afterEach(function () {
-      $(document).off('cocoon:before-insert');
-      $(document).off('cocoon:after-insert');
+      $(document).off('cocooned:before-insert');
+      $(document).off('cocooned:after-insert');
     });
 
-    it("should raise a 'cocoon:before-insert' event", function () {
+    it("should raise a 'cocooned:before-insert' event", function () {
       expect(beforeEventSpy).toHaveBeenCalled();
       if (!beforeEventSpy.calls.any()) {
         return;
@@ -90,14 +90,14 @@ describe('A basic cocoon setup', function () {
 
       var args = beforeEventSpy.calls.first().args;
       var event = args[0];
-      expect(event.type).toEqual('cocoon:before-insert');
+      expect(event.type).toEqual('cocooned:before-insert');
       expect(event.link.get(0)).toEqual($('.add_fields').get(0));
 
       var node = args[1];
       expect(node.get(0)).toEqual(this.wrapper.children('.nested-fields').last().get(0));
     });
 
-    it("should raise a 'cocoon:after-insert' event", function () {
+    it("should raise a 'cocooned:after-insert' event", function () {
       expect(afterEventSpy).toHaveBeenCalled();
       if (!afterEventSpy.calls.any()) {
         return;
@@ -105,7 +105,7 @@ describe('A basic cocoon setup', function () {
 
       var args = afterEventSpy.calls.first().args;
       var event = args[0];
-      expect(event.type).toEqual('cocoon:after-insert');
+      expect(event.type).toEqual('cocooned:after-insert');
       expect(event.link.get(0)).toEqual($('.add_fields').get(0));
 
       var node = args[1];
@@ -121,20 +121,20 @@ describe('A basic cocoon setup', function () {
       beforeEventSpy = jasmine.createSpy('beforeEventSpy').and.callFake(function (e) {
         e.preventDefault();
       });
-      $(document).on('cocoon:before-insert', beforeEventSpy);
+      $(document).on('cocooned:before-insert', beforeEventSpy);
 
       afterEventSpy = jasmine.createSpy('afterEventSpy');
-      $(document).on('cocoon:after-insert', afterEventSpy);
+      $(document).on('cocooned:after-insert', afterEventSpy);
 
       $('.add_fields').trigger('click');
     });
 
     afterEach(function () {
-      $(document).off('cocoon:before-insert');
-      $(document).off('cocoon:after-insert');
+      $(document).off('cocooned:before-insert');
+      $(document).off('cocooned:after-insert');
     });
 
-    it("should raise a 'cocoon:before-insert' event", function () {
+    it("should raise a 'cocooned:before-insert' event", function () {
       expect(beforeEventSpy).toHaveBeenCalled();
     });
 
@@ -142,7 +142,7 @@ describe('A basic cocoon setup', function () {
       expect(this.wrapper.children('.nested-fields').length).toEqual(1);
     });
 
-    it("should not raise a 'cocoon:after-insert' event", function () {
+    it("should not raise a 'cocooned:after-insert' event", function () {
       expect(afterEventSpy).not.toHaveBeenCalled();
     });
   });
@@ -198,10 +198,10 @@ describe('A basic cocoon setup', function () {
       jasmine.clock().install();
 
       beforeEventSpy = jasmine.createSpy('beforeEventSpy');
-      $(document).on('cocoon:before-remove', beforeEventSpy);
+      $(document).on('cocooned:before-remove', beforeEventSpy);
 
       afterEventSpy = jasmine.createSpy('afterEventSpy');
-      $(document).on('cocoon:after-remove', afterEventSpy);
+      $(document).on('cocooned:after-remove', afterEventSpy);
 
       var removeLink = $('.remove_fields').first();
       this.subject = removeLink.closest('.nested-fields').get(0);
@@ -212,11 +212,11 @@ describe('A basic cocoon setup', function () {
 
     afterEach(function () {
       jasmine.clock().uninstall();
-      $(document).off('cocoon:before-remove');
-      $(document).off('cocoon:after-remove');
+      $(document).off('cocooned:before-remove');
+      $(document).off('cocooned:after-remove');
     });
 
-    it("should raise a 'cocoon:before-remove' event", function () {
+    it("should raise a 'cocooned:before-remove' event", function () {
       expect(beforeEventSpy).toHaveBeenCalled();
       if (!beforeEventSpy.calls.any()) {
         return;
@@ -224,13 +224,13 @@ describe('A basic cocoon setup', function () {
 
       var args = beforeEventSpy.calls.first().args;
       var event = args[0];
-      expect(event.type).toEqual('cocoon:before-remove');
+      expect(event.type).toEqual('cocooned:before-remove');
 
       var node = args[1];
       expect(node.get(0)).toEqual(this.subject);
     });
 
-    it("should raise a 'cocoon:after-remove' event", function () {
+    it("should raise a 'cocooned:after-remove' event", function () {
       expect(afterEventSpy).toHaveBeenCalled();
       if (!afterEventSpy.calls.any()) {
         return;
@@ -238,7 +238,7 @@ describe('A basic cocoon setup', function () {
 
       var args = afterEventSpy.calls.first().args;
       var event = args[0];
-      expect(event.type).toEqual('cocoon:after-remove');
+      expect(event.type).toEqual('cocooned:after-remove');
 
       var node = args[1];
       expect(node.get(0)).toEqual(this.subject);
@@ -255,10 +255,10 @@ describe('A basic cocoon setup', function () {
       beforeEventSpy = jasmine.createSpy('beforeEventSpy').and.callFake(function (e) {
         e.preventDefault();
       });
-      $(document).on('cocoon:before-remove', beforeEventSpy);
+      $(document).on('cocooned:before-remove', beforeEventSpy);
 
       afterEventSpy = jasmine.createSpy('afterEventSpy');
-      $(document).on('cocoon:after-remove', afterEventSpy);
+      $(document).on('cocooned:after-remove', afterEventSpy);
 
       var removeLink = $('.remove_fields').first();
       this.subject = removeLink.closest('.nested-fields').get(0);
@@ -269,11 +269,11 @@ describe('A basic cocoon setup', function () {
 
     afterEach(function () {
       jasmine.clock().uninstall();
-      $(document).off('cocoon:before-remove');
-      $(document).off('cocoon:after-remove');
+      $(document).off('cocooned:before-remove');
+      $(document).off('cocooned:after-remove');
     });
 
-    it("should raise a 'cocoon:before-remove' event", function () {
+    it("should raise a 'cocooned:before-remove' event", function () {
       expect(beforeEventSpy).toHaveBeenCalled();
     });
 
@@ -281,7 +281,7 @@ describe('A basic cocoon setup', function () {
       expect(this.wrapper.children('.nested-fields').length).toEqual(1);
     });
 
-    it("should not raise a 'cocoon:after-remove' event", function () {
+    it("should not raise a 'cocooned:after-remove' event", function () {
       expect(afterEventSpy).not.toHaveBeenCalled();
     });
   });

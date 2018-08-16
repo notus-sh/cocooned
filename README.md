@@ -1,13 +1,13 @@
-# cocoon
+# cocooned
 
 [![Build Status](https://travis-ci.org/nathanvda/cocoon.png?branch=master)](https://travis-ci.org/nathanvda/cocoon)
 
-Cocoon makes it easier to handle nested forms.
+Cocooned makes it easier to handle nested forms.
 
 Nested forms are forms that handle nested models and attributes in one form;
 e.g. a project with its tasks or an invoice with its line items.
 
-Cocoon is form builder-agnostic, so it works with standard Rails, [Formtastic](https://github.com/justinfrench/formtastic), or [SimpleForm](https://github.com/plataformatec/simple_form).
+Cocooned is form builder-agnostic, so it works with standard Rails, [Formtastic](https://github.com/justinfrench/formtastic), or [SimpleForm](https://github.com/plataformatec/simple_form).
 It is compatible with rails 3, 4 and 5.
 
 This project is not related to [Apache Cocoon](http://cocoon.apache.org/).
@@ -22,7 +22,7 @@ Furthermore, I would advise you to use either [Formtastic](https://github.com/ju
 Inside your `Gemfile` add the following:
 
 ```ruby
-gem "cocoon"
+gem "cocooned"
 ```
 
 > Please note that for rails 4 you will need at least v1.2.0 or later.
@@ -43,7 +43,7 @@ If you are using Rails 3.0.x, you need to run the installation task (since rails
 rails g cocoon:install
 ```
 
-This will install the Cocoon JavaScript file. In your application layout, add the following below the default javascripts:
+This will install the Cocooned JavaScript file. In your application layout, add the following below the default javascripts:
 
 ```haml
 = javascript_include_tag :cocoon
@@ -106,7 +106,7 @@ E.g. in your `ProjectsController`:
 
 ## Examples
 
-Cocoon's default configuration requires `link_to_add_association` and associated partials to
+Cocooned's default configuration requires `link_to_add_association` and associated partials to
 be properly wrapped with elements. The examples below illustrate simple layouts.
 
 Please note these examples rely on the `haml` gem ([click here](https://github.com/nathanvda/cocoon/wiki/ERB-examples) for the default `erb` views).
@@ -209,7 +209,7 @@ In our `_task_fields` partial we'd write:
 
 ## How it works
 
-Cocoon defines two helper functions:
+Cocooned defines two helper functions:
 
 ### link_to_add_association
 
@@ -367,7 +367,7 @@ On insertion or removal the following events are triggered:
 To listen to the events in your JavaScript:
 
 ```javascript
-  $('#container').on('cocoon:before-insert', function(e, insertedItem) {
+  $('#container').on(cocooned, function(e, insertedItem) {
     // ... do something
   });
 ```
@@ -392,32 +392,32 @@ The callbacks can be added as follows:
 ```javascript
 $(document).ready(function() {
     $('#owner')
-      .on('cocoon:before-insert', function() {
+      .on(cocooned, function() {
         $("#owner_from_list").hide();
         $("#owner a.add_fields").hide();
       })
-      .on('cocoon:after-insert', function() {
+      .on(cocooned, function() {
         /* ... do something ... */
       })
-      .on("cocoon:before-remove", function() {
+      .on(cocooned, function() {
         $("#owner_from_list").show();
         $("#owner a.add_fields").show();
       })
-      .on("cocoon:after-remove", function() {
+      .on(cocooned, function() {
         /* e.g. recalculate order of child items */
       });
 
     // example showing manipulating the inserted/removed item
 
     $('#tasks')
-      .on('cocoon:before-insert', function(e,task_to_be_added) {
+      .on(cocooned, function(e,task_to_be_added) {
         task_to_be_added.fadeIn('slow');
       })
-      .on('cocoon:after-insert', function(e, added_task) {
+      .on(cocooned, function(e, added_task) {
         // e.g. set the background of inserted task
         added_task.css("background","red");
       })
-      .on('cocoon:before-remove', function(e, task) {
+      .on(cocooned, function(e, task) {
         // allow some time for the animation to complete
         $(this).data('remove-timeout', 1000);
         task.fadeOut('slow');
@@ -443,7 +443,7 @@ You can cancel an action from occurring, either an insertion or removal, within 
 For example:
 
 ```javascript
-  $('#container').on('cocoon:before-insert', function(event, insertedItem) {
+  $('#container').on(cocooned, function(event, insertedItem) {
     var confirmation = confirm("Are you sure?");
     if( confirmation === false ){
       event.preventDefault();
@@ -530,7 +530,7 @@ There is no limit to the amount of nesting, though.
 
 ## I18n
 
-As you seen in previous sections, the helper method `link_to_add_association` treats the first parameter as a name. Additionally, if it's skipped and the `form` object is passed as the first one, then **Cocoon** names it using **I18n**.
+As you seen in previous sections, the helper method `link_to_add_association` treats the first parameter as a name. Additionally, if it's skipped and the `form` object is passed as the first one, then **Cocooned** names it using **I18n**.
 
 It allows to invoke helper methods like this:
 
@@ -546,7 +546,7 @@ instead of:
 = link_to_remove_association "remove task", form_object
 ```
 
-**Cocoon** uses the name of `association` as a translations scope key. If custom translations for association is not present it fallbacks to default name. Example of translations tree:
+**Cocooned** uses the name of `association` as a translations scope key. If custom translations for association is not present it fallbacks to default name. Example of translations tree:
 
 ```yaml
 en:
@@ -559,7 +559,7 @@ en:
       remove: "Remove old task"
 ```
 
-Note that `link_to_remove_association` does not require `association` name as an argument. In order to get correct translation key, **Cocoon** tableizes `class` name of the target object of form builder (`form_object.object` from previous example).
+Note that `link_to_remove_association` does not require `association` name as an argument. In order to get correct translation key, **Cocooned** tableizes `class` name of the target object of form builder (`form_object.object` from previous example).
 
 ## Note on Patches/Pull Requests
 

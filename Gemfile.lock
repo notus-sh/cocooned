@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    cocoon (1.2.11)
+    cocooned (1.2.11)
       rails (>= 4.0, <= 6.0)
 
 GEM
@@ -178,7 +178,7 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 1.16)
-  cocoon!
+  cocooned!
   jasmine (~> 3.2)
   jquery-rails
   nokogiri

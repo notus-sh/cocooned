@@ -1,4 +1,4 @@
-Cocoon.Plugins.Reorderable = {
+Cocooned.Plugins.Reorderable = {
 
   defaultOptionValue: true,
 
@@ -7,12 +7,12 @@ Cocoon.Plugins.Reorderable = {
 
     this.container
       // Maintain indexes
-      .on('cocoon:after-insert',  function(e) { self.reindex(); })
-      .on('cocoon:after-remove',  function(e) { self.reindex(); })
-      .on('cocoon:after-move',    function(e) { self.reindex(); })
-      .on('click', '.cocoon-move-up, .cocoon-move-down', function(e) {
+      .on('cocooned:after-insert',  function(e) { self.reindex(); })
+      .on('cocooned:after-remove',  function(e) { self.reindex(); })
+      .on('cocooned:after-move',    function(e) { self.reindex(); })
+      .on('click.cocooned', '.cocooned-move-up, .cocooned-move-down', function(e) {
         e.preventDefault();
-        self.move(this, this.className.indexOf('cocoon-move-up') != -1 ? 'up' : 'down');
+        self.move(this, this.className.indexOf('cocooned-move-up') != -1 ? 'up' : 'down');
       });
 
     // Ensure positions are unique before save
@@ -31,9 +31,9 @@ Cocoon.Plugins.Reorderable = {
       return;
     }
 
-    // Move can be prevented through a 'cocoon:before-move' event handler
-    var eventData = { link: $mover, node: node, cocoon: this };
-    if (!self.notify(node, 'cocoon:before-move', eventData)) {
+    // Move can be prevented through a 'cocooned:before-move' event handler
+    var eventData = { link: $mover, node: node, cocooned: this };
+    if (!self.notify(node, 'cocooned:before-move', eventData)) {
       return false;
     }
 
@@ -47,7 +47,7 @@ Cocoon.Plugins.Reorderable = {
 
       self.show(movedNode, function() {
         self.container.css('height', '').css('width', ''); // Object notation does not work here.
-        self.notify(movedNode, 'cocoon:after-move', eventData);
+        self.notify(movedNode, 'cocooned:after-move', eventData);
       });
     });
   },
@@ -56,29 +56,29 @@ Cocoon.Plugins.Reorderable = {
     var self = this;
     var i = 0;
     var nodes = this.getNodes(':visible');
-    var eventData = { link: null, nodes: nodes, cocoon: this };
+    var eventData = { link: null, nodes: nodes, cocooned: this };
 
-    // Reindex can be prevented through a 'cocoon:before-reindex' event handler
-    if (!this.notify(this.container, 'cocoon:before-reindex', eventData)) {
+    // Reindex can be prevented through a 'cocooned:before-reindex' event handler
+    if (!this.notify(this.container, 'cocooned:before-reindex', eventData)) {
       return false;
     }
 
     nodes.each(function() { $('input[id$=_position]', this).val(++i); });
-    this.notify(this.container, 'cocoon:after-reindex', eventData);
+    this.notify(this.container, 'cocooned:after-reindex', eventData);
   },
 
   show: function(node, callback) {
     callback = callback || function() {};
 
-    node.addClass('cocoon-visible-item');
+    node.addClass('cocooned-visible-item');
     setTimeout(function() {
       callback.apply(node);
-      node.removeClass('cocoon-hidden-item');
+      node.removeClass('cocooned-hidden-item');
     }, 500);
   },
 
   hide: function(node, callback) {
-    node.removeClass('cocoon-visible-item').addClass('cocoon-hidden-item');
+    node.removeClass('cocooned-visible-item').addClass('cocooned-hidden-item');
     if (callback) {
       setTimeout(function() {
         callback.apply(node);

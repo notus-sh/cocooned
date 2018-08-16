@@ -1,15 +1,15 @@
 {
-  "name": "cocoon",
+  "name": "cocooned",
   "version": "1.2.11",
   "private": true,
   "license": "APACHE-2.0",
   "description": "Unobtrusive nested forms handling using jQuery.",
-  "homepage": "https://github.com/notus-sh/cocoon#readme",
-  "repository": "https://github.com/notus-sh/cocoon",
+  "homepage": "https://github.com/notus-sh/cocooned#readme",
+  "repository": "https://github.com/notus-sh/cocooned",
   "author": "Gaël-Ian Havard <gael-ian@notus.sh>",
-  "main": "app/assets/javascripts/cocoon.js",
+  "main": "app/assets/javascripts/cocooned.js",
   "files": ["app/assets/javascripts"],
-  "bugs": { "url": "https://github.com/notus-sh/cocoon/issues" },
+  "bugs": { "url": "https://github.com/notus-sh/cocooned/issues" },
   "dependencies": {
     "jquery": "^3.3.1"
   },

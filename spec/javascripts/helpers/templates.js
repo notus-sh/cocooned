@@ -275,13 +275,13 @@ var templates = {
   'reorderable': `
     <form id="form-template" novalidate="novalidate" action="" accept-charset="UTF-8" method="post">
   
-      <div class="nested-form" data-cocoon-options="{ 'reorderable': true }">
+      <div class="nested-form" data-cocooned-options="{ 'reorderable': true }">
         <div class="nested-fields">
         
           <input type="hidden" name="list[items_attributes][1][_destroy]" id="list_items_attributes_1__destroy" value="false" />
           <a class="remove_fields existing" href="#">Remove</a>
-          <a class="cocoon-move-up" href="#">Move up</a>
-          <a class="cocoon-move-down" href="#">Move down</a>
+          <a class="cocooned-move-up" href="#">Move up</a>
+          <a class="cocooned-move-down" href="#">Move down</a>
           
           <label for="list_items_attributes_1_label">Label</label>
           <input type="text" name="list[items_attributes][1][label]" id="list_items_attributes_1_label" />
@@ -300,8 +300,8 @@ var templates = {
           
           &lt;input type=&quot;hidden&quot; name=&quot;list[items_attributes][new_items][_destroy]&quot; id=&quot;list_items_attributes_new_items__destroy&quot; value=&quot;false&quot; /&gt;
           &lt;a class=&quot;remove_fields dynamic&quot; href=&quot;#&quot;&gt;Remove&lt;/a&gt;
-          &lt;a class=&quot;cocoon-move-up&quot; href=&quot;#&quot;&gt;Move up&lt;/a&gt;
-          &lt;a class=&quot;cocoon-move-down&quot; href=&quot;#&quot;&gt;Move down&lt;/a&gt;
+          &lt;a class=&quot;cocooned-move-up&quot; href=&quot;#&quot;&gt;Move up&lt;/a&gt;
+          &lt;a class=&quot;cocooned-move-down&quot; href=&quot;#&quot;&gt;Move down&lt;/a&gt;
           
           &lt;label for=&quot;list_items_attributes_new_items_label&quot;&gt;Label&lt;/label&gt;
           &lt;input type=&quot;text&quot; name=&quot;list[items_attributes][new_items][label]&quot; id=&quot;list_items_attributes_new_items_label&quot; /&gt;

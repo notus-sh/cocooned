@@ -1,23 +1,25 @@
 /* globals jasmine, describe, it, beforeEach, afterEach, expect, spyOn */
 /* globals setup, teardown */
 
-describe('A reorderable cocoon setup', function () {
+describe('A reorderable cocooned setup', function () {
   beforeEach(setup('reorderable'));
   afterEach(teardown());
 
   describe('with at least two items', function () {
     beforeEach(function () {
-      $('.add_fields').trigger('click');
+      for (var i = 0, count = Math.ceil(Math.random() * 12); i <= count; i++) {
+        $('.add_fields').trigger('click');
+      }
     });
 
     describe('should reindex items on click', function () {
-      var cocoon;
+      var cocooned;
 
       beforeEach(function () {
         jasmine.clock().install();
 
-        cocoon = this.wrapper.data('cocoon');
-        spyOn(cocoon, 'reindex').and.callThrough();
+        cocooned = this.wrapper.data('cocooned');
+        spyOn(cocooned, 'reindex').and.callThrough();
       });
 
       afterEach(function () {
@@ -27,25 +29,33 @@ describe('A reorderable cocoon setup', function () {
       it('on the association add link', function () {
         $('.add_fields').trigger('click');
         jasmine.clock().tick(1);
-        expect(cocoon.reindex).toHaveBeenCalled();
+        expect(cocooned.reindex).toHaveBeenCalled();
       });
 
       it('on an association remove link', function () {
         $('.remove_fields').first().trigger('click');
         jasmine.clock().tick(1);
-        expect(cocoon.reindex).toHaveBeenCalled();
+        expect(cocooned.reindex).toHaveBeenCalled();
       });
 
       it('on an association move up link', function () {
-        $('.cocoon-move-up').last().trigger('click');
-        jasmine.clock().tick(1000);
-        expect(cocoon.reindex).toHaveBeenCalled();
+        var items = this.wrapper.find('.nested-fields:visible:not(:first)');
+        var index = Math.floor(Math.random() * items.length);
+        var item = $(items.get(index));
+
+        item.find('.cocooned-move-up').trigger('click');
+        jasmine.clock().tick(1010);
+        expect(cocooned.reindex).toHaveBeenCalled();
       });
 
       it('on an association move down link', function () {
-        $('.cocoon-move-down').first().trigger('click');
-        jasmine.clock().tick(1000);
-        expect(cocoon.reindex).toHaveBeenCalled();
+        var items = this.wrapper.find('.nested-fields:visible:not(:last)');
+        var index = Math.floor(Math.random() * items.length);
+        var item = $(items.get(index));
+
+        item.find('.cocooned-move-down').trigger('click');
+        jasmine.clock().tick(1010);
+        expect(cocooned.reindex).toHaveBeenCalled();
       });
 
       describe('and reindexed items', function () {
@@ -64,9 +74,6 @@ describe('A reorderable cocoon setup', function () {
 
     describe('on click on an association move link', function () {
       beforeEach(function () {
-        for (var i = 0, count = Math.ceil(Math.random() * 12); i <= count; i++) {
-          $('.add_fields').trigger('click');
-        }
         jasmine.clock().install();
       });
 
@@ -83,8 +90,8 @@ describe('A reorderable cocoon setup', function () {
 
           expect(parseInt($(movedItem).find('input[name$="[position]"]').val(), 10)).toEqual(originalPosition);
 
-          movedItem.find('.cocoon-move-down').trigger('click');
-          jasmine.clock().tick(1000);
+          movedItem.find('.cocooned-move-down').trigger('click');
+          jasmine.clock().tick(1010);
 
           expect(parseInt($(movedItem).find('input[name$="[position]"]').val(), 10)).toEqual(originalPosition + 1);
         });
@@ -99,8 +106,8 @@ describe('A reorderable cocoon setup', function () {
 
           expect(parseInt($(movedItem).find('input[name$="[position]"]').val(), 10)).toEqual(originalPosition);
 
-          movedItem.find('.cocoon-move-up').trigger('click');
-          jasmine.clock().tick(1000);
+          movedItem.find('.cocooned-move-up').trigger('click');
+          jasmine.clock().tick(1010);
 
           expect(parseInt($(movedItem).find('input[name$="[position]"]').val(), 10)).toEqual(originalPosition - 1);
         });

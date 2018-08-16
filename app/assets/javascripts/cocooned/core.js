@@ -1,14 +1,11 @@
-//= require_self
-//= require_tree './cocoon/plugins'
-
-var Cocoon = function (container, options) {
+var Cocooned = function (container, options) {
   this.container = jQuery(container);
   this.options = jQuery.extend({}, this.defaultOptions(), (options || {}));
 
   // Autoload plugins
-  for (var moduleName in Cocoon.Plugins) {
-    if (Cocoon.Plugins.hasOwnProperty(moduleName)) {
-      var module = Cocoon.Plugins[moduleName];
+  for (var moduleName in Cocooned.Plugins) {
+    if (Cocooned.Plugins.hasOwnProperty(moduleName)) {
+      var module = Cocooned.Plugins[moduleName];
       var optionName = moduleName.charAt(0).toLowerCase() + moduleName.slice(1);
 
       if (this.options[optionName]) {
@@ -24,8 +21,8 @@ var Cocoon = function (container, options) {
   this.init();
 };
 
-Cocoon.Plugins = {};
-Cocoon.prototype = {
+Cocooned.Plugins = {};
+Cocooned.prototype = {
 
   elementsCounter: 0,
 
@@ -36,9 +33,9 @@ Cocoon.prototype = {
   defaultOptions: function () {
     var options = {};
 
-    for (var moduleName in Cocoon.Plugins) {
-      if (Cocoon.Plugins.hasOwnProperty(moduleName)) {
-        var module = Cocoon.Plugins[moduleName];
+    for (var moduleName in Cocooned.Plugins) {
+      if (Cocooned.Plugins.hasOwnProperty(moduleName)) {
+        var module = Cocooned.Plugins[moduleName];
         var optionName = moduleName.charAt(0).toLowerCase() + moduleName.slice(1);
 
         options[optionName] = module.defaultOptionValue;
@@ -50,7 +47,7 @@ Cocoon.prototype = {
 
   notify: function (node, eventType, eventData) {
     var event = jQuery.Event(eventType, eventData);
-    node.trigger(event, [eventData.node, eventData.cocoon]);
+    node.trigger(event, [eventData.node, eventData.cocooned]);
     return !(event.isPropagationStopped() || event.isDefaultPrevented());
   },
 
@@ -101,7 +98,7 @@ Cocoon.prototype = {
     selector = selector || '';
     var self = this;
     return $(this.siblingsSelector + selector, this.container).filter(function () {
-      return ($(this).closest('.cocoon-container').get(0) === self.container.get(0));
+      return ($(this).closest('.cocooned-container').get(0) === self.container.get(0));
     });
   },
 
@@ -161,7 +158,7 @@ Cocoon.prototype = {
     if (!this.container.attr('id')) {
       this.container.attr('id', this.buildId());
     }
-    this.container.addClass('cocoon-container');
+    this.container.addClass('cocooned-container');
 
     $(function () { self.hideMarkedForDestruction(); });
     $(document).on('page:load turbolinks:load', function () { self.hideMarkedForDestruction(); });
@@ -171,14 +168,14 @@ Cocoon.prototype = {
     var self = this;
 
     // Bind add links
-    this.addLinks.on('click.cocoon', function (e) {
+    this.addLinks.on('click.cocooned', function (e) {
       e.preventDefault();
       self.add(this);
     });
 
     // Bind remove links
     // (Binded on document instead of container to not bypass click handler defined in jquery_ujs)
-    $(document).on('click.cocoon', ('#' + this.container.attr('id') + ' ' + this.removeLinkSelector), function (e) {
+    $(document).on('click.cocooned', ('#' + this.container.attr('id') + ' ' + this.removeLinkSelector), function (e) {
       e.preventDefault();
       self.remove(this);
     });
@@ -201,17 +198,17 @@ Cocoon.prototype = {
 
     for (var i = 0; i < count; i++) {
       var contentNode = this.buildContentNode(contentTemplate);
-      var eventData = { link: $adder, node: contentNode, cocoon: this };
+      var eventData = { link: $adder, node: contentNode, cocooned: this };
       var afterNode = (insertionMethod === 'replaceWith' ? contentNode : insertionNode);
 
-      // Insertion can be prevented through a 'cocoon:before-insert' event handler
-      if (!this.notify(insertionNode, 'cocoon:before-insert', eventData)) {
+      // Insertion can be prevented through a 'cocooned:before-insert' event handler
+      if (!this.notify(insertionNode, 'cocooned:before-insert', eventData)) {
         return false;
       }
 
       insertionNode[insertionMethod](contentNode);
 
-      this.notify(afterNode, 'cocoon:after-insert', eventData);
+      this.notify(afterNode, 'cocooned:after-insert', eventData);
     }
   },
 
@@ -220,10 +217,10 @@ Cocoon.prototype = {
     var $remover = $(remover);
     var nodeToDelete = this.findItem($remover);
     var triggerNode = nodeToDelete.parent();
-    var eventData = { link: $remover, node: nodeToDelete, cocoon: this };
+    var eventData = { link: $remover, node: nodeToDelete, cocooned: this };
 
-    // Deletion can be prevented through a 'cocoon:before-remove' event handler
-    if (!this.notify(triggerNode, 'cocoon:before-remove', eventData)) {
+    // Deletion can be prevented through a 'cocooned:before-remove' event handler
+    if (!this.notify(triggerNode, 'cocooned:before-remove', eventData)) {
       return false;
     }
 
@@ -239,7 +236,7 @@ Cocoon.prototype = {
         $remover.siblings('input[type=hidden][name$="[_destroy]"]').val('true');
         nodeToDelete.hide();
       }
-      self.notify(triggerNode, 'cocoon:after-remove', eventData);
+      self.notify(triggerNode, 'cocooned:after-remove', eventData);
     }, timeout);
   },
 

@@ -2,7 +2,7 @@
 
 require 'nokogiri'
 
-describe Cocoon::Helpers do
+describe Cocooned::Helpers do
   before(:each) do
     @tester = Class.new(ActionView::Base).new
     @person = Person.new
@@ -27,7 +27,7 @@ describe Cocoon::Helpers do
       context 'and no name given' do
         context 'custom translation exists' do
           before do
-            I18n.backend.store_translations(:en, cocoon: { posts: { add: 'Add a post' } })
+            I18n.backend.store_translations(:en, cocooned: { posts: { add: 'Add a post' } })
 
             @html = @tester.link_to_add_association(@form_obj, :posts)
           end
@@ -38,7 +38,7 @@ describe Cocoon::Helpers do
 
         context 'uses default translation' do
           before do
-            I18n.backend.store_translations(:en, cocoon: { defaults: { add: 'Add' } })
+            I18n.backend.store_translations(:en, cocooned: { defaults: { add: 'Add' } })
 
             @html = @tester.link_to_add_association(@form_obj, :posts)
           end
@@ -226,7 +226,7 @@ describe Cocoon::Helpers do
       context 'no name given' do
         context 'custom translation exists' do
           before do
-            I18n.backend.store_translations(:en, cocoon: { posts: { remove: 'Remove this post' } })
+            I18n.backend.store_translations(:en, cocooned: { posts: { remove: 'Remove this post' } })
             @html = @tester.link_to_remove_association(@form_obj)
           end
 
@@ -236,7 +236,7 @@ describe Cocoon::Helpers do
 
         context 'uses default translation' do
           before do
-            I18n.backend.store_translations(:en, cocoon: { defaults: { remove: 'Remove' } })
+            I18n.backend.store_translations(:en, cocooned: { defaults: { remove: 'Remove' } })
             @html = @tester.link_to_remove_association(@form_obj)
           end
 

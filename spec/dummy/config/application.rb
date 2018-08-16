@@ -16,7 +16,7 @@ require 'sprockets/railtie'
 require 'rails/test_unit/railtie'
 
 Bundler.require(*Rails.groups)
-require 'cocoon'
+require 'cocooned'
 
 module Dummy
   class Application < Rails::Application

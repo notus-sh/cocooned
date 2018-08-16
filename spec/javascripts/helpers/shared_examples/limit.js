@@ -6,14 +6,14 @@ function shouldHonoreTheLimit (pendingSpec) {
 
     beforeEach(function() {
       eventSpy = jasmine.createSpy('eventSpy');
-      $(document).on('cocoon:limit-reached', eventSpy);
+      $(document).on('cocooned:limit-reached', eventSpy);
 
       $('.add_fields').trigger('click');
       $('.add_fields').trigger('click');
     });
 
     afterEach(function() {
-      $(document).off('cocoon:limit-reached');
+      $(document).off('cocooned:limit-reached');
     });
 
     it("should not add more items than allowed", function() {
@@ -21,7 +21,7 @@ function shouldHonoreTheLimit (pendingSpec) {
       expect(this.wrapper.children('.nested-fields').length).toEqual(2);
     });
 
-    it("should raise a 'cocoon:limit-reached' event", function() {
+    it("should raise a 'cocooned:limit-reached' event", function() {
       pendingSpec && pending("The limit option only works with insertion methods that add childs to the insertion node");
       expect(eventSpy).toHaveBeenCalled();
       if (!eventSpy.calls.any()) {
@@ -29,7 +29,7 @@ function shouldHonoreTheLimit (pendingSpec) {
       }
 
       var event = eventSpy.calls.first().args[0];
-      expect(event.type).toEqual('cocoon:limit-reached');
+      expect(event.type).toEqual('cocooned:limit-reached');
       expect(event.link.get(0)).toEqual($('.add_fields').get(0));
     });
   };

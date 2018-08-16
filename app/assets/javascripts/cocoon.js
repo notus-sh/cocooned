@@ -1,15 +1,13 @@
-/* globals Cocoon */
-//= require 'cocoon-core'
-//= require 'cocoon/jquery/plugin'
-//= require 'cocoon/jquery/onload'
+/* globals Cocooned */
+//= require 'cocooned'
 
 // Compatibility with the original Cocoon
 function initCocoon () {
-  $(Cocoon.prototype.addLinkSelector).each(function (_i, addLink) {
-    var container = Cocoon.prototype.findContainer(addLink);
+  $(Cocooned.prototype.addLinkSelector).each(function (_i, addLink) {
+    var container = Cocooned.prototype.findContainer(addLink);
     var limit = parseInt($(addLink).data('limit'), 10) || false;
 
-    container.cocoon({ limit: limit });
+    container.cocooned({ limit: limit });
   });
 }
 

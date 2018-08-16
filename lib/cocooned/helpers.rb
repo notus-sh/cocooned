@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Cocoon
+module Cocooned
   module Helpers
     # this will show a link to remove the current association. This should be placed inside the partial.
     # either you give
@@ -19,7 +19,7 @@ module Cocoon
       elsif args.first.respond_to?(:object)
         form = args.first
         association = form.object.class.to_s.tableize
-        name = I18n.translate("cocoon.#{association}.remove", default: I18n.translate('cocoon.defaults.remove'))
+        name = I18n.translate("cocooned.#{association}.remove", default: I18n.translate('cocooned.defaults.remove'))
 
         link_to_remove_association(name, *args)
       else
@@ -80,7 +80,7 @@ module Cocoon
         link_to_add_association(capture(&block), *args)
       elsif args.first.respond_to?(:object)
         association = args.second
-        name = I18n.translate("cocoon.#{association}.add", default: I18n.translate('cocoon.defaults.add'))
+        name = I18n.translate("cocooned.#{association}.add", default: I18n.translate('cocooned.defaults.add'))
 
         link_to_add_association(name, *args)
       else

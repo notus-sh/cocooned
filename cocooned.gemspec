@@ -2,18 +2,18 @@
 
 lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'cocoon/version'
+require 'cocooned/version'
 
 Gem::Specification.new do |spec|
-  spec.name         = 'cocoon'
-  spec.version      = Cocoon::VERSION
+  spec.name         = 'cocooned'
+  spec.version      = Cocooned::VERSION
   spec.licenses     = ['Apache-2.0']
   spec.authors      = ['Gaël-Ian Havard', 'Nathan Van der Auwera']
   spec.email        = ['gael-ian@notus.sh', 'nathan@dixis.com']
 
   spec.summary      = 'Unobtrusive nested forms handling using jQuery.'
   spec.description  = 'Easier nested form. Supports standard Rails forms, Formtastic and SimpleForm.'
-  spec.homepage     = 'http://github.com/notus-sh/cocoon'
+  spec.homepage     = 'http://github.com/notus-sh/cocooned'
 
   if spec.respond_to?(:metadata)
     spec.metadata['allowed_push_host'] = 'https://rubygems.org'
