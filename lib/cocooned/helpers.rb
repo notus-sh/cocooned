@@ -2,6 +2,7 @@
 
 require 'cocooned/helpers/deprecate'
 require 'cocooned/helpers/cocoon_compatibility'
+require 'cocooned/association_builder'
 
 module Cocooned
   # TODO: Remove in 2.0 (Only Cocoon class names).
@@ -43,21 +44,23 @@ module Cocooned
         name, form, association, html_options = *args
         html_options ||= {}
 
+        builder_options = %i[wrap_object force_non_association_create].each_with_object({}) do |option_name, opts|
+          opts[option_name] = html_options.delete(option_name) if html_options.key?(option_name)
+        end
+        builder = Cocooned::AssociationBuilder.new(form, association, builder_options)
+
         render_options   = html_options.delete(:render_options)
         render_options ||= {}
         override_partial = html_options.delete(:partial)
-        wrap_object = html_options.delete(:wrap_object)
-        force_non_association_create = html_options.delete(:force_non_association_create) || false
         form_parameter_name = html_options.delete(:form_name) || 'f'
         count = html_options.delete(:count).to_i
         limit = html_options.delete(:limit).to_i
 
         html_options[:class] = [html_options[:class], Cocooned::HELPER_CLASSES[:add]].flatten.compact.join(' ')
-        html_options[:'data-association'] = association.to_s.singularize
-        html_options[:'data-associations'] = association.to_s.pluralize
+        html_options[:'data-association'] = builder.singular_name
+        html_options[:'data-associations'] = builder.plural_name
 
-        new_object = create_object(form, association, force_non_association_create)
-        new_object = wrap_object.call(new_object) if wrap_object.respond_to?(:call)
+        new_object = builder.build_object
 
         rendered = render_association(association,
                                       form,
@@ -150,17 +153,6 @@ module Cocooned
       cocooned_move_item_link(:down, name, form, html_options, &block)
     end
 
-    # creates new association object with its conditions, like
-    # `` has_many :admin_comments, class_name: "Comment", conditions: { author: "Admin" }
-    # will create new Comment with author "Admin"
-    def create_object(form, association, force_non_association_create = false)
-      klass = form.object.class
-      assoc = klass.respond_to?(:reflect_on_association) ? klass.reflect_on_association(association) : nil
-
-      return create_object_on_association(form, association, assoc, force_non_association_create) if assoc
-      create_object_on_non_association(form, association)
-    end
-
     private
 
     def cocooned_move_item_link(direction, name, form = nil, html_options = {}, &block)
@@ -204,39 +196,6 @@ module Cocooned
         partial_options = { form_name.to_sym => builder, :dynamic => true }.merge(locals)
         render(partial, partial_options)
       end
-    end
-
-    def create_object_on_non_association(form, association)
-      builder_method = %W[build_#{association} build_#{association.to_s.singularize}].select { |m| form.object.respond_to?(m) }.first
-      return form.object.send(builder_method) if builder_method
-      raise "Association #{association} doesn't exist on #{form.object.class}"
-    end
-
-    def create_object_on_association(form, association, instance, force_non_association_create)
-      if instance.class.name == 'Mongoid::Relations::Metadata' || force_non_association_create
-        create_object_with_conditions(instance)
-      else
-        # assume ActiveRecord or compatible
-        if instance.collection?
-          assoc_obj = form.object.send(association).build
-          form.object.send(association).delete(assoc_obj)
-        else
-          assoc_obj = form.object.send("build_#{association}")
-          form.object.send(association).delete
-        end
-
-        assoc_obj = assoc_obj.dup if assoc_obj.frozen?
-        assoc_obj
-      end
-    end
-
-    def create_object_with_conditions(instance)
-      # in rails 4, an association is defined with a proc
-      # and I did not find how to extract the conditions from a scope
-      # except building from the scope, but then why not just build from the
-      # association???
-      conditions = instance.respond_to?(:conditions) ? instance.conditions.flatten : []
-      instance.klass.new(*conditions)
     end
   end
 end

@@ -92,8 +92,8 @@ describe Cocooned::Helpers do
       context 'force non association create' do
         context 'default case: create object on association' do
           before do
-            expect(@tester).to receive(:create_object)
-              .with(anything, :posts, false)
+            expect(Cocooned::AssociationBuilder).to receive(:new)
+              .with(anything, :posts, hash_including).and_call_original
             @html = @tester.cocooned_add_item_link('add something', @form_obj, :posts)
           end
 
@@ -103,8 +103,8 @@ describe Cocooned::Helpers do
 
         context 'and explicitly specifying false is the same as default' do
           before do
-            expect(@tester).to receive(:create_object)
-              .with(anything, :posts, false)
+            expect(Cocooned::AssociationBuilder).to receive(:new)
+              .with(anything, :posts, hash_including(force_non_association_create: false)).and_call_original
             @html = @tester.cocooned_add_item_link('add something', @form_obj, :posts, force_non_association_create: false)
           end
           it_behaves_like 'a correctly rendered add link',
@@ -113,8 +113,8 @@ describe Cocooned::Helpers do
 
         context 'specifying true will not create objects on association but using the conditions' do
           before do
-            expect(@tester).to receive(:create_object)
-              .with(anything, :posts, true)
+            expect(Cocooned::AssociationBuilder).to receive(:new)
+              .with(anything, :posts, hash_including(force_non_association_create: true)).and_call_original
             @html = @tester.cocooned_add_item_link('add something', @form_obj, :posts, force_non_association_create: true)
           end
           it_behaves_like 'a correctly rendered add link',
