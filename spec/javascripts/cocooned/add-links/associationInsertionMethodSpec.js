@@ -12,7 +12,7 @@ describe('With a different association insertion method', function () {
 
     it("should add an item at the right place", function() {
       var addLink = $('.cocooned-add');
-      var addedItem = this.wrapper.children('.nested-fields').last();
+      var addedItem = this.wrapper.children('.cocooned-item').last();
 
       expect(addLink.parent().next().get(0)).toEqual(addedItem.get(0));
     });

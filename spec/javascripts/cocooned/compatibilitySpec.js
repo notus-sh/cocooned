@@ -24,7 +24,7 @@ describe('Compatibility with a cocoon setup', function () {
     });
   });
 
-  describe('with old action links class names', function () {
+  describe('with old class names', function () {
     describe('on click on the association add link', function () {
       beforeEach(function () {
         $('.add_fields').trigger('click');

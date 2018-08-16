@@ -12,7 +12,7 @@ describe('With a different association insertion node', function () {
 
     it("should add an item at the right place", function() {
       var insertionNode = $('.insertion-node');
-      var addedItem = this.wrapper.children('.nested-fields').last();
+      var addedItem = this.wrapper.children('.cocooned-item').last();
 
       expect(insertionNode.prev().get(0)).toEqual(addedItem.get(0));
     });

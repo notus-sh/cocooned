@@ -18,7 +18,7 @@ function shouldHonoreTheLimit (pendingSpec) {
 
     it("should not add more items than allowed", function() {
       pendingSpec && pending("The limit option only works with insertion methods that add childs to the insertion node");
-      expect(this.wrapper.children('.nested-fields').length).toEqual(2);
+      expect(this.wrapper.children('.cocooned-item').length).toEqual(2);
     });
 
     it("should raise a 'cocooned:limit-reached' event", function() {

@@ -39,7 +39,7 @@ describe('A reorderable cocooned setup', function () {
       });
 
       it('on an association move up link', function () {
-        var items = this.wrapper.find('.nested-fields:visible:not(:first)');
+        var items = this.wrapper.find('.cocooned-item:visible:not(:first)');
         var index = Math.floor(Math.random() * items.length);
         var item = $(items.get(index));
 
@@ -49,7 +49,7 @@ describe('A reorderable cocooned setup', function () {
       });
 
       it('on an association move down link', function () {
-        var items = this.wrapper.find('.nested-fields:visible:not(:last)');
+        var items = this.wrapper.find('.cocooned-item:visible:not(:last)');
         var index = Math.floor(Math.random() * items.length);
         var item = $(items.get(index));
 
@@ -65,7 +65,7 @@ describe('A reorderable cocooned setup', function () {
         });
 
         it('sould have correct positions', function () {
-          this.wrapper.find('.nested-fields:visible').each(function (i, item) {
+          this.wrapper.find('.cocooned-item:visible').each(function (i, item) {
             expect(parseInt($(item).find('input[name$="[position]"]').val(), 10)).toEqual(i + 1);
           });
         });
@@ -83,7 +83,7 @@ describe('A reorderable cocooned setup', function () {
 
       describe('moving an item down', function () {
         it('should move the matching item down', function () {
-          var movableItems = this.wrapper.find('.nested-fields:visible:not(:last)');
+          var movableItems = this.wrapper.find('.cocooned-item:visible:not(:last)');
           var originalIndex = Math.floor(Math.random() * movableItems.length);
           var originalPosition = originalIndex + 1;
           var movedItem = $(movableItems.get(originalIndex));
@@ -99,7 +99,7 @@ describe('A reorderable cocooned setup', function () {
 
       describe('moving an item up', function () {
         it('should move the matching item up', function () {
-          var movableItems = this.wrapper.find('.nested-fields:visible:not(:first)');
+          var movableItems = this.wrapper.find('.cocooned-item:visible:not(:first)');
           var originalIndex = Math.floor(Math.random() * movableItems.length);
           var originalPosition = originalIndex + 2; // :not(:first)
           var movedItem = $(movableItems.get(originalIndex));

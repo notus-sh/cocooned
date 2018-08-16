@@ -10,7 +10,6 @@
 //= require_self
 // Test suites
 //= require 'cocooned/basicSpec'
-//= require 'cocooned/remove-links/wrapperClassSpec'
 //= require 'cocooned/add-links/associationInsertionMethodSpec'
 //= require 'cocooned/add-links/associationInsertionNodeSpec'
 //= require 'cocooned/add-links/associationInsertionTraversalSpec'

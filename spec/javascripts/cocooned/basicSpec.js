@@ -7,12 +7,12 @@ describe('A basic cocooned setup', function () {
 
   describe('on page load', function () {
     it('should do nothing', function () {
-      expect(this.wrapper.children('.nested-fields').length).toEqual(1);
+      expect(this.wrapper.children('.cocooned-item').length).toEqual(1);
     });
 
     describe('the pre-existing nested item', function () {
       beforeEach(function () {
-        this.subject = this.wrapper.children('.nested-fields').first();
+        this.subject = this.wrapper.children('.cocooned-item').first();
       });
 
       describe('fields', shouldBeCorrectlyNamed('[0-9]+'));
@@ -38,12 +38,12 @@ describe('A basic cocooned setup', function () {
     });
 
     it('should add an item', function () {
-      expect(this.wrapper.children('.nested-fields').length).toEqual(2);
+      expect(this.wrapper.children('.cocooned-item').length).toEqual(2);
     });
 
     describe('the newly added item', function () {
       beforeEach(function () {
-        this.subject = this.wrapper.children('.nested-fields').last();
+        this.subject = this.wrapper.children('.cocooned-item').last();
       });
 
       describe('fields', shouldBeCorrectlyNamed('[0-9]{10,}'));
@@ -94,7 +94,7 @@ describe('A basic cocooned setup', function () {
       expect(event.link.get(0)).toEqual($('.cocooned-add').get(0));
 
       var node = args[1];
-      expect(node.get(0)).toEqual(this.wrapper.children('.nested-fields').last().get(0));
+      expect(node.get(0)).toEqual(this.wrapper.children('.cocooned-item').last().get(0));
     });
 
     it("should raise a 'cocooned:after-insert' event", function () {
@@ -109,7 +109,7 @@ describe('A basic cocooned setup', function () {
       expect(event.link.get(0)).toEqual($('.cocooned-add').get(0));
 
       var node = args[1];
-      expect(node.get(0)).toEqual(this.wrapper.children('.nested-fields').last().get(0));
+      expect(node.get(0)).toEqual(this.wrapper.children('.cocooned-item').last().get(0));
     });
   });
 
@@ -139,7 +139,7 @@ describe('A basic cocooned setup', function () {
     });
 
     it('should not add an item', function () {
-      expect(this.wrapper.children('.nested-fields').length).toEqual(1);
+      expect(this.wrapper.children('.cocooned-item').length).toEqual(1);
     });
 
     it("should not raise a 'cocooned:after-insert' event", function () {
@@ -159,12 +159,12 @@ describe('A basic cocooned setup', function () {
     it('should remove an item', function () {
       $('.cocooned-remove').first().trigger('click');
       jasmine.clock().tick(1);
-      expect(this.wrapper.children('.nested-fields:visible').length).toEqual(0);
+      expect(this.wrapper.children('.cocooned-item:visible').length).toEqual(0);
     });
 
     describe('on a pre-existing item', function () {
       beforeEach(function () {
-        this.subject = this.wrapper.find('.cocooned-remove.existing').first().closest('.nested-fields');
+        this.subject = this.wrapper.find('.cocooned-remove.existing').first().closest('.cocooned-item');
       });
 
       it('should mark the item to be destroyed', function () {
@@ -179,7 +179,7 @@ describe('A basic cocooned setup', function () {
     describe('on a just added item', function () {
       beforeEach(function () {
         $('.cocooned-add').trigger('click');
-        this.subject = this.wrapper.children('.cocooned-remove.dynamic').first().closest('.nested-fields');
+        this.subject = this.wrapper.children('.cocooned-remove.dynamic').first().closest('.cocooned-item');
       });
 
       it('should remove the item from the DOM', function () {
@@ -204,7 +204,7 @@ describe('A basic cocooned setup', function () {
       $(document).on('cocooned:after-remove', afterEventSpy);
 
       var removeLink = $('.cocooned-remove').first();
-      this.subject = removeLink.closest('.nested-fields').get(0);
+      this.subject = removeLink.closest('.cocooned-item').get(0);
 
       removeLink.trigger('click');
       jasmine.clock().tick(1);
@@ -261,7 +261,7 @@ describe('A basic cocooned setup', function () {
       $(document).on('cocooned:after-remove', afterEventSpy);
 
       var removeLink = $('.cocooned-remove').first();
-      this.subject = removeLink.closest('.nested-fields').get(0);
+      this.subject = removeLink.closest('.cocooned-item').get(0);
 
       removeLink.trigger('click');
       jasmine.clock().tick(1);
@@ -278,7 +278,7 @@ describe('A basic cocooned setup', function () {
     });
 
     it('should not remove the item', function () {
-      expect(this.wrapper.children('.nested-fields').length).toEqual(1);
+      expect(this.wrapper.children('.cocooned-item').length).toEqual(1);
     });
 
     it("should not raise a 'cocooned:after-remove' event", function () {

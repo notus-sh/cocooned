@@ -11,7 +11,7 @@ describe('With a count', function () {
     });
 
     it("should add the requested number of items", function() {
-      expect(this.wrapper.children('.nested-fields').length).toEqual(3);
+      expect(this.wrapper.children('.cocooned-item').length).toEqual(3);
     });
   });
 });

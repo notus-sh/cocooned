@@ -45,10 +45,6 @@ Cocooned.prototype = {
     item:       ['cocooned-item', 'nested-fields'],
   },
 
-  addLinkSelector: '.add_fields',
-  removeLinkSelector: '.remove_fields',
-  siblingsSelector: '.nested-fields',
-
   defaultOptions: function () {
     var options = {};
 
@@ -150,9 +146,7 @@ Cocooned.prototype = {
   },
 
   findItem: function (removeLink) {
-    var $remover = $(removeLink);
-    var selector = '.' + ($remover.data('wrapper-class') || 'nested-fields');
-    return $remover.closest(selector);
+    return $(removeLink).closest(this.selector('item'));
   },
 
   init: function () {

@@ -5,7 +5,7 @@ var templates = {
     <form id="form-template" novalidate="novalidate" action="" accept-charset="UTF-8" method="post">
   
       <div class="nested-form">
-        <div class="nested-fields">
+        <div class="cocooned-item">
         
           <input type="hidden" name="list[items_attributes][1][_destroy]" id="list_items_attributes_1__destroy" value="false" />
           <a class="cocooned-remove existing" href="#">Remove</a>
@@ -21,7 +21,7 @@ var templates = {
               href="#"
               data-association="item"
               data-associations="items"
-              data-association-insertion-template="&lt;div class=&quot;nested-fields&quot;&gt;
+              data-association-insertion-template="&lt;div class=&quot;cocooned-item&quot;&gt;
               
               &lt;input type=&quot;hidden&quot; name=&quot;list[items_attributes][new_items][_destroy]&quot; id=&quot;list_items_attributes_new_items__destroy&quot; value=&quot;false&quot; /&gt;
               &lt;a class=&quot;cocooned-remove dynamic&quot; href=&quot;#&quot;&gt;Remove&lt;/a&gt;
@@ -71,7 +71,7 @@ var templates = {
     <form id="form-template" novalidate="novalidate" action="" accept-charset="UTF-8" method="post">
   
       <div class="nested-form">
-        <div class="nested-fields">
+        <div class="cocooned-item">
         
           <input type="hidden" name="list[items_attributes][1][_destroy]" id="list_items_attributes_1__destroy" value="false" />
           <a class="cocooned-remove existing" href="#">Remove</a>
@@ -88,7 +88,7 @@ var templates = {
               data-association="item"
               data-associations="items"
               data-association-insertion-method="after"
-              data-association-insertion-template="&lt;div class=&quot;nested-fields&quot;&gt;
+              data-association-insertion-template="&lt;div class=&quot;cocooned-item&quot;&gt;
               
               &lt;input type=&quot;hidden&quot; name=&quot;list[items_attributes][new_items][_destroy]&quot; id=&quot;list_items_attributes_new_items__destroy&quot; value=&quot;false&quot; /&gt;
               &lt;a class=&quot;cocooned-remove dynamic&quot; href=&quot;#&quot;&gt;Remove&lt;/a&gt;
@@ -105,7 +105,7 @@ var templates = {
     <form id="form-template" novalidate="novalidate" action="" accept-charset="UTF-8" method="post">
   
       <div class="nested-form">
-        <div class="nested-fields">
+        <div class="cocooned-item">
         
           <input type="hidden" name="list[items_attributes][1][_destroy]" id="list_items_attributes_1__destroy" value="false" />
           <a class="cocooned-remove existing" href="#">Remove</a>
@@ -124,7 +124,7 @@ var templates = {
           data-association="item"
           data-associations="items"
           data-association-insertion-node=".insertion-node"
-          data-association-insertion-template="&lt;div class=&quot;nested-fields&quot;&gt;
+          data-association-insertion-template="&lt;div class=&quot;cocooned-item&quot;&gt;
           
           &lt;input type=&quot;hidden&quot; name=&quot;list[items_attributes][new_items][_destroy]&quot; id=&quot;list_items_attributes_new_items__destroy&quot; value=&quot;false&quot; /&gt;
           &lt;a class=&quot;cocooned-remove dynamic&quot; href=&quot;#&quot;&gt;Remove&lt;/a&gt;
@@ -139,7 +139,7 @@ var templates = {
     <form id="form-template" novalidate="novalidate" action="" accept-charset="UTF-8" method="post">
   
       <div class="nested-form">
-        <div class="nested-fields">
+        <div class="cocooned-item">
         
           <input type="hidden" name="list[items_attributes][1][_destroy]" id="list_items_attributes_1__destroy" value="false" />
           <a class="cocooned-remove existing" href="#">Remove</a>
@@ -158,7 +158,7 @@ var templates = {
             data-associations="items"
             data-association-insertion-node=".insertion-node"
             data-association-insertion-traversal="siblings"
-            data-association-insertion-template="&lt;div class=&quot;nested-fields&quot;&gt;
+            data-association-insertion-template="&lt;div class=&quot;cocooned-item&quot;&gt;
             
             &lt;input type=&quot;hidden&quot; name=&quot;list[items_attributes][new_items][_destroy]&quot; id=&quot;list_items_attributes_new_items__destroy&quot; value=&quot;false&quot; /&gt;
             &lt;a class=&quot;cocooned-remove dynamic&quot; href=&quot;#&quot;&gt;Remove&lt;/a&gt;
@@ -174,7 +174,7 @@ var templates = {
     <form id="form-template" novalidate="novalidate" action="" accept-charset="UTF-8" method="post">
   
       <div class="nested-form">
-        <div class="nested-fields">
+        <div class="cocooned-item">
         
           <input type="hidden" name="list[items_attributes][1][_destroy]" id="list_items_attributes_1__destroy" value="false" />
           <a class="cocooned-remove existing" href="#">Remove</a>
@@ -191,7 +191,7 @@ var templates = {
               data-association="item"
               data-associations="items"
               data-count="2"
-              data-association-insertion-template="&lt;div class=&quot;nested-fields&quot;&gt;
+              data-association-insertion-template="&lt;div class=&quot;cocooned-item&quot;&gt;
               
               &lt;input type=&quot;hidden&quot; name=&quot;list[items_attributes][new_items][_destroy]&quot; id=&quot;list_items_attributes_new_items__destroy&quot; value=&quot;false&quot; /&gt;
               &lt;a class=&quot;cocooned-remove dynamic&quot; href=&quot;#&quot;&gt;Remove&lt;/a&gt;
@@ -208,7 +208,7 @@ var templates = {
     <form id="form-template" novalidate="novalidate" action="" accept-charset="UTF-8" method="post">
   
       <div class="nested-form">
-        <div class="nested-fields">
+        <div class="cocooned-item">
         
           <input type="hidden" name="list[items_attributes][1][_destroy]" id="list_items_attributes_1__destroy" value="false" />
           <a class="cocooned-remove existing" href="#">Remove</a>
@@ -225,7 +225,7 @@ var templates = {
               data-association="item"
               data-associations="items"
               data-limit="2"
-              data-association-insertion-template="&lt;div class=&quot;nested-fields&quot;&gt;
+              data-association-insertion-template="&lt;div class=&quot;cocooned-item&quot;&gt;
               
               &lt;input type=&quot;hidden&quot; name=&quot;list[items_attributes][new_items][_destroy]&quot; id=&quot;list_items_attributes_new_items__destroy&quot; value=&quot;false&quot; /&gt;
               &lt;a class=&quot;cocooned-remove dynamic&quot; href=&quot;#&quot;&gt;Remove&lt;/a&gt;
@@ -242,7 +242,7 @@ var templates = {
     <form id="form-template" novalidate="novalidate" action="" accept-charset="UTF-8" method="post">
   
       <div class="nested-form">
-        <div class="nested-fields">
+        <div class="cocooned-item">
         
           <input type="hidden" name="list[items_attributes][1][_destroy]" id="list_items_attributes_1__destroy" value="false" />
           <a class="cocooned-remove existing" href="#">Remove</a>
@@ -261,7 +261,7 @@ var templates = {
           data-limit="2"
           data-association-insertion-node=".nested-form"
           data-association-insertion-method="append"
-          data-association-insertion-template="&lt;div class=&quot;nested-fields&quot;&gt;
+          data-association-insertion-template="&lt;div class=&quot;cocooned-item&quot;&gt;
           
           &lt;input type=&quot;hidden&quot; name=&quot;list[items_attributes][new_items][_destroy]&quot; id=&quot;list_items_attributes_new_items__destroy&quot; value=&quot;false&quot; /&gt;
           &lt;a class=&quot;cocooned-remove dynamic&quot; href=&quot;#&quot;&gt;Remove&lt;/a&gt;
@@ -276,7 +276,7 @@ var templates = {
     <form id="form-template" novalidate="novalidate" action="" accept-charset="UTF-8" method="post">
   
       <div class="nested-form" data-cocooned-options="{ 'reorderable': true }">
-        <div class="nested-fields">
+        <div class="cocooned-item">
         
           <input type="hidden" name="list[items_attributes][1][_destroy]" id="list_items_attributes_1__destroy" value="false" />
           <a class="cocooned-remove existing" href="#">Remove</a>
@@ -296,7 +296,7 @@ var templates = {
           data-associations="items"
           data-association-insertion-node=".nested-form"
           data-association-insertion-method="append"
-          data-association-insertion-template="&lt;div class=&quot;nested-fields&quot;&gt;
+          data-association-insertion-template="&lt;div class=&quot;cocooned-item&quot;&gt;
           
           &lt;input type=&quot;hidden&quot; name=&quot;list[items_attributes][new_items][_destroy]&quot; id=&quot;list_items_attributes_new_items__destroy&quot; value=&quot;false&quot; /&gt;
           &lt;a class=&quot;cocooned-remove dynamic&quot; href=&quot;#&quot;&gt;Remove&lt;/a&gt;
