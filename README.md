@@ -164,7 +164,7 @@ This detection is based on the presence of a `data-cocooned-options` attribute o
   = form.input :name
   
   %h3 Items
-  #items{ :data => { cocooned_options: true } }
+  #items{ :data => { cocooned_options: {}.to_json } }
     = form.fields_for :tasks do |item_form|
       = render 'item_fields', f: item_form
     .links
@@ -194,7 +194,7 @@ The limit plugin is autoloaded when needed and does not require anything more th
   = form.input :name
   
   %h3 Items
-  #items{ :data => { cocooned_options: { limit: 12 } } }
+  #items{ :data => { cocooned_options: { limit: 12 }.to_json } }
     = form.fields_for :tasks do |item_form|
       = render 'item_fields', f: item_form
     .links
@@ -213,7 +213,7 @@ The reorderable plugin is autoloaded when activated and does not support any par
   = form.input :name
   
   %h3 Items
-  #items{ :data => { cocooned_options: { reorderable: true } } }
+  #items{ :data => { cocooned_options: { reorderable: true }.to_json } }
     = form.fields_for :tasks do |item_form|
       = render 'item_fields', f: item_form
     .links
