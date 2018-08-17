@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    cocooned (1.2.11)
+    cocooned (1.3.0)
       rails (>= 4.0, <= 6.0)
 
 GEM
