@@ -197,14 +197,6 @@ describe Cocooned::Helpers do
       it_behaves_like 'a correctly rendered add link',
                       extra_attributes: { 'data-count' => '3' }
     end
-
-    context 'when adding a limit' do
-      before do
-        @html = @tester.cocooned_add_item_link('add something', @form_obj, :posts, limit: 3)
-      end
-      it_behaves_like 'a correctly rendered add link',
-                      extra_attributes: { 'data-limit' => '3' }
-    end
   end
 
   describe '#cocooned_remove_item_link' do

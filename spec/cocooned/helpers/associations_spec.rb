@@ -43,9 +43,9 @@ describe Cocooned::Helpers do
       context 'uses the correct plural' do
         before do
           expect(@tester).to receive(:cocooned_render_association)
-            .with(instance_of(Cocooned::AssociationBuilder), form_name: :f, wrapper: 'inline')
+            .with(instance_of(Cocooned::AssociationBuilder), form_name: :f)
 
-          @html = @tester.cocooned_add_item_link('add something', @form, :contacts, render_options: { wrapper: 'inline' })
+          @html = @tester.cocooned_add_item_link('add something', @form, :contacts)
         end
 
         it_behaves_like 'a correctly rendered add link',
@@ -66,10 +66,7 @@ describe Cocooned::Helpers do
           @html = @tester.cocooned_add_item_link('add something',
                                                  @form,
                                                  :contacts,
-                                                 render_options: {
-                                                   wrapper: 'inline',
-                                                   locals: { alfred: 'Judoka' }
-                                                 })
+                                                 locals: { alfred: 'Judoka' })
         end
 
         it_behaves_like 'a correctly rendered add link',
@@ -86,7 +83,7 @@ describe Cocooned::Helpers do
             .with('contact_fields', f: nil, dynamic: true)
             .and_return 'partial'
 
-          @html = @tester.cocooned_add_item_link('add something', @form, :contacts, render_options: { wrapper: 'inline' })
+          @html = @tester.cocooned_add_item_link('add something', @form, :contacts, wrapper: 'inline')
         end
 
         it_behaves_like 'a correctly rendered add link',

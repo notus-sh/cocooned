@@ -242,11 +242,18 @@ module Cocooned
     end
 
     def cocooned_extract_render_options!(html_options)
-      render_options = html_options.delete(:render_options) || {}
-      render_options[:locals] = html_options.delete(:locals) if html_options.key?(:locals)
-      render_options[:partial] = html_options.delete(:partial) if html_options.key?(:partial)
-      render_options[:form_name] = html_options.delete(:form_name) || :f
-      render_options
+      render_options = { form_name: :f }
+
+      # TODO: Remove in 2.0
+      if html_options.key?(:render_options)
+        msg = Cocooned::Helpers::Deprecate.deprecate_release_message(':render_options', :none)
+        warn msg
+        render_options.merge!(html_options.delete(:render_options))
+      end
+
+      %i[locals partial form_name].each_with_object(render_options) do |option_name, opts|
+        opts[option_name] = html_options.delete(option_name) if html_options.key?(option_name)
+      end
     end
 
     def cocooned_extract_data!(html_options)
@@ -254,8 +261,14 @@ module Cocooned
         count: [html_options.delete(:count).to_i, 1].compact.max
       }
 
-      limit = html_options.delete(:limit).to_i
-      data[:limit] = limit if limit.positive?
+      # TODO: Remove in 2.0
+      if html_options.key?(:limit)
+        msg = Cocooned::Helpers::Deprecate.deprecate_release_message(':limit', 'container data attributes')
+        warn msg
+        limit = html_options.delete(:limit).to_i
+        data[:limit] = limit if limit.positive?
+      end
+
       data
     end
   end

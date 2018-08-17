@@ -11,11 +11,11 @@ describe Cocooned::Railtie do
 end
 
 describe Cocooned::Helpers do
-  describe '#cocooned_default_label' do
-    before(:each) do
-      @tester = Class.new(ActionView::Base).new
-    end
+  before(:each) do
+    @tester = Class.new(ActionView::Base).new
+  end
 
+  describe '#cocooned_default_label' do
     after(:each) do
       I18n.reload!
     end
@@ -43,6 +43,28 @@ describe Cocooned::Helpers do
 
       it 'should emit a warning' do
         expect(capture_stderr { @tester.send(:cocooned_default_label, :remove, :people) }).not_to be_empty
+      end
+    end
+  end
+
+  describe '#cocooned_add_item_link' do
+    before(:each) do
+      @person = Person.new
+      @form   = double(object: @person, object_name: @person.class.name)
+      allow(@tester).to receive(:cocooned_render_association).and_return('form<tag>')
+    end
+
+    context 'with a limit' do
+      before(:each) do
+        @stderr_output = capture_stderr do
+          @html = @tester.cocooned_add_item_link('add something', @form, :posts, limit: 3)
+        end
+      end
+
+      it_behaves_like 'a correctly rendered add link', extra_attributes: { 'data-limit' => '3' }
+
+      it 'should emit a warning' do
+        expect(@stderr_output).not_to be_empty
       end
     end
   end
