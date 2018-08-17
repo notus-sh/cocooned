@@ -16,7 +16,7 @@ But last time I checked, the project seemed to not have been actively maintained
 
 Cocooned is almost a complete rewrite of Cocoon, with more functionnalities and (I hope) a more fluent API.
 
-**For now, Cocooned is completely compatible with Cocoon and can be used as a drop-in replacement.**
+**For now, Cocooned is completely compatible with Cocoon and can be used as a drop-in replacement.**  
 Just change the name of the gem in your Gemfile and you're done. It will work the same (but will add a bunch of deprecation warning to your logs).
 
 **The compatibility layer with the original Cocoon API will be dropped in Cocooned 2.0.**
@@ -244,9 +244,9 @@ Of course, it means your model must have a `position` attribute you will use to 
 
 Cocooned defines some helper functions:
 
-* `cocooned_add_item_link` will build a link that, when clicked, dynamically adds a new partial form for the given association. [Have a look at the documentation for available options]().
-* `cocooned_remove_item_link` will build a link that, when clicked, dynamically removes the surrounding partial form. [Have a look at the documentation for available options]().
-* `cocooned_move_item_up_link` and `cocooned_move_item_down_link` will build links that, when clicked, will move the surrounding partial form one step up or down in the collection. [Have a look at the documentation for available options]().
+* `cocooned_add_item_link` will build a link that, when clicked, dynamically adds a new partial form for the given association. [Have a look at the documentation for available options](https://github.com/notus-sh/cocooned/blob/master/lib/cocooned/helpers.rb#L21).
+* `cocooned_remove_item_link` will build a link that, when clicked, dynamically removes the surrounding partial form. [Have a look at the documentation for available options](https://github.com/notus-sh/cocooned/blob/master/lib/cocooned/helpers.rb#L143).
+* `cocooned_move_item_up_link` and `cocooned_move_item_down_link` will build links that, when clicked, will move the surrounding partial form one step up or down in the collection. [Have a look at the documentation for available options](https://github.com/notus-sh/cocooned/blob/master/lib/cocooned/helpers.rb#L178).
 
 ### Javascript callbacks
 
@@ -271,8 +271,9 @@ And so does the reorderable plugin:
 To listen to the events in your JavaScript:
 
 ```javascript
-  $('#container').on('cocooned:before-insert', function(event, node, cocoonedInstance) {
-  });
+$('#container').on('cocooned:before-insert', function(event, node, cocoonedInstance) {
+  /* Do something */
+});
 ```
 
 An event handler is called with 3 arguments:
