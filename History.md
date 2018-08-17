@@ -2,7 +2,31 @@
 
 ## Version 1.3.0 (Unreleased)
 
+### Breaking changes
 
+* Drop support for Rubinius, Ruby < 2.2 and Rails < 4.0
+* Drop support for custom wrapper class on item containers (originaly supported _via_ an option on `link_to_remove_association`).
+
+### Deprecated
+
+The gem has been renamed to `cocooned`:
+
+* `link_to_add_association` has been renamed `cocooned_add_item_link`
+* Generated add links class `add_fields` has been renamed `cocooned-add`
+* `link_to_remove_association` has been renamed `cocooned_remove_item_link`
+* Generated remove links class `remove_fields` has been renamed `cocooned-remove`
+* `cocoon:*` and `*.cocoon` Javascript events have been renamed to `cocooned:*` and `*.cocooned`  
+  (ex: `cocooned:before-insert`, `click.cocooned`)
+* The `cocoon` i18n scope have been renamed to `cocooned`
+* The `.nested-fields` default item wrapper class have been renamed to `cocooned-item`
+
+Other deprecations:
+
+* `link_to_add_association`/`cocooned_add_item_link` no longer require a `:render_options` hash to pass locals to the nested partial
+
+### Non-breaking changes
+
+* Refactor cocoon javascript as a self-contained object with same functionalities
 * Automatically remove `required` attributes on destroyed elements (thanks @markkhair)
 * Add extra properties on events (thanks @ayaman)
 * Add a basic package.json to be used with Webpack (thanks @dmfrancisco)
