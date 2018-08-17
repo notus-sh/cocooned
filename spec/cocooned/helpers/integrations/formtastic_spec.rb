@@ -1,34 +1,27 @@
 # frozen_string_literal: true
 
-require 'nokogiri'
-
 describe Cocooned::Helpers do
   before(:each) do
-    @tester = Class.new(ActionView::Base).new
+    @view = Class.new(ActionView::Base).new
     @person = Person.new
-    @form_obj = double(object: @person, object_name: @person.class.name)
+    @form = double(object: @person, object_name: @person.class.name)
   end
 
-  context 'cocooned_add_item_link' do
-    context 'when using formtastic' do
+  describe '#cocooned_add_item_link' do
+    subject do
+      proc do |*args, &block|
+        @view.cocooned_add_item_link(*args, &block)
+      end
+    end
+
+    context 'with formtastic' do
       before(:each) do
-        allow(@form_obj).to receive(:semantic_fields_for).and_return('form<tagzzz>')
+        allow(@form).to receive_message_chain(:class, :ancestors) { ['Formtastic::FormBuilder'] }
+        expect(@form).to receive(:semantic_fields_for).and_return('<form>')
+        expect(@form).to receive(:fields_for).never
       end
 
-      context 'calls semantic_fields_for and not fields_for' do
-        before do
-          allow(@form_obj).to receive_message_chain(:class, :ancestors) { ['Formtastic::FormBuilder'] }
-          expect(@form_obj).to receive(:semantic_fields_for)
-          expect(@form_obj).to receive(:fields_for).never
-
-          @html = @tester.cocooned_add_item_link('add something', @form_obj, :contacts)
-        end
-
-        it_behaves_like 'a correctly rendered add link',
-                        template: 'form<tagzzz>',
-                        association: 'contact',
-                        associations: 'contacts'
-      end
+      it_should_behave_like 'a link helper', :add, 3
     end
   end
 end
