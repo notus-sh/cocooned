@@ -104,7 +104,8 @@ module Cocooned
     # These options are supported for backward compatibility with the original Cocoon.
     # **Support for these options will be removed in the next major release !**.
     #
-    # - **render_options**: A nested Hash originaly used to pass locals.
+    # - **render_options**: A nested Hash originaly used to pass locals and form builder
+    #   options.
     #
     def cocooned_add_item_link(*args, &block)
       if block_given?
@@ -117,6 +118,7 @@ module Cocooned
       else
         name, form, association, html_options = *args
         html_options ||= {}
+        html_options = html_options.with_indifferent_access
 
         builder_options = cocooned_extract_builder_options!(html_options)
         render_options = cocooned_extract_render_options!(html_options)
@@ -127,17 +129,12 @@ module Cocooned
         data = cocooned_extract_data!(html_options).merge!(
           association: builder.singular_name,
           associations: builder.plural_name,
-          association_insertion_template: CGI.escapeHTML(rendered.to_str).html_safe,
-          association_insertion_method: nil,
-          association_insertion_node: nil,
-          association_insertion_traversal: nil,
+          association_insertion_template: CGI.escapeHTML(rendered.to_str).html_safe
         )
 
-        html_options = {
-          class: [Array(html_options.delete(:class)).collect { |k| k.to_s.split(' ') },
-                  Cocooned::HELPER_CLASSES[:add]].flatten.compact.uniq.join(' '),
-          data: data
-        }.deep_merge(html_options)
+        html_options[:data] = (html_options[:data] || {}).merge(data)
+        html_options[:class] = [Array(html_options.delete(:class)).collect { |k| k.to_s.split(' ') },
+                                Cocooned::HELPER_CLASSES[:add]].flatten.compact.uniq.join(' ')
 
         link_to(name, '#', html_options)
       end
@@ -243,11 +240,12 @@ module Cocooned
     end
 
     def cocooned_render_association(builder, render_options = {})
+      locals = (render_options.delete(:locals) || {}).symbolize_keys
       partial = render_options.delete(:partial) || builder.singular_name + '_fields'
-      locals =  render_options.delete(:locals) || {}
       form_name = render_options.delete(:form_name)
+      form_options = (render_options.delete(:form_options) || {}).symbolize_keys
+      form_options.reverse_merge!(child_index: "new_#{builder.association}")
 
-      form_options = { child_index: "new_#{builder.association}" }.merge(render_options)
       builder.form.send(cocooned_form_method(builder.form),
                         builder.association,
                         builder.build_object,
@@ -282,18 +280,52 @@ module Cocooned
       if html_options.key?(:render_options)
         msg = Cocooned::Helpers::Deprecate.deprecate_release_message(':render_options', :none)
         warn msg
-        render_options.merge!(html_options.delete(:render_options))
+
+        options = html_options.delete(:render_options)
+        render_options[:locals] = options.delete(:locals) if options.key?(:locals)
+        render_options[:form_options] = options
       end
 
-      %i[locals partial form_name].each_with_object(render_options) do |option_name, opts|
+      %i[locals partial form_name form_options].each_with_object(render_options) do |option_name, opts|
         opts[option_name] = html_options.delete(option_name) if html_options.key?(option_name)
       end
     end
 
     def cocooned_extract_data!(html_options)
-      {
-        count: [html_options.delete(:count).to_i, 1].compact.max
+      data = {
+        count: [
+          html_options.delete(:count).to_i,
+          (html_options.key?(:data) ? html_options[:data].delete(:count) : 0).to_i,
+          1
+        ].compact.max,
+        association_insertion_node: cocooned_extract_single_data!(html_options, :insertion_node),
+        association_insertion_method: cocooned_extract_single_data!(html_options, :insertion_method),
+        association_insertion_traversal: cocooned_extract_single_data!(html_options, :insertion_traversal)
       }
+
+      # Compatibility with the old way to pass data attributes to Rails view helpers
+      # Has we build a :data key, they will not be looked up.
+      html_options.keys.select { |k| k.to_s.match?(/data[_-]/) }.each_with_object(data) do |data_key, d|
+        key = data_key.to_s.gsub(/^data[_-]/, '')
+        d[key] = html_options.delete(data_key)
+      end
+      data.compact
+    end
+
+    def cocooned_extract_single_data!(h, key)
+      k = key.to_s
+      return h.delete(k) if h.key?(k)
+
+      # Compatibility alternatives
+      # TODO: Remove in 2.0
+      return h.delete("association_#{k}") if h.key?("association_#{k}")
+      return h.delete("data_association_#{k}") if h.key?("data_association_#{k}")
+      return h.delete("data-association-#{k.tr('_', '-')}") if h.key?("data-association-#{k.tr('_', '-')}")
+      return nil unless h.key?(:data)
+      d = h[:data].with_indifferent_access
+      return d.delete("association_#{k}") if d.key?("association_#{k}")
+      return d.delete("association-#{k.tr('_', '-')}") if d.key?("association-#{k.tr('_', '-')}")
+      nil
     end
   end
 end

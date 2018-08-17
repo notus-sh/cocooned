@@ -2,13 +2,14 @@
 
 module Cocooned
   class AssociationBuilder
-    attr_reader :association
-    attr_reader :form
+    attr_accessor :association
+    attr_accessor :form
+    attr_accessor :options
 
     def initialize(form, association, options = {})
-      @form = form
-      @association = association
-      @options = options.reverse_merge(force_non_association_create: false, wrap_object: false)
+      self.form = form
+      self.association = association
+      self.options = options.reverse_merge(force_non_association_create: false, wrap_object: false)
     end
 
     def build_object
