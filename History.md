@@ -1,6 +1,7 @@
 # Change History / Release Notes
 
-## Version 2.0.0 (Unreleased)
+## Version 1.3.0 (Unreleased)
+
 
 * Automatically remove `required` attributes on destroyed elements (thanks @markkhair)
 * Add extra properties on events (thanks @ayaman)
@@ -8,7 +9,6 @@
 * Compatibility with jQuery 3 (thanks @mstmfm)
 * Namespace click handlers (thanks @chrise86)
 * Drop support for Ruby 1.9 (thanks @simi)
-* Add a `limit` condition on node insertion (thanks @rubensmabueno)
 * Remove Jeweller (thanks @brixen, @tlynam)
 
 ## Version 1.2.11

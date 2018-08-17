@@ -72,8 +72,7 @@ module Cocooned
     # These options are supported for backward compatibility with the original Cocoon.
     # **Support for these options will be removed in the next major release !**.
     #
-    # - **limit**: how many items are allowed in the nested form.
-    #   No default.
+    # - **render_options**: A nested Hash originaly used to pass locals.
     #
     def cocooned_add_item_link(*args, &block)
       if block_given?
@@ -257,19 +256,9 @@ module Cocooned
     end
 
     def cocooned_extract_data!(html_options)
-      data = {
+      {
         count: [html_options.delete(:count).to_i, 1].compact.max
       }
-
-      # TODO: Remove in 2.0
-      if html_options.key?(:limit)
-        msg = Cocooned::Helpers::Deprecate.deprecate_release_message(':limit', 'container data attributes')
-        warn msg
-        limit = html_options.delete(:limit).to_i
-        data[:limit] = limit if limit.positive?
-      end
-
-      data
     end
   end
 end
