@@ -32,6 +32,18 @@ task :eslint do
   system("yarnpkg run eslint #{eslint_args.join(' ')} #{eslint_path.join(' ')}")
 end
 
+# Assets building
+require "sprockets"
+
+assets = Sprockets::Environment.new
+assets.append_path "app/assets/javascripts"
+assets.append_path "app/assets/stylesheets"
+
+task :assets do
+  assets["cocooned.js"].write_to "./dist/cocooned.js"
+  assets["cocooned.css"].write_to "./dist/cocooned.css"
+end
+
 # Documentation
 require 'rdoc/task'
 

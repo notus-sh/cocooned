@@ -1,3 +1,6 @@
-//= require './cocooned/core'
-//= require_tree './cocooned/plugins'
-//= require_tree './cocooned/jquery'
+//= require 'cocooned/core'
+//= require 'cocooned/plugins/limit'
+//= require 'cocooned/plugins/reorderable'
+
+//= require 'cocooned/jquery/plugin'
+//= require 'cocooned/jquery/onload'
