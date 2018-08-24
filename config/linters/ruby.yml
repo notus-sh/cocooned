@@ -11,6 +11,7 @@ Metrics/LineLength:
 
 Metrics/BlockLength:
   Exclude:
+    - '**/cocooned.gemspec'
     - 'spec/dummy/db/schema.rb'
     - 'spec/cocooned/**/*_spec.rb'
     - 'spec/shared_examples/**/*.rb'

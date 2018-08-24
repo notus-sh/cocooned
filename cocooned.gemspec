@@ -24,8 +24,8 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(config|gemfiles|npm|spec)/}) ||
-    %w[.gitignore .rspec .travis.yml].include?(f) ||
-    %w[Gemfile Gemfile.lock package.json yarn.lock].include?(f)
+      %w[.gitignore .rspec .travis.yml].include?(f) ||
+      %w[Gemfile Gemfile.lock package.json yarn.lock].include?(f)
   end
 
   spec.add_dependency 'rails', '>= 4.0', '<= 6.0'

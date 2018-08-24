@@ -50,28 +50,25 @@ task linters: %i[rubocop eslint]
 require 'bundler/gem_tasks'
 
 # JavaScript
+require 'json'
+
 spec = Bundler.load_gemspec('./cocooned.gemspec')
 npm_scope = 'notus.sh'
+
 npm_src_dir = './npm'
 npm_dest_dir = './dist'
 CLOBBER.include 'dist'
 
-require 'sprockets'
-assets = Sprockets::Environment.new
-assets.append_path 'app/assets/javascripts'
-assets.append_path 'app/assets/stylesheets'
+assets_dir = './app/assets/'
+
+npm_files = {
+  File.join(npm_dest_dir, 'cocooned.js') => File.join(assets_dir, 'javascripts', 'cocooned.js'),
+  File.join(npm_dest_dir, 'cocooned.css') => File.join(assets_dir, 'stylesheets', 'cocooned.css'),
+  File.join(npm_dest_dir, 'README.md') => File.join(npm_src_dir, 'README.md'),
+  File.join(npm_dest_dir, 'LICENSE') => './LICENSE'
+}
 
 namespace :npm do
-  task :assets do
-    assets['cocooned.js'].write_to File.join(npm_dest_dir, 'cocooned.js')
-    assets['cocooned.css'].write_to File.join(npm_dest_dir, 'cocooned.css')
-  end
-
-  npm_files = {
-    File.join(npm_dest_dir, 'README.md') => File.join(npm_src_dir, 'README.md'),
-    File.join(npm_dest_dir, 'LICENSE') => './LICENSE'
-  }
-
   npm_files.each do |dest, src|
     file dest => src do
       cp src, dest
@@ -81,10 +78,11 @@ namespace :npm do
   task :'package-json' do
     contributors = []
     spec.authors.each_with_index do |name, i|
+      next if spec.email[i].nil?
       contributors << {
         name: name.dup.force_encoding('UTF-8'),
         email: spec.email[i].dup.force_encoding('UTF-8')
-      } unless spec.email[i].nil?
+      }
     end
 
     template = ERB.new(File.read(File.join(npm_src_dir, 'package.json.erb')))
@@ -94,7 +92,7 @@ namespace :npm do
   end
 
   desc "Build #{npm_scope}-#{spec.name}-#{spec.version}.tgz into the pkg directory"
-  task build: (%i[assets package-json] + npm_files.keys) do
+  task build: (%i[package-json] + npm_files.keys) do
     system("cd #{npm_dest_dir} && npm pack && mv ./#{npm_scope}-#{spec.name}-#{spec.version}.tgz ../pkg/")
   end
 
@@ -104,5 +102,5 @@ namespace :npm do
   end
 end
 
-desc "Build packages and push them to their respective repository"
+desc 'Build packages and push them to their respective repository'
 task releases: [:release, 'npm:release']
