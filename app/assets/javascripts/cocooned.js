@@ -1,5 +1,7 @@
 /* globals define */
 
+// Use Universal Module Definition pattern to load Cocooned
+// See https://github.com/umdjs/umd/blob/master/templates/returnExportsGlobal.js
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
