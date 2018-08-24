@@ -23,13 +23,16 @@ Gem::Specification.new do |spec|
 
   spec.require_paths = ['lib']
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
-    f.match(%r{^(test|spec|features)/})
+    f.match(%r{^(config|gemfiles|npm|spec)/}) ||
+    %w[.gitignore .rspec .travis.yml].include?(f) ||
+    %w[Gemfile Gemfile.lock package.json yarn.lock].include?(f)
   end
 
   spec.add_dependency 'rails', '>= 4.0', '<= 6.0'
 
   spec.add_development_dependency 'bundler', '~> 1.16'
   spec.add_development_dependency 'jasmine', '~> 3.2'
+  spec.add_development_dependency 'mail'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rspec', '~> 3.8.0'
   spec.add_development_dependency 'rspec-rails', '~> 3.8.0'

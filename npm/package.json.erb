@@ -1,0 +1,22 @@
+{
+  "name": "@<%= scope %>/<%= spec.name %>",
+  "version": "<%= spec.version %>",
+  "license": "<%= spec.licenses.first %>",
+
+  "description": "Companion package for the cocooned Ruby gem.",
+  "homepage": "<%= spec.homepage %>#readme",
+  "repository": "<%= spec.homepage %>",
+  "bugs": {
+    "url": "<%= spec.homepage %>/issues"
+  },
+
+  "author": <%= contributors.first.to_json %>,
+  "contributors": <%= contributors.collect { |c| { name: c[:name], email: c[:email] } }.to_json %>,
+
+  "main": "cocooned.js",
+  "files": ["cocooned.js", "cocooned.css", "README", "LICENSE", "package.json"],
+
+  "dependencies": {
+    "jquery": "^3.3.1"
+  }
+}

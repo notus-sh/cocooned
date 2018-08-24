@@ -181,6 +181,7 @@ DEPENDENCIES
   cocooned!
   jasmine (~> 3.2)
   jquery-rails
+  mail
   nokogiri
   rails (~> 5.0)
   rake
