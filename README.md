@@ -33,7 +33,11 @@ Inside your `Gemfile` add the following:
 gem "cocooned"
 ```
 
-You must also require `cocooned` in your `application.js` and `application.css`, so it compiles with the asset pipeline.
+### Load Cocooned styles and scripts
+
+If you use Sprockets, you have to require `cocooned` in your `application.js` and `application.css`, so it compiles with the asset pipeline.
+
+If you use Yarn to manage your non-Ruby dependencies and/or Webpack to build your assets, you can install the [`@notus.sh/cocooned` companion package](https://www.npmjs.com/package/@notus.sh/cocooned).
 
 ## Usage
 
