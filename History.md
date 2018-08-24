@@ -1,5 +1,10 @@
 # Change History / Release Notes
 
+## Version 1.3.1
+
+* Use UMD pattern to load the Cocooned module
+* Now publish packages on both rubygems.org and npmjs.com
+
 ## Version 1.3.0
 
 ### Breaking changes
