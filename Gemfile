@@ -9,7 +9,7 @@ group :development, :test do
   # Dummy app dependencies
   gem 'jquery-rails'
   gem 'rails', '~> 5.0'
-  gem 'sqlite3'
+  gem 'sqlite3', '~> 1.3.6'
 
   gem 'nokogiri'
   gem 'simplecov', require: false
