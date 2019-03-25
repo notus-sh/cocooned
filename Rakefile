@@ -79,6 +79,7 @@ namespace :npm do
     contributors = []
     spec.authors.each_with_index do |name, i|
       next if spec.email[i].nil?
+
       contributors << {
         name: name.dup.force_encoding('UTF-8'),
         email: spec.email[i].dup.force_encoding('UTF-8')

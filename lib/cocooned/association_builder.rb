@@ -54,6 +54,7 @@ module Cocooned
     def build_without_reflection
       methods = %W[build_#{plural_name} build_#{singular_name}].select { |m| form.object.respond_to?(m) }
       raise "Association #{association} doesn't exist on #{form.object.class}" unless methods.any?
+
       form.object.send(methods.first)
     end
 

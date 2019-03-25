@@ -14,7 +14,7 @@ module Cocooned
         [
           "NOTE: #{target_and_name} is deprecated",
           replacement == :none ? ' with no replacement' : "; use #{replacement} instead",
-          format('. It will dissapear in %s.', release),
+          format('. It will dissapear in %<release>s.', release: release),
           location.nil? ? '' : "\n#{target_and_name} called from #{location}"
         ].join.strip
       end
