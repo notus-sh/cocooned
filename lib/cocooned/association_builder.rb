@@ -58,7 +58,7 @@ module Cocooned
     end
 
     def should_use_conditions?
-      reflection.class.name == 'Mongoid::Relations::Metadata' || @options[:force_non_association_create]
+      reflection.class.name.starts_with?('Mongoid::') || @options[:force_non_association_create]
     end
 
     def build_with_conditions
