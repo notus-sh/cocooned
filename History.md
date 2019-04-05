@@ -1,5 +1,9 @@
 # Change History / Release Notes
 
+## Version 1.3.2
+
+* Compatibility with Mongoid 7+
+
 ## Version 1.3.1
 
 * Use UMD pattern to load the Cocooned module
