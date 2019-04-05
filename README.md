@@ -74,23 +74,23 @@ E.g. in your `ListsController`:
 
 ### Basic form
 
-_Please note examples in this section are written with the [`haml` templating language](http://haml.info/)._
-
 [Rails natively supports nested forms](https://guides.rubyonrails.org/form_helpers.html#nested-forms) but does not support adding or removing nested items.
 
-```haml
-/ `app/views/lists/_form.html.haml`
-= form_for @list do |f|
-  = f.input :name
+```erb
+<% # `app/views/lists/_form.html.erb` %>
+<%= form_for @list do |f| %>
+  <%= f.input :name %>
   
-  %h3 Items
-  = f.fields_for :tasks do |item_form|
-    / This block is repeated for every task in @list.items
-    = item_form.label :description
-    = item_form.text_field :description
-    = item_form.check_box :done
-    
-  = f.submit "Save"
+  <h3>Items</h3>
+  <%= f.fields_for :tasks do |item_form| %>
+    <% # This block is repeated for every task in @list.items %>
+    <%= item_form.label :description %>
+    <%= item_form.text_field :description %>
+    <%= item_form.check_box :done %>
+  <% end %>
+  
+  <%= f.submit "Save" %>
+<% end %>
 ```
 
 To enable Cocooned on this first, we need to:
@@ -106,75 +106,88 @@ Let's do it.
 
 We now have two files:
 
-```haml
-/ `app/views/lists/_form.html.haml`
-= form_for @list do |form|
-  = form.input :name
+```erb
+<% # `app/views/lists/_form.html.erb` %>
+<%= form_for @list do |form| %>
+  <%= form.input :name %>
   
-  %h3 Items
-  = form.fields_for :items do |item_form|
-    = render 'item_fields', f: item_form
+  <h3>Items</h3>
+  <%= form.fields_for :items do |item_form|
+    <%= render 'item_fields', f: item_form %>
+  <% end %>
     
-  = form.submit "Save"
+  <%= form.submit "Save" %>
+<% end %>
 ```
 
-```haml
-/ `app/views/lists/_item_fields.html.haml`
-= f.label :description
-= f.text_field :description
-= f.check_box :done
+```erb
+<% # `app/views/lists/_item_fields.html.erb` %>
+<%= f.label :description %>
+<%= f.text_field :description %>
+<%= f.check_box :done %>
 ```
 
 #### 2. Add a way to add a new item to the collection
 
-```haml
-/ `app/views/lists/_form.html.haml`
-= form_for @list do |form|
-  = form.input :name
+```erb
+<% # `app/views/lists/_form.html.erb` %>
+<%= form_for @list do |form| %>
+  <%= form.input :name %>
   
-  %h3 Items
-  #items
-    = form.fields_for :tasks do |item_form|
-      = render 'item_fields', f: item_form
-    .links
-      = cocooned_add_item_link 'Add an item', form, :items
+  <h3>Items</h3>
+  <div id="items">
+    <%= form.fields_for :tasks do |item_form| %>
+      <%= render 'item_fields', f: item_form %>
+    <% end %>
+    
+    <div class="links">
+      <%= cocooned_add_item_link 'Add an item', form, :items %>
+    </div>
+  </div>
   
-  = form.submit "Save"
+  <%= form.submit "Save" %>
+<% end %>
 ```
 
 By default, a new item will be inserted just before the immediate parent of the 'Add an item' link. You can have a look at the documentation of `cocooned_add_item_link` for more information about how to change that but we'll keep it simple for now.
 
 #### 3. Add a way to remove an item from the collection
 
-```haml
-/ `app/views/lists/_item_fields.html.haml`
-.cocooned-item
-  = f.label :description
-  = f.text_field :description
-  = f.check_box :done
-  = cocooned_remove_item_link 'Remove', f
+```erb
+<% # `app/views/lists/_item_fields.html.erb` %>
+<div class="cocooned-item">
+  <%= f.label :description %>
+  <%= f.text_field :description %>
+  <%= f.check_box :done %>
+  <%= cocooned_remove_item_link 'Remove', f %>
+</div>
 ```
 
-The `.cocooned-item` class is required for the `cocooned_remove_item_link` to work correctly.
+The `cocooned-item` class is required for the `cocooned_remove_item_link` to work correctly.
 
 #### 4. Initialize Cocooned to handle this form
 
 Cocooned will detect on page load forms it should handle and initialize itself.
 This detection is based on the presence of a `data-cocooned-options` attribute on the nested forms container.
 
-```haml
-/ `app/views/lists/_form.html.haml`
-= form_for @list do |form|
-  = form.input :name
+```erb
+<% # `app/views/lists/_form.html.erb` %>
+<%= form_for @list do |form| %>
+  <%= form.input :name %>
   
-  %h3 Items
-  #items{ :data => { cocooned_options: {}.to_json } }
-    = form.fields_for :tasks do |item_form|
-      = render 'item_fields', f: item_form
-    .links
-      = cocooned_add_item_link 'Add an item', form, :items
+  <h3>Items</h3>
+  <div id="items" data-cocooned-options="<%= {}.to_json %>">
+    <%= form.fields_for :tasks do |item_form| %>
+      <%= render 'item_fields', f: item_form %>
+    <% end %>
+    
+    <div class="links">
+      <%= cocooned_add_item_link 'Add an item', form, :items %>
+    </div>
+  </div>
   
-  = form.submit "Save"
+  <%= form.submit "Save" %>
+</div>
 ``` 
 
 And we're done!
@@ -192,52 +205,63 @@ For now, Cocooned supports two plugins:
 
 The limit plugin is autoloaded when needed and does not require anything more than you specifiying the maximum number of items allowed in the association.
 
-```haml
-/ `app/views/lists/_form.html.haml`
-= form_for @list do |form|
-  = form.input :name
+```erb
+<% # `app/views/lists/_form.html.erb` %>
+<%= form_for @list do |form| %>
+  <%= form.input :name %>
   
-  %h3 Items
-  #items{ :data => { cocooned_options: { limit: 12 }.to_json } }
-    = form.fields_for :tasks do |item_form|
-      = render 'item_fields', f: item_form
-    .links
-      = cocooned_add_item_link 'Add an item', form, :items
+  <h3>Items</h3>
+  <div id="items" data-cocooned-options="<%= { limit: 12 }.to_json %>">
+    <%= form.fields_for :tasks do |item_form| %>
+      <%= render 'item_fields', f: item_form %>
+    <% end %>
+    
+    <div class="links">
+      <%= cocooned_add_item_link 'Add an item', form, :items %>
+    </div>
+  </div>
   
-  = form.submit "Save"
+  <%= form.submit "Save" %>
+<% end %>
 ```
 
 #### The reorderable plugin
 
 The reorderable plugin is autoloaded when activated and does not support any particular options.
 
-```haml
-/ `app/views/lists/_form.html.haml`
-= form_for @list do |form|
-  = form.input :name
+```erb
+<% # `app/views/lists/_form.html.haml` %>
+<%= form_for @list do |form| %>
+  <%= form.input :name %>
   
-  %h3 Items
-  #items{ :data => { cocooned_options: { reorderable: true }.to_json } }
-    = form.fields_for :tasks do |item_form|
-      = render 'item_fields', f: item_form
-    .links
-      = cocooned_add_item_link 'Add an item', form, :items
-  
-  = form.submit "Save"
+  <h3>Items</h3>
+  <div id="items" data-cocooned-options="<%= { reorderable: true }.to_json %>">
+    <%= form.fields_for :tasks do |item_form| %>
+      <%= render 'item_fields', f: item_form %>
+    <% end %>
+    
+    <div class="links">
+      <%= cocooned_add_item_link 'Add an item', form, :items %>
+    </div>
+  </div>
+    
+  <%= form.submit "Save" %>
+<% end %>
 ```
 
 However, you need to edit your nested partial to add the links that allow your users to move an item up or down in the collection and to add a `position` field.
 
-```haml
-/ `app/views/lists/_item_fields.html.haml`
-.cocooned-item
-  = f.label :description
-  = f.text_field :description
-  = f.check_box :done
-  = f.hidden_field :position
-  = cocooned_move_item_up_link 'Up', f
-  = cocooned_move_item_down_link 'Down', f
-  = cocooned_remove_item_link 'Remove', f
+```erb
+<% # `app/views/lists/_item_fields.html.erb` %>
+<div class="cocooned-item">
+  <%= f.label :description %>
+  <%= f.text_field :description %>
+  <%= f.check_box :done %>
+  <%= f.hidden_field :position %>
+  <%= cocooned_move_item_up_link 'Up', f %>
+  <%= cocooned_move_item_down_link 'Down', f %>
+  <%= cocooned_remove_item_link 'Remove', f %>
+</div>
 ```
 
 Also, remember the strong parameters gotcha we mentioned earlier.
