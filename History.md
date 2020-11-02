@@ -1,5 +1,9 @@
 # Change History / Release Notes
 
+## Version 1.4.0
+
+* Pass the original browser event to all event handlers _via_ e.originalEvent. (See [jQuery Event object](https://api.jquery.com/category/events/event-object/)).
+
 ## Version 1.3.2
 
 * Compatibility with Mongoid 7+

@@ -312,6 +312,7 @@ The event `event` is an instance of `jQuery.Event` and carry some additional dat
 * `event.node`, the nested item that will be added, removed or moved, as a jQuery object. This is null for `cocooned:limit-reached` and `cocooned:*-reindex` events
 * `event.nodes`, the nested items that will be or just have been reindexed on `cocooned:*-reindex` events, as a jQuery object. Null otherwise. 
 * `event.cocooned`, the Cocooned javascript object instance handling the nested association.
+* `event.originalEvent`, the original (browser) event.
 
 The `node` argument is the same jQuery object as `event.node`.
 The `cocooned` argument is the same as `event.cocooned`.

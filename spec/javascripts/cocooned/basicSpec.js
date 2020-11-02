@@ -92,6 +92,7 @@ describe('A basic cocooned setup', function () {
       var event = args[0];
       expect(event.type).toEqual('cocooned:before-insert');
       expect(event.link.get(0)).toEqual($('.cocooned-add').get(0));
+      expect(event.originalEvent).toBeDefined();
 
       var node = args[1];
       expect(node.get(0)).toEqual(this.wrapper.children('.cocooned-item').last().get(0));
@@ -107,6 +108,7 @@ describe('A basic cocooned setup', function () {
       var event = args[0];
       expect(event.type).toEqual('cocooned:after-insert');
       expect(event.link.get(0)).toEqual($('.cocooned-add').get(0));
+      expect(event.originalEvent).toBeDefined();
 
       var node = args[1];
       expect(node.get(0)).toEqual(this.wrapper.children('.cocooned-item').last().get(0));
@@ -225,6 +227,7 @@ describe('A basic cocooned setup', function () {
       var args = beforeEventSpy.calls.first().args;
       var event = args[0];
       expect(event.type).toEqual('cocooned:before-remove');
+      expect(event.originalEvent).toBeDefined();
 
       var node = args[1];
       expect(node.get(0)).toEqual(this.subject);
@@ -239,6 +242,7 @@ describe('A basic cocooned setup', function () {
       var args = afterEventSpy.calls.first().args;
       var event = args[0];
       expect(event.type).toEqual('cocooned:after-remove');
+      expect(event.originalEvent).toBeDefined();
 
       var node = args[1];
       expect(node.get(0)).toEqual(this.subject);

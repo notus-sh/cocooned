@@ -223,7 +223,7 @@
           e.preventDefault();
           e.stopPropagation();
 
-          self.add(this);
+          self.add(this, e);
         });
 
       // Bind remove links
@@ -235,7 +235,7 @@
           e.preventDefault();
           e.stopPropagation();
 
-          self.remove(this);
+          self.remove(this, e);
         });
 
       // Bind options events
@@ -247,7 +247,7 @@
       });
     },
 
-    add: function (adder) {
+    add: function (adder, originalEvent) {
       var $adder = $(adder);
       var insertionMethod = this.getInsertionMethod($adder);
       var insertionNode = this.getInsertionNode($adder);
@@ -256,7 +256,7 @@
 
       for (var i = 0; i < count; i++) {
         var contentNode = this.buildContentNode(contentTemplate);
-        var eventData = { link: $adder, node: contentNode, cocooned: this };
+        var eventData = { link: $adder, node: contentNode, cocooned: this, originalEvent: originalEvent };
         var afterNode = (insertionMethod === 'replaceWith' ? contentNode : insertionNode);
 
         // Insertion can be prevented through a 'cocooned:before-insert' event handler
@@ -270,12 +270,12 @@
       }
     },
 
-    remove: function (remover) {
+    remove: function (remover, originalEvent) {
       var self = this;
       var $remover = $(remover);
       var nodeToDelete = this.findItem($remover);
       var triggerNode = nodeToDelete.parent();
-      var eventData = { link: $remover, node: nodeToDelete, cocooned: this };
+      var eventData = { link: $remover, node: nodeToDelete, cocooned: this, originalEvent: originalEvent };
 
       // Deletion can be prevented through a 'cocooned:before-remove' event handler
       if (!this.notify(triggerNode, 'before-remove', eventData)) {
@@ -320,7 +320,7 @@
         }
 
         e.stopPropagation();
-        var eventData = { link: e.link, node: e.node, cocooned: cocooned };
+        var eventData = { link: e.link, node: e.node, cocooned: cocooned, originalEvent: e };
         cocooned.notify(cocooned.container, 'limit-reached', eventData);
       });
     },
@@ -339,9 +339,9 @@
 
       // Maintain indexes
       this.container
-        .on('cocooned:after-insert', function (e) { self.reindex(); })
-        .on('cocooned:after-remove', function (e) { self.reindex(); })
-        .on('cocooned:after-move', function (e) { self.reindex(); });
+        .on('cocooned:after-insert', function (e) { self.reindex(e); })
+        .on('cocooned:after-remove', function (e) { self.reindex(e); })
+        .on('cocooned:after-move', function (e) { self.reindex(e); });
 
       // Move items
       this.container.on(
@@ -355,18 +355,18 @@
           var up = self.classes['up'].some(function (klass) {
             return node.className.indexOf(klass) !== -1;
           });
-          self.move(this, up ? 'up' : 'down');
+          self.move(this, up ? 'up' : 'down', e);
         });
 
       // Ensure positions are unique before save
       this.container.closest('form').on(
         this.namespacedNativeEvents('submit'),
         function (e) {
-          self.reindex();
+          self.reindex(e);
         });
     },
 
-    move: function (moveLink, direction) {
+    move: function (moveLink, direction, originalEvent) {
       var self = this;
       var $mover = $(moveLink);
       var node = $mover.closest(this.selector('item'));
@@ -379,7 +379,7 @@
       }
 
       // Move can be prevented through a 'cocooned:before-move' event handler
-      var eventData = { link: $mover, node: node, cocooned: this };
+      var eventData = { link: $mover, node: node, cocooned: this, originalEvent: originalEvent };
       if (!self.notify(node, 'before-move', eventData)) {
         return false;
       }
@@ -399,10 +399,10 @@
       });
     },
 
-    reindex: function () {
+    reindex: function (originalEvent) {
       var i = 0;
       var nodes = this.getItems('&:visible');
-      var eventData = { link: null, nodes: nodes, cocooned: this };
+      var eventData = { link: null, nodes: nodes, cocooned: this, originalEvent: originalEvent };
 
       // Reindex can be prevented through a 'cocooned:before-reindex' event handler
       if (!this.notify(this.container, 'before-reindex', eventData)) {
