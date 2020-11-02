@@ -221,6 +221,8 @@
         this.namespacedNativeEvents('click'),
         function (e) {
           e.preventDefault();
+          e.stopPropagation();
+
           self.add(this);
         });
 
@@ -231,6 +233,8 @@
         this.selector('remove', '#' + this.container.attr('id') + ' &'),
         function (e) {
           e.preventDefault();
+          e.stopPropagation();
+
           self.remove(this);
         });
 
@@ -345,6 +349,8 @@
         [this.selector('up'), this.selector('down')].join(', '),
         function (e) {
           e.preventDefault();
+          e.stopPropagation();
+
           var node = this;
           var up = self.classes['up'].some(function (klass) {
             return node.className.indexOf(klass) !== -1;
