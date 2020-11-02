@@ -16,10 +16,14 @@ But last time I checked, the project seemed to not have been actively maintained
 
 Cocooned is almost a complete rewrite of Cocoon, with more functionnalities and (I hope) a more fluent API.
 
-**For now, Cocooned is completely compatible with Cocoon and can be used as a drop-in replacement.**  
+**For now, Cocooned is completely compatible with Cocoon and can be used as a drop-in replacement** as long as we talk about Ruby code.  
 Just change the name of the gem in your Gemfile and you're done. It will work the same (but will add a bunch of deprecation warning to your logs).
 
-**The compatibility layer with the original Cocoon API will be dropped in Cocooned 2.0.**
+**This compatibility layer with the original Cocoon API will be dropped in Cocooned 2.0.**
+
+On the JavaScript side, Cocoon 1.2.13 introduced the original browser event as a third parameter to all event handlers. Meanwhile, Cocooned already started to use this positional parameter to pass the Cocooned object instance (since 1.3.0).
+
+To get access to the original event, [you'll have to change your handlers and use `event.originalEvent`](#javascript-callbacks).
 
 ## Prerequisites
 
