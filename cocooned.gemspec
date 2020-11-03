@@ -28,7 +28,7 @@ Gem::Specification.new do |spec|
       %w[Gemfile Gemfile.lock package.json yarn.lock].include?(f)
   end
 
-  spec.add_dependency 'rails', '>= 4.0', '<= 6.0'
+  spec.add_dependency 'rails', '>= 5.0', '<= 7.0'
 
   spec.add_development_dependency 'bundler', '~> 2.1'
   spec.add_development_dependency 'jasmine', '~> 3.2'

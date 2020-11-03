@@ -2,6 +2,9 @@
 
 ## Version 1.4.0
 
+* Drop support for Rails < 5.0 and Ruby < 2.5 
+* Prevent side effects on options passed to view helpers.
+* Use form builder to add the hidden `_destroy` field instead of `hidden_field`.
 * Pass the original browser event to all event handlers _via_ e.originalEvent. (See [jQuery Event object](https://api.jquery.com/category/events/event-object/)).
 
 ## Version 1.3.2
