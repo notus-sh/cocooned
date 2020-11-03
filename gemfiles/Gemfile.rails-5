@@ -1,7 +1,9 @@
 source 'http://rubygems.org'
 
+gemspec path: '..'
+
 group :development, :test do
-  gem 'rails', '~> 6.0'
+  gem 'rails', '~> 5.0'
   gem 'sqlite3'
   gem 'simplecov', :require => false
   gem 'nokogiri'
