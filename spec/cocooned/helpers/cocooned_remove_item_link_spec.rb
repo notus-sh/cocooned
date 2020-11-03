@@ -4,7 +4,7 @@ describe Cocooned::Helpers do
   before(:each) do
     @view = Class.new(ActionView::Base).new
     @person = Person.new
-    @form = double(object: @person, object_name: @person.class.name)
+    @form = ActionView::Base.default_form_builder.new(@person.class.name, @person, @view, {})
   end
 
   describe '#cocooned_remove_item_link' do

@@ -171,8 +171,7 @@ module Cocooned
       html_options[:class] << (form.object.new_record? ? 'dynamic' : 'existing')
       html_options[:class] << 'destroyed' if form.object.marked_for_destruction?
 
-      hidden_field_tag("#{form.object_name}[_destroy]", form.object._destroy) <<
-        link_to(name, '#', html_options)
+      form.hidden_field(:_destroy, value: form.object._destroy) << link_to(name, '#', html_options)
     end
 
     # Output an action link to move an item up.
