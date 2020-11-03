@@ -45,7 +45,7 @@ shared_examples_for 'a link helper' do |action, arity|
     expect(link.attribute('hreflang').value).to eq('en')
   end
 
-  it "does not alter options" do
+  it 'does not alter options' do
     arguments = ['label', @form]
     arguments << :posts if arity == 3
     arguments << { class: 'specific-class' }

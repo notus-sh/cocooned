@@ -10,6 +10,8 @@ module Cocooned
     module Deprecate
       extend Gem::Deprecate
 
+      module_function
+
       def deprecate_release_message(target_and_name, replacement, release = '2.0', location = nil)
         [
           "NOTE: #{target_and_name} is deprecated",
@@ -18,8 +20,6 @@ module Cocooned
           location.nil? ? '' : "\n#{target_and_name} called from #{location}"
         ].join.strip
       end
-
-      module_function :deprecate_release_message
 
       def deprecate_release(name, replacement, release = '2.0')
         class_eval do
@@ -42,8 +42,6 @@ module Cocooned
           end
         end
       end
-
-      module_function :deprecate_release
     end
   end
 end

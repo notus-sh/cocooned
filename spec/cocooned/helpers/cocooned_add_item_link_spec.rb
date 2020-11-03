@@ -62,9 +62,10 @@ describe Cocooned::Helpers do
     context 'when called with rendering option' do
       shared_examples_for 'an association renderer' do |options = {}|
         it 'should forward it to #cocooned_render_association' do
-          expect(@view).to receive(:cocooned_render_association).once
+          expect(@view).to receive(:cocooned_render_association)
+            .once
             .with(anything, hash_including(options))
-                                                                .and_return('<form>')
+            .and_return('<form>')
 
           subject.call('label', @form, :posts, options)
         end
@@ -79,17 +80,19 @@ describe Cocooned::Helpers do
         it_should_behave_like 'an association renderer', partial: 'partial'
 
         it 'where it will be correctly used' do
-          expect(@view).to receive(:render).once
+          expect(@view).to receive(:render)
+            .once
             .with('partial', anything)
-                                           .and_return('<form>')
+            .and_return('<form>')
 
           subject.call('label', @form, :posts, partial: 'partial')
         end
 
         it 'or use the correct default value' do
-          expect(@view).to receive(:render).once
+          expect(@view).to receive(:render)
+            .once
             .with('post_fields', anything)
-                                           .and_return('<form>')
+            .and_return('<form>')
 
           subject.call('label', @form, :posts)
         end
@@ -104,17 +107,19 @@ describe Cocooned::Helpers do
         it_should_behave_like 'an association renderer', locals: { name: 'value' }
 
         it 'where it will be correctly used' do
-          expect(@view).to receive(:render).once
+          expect(@view).to receive(:render)
+            .once
             .with(anything, hash_including(name: 'value'))
-                                           .and_return('<form>')
+            .and_return('<form>')
 
           subject.call('label', @form, :posts, locals: { name: 'value' })
         end
 
         it 'or use the correct default value' do
-          expect(@view).to receive(:render).once
+          expect(@view).to receive(:render)
+            .once
             .with(anything, hash_excluding(locals: anything))
-                                           .and_return('<form>')
+            .and_return('<form>')
 
           subject.call('label', @form, :posts)
         end
@@ -129,17 +134,19 @@ describe Cocooned::Helpers do
         it_should_behave_like 'an association renderer', form_name: 'form'
 
         it 'where it will be correctly used' do
-          expect(@view).to receive(:render).once
+          expect(@view).to receive(:render)
+            .once
             .with(anything, hash_including(form: anything))
-                                           .and_return('<form>')
+            .and_return('<form>')
 
           subject.call('label', @form, :posts, form_name: 'form')
         end
 
         it 'or use the correct default value' do
-          expect(@view).to receive(:render).once
+          expect(@view).to receive(:render)
+            .once
             .with(anything, hash_including(f: anything))
-                                           .and_return('<form>')
+            .and_return('<form>')
 
           subject.call('label', @form, :posts)
         end

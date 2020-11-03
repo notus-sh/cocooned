@@ -9,11 +9,12 @@ AllCops:
   Exclude:
     - 'spec/dummy/bin/*'
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 150
 
 Metrics/BlockLength:
   Exclude:
+    - 'Rakefile'
     - '**/cocooned.gemspec'
     - 'spec/dummy/db/schema.rb'
     - 'spec/cocooned/**/*_spec.rb'

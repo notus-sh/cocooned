@@ -15,18 +15,20 @@ Gem::Specification.new do |spec|
   spec.description  = 'Easier nested form. Supports standard Rails forms, Formtastic and SimpleForm.'
   spec.homepage     = 'http://github.com/notus-sh/cocooned'
 
-  if spec.respond_to?(:metadata)
-    spec.metadata['allowed_push_host'] = 'https://rubygems.org'
-  else
-    raise 'RubyGems 2.0 or newer is required.'
-  end
+  raise 'RubyGems 2.0 or newer is required.' unless spec.respond_to?(:metadata)
 
+  spec.metadata['allowed_push_host'] = 'https://rubygems.org'
+
+  # rubocop:disable Performance/CollectionLiteralInLoop
   spec.require_paths = ['lib']
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(config|gemfiles|npm|spec)/}) ||
       %w[.gitignore .rspec .travis.yml].include?(f) ||
       %w[Gemfile Gemfile.lock package.json yarn.lock].include?(f)
   end
+  # rubocop:enable Performance/CollectionLiteralInLoop
+
+  spec.required_ruby_version = '>= 2.5'
 
   spec.add_dependency 'rails', '>= 5.0', '<= 7.0'
 

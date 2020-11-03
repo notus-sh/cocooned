@@ -7,13 +7,13 @@ require 'cocooned/association_builder'
 module Cocooned
   # TODO: Remove in 2.0 (Only Cocoon class names).
   HELPER_CLASSES = {
-    add:    ['cocooned-add', 'add_fields'],
-    remove: ['cocooned-remove', 'remove_fields'],
-    up:     ['cocooned-move-up'],
-    down:   ['cocooned-move-down']
+    add:    %w[cocooned-add add_fields],
+    remove: %w[cocooned-remove remove_fields],
+    up:     %w[cocooned-move-up],
+    down:   %w[cocooned-move-down]
   }.freeze
 
-  module Helpers
+  module Helpers # rubocop:disable Metrics/ModuleLength
     # Create aliases to old Cocoon method name
     # TODO: Remove in 2.0
     include Cocooned::Helpers::CocoonCompatibility
@@ -243,7 +243,7 @@ module Cocooned
     def cocooned_render_association(builder, options = {})
       render_options = options.dup
       locals = (render_options.delete(:locals) || {}).symbolize_keys
-      partial = render_options.delete(:partial) || builder.singular_name + '_fields'
+      partial = render_options.delete(:partial) || "#{builder.singular_name}_fields"
       form_name = render_options.delete(:form_name)
       form_options = (render_options.delete(:form_options) || {}).symbolize_keys
       form_options.reverse_merge!(child_index: "new_#{builder.association}")
@@ -252,7 +252,6 @@ module Cocooned
                         builder.association,
                         builder.build_object,
                         form_options) do |form_builder|
-
         partial_options = { form_name.to_sym => form_builder, :dynamic => true }.merge(locals)
         render(partial, partial_options)
       end
@@ -314,19 +313,21 @@ module Cocooned
       data.compact
     end
 
-    def cocooned_extract_single_data!(h, key)
+    def cocooned_extract_single_data!(hash, key)
       k = key.to_s
-      return h.delete(k) if h.key?(k)
+      return hash.delete(k) if hash.key?(k)
 
       # Compatibility alternatives
       # TODO: Remove in 2.0
-      return h.delete("association_#{k}") if h.key?("association_#{k}")
-      return h.delete("data_association_#{k}") if h.key?("data_association_#{k}")
-      return h.delete("data-association-#{k.tr('_', '-')}") if h.key?("data-association-#{k.tr('_', '-')}")
-      return nil unless h.key?(:data)
-      d = h[:data].with_indifferent_access
+      return hash.delete("association_#{k}") if hash.key?("association_#{k}")
+      return hash.delete("data_association_#{k}") if hash.key?("data_association_#{k}")
+      return hash.delete("data-association-#{k.tr('_', '-')}") if hash.key?("data-association-#{k.tr('_', '-')}")
+      return nil unless hash.key?(:data)
+
+      d = hash[:data].with_indifferent_access
       return d.delete("association_#{k}") if d.key?("association_#{k}")
       return d.delete("association-#{k.tr('_', '-')}") if d.key?("association-#{k.tr('_', '-')}")
+
       nil
     end
   end

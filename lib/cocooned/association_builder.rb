@@ -2,9 +2,7 @@
 
 module Cocooned
   class AssociationBuilder
-    attr_accessor :association
-    attr_accessor :form
-    attr_accessor :options
+    attr_accessor :association, :form, :options
 
     def initialize(form, association, options = {})
       self.form = form

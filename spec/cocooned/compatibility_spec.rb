@@ -93,9 +93,10 @@ describe Cocooned::Helpers do
         end
 
         it 'should forward it to #cocooned_render_association' do
-          expect(@view).to receive(:cocooned_render_association).once
+          expect(@view).to receive(:cocooned_render_association)
+            .once
             .with(anything, hash_including(locals: { name: 'value' }))
-                                                                .and_return('<form>')
+            .and_return('<form>')
 
           capture_stderr do
             subject.call('label', @form, :posts, render_options: { locals: { name: 'value' } })
