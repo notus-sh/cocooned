@@ -118,7 +118,7 @@ module Cocooned
       else
         name, form, association, html_options = *args
         html_options ||= {}
-        html_options = html_options.with_indifferent_access
+        html_options = html_options.dup.with_indifferent_access
 
         builder_options = cocooned_extract_builder_options!(html_options)
         render_options = cocooned_extract_render_options!(html_options)
@@ -167,11 +167,12 @@ module Cocooned
       association = form.object.class.to_s.tableize
       return cocooned_remove_item_link(cocooned_default_label(:remove, association), form, html_options) if name.nil?
 
-      html_options[:class] = [html_options[:class], Cocooned::HELPER_CLASSES[:remove]].flatten.compact
-      html_options[:class] << (form.object.new_record? ? 'dynamic' : 'existing')
-      html_options[:class] << 'destroyed' if form.object.marked_for_destruction?
+      link_options = html_options.dup
+      link_options[:class] = [html_options[:class], Cocooned::HELPER_CLASSES[:remove]].flatten.compact
+      link_options[:class] << (form.object.new_record? ? 'dynamic' : 'existing')
+      link_options[:class] << 'destroyed' if form.object.marked_for_destruction?
 
-      form.hidden_field(:_destroy, value: form.object._destroy) << link_to(name, '#', html_options)
+      form.hidden_field(:_destroy, value: form.object._destroy) << link_to(name, '#', link_options)
     end
 
     # Output an action link to move an item up.
@@ -219,8 +220,9 @@ module Cocooned
       return cocooned_move_item_link(direction, capture(&block), form, html_options) if block_given?
       return cocooned_move_item_link(direction, cocooned_default_label(direction), form, html_options) if name.nil?
 
-      html_options[:class] = [html_options[:class], Cocooned::HELPER_CLASSES[direction]].flatten.compact.join(' ')
-      link_to name, '#', html_options
+      link_options = html_options.dup
+      link_options[:class] = [html_options[:class], Cocooned::HELPER_CLASSES[direction]].flatten.compact.join(' ')
+      link_to name, '#', link_options
     end
 
     def cocooned_default_label(action, association = nil)
@@ -238,7 +240,8 @@ module Cocooned
       I18n.translate(keys.take(1).first, default: keys.drop(1))
     end
 
-    def cocooned_render_association(builder, render_options = {})
+    def cocooned_render_association(builder, options = {})
+      render_options = options.dup
       locals = (render_options.delete(:locals) || {}).symbolize_keys
       partial = render_options.delete(:partial) || builder.singular_name + '_fields'
       form_name = render_options.delete(:form_name)
