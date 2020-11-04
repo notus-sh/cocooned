@@ -13,4 +13,4 @@ gemfile:
   - gemfiles/Gemfile.rails-6
 
 before_script:
-  - cd spec/dummy && RAILS_ENV=test bundle exec rake db:prepare
+  - "cd spec/dummy && bundle exec rake db:drop db:create db:migrate RAILS_ENV=test"
