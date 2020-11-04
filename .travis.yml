@@ -1,6 +1,9 @@
 sudo: false
 cache: bundler
 language: ruby
+
+matrix:
+  fast_finish: true
 rvm:
   - 2.5
   - 2.6
@@ -9,5 +12,5 @@ gemfile:
   - gemfiles/Gemfile.rails-5
   - gemfiles/Gemfile.rails-6
 
-matrix:
-  fast_finish: true
+before_script:
+  - cd spec/dummy && RAILS_ENV=test bundle exec rake db:prepare
