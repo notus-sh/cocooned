@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateLists < (Rails.version.start_with?('5.') ? ActiveRecord::Migration[5.0] : ActiveRecord::Migration)
+class CreateLists < ActiveRecord::Migration[5.0]
   def change
     create_table :lists do |t|
       t.string :name
