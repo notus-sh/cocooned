@@ -1,7 +1,7 @@
 /* globals jasmine, describe, it, beforeEach, afterEach, expect */
 /* globals setup, teardown */
 
-// TODO: Remove in 2.0
+// TODO: Remove in 3.0
 describe('Compatibility with a cocoon setup', function () {
   beforeEach(setup('compatibility'));
   afterEach(teardown());

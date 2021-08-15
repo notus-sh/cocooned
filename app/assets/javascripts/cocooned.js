@@ -20,7 +20,7 @@
 }(typeof self !== 'undefined' ? self : this, function ($) {
   var Cocooned = function (container, options) {
     this.container = $(container);
-    this.options = $.extend({}, this.defaultOptions(), (options || {}));
+    var opts = $.extend({}, this.defaultOptions(), (options || {}));
 
     // Autoload plugins
     for (var moduleName in Cocooned.Plugins) {
@@ -28,16 +28,26 @@
         var module = Cocooned.Plugins[moduleName];
         var optionName = moduleName.charAt(0).toLowerCase() + moduleName.slice(1);
 
-        if (this.options[optionName]) {
+        if (opts[optionName] !== false) {
+          if (module.hasOwnProperty('normalizeConfig') && typeof module['normalizeConfig'] === 'function') {
+            opts[optionName] = module.normalizeConfig(opts[optionName]);
+          }
+
           for (var method in module) {
-            if (module.hasOwnProperty(method) && typeof module[method] === 'function') {
-              this[method] = module[method];
+            if (method === 'normalizeConfig') {
+              continue;
             }
+            if (!module.hasOwnProperty(method) || typeof module[method] !== 'function') {
+              continue;
+            }
+
+            this[method] = module[method];
           }
         }
       }
     }
 
+    this.options = opts;
     this.init();
   };
 
@@ -333,6 +343,14 @@
   Cocooned.Plugins.Reorderable = {
 
     defaultOptionValue: false,
+    defaultConfig: { startAt: 1 },
+
+    normalizeConfig: function(config) {
+      if (typeof config === 'boolean' && config) {
+        return this.defaultConfig;
+      }
+      return config;
+    },
 
     bindReorderable: function () {
       var self = this;
@@ -400,7 +418,7 @@
     },
 
     reindex: function (originalEvent) {
-      var i = 0;
+      var i = this.options.reorderable.startAt;
       var nodes = this.getItems('&:visible');
       var eventData = { link: null, nodes: nodes, cocooned: this, originalEvent: originalEvent };
 
@@ -409,7 +427,7 @@
         return false;
       }
 
-      nodes.each(function () { $('input[id$=_position]', this).val(++i); });
+      nodes.each(function () { $('input[id$=_position]', this).val(i++); });
       this.notify(this.container, 'after-reindex', eventData);
     },
 
