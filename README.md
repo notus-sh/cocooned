@@ -6,8 +6,6 @@ Cocooned makes it easier to handle nested forms in a Rails project.
 
 Cocooned is form builder-agnostic: it works with standard Rails (>= 5.0, < 7.0) form helpers, [Formtastic](https://github.com/justinfrench/formtastic) or [SimpleForm](https://github.com/plataformatec/simple_form).
 
-**Cocooned does not depend on jQuery** but can be integrated to use it. Your project, your choice.
-
 ## Some Background
 
 Cocooned is a fork of [Cocoon](https://github.com/nathanvda/cocoon) by [Nathan Van der Auwera](https://github.com/nathanvda). He and all Cocoon contributors did a great job to maintain it for years. Many thanks to them!

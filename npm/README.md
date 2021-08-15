@@ -3,11 +3,12 @@
 This is a companion package for the [cocooned Ruby gem](https://rubygems.org/gems/cocooned).
 
 Cocooned makes it easier to handle nested forms in a Rails project.
-It works with standard Rails (>= 4.0, < 6.0), [Formtastic](https://github.com/justinfrench/formtastic) or [SimpleForm](https://github.com/plataformatec/simple_form).
+
+Cocooned is form builder-agnostic: it works with standard Rails (>= 5.0, < 7.0) form helpers, [Formtastic](https://github.com/justinfrench/formtastic) or [SimpleForm](https://github.com/plataformatec/simple_form).
 
 This package aims to ease cocooned integration with projects that use npm/Yarn to manage non-ruby dependencies and/or use webpacker to build their assets.
 
-Cocooned depends on jQuery, Ruby (>= 2.2) and Rails (>= 4.0, < 6.0).
+Cocooned depends on jQuery, Ruby (>= 2.5) and Rails (>= 5.0, < 7.0).
 
 ## Installation
 
