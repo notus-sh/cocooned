@@ -67,6 +67,12 @@ E.g. in your `ListsController`:
   end
 ```
 
+### Has One Gotcha
+
+If you have a `has_one` association, then you (probably) need to set `force_non_association_create: true` on `link_to_add_association` or the associated object will be destroyed every time the edit form is rendered (which is probably not what you expect).
+
+See the [original merge request](https://github.com/nathanvda/cocoon/pull/247) for more details.
+
 ### Basic form
 
 [Rails natively supports nested forms](https://guides.rubyonrails.org/form_helpers.html#nested-forms) but does not support adding or removing nested items.
