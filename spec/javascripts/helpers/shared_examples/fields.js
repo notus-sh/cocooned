@@ -22,10 +22,6 @@ function shouldBeCorrectlyNamed (pseudoIdPattern) {
         return this.name.match(nameRegExp('_destroy')) && this.id.match(idRegExp('_destroy'));
       }).length).toEqual(1);
 
-      expect(this.subject.find('input[type="hidden"]').filter(function () {
-        return this.name.match(nameRegExp('position')) && this.id.match(idRegExp('position'));
-      }).length).toEqual(1);
-
       expect(this.subject.find('input[type="text"]').filter(function () {
         return this.name.match(nameRegExp('label')) && this.id.match(idRegExp('label'));
       }).length).toEqual(1);

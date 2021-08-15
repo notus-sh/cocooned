@@ -332,7 +332,7 @@
 
   Cocooned.Plugins.Reorderable = {
 
-    defaultOptionValue: true,
+    defaultOptionValue: false,
 
     bindReorderable: function () {
       var self = this;
