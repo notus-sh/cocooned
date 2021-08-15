@@ -3,12 +3,11 @@
   "private": true,
   "description": "Development dependencies description file. For the real package.json, see ./npm",
   "devDependencies": {
-    "jquery": "^3.3.1",
-    "eslint": "^4.19.1",
-    "eslint-config-standard": "^11.0.0",
+    "eslint": "^7.0.0",
+    "eslint-config-standard": "^16.0.0",
     "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-node": "^5.2.1",
-    "eslint-plugin-promise": "^3.6.0",
-    "eslint-plugin-standard": "^3.0.1"
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-promise": "^5.0.0",
+    "jquery": "^3.0.0"
   }
 }
