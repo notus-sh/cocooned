@@ -5,11 +5,10 @@ language: ruby
 matrix:
   fast_finish: true
 rvm:
-  - 2.5
   - 2.6
   - 2.7
+  - 3.0
 gemfile:
-  - gemfiles/Gemfile.rails-5
   - gemfiles/Gemfile.rails-6
 
 before_script:
