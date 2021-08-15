@@ -441,7 +441,12 @@
         return;
       }
 
-      var cocooned = new Cocooned(container, options);
+      var opts = options;
+      if (typeof container.data('cocooned-options') !== 'undefined') {
+        opts = $.extend(opts, container.data('cocooned-options'));
+      }
+
+      var cocooned = new Cocooned(container, opts);
       container.data('cocooned', cocooned);
     });
   };
@@ -449,7 +454,7 @@
   // On-load initialization
   $(function () {
     $('*[data-cocooned-options]').each(function (i, el) {
-      $(el).cocooned($(el).data('cocooned-options'));
+      $(el).cocooned();
     });
   });
 

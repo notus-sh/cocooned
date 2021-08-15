@@ -252,14 +252,13 @@ var templates = {
           
           &lt;label for=&quot;list_items_attributes_new_items_label&quot;&gt;Label&lt;/label&gt;
           &lt;input type=&quot;text&quot; name=&quot;list[items_attributes][new_items][label]&quot; id=&quot;list_items_attributes_new_items_label&quot; /&gt;
-          &lt;input type=&quot;hidden&quot; value=&quot;0&quot; name=&quot;list[items_attributes][new_items][position]&quot; id=&quot;list_items_attributes_new_items_position&quot; /&gt;
         &lt;/div&gt;">Add</a>
     </form>`,
 
   'reorderable': `
     <form id="form-template" novalidate="novalidate" action="" accept-charset="UTF-8" method="post">
   
-      <div class="nested-form" data-cocooned-options="{ 'reorderable': true }">
+      <div class="nested-form" data-cocooned-options='{ "reorderable": true }'>
         <div class="cocooned-item">
         
           <input type="hidden" name="list[items_attributes][1][_destroy]" id="list_items_attributes_1__destroy" value="false" />
