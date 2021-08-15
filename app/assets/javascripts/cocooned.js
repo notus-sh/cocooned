@@ -210,7 +210,7 @@
       this.container.addClass(this.classes['container'].join(' '));
 
       $(function () { self.hideMarkedForDestruction(); });
-      $(document).on('page:load turbolinks:load', function () { self.hideMarkedForDestruction(); });
+      $(document).on('page:load turbolinks:load turbo:load', function () { self.hideMarkedForDestruction(); });
     },
 
     bindEvents: function () {
