@@ -47,13 +47,13 @@
     elementsCounter: 0,
 
     // Compatibility with Cocoon
-    // TODO: Remove in 2.0 (Only Cocoon namespaces).
+    // TODO: Remove in 3.0 (Only Cocoon namespaces).
     namespaces: {
       events: ['cocooned', 'cocoon']
     },
 
     // Compatibility with Cocoon
-    // TODO: Remove in 2.0 (Only Cocoon class names).
+    // TODO: Remove in 3.0 (Only Cocoon class names).
     classes: {
       // Actions link
       add: ['cocooned-add', 'add_fields'],
