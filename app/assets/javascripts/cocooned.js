@@ -23,25 +23,25 @@
     var opts = $.extend({}, this.defaultOptions(), (options || {}));
 
     // Autoload plugins
-    for (var moduleName in Cocooned.Plugins) {
-      if (Cocooned.Plugins.hasOwnProperty(moduleName)) {
-        var module = Cocooned.Plugins[moduleName];
-        var optionName = moduleName.charAt(0).toLowerCase() + moduleName.slice(1);
+    for (var pluginName in Cocooned.Plugins) {
+      if (Cocooned.Plugins.hasOwnProperty(pluginName)) {
+        var plugin = Cocooned.Plugins[pluginName];
+        var optionName = pluginName.charAt(0).toLowerCase() + pluginName.slice(1);
 
         if (opts[optionName] !== false) {
-          if (module.hasOwnProperty('normalizeConfig') && typeof module['normalizeConfig'] === 'function') {
-            opts[optionName] = module.normalizeConfig(opts[optionName]);
+          if (plugin.hasOwnProperty('normalizeConfig') && typeof plugin['normalizeConfig'] === 'function') {
+            opts[optionName] = plugin.normalizeConfig(opts[optionName]);
           }
 
-          for (var method in module) {
+          for (var method in plugin) {
             if (method === 'normalizeConfig') {
               continue;
             }
-            if (!module.hasOwnProperty(method) || typeof module[method] !== 'function') {
+            if (!plugin.hasOwnProperty(method) || typeof plugin[method] !== 'function') {
               continue;
             }
 
-            this[method] = module[method];
+            this[method] = plugin[method];
           }
         }
       }
