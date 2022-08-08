@@ -3,8 +3,10 @@ source 'http://rubygems.org'
 gemspec path: '..'
 
 group :development, :test do
-  gem 'rails', '~> 5.0'
+  gem 'rails', '~> 6.0.0'
+  gem 'jquery-rails'
   gem 'sqlite3'
-  gem 'simplecov', :require => false
+
   gem 'nokogiri'
+  gem 'simplecov', :require => false
 end

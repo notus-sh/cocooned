@@ -8,8 +8,21 @@ rvm:
   - 2.6
   - 2.7
   - 3.0
+  - 3.1
 gemfile:
-  - gemfiles/Gemfile.rails-6
+  - Gemfile
+  - gemfiles/rails-6.0.x.gemfile
+  - gemfiles/rails-6.1.x.gemfile
+# Exclude rubies < 2.7 for ActiveModel < 7.0
+jobs:
+  exclude:
+    - rvm: 2.6
+      gemfile: Gemfile
+
+# Force Travis jobs to use the latest version of Bundler
+before_install:
+  - yes | gem update --system --force
+  - gem install bundler
 
 before_script:
   - "cd spec/dummy && bundle exec rake db:drop db:create db:migrate RAILS_ENV=test && cd -"

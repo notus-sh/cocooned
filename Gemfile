@@ -8,8 +8,9 @@ gemspec
 group :development, :test do
   # Dummy app dependencies
   gem 'jquery-rails'
-  gem 'rails', '~> 6.0'
-  gem 'sqlite3', '~> 1.4.2'
+  gem 'rails'
+  gem 'sqlite3'
+  gem "sprockets-rails" # Optional in Rails 7.0+
 
   gem 'nokogiri'
   gem 'simplecov', require: false
