@@ -1,9 +1,5 @@
-sudo: false
 cache: bundler
 language: ruby
-
-matrix:
-  fast_finish: true
 rvm:
   - 2.6
   - 2.7
@@ -13,11 +9,14 @@ gemfile:
   - Gemfile
   - gemfiles/rails-6.0.x.gemfile
   - gemfiles/rails-6.1.x.gemfile
-# Exclude rubies < 2.7 for ActiveModel < 7.0
 jobs:
   exclude:
+    # Exclude rubies < 2.7 for ActiveModel < 7.0
     - rvm: 2.6
       gemfile: Gemfile
+    # Exclude rubies > 3.0 for ActiveModel < 6.1
+    - rvm: 3.1
+      gemfile: gemfiles/rails-6.0.x.gemfile
 
 # Force Travis jobs to use the latest version of Bundler
 before_install:
