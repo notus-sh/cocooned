@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
   end
   spec.required_ruby_version = '>= 2.5'
 
-  spec.add_dependency 'rails', '>= 5.0', '<= 7.0'
+  spec.add_dependency 'rails', '>= 5.0', '<= 7.1'
 
   spec.add_development_dependency 'bundler', '~> 2.1'
   spec.add_development_dependency 'jasmine', '~> 3.2'
