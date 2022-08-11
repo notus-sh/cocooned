@@ -15,7 +15,8 @@
 //= require 'cocooned/add-links/associationInsertionTraversalSpec'
 //= require 'cocooned/add-links/countSpec'
 //= require 'cocooned/add-links/limitSpec'
-//= require 'cocooned/reorderableSpec'
+//= require 'cocooned/reorderable/defaultSpec'
+//= require 'cocooned/reorderable/startAtSpec'
 
 var templates = {};
 
