@@ -167,12 +167,14 @@ module Cocooned
       association = form.object.class.to_s.tableize
       return cocooned_remove_item_link(cocooned_default_label(:remove, association), form, html_options) if name.nil?
 
+      destroy = form.object.respond_to?(:marked_for_destruction?) && form.object.marked_for_destruction?
+
       link_options = html_options.dup
       link_options[:class] = [html_options[:class], Cocooned::HELPER_CLASSES[:remove]].flatten.compact
-      link_options[:class] << (form.object.new_record? ? 'dynamic' : 'existing')
-      link_options[:class] << 'destroyed' if form.object.marked_for_destruction?
+      link_options[:class] << (form.object.respond_to?(:new_record?) && form.object.new_record? ? :dynamic : :existing)
+      link_options[:class] << :destroyed if destroy.present?
 
-      form.hidden_field(:_destroy, value: form.object._destroy) << link_to(name, '#', link_options)
+      form.hidden_field(:_destroy, value: destroy) << link_to(name, '#', link_options)
     end
 
     # Output an action link to move an item up.
