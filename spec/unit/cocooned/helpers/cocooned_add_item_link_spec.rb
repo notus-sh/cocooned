@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'unit/shared/link_helper'
+
 describe Cocooned::Helpers do
   let(:view) { ActionView::Base.empty }
   let(:form) { double(object: person, object_name: person.class.name) }

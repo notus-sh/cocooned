@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'unit/shared/link_helper'
+
 describe Cocooned::Helpers do
   let(:view) { ActionView::Base.empty }
   let(:form) { double(object: person, object_name: person.class.name) }
@@ -8,10 +10,10 @@ describe Cocooned::Helpers do
   describe '#cocooned_add_item_link' do
     subject(:method) { view.method(:cocooned_add_item_link) }
 
-    context 'with simple_form' do
+    context 'with formtastic' do
       before do
-        allow(form).to receive_message_chain(:class, :ancestors) { ['SimpleForm::FormBuilder'] }
-        allow(form).to receive(:simple_fields_for).and_return('<form>')
+        allow(form).to receive_message_chain(:class, :ancestors) { ['Formtastic::FormBuilder'] }
+        allow(form).to receive(:semantic_fields_for).and_return('<form>')
       end
 
       it_behaves_like 'a link helper', :add
