@@ -20,7 +20,7 @@
 }(typeof self !== 'undefined' ? self : this, function ($) {
   var Cocooned = function (container, options) {
     this.container = $(container);
-    var opts = $.extend({}, this.defaultOptions(), (options || {}));
+    var opts = $.extend({}, this.defaultOptions(), (this.container.data('cocooned-options') || {}), (options || {}));
 
     // Autoload plugins
     for (var pluginName in Cocooned.Plugins) {
@@ -49,6 +49,8 @@
 
     this.options = opts;
     this.init();
+
+    this.container.get(0).dataset.cocooned = this;
   };
 
   Cocooned.Plugins = {};
@@ -459,20 +461,33 @@
         return;
       }
 
-      var opts = options;
-      if (typeof container.data('cocooned-options') !== 'undefined') {
-        opts = $.extend(opts, container.data('cocooned-options'));
-      }
-
-      var cocooned = new Cocooned(container, opts);
-      container.data('cocooned', cocooned);
+      new Cocooned(container, options);
     });
   };
 
   // On-load initialization
+  /*
   $(function () {
     $('*[data-cocooned-options]').each(function (i, el) {
       $(el).cocooned();
+    });
+  });
+  */
+
+  var ready = (callback) => {
+    if (document.readyState != "loading") {
+      return callback();
+    }
+    document.addEventListener("DOMContentLoaded", callback);
+  }
+
+  ready(() => {
+    document.querySelectorAll('*[data-cocooned-options]').forEach(container => {
+      if (typeof container.dataset.cocooned !== 'undefined') {
+        return;
+      }
+
+      new Cocooned(container, opts);
     });
   });
 
