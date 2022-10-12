@@ -5,6 +5,13 @@
     "jquery": true
   },
   "parserOptions": { "ecmaVersion": 2015 },
+  "overrides": [
+    {
+      "files": ["__tests__/unit/**"],
+      "plugins": ["jest","jest-dom"],
+      "extends": ["plugin:jest/recommended", "plugin:jest-dom/recommended"]
+    }
+  ],
   "rules": {
     // Force strict mode
     "strict": ["error", "function"],

@@ -1,22 +1,17 @@
-'use strict';
-
 const $ = require('jquery');
 const Cocooned = require('../../app/assets/javascripts/cocooned');
 
-describe('A basic cocooned setup', ()  => {
+describe('A basic cocooned setup', () => {
   beforeEach(() => {
     document.body.innerHTML = `
-      <div id="container">
+      <section>
         <div class="cocooned-item"></div>
         
         <div>
-          <a class="cocooned-add"
-           href="#"
-           data-association="item"
-           data-associations="items"
-           data-association-insertion-template="&lt;div class=&quot;cocooned-item&quot;&gt;&lt;/div&gt;">Add</a>
+          <a class="cocooned-add" href="#"
+             data-association-insertion-template="&lt;div class=&quot;cocooned-item&quot;&gt;&lt;/div&gt;">Add</a>
         </div>
-      </div>
+      </section>
     `;
   });
 
@@ -25,7 +20,7 @@ describe('A basic cocooned setup', ()  => {
     let cocooned;
 
     beforeEach(() => {
-      container = document.getElementById('container');
+      container = document.querySelector('section');
       cocooned = new Cocooned(container);
     });
 
@@ -35,6 +30,14 @@ describe('A basic cocooned setup', ()  => {
 
     it('associates itself with container', () => {
       expect(container.dataset).toHaveProperty('cocooned');
+    });
+
+    it('add an ID to container', () => {
+      expect(container).toHaveAttribute('id');
+    });
+
+    it('add a class to container', () => {
+      expect(container).toHaveClass('cocooned-container');
     });
 
     describe('when add link is clicked', () => {
