@@ -2,26 +2,26 @@ const $ = require('jquery');
 const Cocooned = require('../../app/assets/javascripts/cocooned');
 
 describe('A basic cocooned setup', () => {
+  given('template', () => `
+    <section>
+      <div class="cocooned-item"></div>
+      
+      <div>
+        <a class="cocooned-add" href="#"
+           data-association-insertion-template="&lt;div class=&quot;cocooned-item&quot;&gt;&lt;/div&gt;">Add</a>
+      </div>
+    </section>
+  `);
+
   beforeEach(() => {
-    document.body.innerHTML = `
-      <section>
-        <div class="cocooned-item"></div>
-        
-        <div>
-          <a class="cocooned-add" href="#"
-             data-association-insertion-template="&lt;div class=&quot;cocooned-item&quot;&gt;&lt;/div&gt;">Add</a>
-        </div>
-      </section>
-    `;
+    document.body.innerHTML = given.template;
   });
 
   describe('once instanced', () => {
-    let container;
-    let cocooned;
+    given('container', () => document.querySelector('section'));
 
     beforeEach(() => {
-      container = document.querySelector('section');
-      cocooned = new Cocooned(container);
+      new Cocooned(given.container);
     });
 
     it('does not change container content', () => {
@@ -29,15 +29,15 @@ describe('A basic cocooned setup', () => {
     });
 
     it('associates itself with container', () => {
-      expect(container.dataset).toHaveProperty('cocooned');
+      expect(given.container.dataset).toHaveProperty('cocooned');
     });
 
     it('add an ID to container', () => {
-      expect(container).toHaveAttribute('id');
+      expect(given.container).toHaveAttribute('id');
     });
 
     it('add a class to container', () => {
-      expect(container).toHaveClass('cocooned-container');
+      expect(given.container).toHaveClass('cocooned-container');
     });
 
     describe('when add link is clicked', () => {
@@ -52,7 +52,7 @@ describe('A basic cocooned setup', () => {
       });
 
       it('adds an item to the container', () => {
-        expect(container.querySelectorAll('.cocooned-item').length).toEqual(2);
+        expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(2);
       });
     });
   });
