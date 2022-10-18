@@ -137,6 +137,7 @@ module.exports = {
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
   setupFilesAfterEnv: [
     'givens/setup.js',
+    './support/jquery.js',
     './support/matchers.js'
   ],
 

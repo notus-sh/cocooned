@@ -2685,6 +2685,11 @@ jest@^29.1.2:
     import-local "^3.0.2"
     jest-cli "^29.1.2"
 
+jquery-events-to-dom-events@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/jquery-events-to-dom-events/-/jquery-events-to-dom-events-1.1.0.tgz#df038920e05760d9a41e00e2f48ca023f80d5579"
+  integrity sha512-rEgD7wqslktlvPPlQ74QuaQJ7y33kNCGW0bhAKRiJbSm4yg6xiConpzOqrO2qO5a00hpMQZT7YrSElB7K6o9jg==
+
 jquery@^3.0.0:
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.6.0.tgz#c72a09f15c1bdce142f49dbf1170bdf8adac2470"
