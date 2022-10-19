@@ -48,6 +48,12 @@ describe('A basic Cocooned setup', () => {
         expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(2);
       });
 
+      it('adds an item to the container every time it is clicked', () => {
+        given.link.dispatchEvent(given.event);
+        given.link.dispatchEvent(given.event);
+        expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(3);
+      });
+
       describe('with a listener on before-insert', () => {
         beforeEach(() => { delegate('cocooned:before-insert', ['event', 'node', 'cocooned']); });
         afterEach(() => { abnegate('cocooned:before-insert'); });
