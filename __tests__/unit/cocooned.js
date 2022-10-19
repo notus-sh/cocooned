@@ -1,4 +1,5 @@
 const Cocooned = require('../../app/assets/javascripts/cocooned');
+const itBehavesLikeAnEventListener = require('./shared/eventListener');
 
 describe('A basic cocooned setup', () => {
   given('template', () => `
@@ -59,36 +60,43 @@ describe('A basic cocooned setup', () => {
           expect(listener).toHaveBeenCalled();
         });
 
-        describe('when called', () => {
-          it('receives the event as first argument', done => {
-            const listener = jest.fn(e => {
-              expect(e.detail.event).toBeInstanceOf(jQuery.Event);
-              done();
-            });
+        itBehavesLikeAnEventListener({
+          listen: (listener) => { given.container.addEventListener('$cocooned:before-insert', listener); },
+          dispatch: () => { given.link.dispatchEvent(given.event); }
+        });
 
-            given.container.addEventListener('$cocooned:before-insert', listener);
-            given.link.dispatchEvent(given.event);
-          });
+        // See jQuery alternative below
+        it.skip('can cancel event if propagation is stopped', () => {
+          const listener = jest.fn(e => e.stopPropagation());
+          given.container.addEventListener('$cocooned:before-insert', listener);
+          given.link.dispatchEvent(given.event);
 
-          it('receives the wannabe inserted node as second argument', done => {
-            const listener = jest.fn(e => {
-              expect(e.detail.node).toBeInstanceOf(jQuery);
-              done();
-            });
+          expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(1);
+        });
 
-            given.container.addEventListener('$cocooned:before-insert', listener);
-            given.link.dispatchEvent(given.event);
-          });
+        it('can cancel event if propagation is stopped', () => {
+          const listener = jest.fn(e => e.stopPropagation());
+          $(given.container).on('cocooned:before-insert', listener);
+          $(given.link).trigger('click');
 
-          it('receives the Cocooned instance as third argument', done => {
-            const listener = jest.fn(e => {
-              expect(e.detail.cocooned).toBe(given.cocooned);
-              done();
-            });
+          expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(1);
+        });
 
-            given.container.addEventListener('$cocooned:before-insert', listener);
-            given.link.dispatchEvent(given.event);
-          });
+        // See jQuery alternative below
+        it.skip('can cancel event if default is prevented', () => {
+          const listener = jest.fn(e => e.preventDefault());
+          given.container.addEventListener('$cocooned:before-insert', listener);
+          given.link.dispatchEvent(given.event);
+
+          expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(1);
+        });
+
+        it('can cancel event if default is prevented', () => {
+          const listener = jest.fn(e => e.preventDefault());
+          $(given.container).on('cocooned:before-insert', listener);
+          $(given.link).trigger('click');
+
+          expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(1);
         });
       });
 
@@ -104,36 +112,9 @@ describe('A basic cocooned setup', () => {
           expect(listener).toHaveBeenCalled();
         });
 
-        describe('when called', () => {
-          it('receives the event as first argument', done => {
-            const listener = jest.fn(e => {
-              expect(e.detail.event).toBeInstanceOf(jQuery.Event);
-              done();
-            });
-
-            given.container.addEventListener('$cocooned:after-insert', listener);
-            given.link.dispatchEvent(given.event);
-          });
-
-          it('receives the wannabe inserted node as second argument', done => {
-            const listener = jest.fn(e => {
-              expect(e.detail.node).toBeInstanceOf(jQuery);
-              done();
-            });
-
-            given.container.addEventListener('$cocooned:after-insert', listener);
-            given.link.dispatchEvent(given.event);
-          });
-
-          it('receives the Cocooned instance as third argument', done => {
-            const listener = jest.fn(e => {
-              expect(e.detail.cocooned).toBe(given.cocooned);
-              done();
-            });
-
-            given.container.addEventListener('$cocooned:after-insert', listener);
-            given.link.dispatchEvent(given.event);
-          });
+        itBehavesLikeAnEventListener({
+          listen: (listener) => { given.container.addEventListener('$cocooned:after-insert', listener); },
+          dispatch: () => { given.link.dispatchEvent(given.event); }
         });
       });
     });
