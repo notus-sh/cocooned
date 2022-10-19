@@ -48,77 +48,91 @@ describe('A basic cocooned setup', () => {
       });
 
       describe('with a listener on before-insert', () => {
-        given('listener', () => jest.fn());
-
-        beforeEach(() => {
-          delegate('cocooned:before-insert', ['event', 'node', 'cocooned'])
-          given.container.addEventListener('$cocooned:before-insert', given.listener);
-
-          given.link.dispatchEvent(given.event);
-        });
-
-        afterEach(() => {
-          abnegate('cocooned:before-insert', given.listener);
-        })
+        beforeEach(() => { delegate('cocooned:before-insert', ['event', 'node', 'cocooned']); });
+        afterEach(() => { abnegate('cocooned:before-insert'); });
 
         it('triggers a before-insert event', () => {
-          expect(given.listener).toHaveBeenCalled();
+          const listener = jest.fn();
+          given.container.addEventListener('$cocooned:before-insert', listener);
+          given.link.dispatchEvent(given.event);
+
+          expect(listener).toHaveBeenCalled();
         });
 
         describe('when called', () => {
-          let details;
-          given('listener', () => jest.fn((e) => {
-            details = e.detail;
-          }));
+          it('receives the event as first argument', done => {
+            const listener = jest.fn(e => {
+              expect(e.detail.event).toBeInstanceOf(jQuery.Event);
+              done();
+            });
 
-          it('receives the event as first argument', () => {
-            expect(details.event).toBeInstanceOf(jQuery.Event);
+            given.container.addEventListener('$cocooned:before-insert', listener);
+            given.link.dispatchEvent(given.event);
           });
 
-          it('receives the wannabe inserted node as second argument', () => {
-            expect(details.node).toBeInstanceOf(jQuery);
+          it('receives the wannabe inserted node as second argument', done => {
+            const listener = jest.fn(e => {
+              expect(e.detail.node).toBeInstanceOf(jQuery);
+              done();
+            });
+
+            given.container.addEventListener('$cocooned:before-insert', listener);
+            given.link.dispatchEvent(given.event);
           });
 
-          it('receives the Cocooned instance as third argument', () => {
-            expect(details.cocooned).toBe(given.cocooned);
+          it('receives the Cocooned instance as third argument', done => {
+            const listener = jest.fn(e => {
+              expect(e.detail.cocooned).toBe(given.cocooned);
+              done();
+            });
+
+            given.container.addEventListener('$cocooned:before-insert', listener);
+            given.link.dispatchEvent(given.event);
           });
         });
       });
 
       describe('with a listener on after-insert', () => {
-        given('listener', () => jest.fn());
-
-        beforeEach(() => {
-          delegate('cocooned:after-insert', ['event', 'node', 'cocooned'])
-          given.container.addEventListener('$cocooned:after-insert', given.listener);
-
-          given.link.dispatchEvent(given.event);
-        });
-
-        afterEach(() => {
-          abnegate('cocooned:after-insert', given.listener);
-        })
+        beforeEach(() => { delegate('cocooned:after-insert', ['event', 'node', 'cocooned']); });
+        afterEach(() => { abnegate('cocooned:after-insert'); });
 
         it('triggers an after-insert event', () => {
-          expect(given.listener).toHaveBeenCalled();
+          const listener = jest.fn();
+          given.container.addEventListener('$cocooned:after-insert', listener);
+          given.link.dispatchEvent(given.event);
+
+          expect(listener).toHaveBeenCalled();
         });
 
         describe('when called', () => {
-          let details;
-          given('listener', () => jest.fn((e) => {
-            details = e.detail;
-          }));
+          it('receives the event as first argument', done => {
+            const listener = jest.fn(e => {
+              expect(e.detail.event).toBeInstanceOf(jQuery.Event);
+              done();
+            });
 
-          it('receives the event as first argument', () => {
-            expect(details.event).toBeInstanceOf(jQuery.Event);
+            given.container.addEventListener('$cocooned:after-insert', listener);
+            given.link.dispatchEvent(given.event);
           });
 
-          it('receives the inserted node as second argument', () => {
-            expect(details.node).toBeInstanceOf(jQuery);
+          it('receives the wannabe inserted node as second argument', done => {
+            const listener = jest.fn(e => {
+              expect(e.detail.node).toBeInstanceOf(jQuery);
+              done();
+            });
+
+            given.container.addEventListener('$cocooned:after-insert', listener);
+            given.link.dispatchEvent(given.event);
           });
 
-          it('receives the Cocooned instance as third argument', () => {
-            expect(details.cocooned).toBe(given.cocooned);
+          it('receives the Cocooned instance as third argument', done => {
+            const listener = jest.fn(e => {
+              expect(e.detail.cocooned).toBe(given.cocooned);
+              done();
+            });
+
+            given.container.addEventListener('$cocooned:after-insert', listener);
+            given.link.dispatchEvent(given.event);
           });
         });
       });
