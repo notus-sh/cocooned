@@ -1,7 +1,7 @@
 const Cocooned = require('../../app/assets/javascripts/cocooned');
 const itBehavesLikeAnEventListener = require('./shared/eventListener');
 
-describe('A basic cocooned setup', () => {
+describe('A basic Cocooned setup', () => {
   given('template', () => `
     <section>
       <div class="cocooned-item"></div>
