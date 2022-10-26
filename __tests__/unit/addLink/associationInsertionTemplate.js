@@ -1,10 +1,5 @@
 const Cocooned = require('../../../app/assets/javascripts/cocooned');
-const asAttribute = (string) => {
-  return string.replaceAll(/</g, '&lt;')
-               .replaceAll(/>/g, '&gt;')
-               .replaceAll(/"/g, '&quot;')
-               .trim();
-};
+const { asAttribute } = require('../../support/helpers');
 
 describe('A Cocooned setup', () => {
   given('template', () => `
