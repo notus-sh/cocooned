@@ -8,8 +8,11 @@ describe('A Cocooned setup', () => {
   given('event', () => new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
   given('item', () => given.container.querySelector('.cocooned-item'));
 
+  given('prepare', () => null);
+
   beforeEach(() => {
     document.body.innerHTML = given.template;
+    if (typeof given.prepare === 'function') given.prepare();
     new Cocooned(given.container);
 
     given.link.dispatchEvent(given.event)
@@ -42,6 +45,31 @@ describe('A Cocooned setup', () => {
       </section>
     `);
     given('insertionNode', () => given.link);
+
+    it('insert new items before the link', () => {
+      expect(given.insertionNode.previousElementSibling).toBe(given.item);
+    });
+  });
+
+  // As HTML dataset are DOMStringMap, it seems they only accept… well… strings as values.
+  // Couldn't find another way to use this than through jQuery.data implementation.
+  // As this seems a rather limited use case, we surely can drop it in the future.
+  describe('with association-insertion-node as a function', () => {
+    given('template', () => `
+      <section>
+        <div class="closest">
+          <a class="cocooned-add" href="#"
+             data-associations="items"
+             data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
+        </div>
+      </section>
+    `);
+    given('prepare', () => {
+      return () => {
+        $(given.link).data('association-insertion-node', (adder) => adder.closest('.closest'));
+      };
+    });
+    given('insertionNode', () => given.container.querySelector('.closest'));
 
     it('insert new items before the link', () => {
       expect(given.insertionNode.previousElementSibling).toBe(given.item);
