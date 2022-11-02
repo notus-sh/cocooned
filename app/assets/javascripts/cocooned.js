@@ -137,7 +137,7 @@
       var insertionNode = $adder.data('association-insertion-node');
       var insertionTraversal = $adder.data('association-insertion-traversal');
 
-      if (!insertionNode) {
+      if (typeof insertionNode === 'undefined') {
         return $adder.parent();
       }
 
@@ -145,7 +145,7 @@
         return insertionNode($adder);
       }
 
-      if (insertionTraversal) {
+      if (typeof insertionTraversal !== 'undefined') {
         return $adder[insertionTraversal](insertionNode);
       }
 

@@ -69,33 +69,43 @@ describe('A Cocooned setup', () => {
       // See https://api.jquery.com/category/traversing/tree-traversal/
       // Methods other than those listed here does not really make sense as a viable traversal method.
       const traversals = [
-        { traversal: 'closest',   finder: (link) => link.closest('.closest') },
-        // Somehow broken :/
-        // Can't use nextElementSibling here as, at the time of finding, it is no more the next one.
-        // { traversal: 'next',      finder: (link) => link.parentElement.querySelector(':scope > .next') },
-        { traversal: 'parent',    finder: (link) => link.parentElement },
-        { traversal: 'prev',      finder: (link) => link.previousElementSibling },
-        { traversal: 'siblings',  finder: (link) => link.parentElement.querySelector(':scope > .siblings') },
+        {
+          traversal: 'closest',
+          finder: (link) => link.closest('.closest'),
+          template: (adder) => `<div class="closest"><div>${adder}</div></div>`
+        },
+        {
+          traversal: 'next',
+          finder: (link) => link.parentElement.querySelector('.next'),
+          template: (adder) => `${adder}<div class="next"></div>`
+        },
+        {
+          traversal: 'parent',
+          finder: (link) => link.parentElement,
+          template: (adder) => `<div class="parent">${adder}</div>`
+        },
+        {
+          traversal: 'prev',
+          finder: (link) => link.previousElementSibling,
+          template: (adder) => `<div class="prev"></div>${adder}`
+        },
+        {
+          traversal: 'siblings',
+          finder: (link) => link.parentElement.querySelector('.siblings'),
+          template: (adder) => `${adder}<div class="siblings"></div>`
+        }
       ];
 
-      given('template', () => `
-        <section>
-          <div class="closest">
-            <div class="parent">
-              <div class="prev siblings"></div>
-              <a class="cocooned-add" href="#"
-                 data-associations="items"
-                 data-association-insertion-node=".${given.insertionTraversal}"
-                 data-association-insertion-traversal="${given.insertionTraversal}"
-                 data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
-              <div class="next"></div> 
-            </div>
-          </div>
-        </section>
-      `);
-
-      describe.each(traversals)('when $traversal', ({ traversal, finder }) => {
+      describe.each(traversals)('when $traversal', ({ traversal, finder, template }) => {
+        given('adder', () => `
+          <a class="cocooned-add" href="#"
+             data-associations="items"
+             data-association-insertion-node=".${given.insertionTraversal}"
+             data-association-insertion-traversal="${given.insertionTraversal}"
+             data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
+        `);
         given('insertionTraversal', () => traversal);
+        given('template', () => `<section>${template(given.adder)}</section>`);
 
         it('insert new items before the expected element', () => {
           expect(finder(given.link).previousElementSibling).toBe(given.item);
