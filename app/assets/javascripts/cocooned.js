@@ -264,7 +264,7 @@
       var insertionMethod = this.getInsertionMethod($adder);
       var insertionNode = this.getInsertionNode($adder);
       var contentTemplate = $adder.data('association-insertion-template');
-      var count = parseInt($adder.data('count'), 10) || 1;
+      var count = parseInt($adder.data('association-insertion-count'), 10) || parseInt($adder.data('count'), 10) || 1;
 
       for (var i = 0; i < count; i++) {
         var contentNode = this.buildContentNode(contentTemplate);
