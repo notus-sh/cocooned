@@ -1,5 +1,5 @@
 const Cocooned = require('../../../app/assets/javascripts/cocooned');
-const { asAttribute } = require('../../support/helpers');
+const { asAttribute, clickEvent } = require('../../support/helpers');
 
 describe('A Cocooned setup', () => {
   given('template', () => `
@@ -12,15 +12,14 @@ describe('A Cocooned setup', () => {
     </section>
   `);
   given('container', () => document.querySelector('section'));
-  given('link', () => document.querySelector('.cocooned-add'));
-  given('event', () => new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+  given('addLink', () => document.querySelector('.cocooned-add'));
   given('item', () => given.container.querySelector('.cocooned-item'));
 
   beforeEach(() => {
     document.body.innerHTML = given.template;
     new Cocooned(given.container);
 
-    given.link.dispatchEvent(given.event)
+    given.addLink.dispatchEvent(clickEvent())
   });
 
   describe('with a simple insertion template', () => {

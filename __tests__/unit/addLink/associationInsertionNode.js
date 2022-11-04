@@ -1,11 +1,10 @@
 const Cocooned = require('../../../app/assets/javascripts/cocooned');
-const { asAttribute } = require('../../support/helpers');
+const { asAttribute, clickEvent } = require('../../support/helpers');
 
 describe('A Cocooned setup', () => {
   given('insertionTemplate', () => `<div class="cocooned-item"></div>`);
   given('container', () => document.querySelector('section'));
-  given('link', () => document.querySelector('.cocooned-add'));
-  given('event', () => new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+  given('addLink', () => document.querySelector('.cocooned-add'));
   given('item', () => given.container.querySelector('.cocooned-item'));
 
   given('prepare', () => null);
@@ -15,7 +14,7 @@ describe('A Cocooned setup', () => {
     if (typeof given.prepare === 'function') given.prepare();
     new Cocooned(given.container);
 
-    given.link.dispatchEvent(given.event)
+    given.addLink.dispatchEvent(clickEvent())
   });
 
   describe('without association-insertion-node', () => {
@@ -28,7 +27,7 @@ describe('A Cocooned setup', () => {
         </div>
       </section>
     `);
-    given('insertionNode', () => given.link.parentElement);
+    given('insertionNode', () => given.addLink.parentElement);
 
     it('insert new items before link parent', () => {
       expect(given.insertionNode.previousElementSibling).toBe(given.item);
@@ -44,7 +43,7 @@ describe('A Cocooned setup', () => {
            data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
       </section>
     `);
-    given('insertionNode', () => given.link);
+    given('insertionNode', () => given.addLink);
 
     it('insert new items before the link', () => {
       expect(given.insertionNode.previousElementSibling).toBe(given.item);
@@ -66,7 +65,7 @@ describe('A Cocooned setup', () => {
     `);
     given('prepare', () => {
       return () => {
-        $(given.link).data('association-insertion-node', (adder) => adder.closest('.closest'));
+        $(given.addLink).data('association-insertion-node', (adder) => adder.closest('.closest'));
       };
     });
     given('insertionNode', () => given.container.querySelector('.closest'));
@@ -136,7 +135,7 @@ describe('A Cocooned setup', () => {
         given('template', () => `<section>${template(given.adder)}</section>`);
 
         it('insert new items before the expected element', () => {
-          expect(finder(given.link).previousElementSibling).toBe(given.item);
+          expect(finder(given.addLink).previousElementSibling).toBe(given.item);
         });
       });
     });

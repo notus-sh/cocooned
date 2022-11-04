@@ -1,5 +1,5 @@
 const Cocooned = require('../../../app/assets/javascripts/cocooned');
-const { asAttribute } = require('../../support/helpers');
+const { asAttribute, clickEvent } = require('../../support/helpers');
 
 const itBehavesLikeAnEventListener = require('../shared/eventListener');
 
@@ -21,8 +21,7 @@ describe('A basic Cocooned setup', () => {
     </div>
   `);
   given('container', () => document.querySelector('section'));
-  given('link', () => document.querySelector('.cocooned-remove'));
-  given('event', () => new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+  given('removeLink', () => document.querySelector('.cocooned-remove'));
   given('item', () => given.container.querySelector('.cocooned-item'));
   given('cocooned', () => new Cocooned(given.container));
 
@@ -38,21 +37,21 @@ describe('A basic Cocooned setup', () => {
     it('triggers a before-remove event', () => {
       const listener = jest.fn();
       given.container.addEventListener('$cocooned:before-remove', listener);
-      given.link.dispatchEvent(given.event);
+      given.removeLink.dispatchEvent(clickEvent());
 
       expect(listener).toHaveBeenCalled();
     });
 
     itBehavesLikeAnEventListener({
       listen: (listener) => { given.container.addEventListener('$cocooned:before-remove', listener); },
-      dispatch: () => { given.link.dispatchEvent(given.event); }
+      dispatch: () => { given.removeLink.dispatchEvent(clickEvent()); }
     });
 
     // See jQuery alternative below
     it.skip('can cancel event if propagation is stopped', () => {
       const listener = jest.fn(e => e.stopPropagation());
       given.container.addEventListener('$cocooned:before-remove', listener);
-      given.link.dispatchEvent(given.event);
+      given.removeLink.dispatchEvent(clickEvent());
 
       expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(1);
     });
@@ -60,7 +59,7 @@ describe('A basic Cocooned setup', () => {
     it('can cancel event if propagation is stopped', () => {
       const listener = jest.fn(e => e.stopPropagation());
       $(given.container).on('cocooned:before-remove', listener);
-      $(given.link).trigger('click');
+      $(given.removeLink).trigger('click');
 
       expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(1);
     });
@@ -69,7 +68,7 @@ describe('A basic Cocooned setup', () => {
     it.skip('can cancel event if default is prevented', () => {
       const listener = jest.fn(e => e.preventDefault());
       given.container.addEventListener('$cocooned:before-remove', listener);
-      given.link.dispatchEvent(given.event);
+      given.removeLink.dispatchEvent(clickEvent());
 
       expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(1);
     });
@@ -77,7 +76,7 @@ describe('A basic Cocooned setup', () => {
     it('can cancel event if default is prevented', () => {
       const listener = jest.fn(e => e.preventDefault());
       $(given.container).on('cocooned:before-remove', listener);
-      $(given.link).trigger('click');
+      $(given.removeLink).trigger('click');
 
       expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(1);
     });
@@ -90,14 +89,14 @@ describe('A basic Cocooned setup', () => {
     it('triggers an after-remove event', () => {
       const listener = jest.fn();
       given.container.addEventListener('$cocooned:after-remove', listener);
-      given.link.dispatchEvent(given.event);
+      given.removeLink.dispatchEvent(clickEvent());
 
       expect(listener).toHaveBeenCalled();
     });
 
     itBehavesLikeAnEventListener({
       listen: (listener) => { given.container.addEventListener('$cocooned:after-remove', listener); },
-      dispatch: () => { given.link.dispatchEvent(given.event); }
+      dispatch: () => { given.removeLink.dispatchEvent(clickEvent()); }
     });
   });
 });

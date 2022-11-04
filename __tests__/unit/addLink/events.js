@@ -1,5 +1,5 @@
 const Cocooned = require('../../../app/assets/javascripts/cocooned');
-const { asAttribute } = require('../../support/helpers');
+const { asAttribute, clickEvent } = require('../../support/helpers');
 
 const itBehavesLikeAnEventListener = require('../shared/eventListener');
 
@@ -15,8 +15,7 @@ describe('A basic Cocooned setup', () => {
   `);
   given('insertionTemplate', () => `<div class="cocooned-item"></div>`);
   given('container', () => document.querySelector('section'));
-  given('link', () => document.querySelector('.cocooned-add'));
-  given('event', () => new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+  given('addLink', () => document.querySelector('.cocooned-add'));
   given('item', () => given.container.querySelector('.cocooned-item'));
   given('cocooned', () => new Cocooned(given.container));
 
@@ -32,21 +31,21 @@ describe('A basic Cocooned setup', () => {
     it('triggers a before-insert event', () => {
       const listener = jest.fn();
       given.container.addEventListener('$cocooned:before-insert', listener);
-      given.link.dispatchEvent(given.event);
+      given.addLink.dispatchEvent(clickEvent());
 
       expect(listener).toHaveBeenCalled();
     });
 
     itBehavesLikeAnEventListener({
       listen: (listener) => { given.container.addEventListener('$cocooned:before-insert', listener); },
-      dispatch: () => { given.link.dispatchEvent(given.event); }
+      dispatch: () => { given.addLink.dispatchEvent(clickEvent()); }
     });
 
     // See jQuery alternative below
     it.skip('can cancel event if propagation is stopped', () => {
       const listener = jest.fn(e => e.stopPropagation());
       given.container.addEventListener('$cocooned:before-insert', listener);
-      given.link.dispatchEvent(given.event);
+      given.addLink.dispatchEvent(clickEvent());
 
       expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(0);
     });
@@ -54,7 +53,7 @@ describe('A basic Cocooned setup', () => {
     it('can cancel event if propagation is stopped', () => {
       const listener = jest.fn(e => e.stopPropagation());
       $(given.container).on('cocooned:before-insert', listener);
-      $(given.link).trigger('click');
+      $(given.addLink).trigger('click');
 
       expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(0);
     });
@@ -63,7 +62,7 @@ describe('A basic Cocooned setup', () => {
     it.skip('can cancel event if default is prevented', () => {
       const listener = jest.fn(e => e.preventDefault());
       given.container.addEventListener('$cocooned:before-insert', listener);
-      given.link.dispatchEvent(given.event);
+      given.addLink.dispatchEvent(clickEvent());
 
       expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(0);
     });
@@ -71,7 +70,7 @@ describe('A basic Cocooned setup', () => {
     it('can cancel event if default is prevented', () => {
       const listener = jest.fn(e => e.preventDefault());
       $(given.container).on('cocooned:before-insert', listener);
-      $(given.link).trigger('click');
+      $(given.addLink).trigger('click');
 
       expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(0);
     });
@@ -84,14 +83,14 @@ describe('A basic Cocooned setup', () => {
     it('triggers an after-insert event', () => {
       const listener = jest.fn();
       given.container.addEventListener('$cocooned:after-insert', listener);
-      given.link.dispatchEvent(given.event);
+      given.addLink.dispatchEvent(clickEvent());
 
       expect(listener).toHaveBeenCalled();
     });
 
     itBehavesLikeAnEventListener({
       listen: (listener) => { given.container.addEventListener('$cocooned:after-insert', listener); },
-      dispatch: () => { given.link.dispatchEvent(given.event); }
+      dispatch: () => { given.addLink.dispatchEvent(clickEvent()); }
     });
   });
 });

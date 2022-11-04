@@ -1,5 +1,5 @@
 const Cocooned = require('../../../app/assets/javascripts/cocooned');
-const { asAttribute } = require('../../support/helpers');
+const { asAttribute, clickEvent } = require('../../support/helpers');
 
 describe('A Cocooned setup', () => {
   given('template', () => `
@@ -13,15 +13,14 @@ describe('A Cocooned setup', () => {
   `);
   given('insertionTemplate', () => `<div class="cocooned-item"></div>`);
   given('container', () => document.querySelector('section'));
-  given('link', () => document.querySelector('.cocooned-add'));
-  given('event', () => new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+  given('addLink', () => document.querySelector('.cocooned-add'));
   given('items', () => given.container.querySelectorAll('.cocooned-item'));
 
   beforeEach(() => {
     document.body.innerHTML = given.template;
     new Cocooned(given.container);
 
-    given.link.dispatchEvent(given.event)
+    given.addLink.dispatchEvent(clickEvent())
   });
 
   describe('without association-insertion-count', () => {

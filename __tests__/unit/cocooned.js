@@ -1,10 +1,11 @@
 const Cocooned = require('../../app/assets/javascripts/cocooned');
-const { asAttribute } = require('../support/helpers');
+const { asAttribute, clickEvent } = require('../support/helpers');
 
 describe('A basic Cocooned setup', () => {
   given('template', () => `
     <section>
       ${given.insertionTemplate}
+
       <div>
         <a class="cocooned-add" href="#"
            data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
@@ -12,64 +13,77 @@ describe('A basic Cocooned setup', () => {
     </section>
   `);
   given('insertionTemplate', () => `<div class="cocooned-item"></div>`);
+  given('container', () => document.querySelector('section'));
+  given('cocooned', () => new Cocooned(given.container));
 
   beforeEach(() => {
     document.body.innerHTML = given.template;
+    given.cocooned;
   });
 
-  describe('once instanced', () => {
-    given('container', () => document.querySelector('section'));
-    given('cocooned', () => new Cocooned(given.container));
+  it('does not change container content', () => {
+    expect(document.querySelectorAll('.cocooned-item').length).toEqual(1);
+  });
 
-    beforeEach(() => given.cocooned);
+  it('associates itself with container', () => {
+    expect(given.container.dataset).toHaveProperty('cocooned');
+  });
 
-    it('does not change container content', () => {
-      expect(document.querySelectorAll('.cocooned-item').length).toEqual(1);
+  it('add an ID to container', () => {
+    expect(given.container).toHaveAttribute('id');
+  });
+
+  it('add a class to container', () => {
+    expect(given.container).toHaveClass('cocooned-container');
+  });
+
+  describe('when add link is clicked', () => {
+    given('addLink', () => document.querySelector('.cocooned-add'));
+
+    it('adds an item to the container', () => {
+      given.addLink.dispatchEvent(clickEvent());
+
+      expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(2);
     });
 
-    it('associates itself with container', () => {
-      expect(given.container.dataset).toHaveProperty('cocooned');
+    it('adds an item to the container every time it is clicked', () => {
+      given.addLink.dispatchEvent(clickEvent());
+      given.addLink.dispatchEvent(clickEvent());
+
+      expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(3);
     });
+  });
 
-    it('add an ID to container', () => {
-      expect(given.container).toHaveAttribute('id');
-    });
+  describe('with items including a remove link', () => {
+    given('insertionTemplate', () => `
+      <div class="cocooned-item">
+        <a class="cocooned-remove dynamic" href="#">Remove</a>
+      </div>
+    `);
 
-    it('add a class to container', () => {
-      expect(given.container).toHaveClass('cocooned-container');
-    });
+    describe('when remove link is clicked', () => {
+      given('addLink', () => document.querySelector('.cocooned-add'));
+      given('removeLink', () => document.querySelector('.cocooned-remove'));
 
-    describe('when add link is clicked', () => {
-      given('link', () => document.querySelector('.cocooned-add'));
-      given('event', () => new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+      it('removes an item from the container', () => {
+        given.removeLink.dispatchEvent(clickEvent());
 
-      it('adds an item to the container', () => {
-        given.link.dispatchEvent(given.event);
-        expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(2);
+        expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(0);
       });
 
-      it('adds an item to the container every time it is clicked', () => {
-        given.link.dispatchEvent(given.event);
-        given.link.dispatchEvent(given.event);
-        expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(3);
+      it('removes only one item from the container', () => {
+        given.addLink.dispatchEvent(clickEvent());
+        given.removeLink.dispatchEvent(clickEvent());
+
+        expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(1);
       });
-    });
 
-    describe('with items including a remove link', () => {
-      given('insertionTemplate', () => `
-        <div class="cocooned-item">
-          <a class="cocooned-remove dynamic" href="#">Remove</a>
-        </div>
-      `);
+      it('removes the correct item from the container', () => {
+        given.addLink.dispatchEvent(clickEvent());
+        const inserted = Array.from(given.container.querySelectorAll('.cocooned-item')).pop();
+        inserted.querySelector('.cocooned-remove').dispatchEvent(clickEvent());
 
-      describe('when remove link is clicked', () => {
-        given('link', () => document.querySelector('.cocooned-remove'));
-        given('event', () => new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
-
-        it('removes an item from the container', () => {
-          given.link.dispatchEvent(given.event);
-          expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(0);
-        });
+        expect(inserted).not.toBeInTheDocument();
       });
     });
   });

@@ -1,18 +1,17 @@
 const Cocooned = require('../../../app/assets/javascripts/cocooned');
-const { asAttribute } = require('../../support/helpers');
+const { asAttribute, clickEvent } = require('../../support/helpers');
 
 describe('A Cocooned setup', () => {
   given('insertionTemplate', () => `<div class="cocooned-item"></div>`);
   given('container', () => document.querySelector('section'));
-  given('link', () => document.querySelector('.cocooned-add'));
-  given('event', () => new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+  given('addLink', () => document.querySelector('.cocooned-add'));
   given('item', () => given.container.querySelector('.cocooned-item'));
 
   beforeEach(() => {
     document.body.innerHTML = given.template;
     new Cocooned(given.container);
 
-    given.link.dispatchEvent(given.event)
+    given.addLink.dispatchEvent(clickEvent())
   });
 
   describe('without association-insertion-method', () => {
@@ -27,7 +26,7 @@ describe('A Cocooned setup', () => {
     `);
 
     it('insert new item before the insertion point', () => {
-      expect(given.link.parentElement.previousElementSibling).toEqual(given.item);
+      expect(given.addLink.parentElement.previousElementSibling).toEqual(given.item);
     });
   });
 
