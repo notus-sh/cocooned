@@ -294,9 +294,7 @@
         return false;
       }
 
-      var timeout = triggerNode.data('remove-timeout') || 0;
-
-      setTimeout(function () {
+      var doRemove = function () {
         if ($remover.hasClass('dynamic')) {
           nodeToDelete.remove();
         } else {
@@ -307,7 +305,14 @@
           nodeToDelete.hide();
         }
         self.notify(triggerNode, 'after-remove', eventData);
-      }, timeout);
+      };
+      var timeout = parseInt(triggerNode.data('remove-timeout'), 10) || 0;
+
+      if (timeout === 0) {
+        doRemove();
+      } else {
+        setTimeout(doRemove, timeout);
+      }
     },
 
     hideMarkedForDestruction: function () {
