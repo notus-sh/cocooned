@@ -4,7 +4,7 @@ const { asAttribute, clickEvent } = require('../support/helpers');
 describe('A basic Cocooned setup', () => {
   given('template', () => `
     <section>
-      ${given.insertionTemplate}
+      ${given.existing}
 
       <div>
         <a class="cocooned-add" href="#"
@@ -13,6 +13,7 @@ describe('A basic Cocooned setup', () => {
     </section>
   `);
   given('insertionTemplate', () => `<div class="cocooned-item"></div>`);
+  given('existing', () => given.insertionTemplate);
   given('container', () => document.querySelector('section'));
   given('cocooned', () => new Cocooned(given.container));
 
@@ -84,6 +85,26 @@ describe('A basic Cocooned setup', () => {
         inserted.querySelector('.cocooned-remove').dispatchEvent(clickEvent());
 
         expect(inserted).not.toBeInTheDocument();
+      });
+    });
+
+    describe('with existing items marked for destruction', () => {
+      given('insertionTemplate', () => `
+        <div class="cocooned-item">
+          <input type="hidden" name="list[items_attributes][new_items][_destroy]" />
+          <a class="cocooned-remove dynamic" href="#">Remove</a>
+        </div>
+      `);
+      given('existing', () => `
+        <div class="cocooned-item">
+          <input type="hidden" name="list[items_attributes][0][_destroy]" />
+          <a class="cocooned-remove existing destroyed" href="#">Remove</a>
+        </div>
+      `);
+      given('item', () => document.querySelector('.cocooned-item'));
+
+      it('hides those item when instanced', () => {
+        expect(given.item).not.toBeVisible();
       });
     });
   });

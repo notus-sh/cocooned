@@ -466,33 +466,14 @@
         return;
       }
 
-      new Cocooned(container, options);
+      return new Cocooned(container, options);
     });
   };
 
   // On-load initialization
-  /*
   $(function () {
     $('*[data-cocooned-options]').each(function (i, el) {
       $(el).cocooned();
-    });
-  });
-  */
-
-  var ready = (callback) => {
-    if (document.readyState != "loading") {
-      return callback();
-    }
-    document.addEventListener("DOMContentLoaded", callback);
-  }
-
-  ready(() => {
-    document.querySelectorAll('*[data-cocooned-options]').forEach(container => {
-      if (typeof container.dataset.cocooned !== 'undefined') {
-        return;
-      }
-
-      new Cocooned(container, opts);
     });
   });
 
