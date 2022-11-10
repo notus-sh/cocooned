@@ -3,7 +3,7 @@ const { asAttribute, clickEvent } = require('../../support/helpers');
 
 const itBehavesLikeAnEventListener = require('../shared/eventListener');
 
-describe('A basic Cocooned setup', () => {
+describe('A Cocooned setup', () => {
   given('template', () => `
     <section>
       <div>
