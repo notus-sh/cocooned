@@ -343,7 +343,10 @@
     },
 
     getLength: function () {
-      return this.getItems('&:visible').length;
+      // jQuery :visible selector use element.offset(Width|Height), which is not available in jsdom.
+      return this.getItems().filter(function () {
+        return $(this).css('display') !== 'none';
+      }).length;
     }
   };
 
