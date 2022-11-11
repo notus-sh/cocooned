@@ -1,3 +1,5 @@
+/* global given */
+
 const Cocooned = require('../../../app/assets/javascripts/cocooned');
 const { asAttribute, clickEvent } = require('../../support/helpers');
 

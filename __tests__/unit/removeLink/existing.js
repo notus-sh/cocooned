@@ -1,5 +1,7 @@
-const Cocooned = require('../../../app/assets/javascripts/cocooned');
-const { asAttribute, clickEvent } = require('../../support/helpers');
+/* global given */
+
+const Cocooned = require('../../../app/assets/javascripts/cocooned')
+const { asAttribute, clickEvent } = require('../../support/helpers')
 
 describe('A Cocooned setup', () => {
   given('template', () => `
@@ -12,45 +14,45 @@ describe('A Cocooned setup', () => {
            data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
       </div>
     </section>
-  `);
+  `)
   given('insertionTemplate', () => `
     <div class="cocooned-item">
       <a class="cocooned-remove dynamic" href="#">Remove</a>
     </div>
-  `);
-  given('container', () => document.querySelector('section'));
-  given('item', () => given.container.querySelector('.cocooned-item'));
-  given('cocooned', () => new Cocooned(given.container));
+  `)
+  given('container', () => document.querySelector('section'))
+  given('item', () => given.container.querySelector('.cocooned-item'))
+  given('cocooned', () => new Cocooned(given.container))
 
   beforeEach(() => {
-    document.body.innerHTML = given.template;
-    given.cocooned;
-  });
+    document.body.innerHTML = given.template
+    given.cocooned
+  })
 
   describe('with existing item', () => {
     beforeEach(() => {
-      given.removeLink.dispatchEvent(clickEvent());
-    });
+      given.removeLink.dispatchEvent(clickEvent())
+    })
 
     given('existing', () => `
       <div class="cocooned-item">
         <input type="hidden" name="list[items_attributes][0][_destroy]" />
         <a class="cocooned-remove existing" href="#">Remove</a>
       </div>
-    `);
-    given('removeLink', () => document.querySelector('.cocooned-remove'));
+    `)
+    given('removeLink', () => document.querySelector('.cocooned-remove'))
 
     it('does not remove the item from the container', () => {
-      expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(1);
-    });
+      expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(1)
+    })
 
     it('hides the item', () => {
-      expect(given.item).not.toBeVisible();
-    });
+      expect(given.item).not.toBeVisible()
+    })
 
     it('sets _destroy value', () => {
-      expect(given.item.querySelector('input[name$="[_destroy]"]').getAttribute('value')).toBeTruthy();
-    });
+      expect(given.item.querySelector('input[name$="[_destroy]"]').getAttribute('value')).toBeTruthy()
+    })
 
     describe('with required input', () => {
       given('existing', () => `
@@ -65,14 +67,14 @@ describe('A Cocooned setup', () => {
             <option value="2">High</option>
           </select>
         </div>
-      `);
-      given('inputs', () => given.item.querySelectorAll('input, select, textarea'));
+      `)
+      given('inputs', () => given.item.querySelectorAll('input, select, textarea'))
 
       it('removes required attribute on every input', () => {
-        const requireds = Array.from(given.inputs).map(input => input.getAttribute('required'));
+        const requireds = Array.from(given.inputs).map(input => input.getAttribute('required'))
 
-        expect([...new Set(requireds)]).toEqual([null]);
-      });
-    });
-  });
-});
+        expect([...new Set(requireds)]).toEqual([null])
+      })
+    })
+  })
+})

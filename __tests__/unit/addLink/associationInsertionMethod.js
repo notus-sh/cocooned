@@ -1,18 +1,20 @@
-const Cocooned = require('../../../app/assets/javascripts/cocooned');
-const { asAttribute, clickEvent } = require('../../support/helpers');
+/* global given */
+
+const Cocooned = require('../../../app/assets/javascripts/cocooned')
+const { asAttribute, clickEvent } = require('../../support/helpers')
 
 describe('A Cocooned setup', () => {
-  given('insertionTemplate', () => `<div class="cocooned-item"></div>`);
-  given('container', () => document.querySelector('section'));
-  given('addLink', () => document.querySelector('.cocooned-add'));
-  given('item', () => given.container.querySelector('.cocooned-item'));
+  given('insertionTemplate', () => '<div class="cocooned-item"></div>')
+  given('container', () => document.querySelector('section'))
+  given('addLink', () => document.querySelector('.cocooned-add'))
+  given('item', () => given.container.querySelector('.cocooned-item'))
 
   beforeEach(() => {
-    document.body.innerHTML = given.template;
-    new Cocooned(given.container);
+    document.body.innerHTML = given.template
+    new Cocooned(given.container)
 
     given.addLink.dispatchEvent(clickEvent())
-  });
+  })
 
   describe('without association-insertion-method', () => {
     given('template', () => `
@@ -23,12 +25,12 @@ describe('A Cocooned setup', () => {
              data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
         </div>
       </section>
-    `);
+    `)
 
     it('insert new item before the insertion point', () => {
-      expect(given.addLink.parentElement.previousElementSibling).toEqual(given.item);
-    });
-  });
+      expect(given.addLink.parentElement.previousElementSibling).toEqual(given.item)
+    })
+  })
 
   describe('with association-insertion-method as a jQuery insertion method', () => {
     // See:
@@ -55,7 +57,7 @@ describe('A Cocooned setup', () => {
         method: 'prepend',
         finder: (node) => node.firstChild
       }
-    ];
+    ]
 
     given('template', () => `
       <section>
@@ -64,15 +66,15 @@ describe('A Cocooned setup', () => {
            data-association-insertion-method="${given.insertionMethod}"
            data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
       </section>
-    `);
+    `)
 
     describe.each(methods)('when $method', ({ method, finder }) => {
-      given('insertionMethod', () => method);
+      given('insertionMethod', () => method)
 
       it('insert new item at the right place', () => {
-        expect(finder(given.container)).toBe(given.item);
-      });
-    });
+        expect(finder(given.container)).toBe(given.item)
+      })
+    })
 
     describe('when replaceWith', () => {
       given('template', () => `
@@ -85,16 +87,16 @@ describe('A Cocooned setup', () => {
              data-association-insertion-method="${given.insertionMethod}"
              data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
         </section>
-      `);
-      given('insertionMethod', () => 'replaceWith');
+      `)
+      given('insertionMethod', () => 'replaceWith')
 
       it('replace the insertion point', () => {
-        expect(given.container.querySelector('.insertion-node')).toBeNull();
-      });
+        expect(given.container.querySelector('.insertion-node')).toBeNull()
+      })
 
       it('inserts an item', () => {
-        expect(given.item).not.toBeNull();
-      });
-    });
-  });
-});
+        expect(given.item).not.toBeNull()
+      })
+    })
+  })
+})

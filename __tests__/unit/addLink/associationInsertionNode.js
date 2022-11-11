@@ -1,21 +1,23 @@
-const Cocooned = require('../../../app/assets/javascripts/cocooned');
-const { asAttribute, clickEvent } = require('../../support/helpers');
+/* global given */
+
+const Cocooned = require('../../../app/assets/javascripts/cocooned')
+const { asAttribute, clickEvent } = require('../../support/helpers')
 
 describe('A Cocooned setup', () => {
-  given('insertionTemplate', () => `<div class="cocooned-item"></div>`);
-  given('container', () => document.querySelector('section'));
-  given('addLink', () => document.querySelector('.cocooned-add'));
-  given('item', () => given.container.querySelector('.cocooned-item'));
+  given('insertionTemplate', () => '<div class="cocooned-item"></div>')
+  given('container', () => document.querySelector('section'))
+  given('addLink', () => document.querySelector('.cocooned-add'))
+  given('item', () => given.container.querySelector('.cocooned-item'))
 
-  given('prepare', () => null);
+  given('prepare', () => null)
 
   beforeEach(() => {
-    document.body.innerHTML = given.template;
-    if (typeof given.prepare === 'function') given.prepare();
-    new Cocooned(given.container);
+    document.body.innerHTML = given.template
+    if (typeof given.prepare === 'function') given.prepare()
+    new Cocooned(given.container)
 
     given.addLink.dispatchEvent(clickEvent())
-  });
+  })
 
   describe('without association-insertion-node', () => {
     given('template', () => `
@@ -26,13 +28,13 @@ describe('A Cocooned setup', () => {
              data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
         </div>
       </section>
-    `);
-    given('insertionNode', () => given.addLink.parentElement);
+    `)
+    given('insertionNode', () => given.addLink.parentElement)
 
     it('insert new items before link parent', () => {
-      expect(given.insertionNode.previousElementSibling).toBe(given.item);
-    });
-  });
+      expect(given.insertionNode.previousElementSibling).toBe(given.item)
+    })
+  })
 
   describe('with association-insertion-node as "this"', () => {
     given('template', () => `
@@ -42,13 +44,13 @@ describe('A Cocooned setup', () => {
            data-association-insertion-node="this"
            data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
       </section>
-    `);
-    given('insertionNode', () => given.addLink);
+    `)
+    given('insertionNode', () => given.addLink)
 
     it('insert new items before the link', () => {
-      expect(given.insertionNode.previousElementSibling).toBe(given.item);
-    });
-  });
+      expect(given.insertionNode.previousElementSibling).toBe(given.item)
+    })
+  })
 
   // As HTML dataset are DOMStringMap, it seems they only accept… well… strings as values.
   // Couldn't find another way to use this than through jQuery.data implementation.
@@ -62,18 +64,18 @@ describe('A Cocooned setup', () => {
              data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
         </div>
       </section>
-    `);
+    `)
     given('prepare', () => {
       return () => {
-        $(given.addLink).data('association-insertion-node', (adder) => adder.closest('.closest'));
-      };
-    });
-    given('insertionNode', () => given.container.querySelector('.closest'));
+        $(given.addLink).data('association-insertion-node', (adder) => adder.closest('.closest'))
+      }
+    })
+    given('insertionNode', () => given.container.querySelector('.closest'))
 
     it('insert new items before the link', () => {
-      expect(given.insertionNode.previousElementSibling).toBe(given.item);
-    });
-  });
+      expect(given.insertionNode.previousElementSibling).toBe(given.item)
+    })
+  })
 
   describe('with association-insertion-node as a selector', () => {
     given('template', () => `
@@ -85,12 +87,12 @@ describe('A Cocooned setup', () => {
            data-association-insertion-node=".insertion-node"
            data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
       </section>
-    `);
-    given('insertionNode', () => given.container.querySelector('.insertion-node'));
+    `)
+    given('insertionNode', () => given.container.querySelector('.insertion-node'))
 
     it('insert new items before the expected element', () => {
-      expect(given.insertionNode.previousElementSibling).toBe(given.item);
-    });
+      expect(given.insertionNode.previousElementSibling).toBe(given.item)
+    })
 
     describe('with association-insertion-traversal as a jQuery traversal method name', () => {
       // See https://api.jquery.com/category/traversing/tree-traversal/
@@ -121,7 +123,7 @@ describe('A Cocooned setup', () => {
           finder: (link) => link.parentElement.querySelector('.siblings'),
           template: (adder) => `${adder}<div class="siblings"></div>`
         }
-      ];
+      ]
 
       describe.each(traversals)('when $traversal', ({ traversal, finder, template }) => {
         given('adder', () => `
@@ -130,14 +132,14 @@ describe('A Cocooned setup', () => {
              data-association-insertion-node=".${given.insertionTraversal}"
              data-association-insertion-traversal="${given.insertionTraversal}"
              data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
-        `);
-        given('insertionTraversal', () => traversal);
-        given('template', () => `<section>${template(given.adder)}</section>`);
+        `)
+        given('insertionTraversal', () => traversal)
+        given('template', () => `<section>${template(given.adder)}</section>`)
 
         it('insert new items before the expected element', () => {
-          expect(finder(given.addLink).previousElementSibling).toBe(given.item);
-        });
-      });
-    });
-  });
-});
+          expect(finder(given.addLink).previousElementSibling).toBe(given.item)
+        })
+      })
+    })
+  })
+})

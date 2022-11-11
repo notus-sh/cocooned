@@ -6,54 +6,55 @@
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
     define(['jquery'], function (jquery) {
-      return (root.Cocooned = factory(jquery));
-    });
+      return (root.Cocooned = factory(jquery))
+    })
   } else if (typeof module === 'object' && module.exports) {
     // Node. Does not work with strict CommonJS, but
     // only CommonJS-like environments that support module.exports,
     // like Node.
-    module.exports = factory(require('jquery'));
+    module.exports = factory(require('jquery'))
   } else {
     // Browser globals
-    root.Cocooned = factory(root.jQuery);
+    root.Cocooned = factory(root.jQuery)
   }
 }(typeof self !== 'undefined' ? self : this, function ($) {
-  var Cocooned = function (container, options) {
-    this.container = $(container);
-    var opts = $.extend({}, this.defaultOptions(), (this.container.data('cocooned-options') || {}), (options || {}));
+  const Cocooned = function (container, options) {
+    this.container = $(container)
+    const opts = $.extend({}, this.defaultOptions(), (this.container.data('cocooned-options') || {}), (options || {}))
 
     // Autoload plugins
-    for (var pluginName in Cocooned.Plugins) {
-      if (Cocooned.Plugins.hasOwnProperty(pluginName)) {
-        var plugin = Cocooned.Plugins[pluginName];
-        var optionName = pluginName.charAt(0).toLowerCase() + pluginName.slice(1);
+    for (const pluginName in Cocooned.Plugins) {
+      if (Object.prototype.hasOwnProperty.call(Cocooned.Plugins, pluginName)) {
+        const plugin = Cocooned.Plugins[pluginName]
+        const optionName = pluginName.charAt(0).toLowerCase() + pluginName.slice(1)
 
         if (opts[optionName] !== false) {
-          if (plugin.hasOwnProperty('normalizeConfig') && typeof plugin['normalizeConfig'] === 'function') {
-            opts[optionName] = plugin.normalizeConfig(opts[optionName]);
+          if (Object.prototype.hasOwnProperty.call(plugin, 'normalizeConfig') &&
+              typeof plugin.normalizeConfig === 'function') {
+            opts[optionName] = plugin.normalizeConfig(opts[optionName])
           }
 
-          for (var method in plugin) {
+          for (const method in plugin) {
             if (method === 'normalizeConfig') {
-              continue;
+              continue
             }
-            if (!plugin.hasOwnProperty(method) || typeof plugin[method] !== 'function') {
-              continue;
+            if (!Object.prototype.hasOwnProperty.call(plugin, method) || typeof plugin[method] !== 'function') {
+              continue
             }
 
-            this[method] = plugin[method];
+            this[method] = plugin[method]
           }
         }
       }
     }
 
-    this.options = opts;
-    this.init();
+    this.options = opts
+    this.init()
 
-    this.container.get(0).dataset.cocooned = this;
-  };
+    this.container.get(0).dataset.cocooned = this
+  }
 
-  Cocooned.Plugins = {};
+  Cocooned.Plugins = {}
   Cocooned.prototype = {
 
     elementsCounter: 0,
@@ -78,126 +79,126 @@
     },
 
     defaultOptions: function () {
-      var options = {};
+      const options = {}
 
-      for (var moduleName in Cocooned.Plugins) {
-        if (Cocooned.Plugins.hasOwnProperty(moduleName)) {
-          var module = Cocooned.Plugins[moduleName];
-          var optionName = moduleName.charAt(0).toLowerCase() + moduleName.slice(1);
+      for (const moduleName in Cocooned.Plugins) {
+        if (Object.prototype.hasOwnProperty.call(Cocooned.Plugins, moduleName)) {
+          const module = Cocooned.Plugins[moduleName]
+          const optionName = moduleName.charAt(0).toLowerCase() + moduleName.slice(1)
 
-          options[optionName] = module.defaultOptionValue;
+          options[optionName] = module.defaultOptionValue
         }
       }
 
-      return options;
+      return options
     },
 
     notify: function (node, eventType, eventData) {
       return !(this.namespaces.events.some(function (namespace) {
-        var namespacedEventType = [namespace, eventType].join(':');
-        var event = $.Event(namespacedEventType, eventData);
+        const namespacedEventType = [namespace, eventType].join(':')
+        const event = $.Event(namespacedEventType, eventData)
 
-        node.trigger(event, [eventData.node, eventData.cocooned]);
+        node.trigger(event, [eventData.node, eventData.cocooned])
 
-        return (event.isPropagationStopped() || event.isDefaultPrevented());
-      }));
+        return (event.isPropagationStopped() || event.isDefaultPrevented())
+      }))
     },
 
     selector: function (type, selector) {
-      var s = selector || '&';
-      return this.classes[type].map(function (klass) { return s.replace(/&/, '.' + klass); }).join(', ');
+      const s = selector || '&'
+      return this.classes[type].map(function (klass) { return s.replace(/&/, '.' + klass) }).join(', ')
     },
 
     namespacedNativeEvents: function (type) {
-      var namespaces = this.namespaces.events.map(function (ns) { return '.' + ns; });
-      namespaces.unshift(type);
-      return namespaces.join('');
+      const namespaces = this.namespaces.events.map(function (ns) { return '.' + ns })
+      namespaces.unshift(type)
+      return namespaces.join('')
     },
 
     buildId: function () {
-      return (new Date().getTime() + this.elementsCounter++);
+      return (new Date().getTime() + this.elementsCounter++)
     },
 
     buildContentNode: function (content) {
-      var id = this.buildId();
-      var html = (content || this.content);
-      var braced = '[' + id + ']';
-      var underscored = '_' + id + '_';
+      const id = this.buildId()
+      let html = (content || this.content)
+      const braced = '[' + id + ']'
+      const underscored = '_' + id + '_';
 
       ['associations', 'association'].forEach(function (a) {
-        html = html.replace(this.regexps[a]['braced'], braced + '$1');
-        html = html.replace(this.regexps[a]['underscored'], underscored + '$1');
-      }, this);
+        html = html.replace(this.regexps[a].braced, braced + '$1')
+        html = html.replace(this.regexps[a].underscored, underscored + '$1')
+      }, this)
 
-      return $(html);
+      return $(html)
     },
 
     getInsertionNode: function (adder) {
-      var $adder = $(adder);
-      var insertionNode = $adder.data('association-insertion-node');
-      var insertionTraversal = $adder.data('association-insertion-traversal');
+      const $adder = $(adder)
+      const insertionNode = $adder.data('association-insertion-node')
+      const insertionTraversal = $adder.data('association-insertion-traversal')
 
       if (typeof insertionNode === 'undefined') {
-        return $adder.parent();
+        return $adder.parent()
       }
 
       if (typeof insertionNode === 'function') {
-        return insertionNode($adder);
+        return insertionNode($adder)
       }
 
       if (typeof insertionTraversal !== 'undefined') {
-        return $adder[insertionTraversal](insertionNode);
+        return $adder[insertionTraversal](insertionNode)
       }
 
-      return insertionNode === 'this' ? $adder : $(insertionNode);
+      return insertionNode === 'this' ? $adder : $(insertionNode)
     },
 
     getInsertionMethod: function (adder) {
-      var $adder = $(adder);
-      return $adder.data('association-insertion-method') || 'before';
+      const $adder = $(adder)
+      return $adder.data('association-insertion-method') || 'before'
     },
 
     getItems: function (selector) {
-      selector = selector || '';
-      var self = this;
+      selector = selector || ''
+      const self = this
       return $(this.selector('item', selector), this.container).filter(function () {
-        return ($(this).closest(self.selector('container')).get(0) === self.container.get(0));
-      });
+        return ($(this).closest(self.selector('container')).get(0) === self.container.get(0))
+      })
     },
 
     findContainer: function (addLink) {
-      var $adder = $(addLink);
-      var insertionNode = this.getInsertionNode($adder);
-      var insertionMethod = this.getInsertionMethod($adder);
+      const $adder = $(addLink)
+      const insertionNode = this.getInsertionNode($adder)
+      const insertionMethod = this.getInsertionMethod($adder)
 
       switch (insertionMethod) {
         case 'before':
         case 'after':
         case 'replaceWith':
-          return insertionNode.parent();
+          return insertionNode.parent()
 
         case 'append':
         case 'prepend':
         default:
-          return insertionNode;
+          return insertionNode
       }
     },
 
     findItem: function (removeLink) {
-      return $(removeLink).closest(this.selector('item'));
+      return $(removeLink).closest(this.selector('item'))
     },
 
     init: function () {
-      var self = this;
+      const self = this
 
       this.addLinks = $(this.selector('add')).filter(function () {
-        var container = self.findContainer(this);
-        return (container.get(0) === self.container.get(0));
-      });
+        const container = self.findContainer(this)
+        return (container.get(0) === self.container.get(0))
+      })
 
-      var addLink = $(this.addLinks.get(0));
+      const addLink = $(this.addLinks.get(0))
 
-      this.content = addLink.data('association-insertion-template');
+      this.content = addLink.data('association-insertion-template')
       this.regexps = {
         association: {
           braced: new RegExp('\\[new_' + addLink.data('association') + '\\](.*?\\s)', 'g'),
@@ -207,36 +208,36 @@
           braced: new RegExp('\\[new_' + addLink.data('associations') + '\\](.*?\\s)', 'g'),
           underscored: new RegExp('_new_' + addLink.data('associations') + '_(\\w*)', 'g')
         }
-      };
+      }
 
-      this.initUi();
-      this.bindEvents();
+      this.initUi()
+      this.bindEvents()
     },
 
     initUi: function () {
-      var self = this;
+      const self = this
 
       if (!this.container.attr('id')) {
-        this.container.attr('id', this.buildId());
+        this.container.attr('id', this.buildId())
       }
-      this.container.addClass(this.classes['container'].join(' '));
+      this.container.addClass(this.classes.container.join(' '))
 
-      $(function () { self.hideMarkedForDestruction(); });
-      $(document).on('page:load turbolinks:load turbo:load', function () { self.hideMarkedForDestruction(); });
+      $(function () { self.hideMarkedForDestruction() })
+      $(document).on('page:load turbolinks:load turbo:load', function () { self.hideMarkedForDestruction() })
     },
 
     bindEvents: function () {
-      var self = this;
+      const self = this
 
       // Bind add links
       this.addLinks.on(
         this.namespacedNativeEvents('click'),
         function (e) {
-          e.preventDefault();
-          e.stopPropagation();
+          e.preventDefault()
+          e.stopPropagation()
 
-          self.add(this, e);
-        });
+          self.add(this, e)
+        })
 
       // Bind remove links
       // (Binded on document instead of container to not bypass click handler defined in jquery_ujs)
@@ -244,241 +245,241 @@
         this.namespacedNativeEvents('click'),
         this.selector('remove', '#' + this.container.attr('id') + ' &'),
         function (e) {
-          e.preventDefault();
-          e.stopPropagation();
+          e.preventDefault()
+          e.stopPropagation()
 
-          self.remove(this, e);
-        });
+          self.remove(this, e)
+        })
 
       // Bind options events
       $.each(this.options, function (name, value) {
-        var bindMethod = 'bind' + name.charAt(0).toUpperCase() + name.slice(1);
+        const bindMethod = 'bind' + name.charAt(0).toUpperCase() + name.slice(1)
         if (value && self[bindMethod]) {
-          self[bindMethod]();
+          self[bindMethod]()
         }
-      });
+      })
     },
 
     add: function (adder, originalEvent) {
-      var $adder = $(adder);
-      var insertionMethod = this.getInsertionMethod($adder);
-      var insertionNode = this.getInsertionNode($adder);
-      var contentTemplate = $adder.data('association-insertion-template');
-      var count = parseInt($adder.data('association-insertion-count'), 10) || parseInt($adder.data('count'), 10) || 1;
+      const $adder = $(adder)
+      const insertionMethod = this.getInsertionMethod($adder)
+      const insertionNode = this.getInsertionNode($adder)
+      const contentTemplate = $adder.data('association-insertion-template')
+      const count = parseInt($adder.data('association-insertion-count'), 10) || parseInt($adder.data('count'), 10) || 1
 
-      for (var i = 0; i < count; i++) {
-        var contentNode = this.buildContentNode(contentTemplate);
-        var eventData = { link: $adder, node: contentNode, cocooned: this, originalEvent: originalEvent };
-        var afterNode = (insertionMethod === 'replaceWith' ? contentNode : insertionNode);
+      for (let i = 0; i < count; i++) {
+        const contentNode = this.buildContentNode(contentTemplate)
+        const eventData = { link: $adder, node: contentNode, cocooned: this, originalEvent }
+        const afterNode = (insertionMethod === 'replaceWith' ? contentNode : insertionNode)
 
         // Insertion can be prevented through a 'cocooned:before-insert' event handler
         if (!this.notify(insertionNode, 'before-insert', eventData)) {
-          return false;
+          return false
         }
 
-        insertionNode[insertionMethod](contentNode);
+        insertionNode[insertionMethod](contentNode)
 
-        this.notify(afterNode, 'after-insert', eventData);
+        this.notify(afterNode, 'after-insert', eventData)
       }
     },
 
     remove: function (remover, originalEvent) {
-      var self = this;
-      var $remover = $(remover);
-      var nodeToDelete = this.findItem($remover);
-      var triggerNode = nodeToDelete.parent();
-      var eventData = { link: $remover, node: nodeToDelete, cocooned: this, originalEvent: originalEvent };
+      const self = this
+      const $remover = $(remover)
+      const nodeToDelete = this.findItem($remover)
+      const triggerNode = nodeToDelete.parent()
+      const eventData = { link: $remover, node: nodeToDelete, cocooned: this, originalEvent }
 
       // Deletion can be prevented through a 'cocooned:before-remove' event handler
       if (!this.notify(triggerNode, 'before-remove', eventData)) {
-        return false;
+        return false
       }
 
-      var doRemove = function () {
+      const doRemove = function () {
         if ($remover.hasClass('dynamic')) {
-          nodeToDelete.remove();
+          nodeToDelete.remove()
         } else {
           nodeToDelete.find('input[required], select[required]').each(function (index, element) {
-            $(element).removeAttr('required');
-          });
-          $remover.siblings('input[type=hidden][name$="[_destroy]"]').val('true');
-          nodeToDelete.hide();
+            $(element).removeAttr('required')
+          })
+          $remover.siblings('input[type=hidden][name$="[_destroy]"]').val('true')
+          nodeToDelete.hide()
         }
-        self.notify(triggerNode, 'after-remove', eventData);
-      };
-      var timeout = parseInt(triggerNode.data('remove-timeout'), 10) || 0;
+        self.notify(triggerNode, 'after-remove', eventData)
+      }
+      const timeout = parseInt(triggerNode.data('remove-timeout'), 10) || 0
 
       if (timeout === 0) {
-        doRemove();
+        doRemove()
       } else {
-        setTimeout(doRemove, timeout);
+        setTimeout(doRemove, timeout)
       }
     },
 
     hideMarkedForDestruction: function () {
-      var self = this;
+      const self = this
       $(this.selector('remove', '&.existing.destroyed'), this.container).each(function (i, removeLink) {
-        var node = self.findItem(removeLink);
-        node.hide();
-      });
+        const node = self.findItem(removeLink)
+        node.hide()
+      })
     }
-  };
+  }
 
   Cocooned.Plugins.Limit = {
 
     defaultOptionValue: false,
 
     bindLimit: function () {
-      this.limit = this.options['limit'];
+      this.limit = this.options.limit
       this.container.on('cocooned:before-insert', function (e) {
-        var cocooned = e.cocooned;
+        const cocooned = e.cocooned
         if (cocooned.getLength() < cocooned.limit) {
-          return;
+          return
         }
 
-        e.stopPropagation();
-        var eventData = { link: e.link, node: e.node, cocooned: cocooned, originalEvent: e };
-        cocooned.notify(cocooned.container, 'limit-reached', eventData);
-      });
+        e.stopPropagation()
+        const eventData = { link: e.link, node: e.node, cocooned, originalEvent: e }
+        cocooned.notify(cocooned.container, 'limit-reached', eventData)
+      })
     },
 
     getLength: function () {
       // jQuery :visible selector use element.offset(Width|Height), which is not available in jsdom.
       return this.getItems().filter(function () {
-        return $(this).css('display') !== 'none';
-      }).length;
+        return $(this).css('display') !== 'none'
+      }).length
     }
-  };
+  }
 
   Cocooned.Plugins.Reorderable = {
 
     defaultOptionValue: false,
     defaultConfig: { startAt: 1 },
 
-    normalizeConfig: function(config) {
+    normalizeConfig: function (config) {
       if (typeof config === 'boolean' && config) {
-        return this.defaultConfig;
+        return this.defaultConfig
       }
-      return config;
+      return config
     },
 
     bindReorderable: function () {
-      var self = this;
+      const self = this
 
       // Maintain indexes
       this.container
-        .on('cocooned:after-insert', function (e) { self.reindex(e); })
-        .on('cocooned:after-remove', function (e) { self.reindex(e); })
-        .on('cocooned:after-move', function (e) { self.reindex(e); });
+        .on('cocooned:after-insert', function (e) { self.reindex(e) })
+        .on('cocooned:after-remove', function (e) { self.reindex(e) })
+        .on('cocooned:after-move', function (e) { self.reindex(e) })
 
       // Move items
       this.container.on(
         this.namespacedNativeEvents('click'),
         [this.selector('up'), this.selector('down')].join(', '),
         function (e) {
-          e.preventDefault();
-          e.stopPropagation();
+          e.preventDefault()
+          e.stopPropagation()
 
-          var node = this;
-          var up = self.classes['up'].some(function (klass) {
-            return node.className.indexOf(klass) !== -1;
-          });
-          self.move(this, up ? 'up' : 'down', e);
-        });
+          const node = this
+          const up = self.classes.up.some(function (klass) {
+            return node.className.indexOf(klass) !== -1
+          })
+          self.move(this, up ? 'up' : 'down', e)
+        })
 
       // Ensure positions are unique before save
       this.container.closest('form').on(
         this.namespacedNativeEvents('submit'),
         function (e) {
-          self.reindex(e);
-        });
+          self.reindex(e)
+        })
     },
 
     move: function (moveLink, direction, originalEvent) {
-      var self = this;
-      var $mover = $(moveLink);
-      var node = $mover.closest(this.selector('item'));
-      var siblings = (direction === 'up'
+      const self = this
+      const $mover = $(moveLink)
+      const node = $mover.closest(this.selector('item'))
+      const siblings = (direction === 'up'
         ? node.prevAll(this.selector('item', '&:eq(0)'))
-        : node.nextAll(this.selector('item', '&:eq(0)')));
+        : node.nextAll(this.selector('item', '&:eq(0)')))
 
       if (siblings.length === 0) {
-        return;
+        return
       }
 
       // Move can be prevented through a 'cocooned:before-move' event handler
-      var eventData = { link: $mover, node: node, cocooned: this, originalEvent: originalEvent };
+      const eventData = { link: $mover, node, cocooned: this, originalEvent }
       if (!self.notify(node, 'before-move', eventData)) {
-        return false;
+        return false
       }
 
-      var height = self.container.outerHeight();
-      var width = self.container.outerWidth();
+      const height = self.container.outerHeight()
+      const width = self.container.outerWidth()
 
-      self.container.css('height', height).css('width', width);
+      self.container.css('height', height).css('width', width)
       self.hide(node, function () {
-        var movedNode = $(this).detach();
-        movedNode[(direction === 'up' ? 'insertBefore' : 'insertAfter')](siblings);
+        const movedNode = $(this).detach()
+        movedNode[(direction === 'up' ? 'insertBefore' : 'insertAfter')](siblings)
 
         self.show(movedNode, function () {
-          self.container.css('height', '').css('width', ''); // Object notation does not work here.
-          self.notify(movedNode, 'after-move', eventData);
-        });
-      });
+          self.container.css('height', '').css('width', '') // Object notation does not work here.
+          self.notify(movedNode, 'after-move', eventData)
+        })
+      })
     },
 
     reindex: function (originalEvent) {
-      var i = this.options.reorderable.startAt;
-      var nodes = this.getItems('&:visible');
-      var eventData = { link: null, nodes: nodes, cocooned: this, originalEvent: originalEvent };
+      let i = this.options.reorderable.startAt
+      const nodes = this.getItems('&:visible')
+      const eventData = { link: null, nodes, cocooned: this, originalEvent }
 
       // Reindex can be prevented through a 'cocooned:before-reindex' event handler
       if (!this.notify(this.container, 'before-reindex', eventData)) {
-        return false;
+        return false
       }
 
-      nodes.each(function () { $('input[id$=_position]', this).val(i++); });
-      this.notify(this.container, 'after-reindex', eventData);
+      nodes.each(function () { $('input[id$=_position]', this).val(i++) })
+      this.notify(this.container, 'after-reindex', eventData)
     },
 
     show: function (node, callback) {
-      callback = callback || function () { return true; };
+      callback = callback || function () { return true }
 
-      node.addClass('cocooned-visible-item');
+      node.addClass('cocooned-visible-item')
       setTimeout(function () {
-        callback.apply(node);
-        node.removeClass('cocooned-hidden-item');
-      }, 500);
+        callback.apply(node)
+        node.removeClass('cocooned-hidden-item')
+      }, 500)
     },
 
     hide: function (node, callback) {
-      node.removeClass('cocooned-visible-item').addClass('cocooned-hidden-item');
+      node.removeClass('cocooned-visible-item').addClass('cocooned-hidden-item')
       if (callback) {
         setTimeout(function () {
-          callback.apply(node);
-        }, 500);
+          callback.apply(node)
+        }, 500)
       }
     }
-  };
+  }
 
   // Expose a jQuery plugin
   $.fn.cocooned = function (options) {
     return this.each(function () {
-      var container = $(this);
+      const container = $(this)
       if (typeof container.data('cocooned') !== 'undefined') {
-        return;
+        return
       }
 
-      return new Cocooned(container, options);
-    });
-  };
+      return new Cocooned(container, options)
+    })
+  }
 
   // On-load initialization
   $(function () {
     $('*[data-cocooned-options]').each(function (i, el) {
-      $(el).cocooned();
-    });
-  });
+      $(el).cocooned()
+    })
+  })
 
-  return Cocooned;
-}));
+  return Cocooned
+}))
