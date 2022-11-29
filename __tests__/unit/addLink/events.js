@@ -3,7 +3,8 @@
 const Cocooned = require('../../../app/assets/javascripts/cocooned')
 const { asAttribute, clickEvent } = require('../../support/helpers')
 
-const itBehavesLikeAnEventListener = require('../shared/eventListener')
+const itBehavesLikeAnEventListener = require('../shared/events/listener')
+const itBehavesLikeACancellableEvent = require("../shared/events/cancelable")
 
 describe('A Cocooned setup', () => {
   given('template', () => `
@@ -26,73 +27,50 @@ describe('A Cocooned setup', () => {
     given.cocooned
   })
 
-  describe('with a listener on before-insert', () => {
-    beforeEach(() => { delegate('cocooned:before-insert', ['event', 'node', 'cocooned']) })
-    afterEach(() => { abnegate('cocooned:before-insert') })
-
-    it('triggers a before-insert event', () => {
-      const listener = jest.fn()
-      given.container.addEventListener('$cocooned:before-insert', listener)
-      given.addLink.dispatchEvent(clickEvent())
-
-      expect(listener).toHaveBeenCalled()
+  describe('events on insert', () => {
+    beforeEach(() => {
+      delegate('cocooned:before-insert', ['event', 'node', 'cocooned'])
+      delegate('cocooned:after-insert', ['event', 'node', 'cocooned'])
+    })
+    afterEach(() => {
+      abnegate('cocooned:before-insert')
+      abnegate('cocooned:after-insert')
     })
 
-    itBehavesLikeAnEventListener({
-      listen: (listener) => { given.container.addEventListener('$cocooned:before-insert', listener) },
-      dispatch: () => { given.addLink.dispatchEvent(clickEvent()) }
+    describe('a before-insert event', () => {
+      it('is triggered', () => {
+        const listener = jest.fn()
+        given.container.addEventListener('$cocooned:before-insert', listener)
+        given.addLink.dispatchEvent(clickEvent())
+
+        expect(listener).toHaveBeenCalled()
+      })
+
+      itBehavesLikeAnEventListener({
+        listen: (listener) => { given.container.addEventListener('$cocooned:before-insert', listener) },
+        dispatch: () => { given.addLink.dispatchEvent(clickEvent()) }
+      })
     })
 
-    // See jQuery alternative below
-    it.skip('can cancel event if propagation is stopped', () => {
-      const listener = jest.fn(e => e.stopPropagation())
-      given.container.addEventListener('$cocooned:before-insert', listener)
-      given.addLink.dispatchEvent(clickEvent())
+    describe('an after-insert event', () => {
+      it('is triggered', () => {
+        const listener = jest.fn()
+        given.container.addEventListener('$cocooned:after-insert', listener)
+        given.addLink.dispatchEvent(clickEvent())
 
-      expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(0)
+        expect(listener).toHaveBeenCalled()
+      })
+
+      itBehavesLikeAnEventListener({
+        listen: (listener) => { given.container.addEventListener('$cocooned:after-insert', listener) },
+        dispatch: () => { given.addLink.dispatchEvent(clickEvent()) }
+      })
     })
 
-    it('can cancel event if propagation is stopped', () => {
-      const listener = jest.fn(e => e.stopPropagation())
-      $(given.container).on('cocooned:before-insert', listener)
-      $(given.addLink).trigger('click')
-
-      expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(0)
-    })
-
-    // See jQuery alternative below
-    it.skip('can cancel event if default is prevented', () => {
-      const listener = jest.fn(e => e.preventDefault())
-      given.container.addEventListener('$cocooned:before-insert', listener)
-      given.addLink.dispatchEvent(clickEvent())
-
-      expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(0)
-    })
-
-    it('can cancel event if default is prevented', () => {
-      const listener = jest.fn(e => e.preventDefault())
-      $(given.container).on('cocooned:before-insert', listener)
-      $(given.addLink).trigger('click')
-
-      expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(0)
-    })
-  })
-
-  describe('with a listener on after-insert', () => {
-    beforeEach(() => { delegate('cocooned:after-insert', ['event', 'node', 'cocooned']) })
-    afterEach(() => { abnegate('cocooned:after-insert') })
-
-    it('triggers an after-insert event', () => {
-      const listener = jest.fn()
-      given.container.addEventListener('$cocooned:after-insert', listener)
-      given.addLink.dispatchEvent(clickEvent())
-
-      expect(listener).toHaveBeenCalled()
-    })
-
-    itBehavesLikeAnEventListener({
-      listen: (listener) => { given.container.addEventListener('$cocooned:after-insert', listener) },
-      dispatch: () => { given.addLink.dispatchEvent(clickEvent()) }
+    itBehavesLikeACancellableEvent({
+      event: 'insert',
+      dispatch: () => { given.link.dispatchEvent(clickEvent()) },
+      trigger: () => { $(given.link).trigger('click') },
     })
   })
 })

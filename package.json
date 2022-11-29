@@ -1,11 +1,17 @@
 {
   "name": "cocooned",
   "private": true,
+  "browser": true,
   "description": "Development dependencies description file. For the real package.json, see ./npm",
   "scripts": {
-    "test": "jest --config __tests__/jest.config.js"
+    "test": "jest --config __tests__/jest.config.js --showSeed"
+  },
+  "dependencies": {
+    "@cocooned/src": "link:./app/assets",
+    "@cocooned/tests": "link:./__tests__"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
     "@testing-library/jest-dom": "^5.16.5",
     "eslint": "^8.25.0",
     "eslint-config-standard": "^17.0.0",

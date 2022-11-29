@@ -5,11 +5,16 @@ const asAttribute = function (string) {
     .trim()
 }
 
+const asInt = function (value) {
+  return parseInt(value, 10)
+}
+
 const clickEvent = function () {
   return new MouseEvent('click', { bubbles: true, cancelable: true, view: window })
 }
 
 module.exports = {
   asAttribute,
+  asInt,
   clickEvent
 }

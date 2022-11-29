@@ -430,7 +430,9 @@
 
     reindex: function (originalEvent) {
       let i = this.options.reorderable.startAt
-      const nodes = this.getItems('&:visible')
+      const nodes = this.getItems().filter(function () {
+        return $(this).css('display') !== 'none'
+      })
       const eventData = { link: null, nodes, cocooned: this, originalEvent }
 
       // Reindex can be prevented through a 'cocooned:before-reindex' event handler
@@ -438,7 +440,7 @@
         return false
       }
 
-      nodes.each(function () { $('input[id$=_position]', this).val(i++) })
+      nodes.each(function () { $('input[name$="[position]"]', this).val(i++) })
       this.notify(this.container, 'after-reindex', eventData)
     },
 

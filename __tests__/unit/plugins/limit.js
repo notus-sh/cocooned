@@ -1,6 +1,7 @@
 /* global given */
 
 const Cocooned = require('../../../app/assets/javascripts/cocooned')
+const faker = require('../../support/faker')
 const { asAttribute, clickEvent } = require('../../support/helpers')
 
 describe('A Cocooned setup', () => {
@@ -9,6 +10,7 @@ describe('A Cocooned setup', () => {
       ${given.existing}
       <div>
         <a class="cocooned-add" href="#"
+           data-associations="items"
            data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
       </div>
     </section>
@@ -26,7 +28,7 @@ describe('A Cocooned setup', () => {
   })
 
   describe('with options for the limit plugin', () => {
-    given('limit', () => 1 + Math.floor(Math.random() * 4))
+    given('limit', () => faker.datatype.number({ min: 2, max: 5 }))
 
     it('limits how many items can be added to the container', () => {
       for (let i = 0; i <= given.limit; i++) {

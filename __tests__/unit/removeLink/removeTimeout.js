@@ -1,6 +1,7 @@
 /* global given */
 
 const Cocooned = require('../../../app/assets/javascripts/cocooned')
+const faker = require('../../support/faker')
 const { asAttribute, clickEvent } = require('../../support/helpers')
 
 describe('A Cocooned setup with remove-timeout', () => {
@@ -20,7 +21,7 @@ describe('A Cocooned setup with remove-timeout', () => {
       <a class="cocooned-remove dynamic" href="#">Remove</a>
     </div>
   `)
-  given('timeout', () => 10 + Math.floor(Math.random() * 40))
+  given('timeout', () => faker.datatype.number({ min: 10, max: 50 }))
   given('container', () => document.querySelector('section'))
   given('item', () => given.container.querySelector('.cocooned-item'))
   given('cocooned', () => new Cocooned(given.container))

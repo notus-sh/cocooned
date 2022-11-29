@@ -1,6 +1,7 @@
 /* global given */
 
 const Cocooned = require('../../../app/assets/javascripts/cocooned')
+const faker = require('../../support/faker')
 const { asAttribute, clickEvent } = require('../../support/helpers')
 
 describe('A Cocooned setup', () => {
@@ -42,7 +43,7 @@ describe('A Cocooned setup', () => {
         </div>
       </section>
     `)
-    given('insertionCount', () => 1 + Math.floor(Math.random() * 4))
+    given('insertionCount', () => faker.datatype.number({ min: 2, max: 5 }))
 
     it('insert the correct count of items', () => {
       expect(given.items.length).toEqual(given.insertionCount)

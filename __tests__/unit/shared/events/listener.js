@@ -1,7 +1,7 @@
 /* global given, jQuery, jest */
 
 module.exports = ({ listen, dispatch }) => {
-  describe('when called', () => {
+  describe('when triggered', () => {
     it('receives the event as first argument', done => {
       const listener = jest.fn(e => {
         expect(e.detail.event).toBeInstanceOf(jQuery.Event)
