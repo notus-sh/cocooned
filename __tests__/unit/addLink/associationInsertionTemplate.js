@@ -1,7 +1,7 @@
 /* global given */
 
-const Cocooned = require('../../../app/assets/javascripts/cocooned');
-const { asAttribute, clickEvent } = require('../../support/helpers');
+const Cocooned = require('@cocooned/src/javascripts/cocooned');
+const { asAttribute, clickEvent } = require('@cocooned/tests/support/helpers');
 
 describe('A Cocooned setup', () => {
   given('template', () => `

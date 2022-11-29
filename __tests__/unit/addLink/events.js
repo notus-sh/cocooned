@@ -1,10 +1,10 @@
 /* global given, delegate, abnegate */
 
-const Cocooned = require('../../../app/assets/javascripts/cocooned')
-const { asAttribute, clickEvent } = require('../../support/helpers')
+const Cocooned = require('@cocooned/src/javascripts/cocooned')
+const { asAttribute, clickEvent } = require('@cocooned/tests/support/helpers')
 
-const itBehavesLikeAnEventListener = require('../shared/events/listener')
-const itBehavesLikeACancellableEvent = require("../shared/events/cancelable")
+const itBehavesLikeAnEventListener = require('@cocooned/tests/unit/shared/events/listener')
+const itBehavesLikeACancellableEvent = require("@cocooned/tests/unit/shared/events/cancelable")
 
 describe('A Cocooned setup', () => {
   given('template', () => `
@@ -47,8 +47,8 @@ describe('A Cocooned setup', () => {
       })
 
       itBehavesLikeAnEventListener({
-        listen: (listener) => { given.container.addEventListener('$cocooned:before-insert', listener) },
-        dispatch: () => { given.addLink.dispatchEvent(clickEvent()) }
+        listen: (listener) => given.container.addEventListener('$cocooned:before-insert', listener),
+        dispatch: () => given.addLink.dispatchEvent(clickEvent())
       })
     })
 
@@ -62,8 +62,8 @@ describe('A Cocooned setup', () => {
       })
 
       itBehavesLikeAnEventListener({
-        listen: (listener) => { given.container.addEventListener('$cocooned:after-insert', listener) },
-        dispatch: () => { given.addLink.dispatchEvent(clickEvent()) }
+        listen: (listener) => given.container.addEventListener('$cocooned:after-insert', listener),
+        dispatch: () => given.addLink.dispatchEvent(clickEvent())
       })
     })
 

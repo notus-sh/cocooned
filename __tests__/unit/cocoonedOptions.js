@@ -1,6 +1,6 @@
 /* global given */
 
-const { asAttribute } = require('../support/helpers')
+const { asAttribute } = require('@cocooned/tests/support/helpers')
 
 describe('A Cocooned setup with cocooned-options', () => {
   given('template', () => `

@@ -1,11 +1,11 @@
 /* global given */
 
-const Cocooned = require('../../../../../app/assets/javascripts/cocooned')
-const faker = require('../../../../support/faker')
-const { asAttribute, asInt, clickEvent } = require('../../../../support/helpers')
+const Cocooned = require('@cocooned/src/javascripts/cocooned')
+const faker = require('@cocooned/tests/support/faker')
+const { asAttribute, asInt, clickEvent } = require('@cocooned/tests/support/helpers')
 
-const itBehavesLikeAnEventListener = require("../../../shared/events/listener")
-const itBehavesLikeACancellableEvent = require("../../../shared/events/cancelable")
+const itBehavesLikeAnEventListener = require("@cocooned/tests/unit/shared/events/listener")
+const itBehavesLikeACancellableEvent = require("@cocooned/tests/unit/shared/events/cancelable")
 
 describe('A Cocooned reorderable setup', () => {
   given('template', () => `
@@ -67,6 +67,7 @@ describe('A Cocooned reorderable setup', () => {
           given.link.dispatchEvent(clickEvent())
 
           expect(listener).not.toHaveBeenCalled()
+          given.container.removeEventListener('$cocooned:before-move', listener)
         })
       })
 
@@ -77,6 +78,7 @@ describe('A Cocooned reorderable setup', () => {
           given.link.dispatchEvent(clickEvent())
 
           expect(listener).not.toHaveBeenCalled()
+          given.container.removeEventListener('$cocooned:after-move', listener)
         })
       })
     }
@@ -89,34 +91,29 @@ describe('A Cocooned reorderable setup', () => {
           given.link.dispatchEvent(clickEvent())
 
           expect(listener).toHaveBeenCalled()
+          given.container.removeEventListener('$cocooned:before-move', listener)
         })
 
         itBehavesLikeAnEventListener({
-          listen: (listener) => {
-            given.container.addEventListener('$cocooned:before-move', listener)
-          },
-          dispatch: () => {
-            given.link.dispatchEvent(clickEvent())
-          }
+          listen: (listener) => given.container.addEventListener('$cocooned:before-move', listener),
+          dispatch: () => given.link.dispatchEvent(clickEvent())
         })
       })
 
       describe('an after-move event', () => {
+
         it('is triggered', () => {
           const listener = jest.fn()
           given.container.addEventListener('$cocooned:after-move', listener)
           given.link.dispatchEvent(clickEvent())
 
           expect(listener).toHaveBeenCalled()
+          given.container.removeEventListener('$cocooned:before-move', listener)
         })
 
         itBehavesLikeAnEventListener({
-          listen: (listener) => {
-            given.container.addEventListener('$cocooned:after-move', listener)
-          },
-          dispatch: () => {
-            given.link.dispatchEvent(clickEvent())
-          }
+          listen: (listener) => given.container.addEventListener('$cocooned:after-move', listener),
+          dispatch: () => given.link.dispatchEvent(clickEvent())
         })
       })
 
@@ -144,7 +141,7 @@ describe('A Cocooned reorderable setup', () => {
     })
 
     describe('with other items', () => {
-      given('count', () => faker.datatype.number({ min: 2, max: 5 }))
+      given('count', () => faker.datatype.number({ min: 3, max: 8 }))
 
       describe('the move up link of the top item', () => {
         given('link', () => Array.from(given.moveUpLinks).shift())

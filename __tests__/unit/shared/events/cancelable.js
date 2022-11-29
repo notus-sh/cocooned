@@ -1,6 +1,5 @@
 /* global given, jQuery, jest */
 
-const {clickEvent} = require("../../../support/helpers");
 module.exports = ({ event, dispatch, trigger }) => {
   describe('a cancelable operation', () => {
     // See jQuery alternative below

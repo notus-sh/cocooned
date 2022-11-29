@@ -1,8 +1,8 @@
 /* global given */
 
-const Cocooned = require('../../../../app/assets/javascripts/cocooned')
-const faker = require('../../../../../support/faker')
-const { asAttribute, asInt, clickEvent } = require('../../../support/helpers')
+const Cocooned = require('@cocooned/src/javascripts/cocooned')
+const faker = require('@cocooned/tests/support/faker')
+const { asAttribute, asInt, clickEvent } = require('@cocooned/tests/support/helpers')
 
 describe('A Cocooned setup', () => {
   given('template', () => `
@@ -80,10 +80,7 @@ describe('A Cocooned setup', () => {
         given.removeLink.dispatchEvent(clickEvent())
       })
 
-      given('index', () => faker.datatype.number({ max: given.count - 1 }))
-      given('removeLink', () => {
-        return given.container.querySelectorAll('.cocooned-remove.dynamic').item(0)
-      })
+      given('removeLink', () => given.container.querySelectorAll('.cocooned-remove.dynamic').item(0))
 
       it('reorders remaining items', () => {
         expect(given.positions).toEqual(Array.from(Array(given.count), (_, i) => i + 1))
@@ -117,7 +114,7 @@ describe('A Cocooned setup', () => {
     })
 
     describe('when moving up another item', () => {
-      given('index', () => faker.datatype.number({ min: 1, max: given.count }))
+      given('index', () => faker.datatype.number({ min: 1, max: given.count - 1 }))
       given('item', () => given.items.item(given.index))
       given('moveUpLink', () => given.item.querySelector('.cocooned-move-down'))
 
@@ -131,7 +128,7 @@ describe('A Cocooned setup', () => {
     })
 
     describe('when moving down another item', () => {
-      given('index', () => faker.datatype.number({ max: given.count - 1 }))
+      given('index', () => faker.datatype.number({ max: given.count - 2 }))
       given('item', () => given.items.item(given.index))
       given('moveDownLink', () => given.item.querySelector('.cocooned-move-up'))
 

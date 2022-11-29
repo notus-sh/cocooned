@@ -408,7 +408,7 @@
       }
 
       // Move can be prevented through a 'cocooned:before-move' event handler
-      const eventData = { link: $mover, node, cocooned: this, originalEvent }
+      const eventData = { link: $mover, node, cocooned: self, originalEvent }
       if (!self.notify(node, 'before-move', eventData)) {
         return false
       }
