@@ -4,7 +4,7 @@ const Cocooned = require('@cocooned/src/javascripts/cocooned')
 const { asAttribute, clickEvent } = require('@cocooned/tests/support/helpers')
 
 const itBehavesLikeAnEventListener = require('@cocooned/tests/unit/shared/events/listener')
-const itBehavesLikeACancellableEvent = require("@cocooned/tests/unit/shared/events/cancelable")
+const itBehavesLikeACancellableEvent = require('@cocooned/tests/unit/shared/events/cancelable')
 
 describe('A Cocooned setup', () => {
   given('template', () => `
@@ -70,7 +70,7 @@ describe('A Cocooned setup', () => {
     itBehavesLikeACancellableEvent({
       event: 'insert',
       dispatch: () => { given.link.dispatchEvent(clickEvent()) },
-      trigger: () => { $(given.link).trigger('click') },
+      trigger: () => { $(given.link).trigger('click') }
     })
   })
 })

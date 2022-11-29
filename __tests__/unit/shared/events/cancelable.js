@@ -1,4 +1,4 @@
-/* global given, jQuery, jest */
+/* global given, $, jest */
 
 module.exports = ({ event, dispatch, trigger }) => {
   describe('a cancelable operation', () => {

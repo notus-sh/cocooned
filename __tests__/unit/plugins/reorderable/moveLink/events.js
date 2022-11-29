@@ -1,11 +1,11 @@
-/* global given */
+/* global given, delegate, abnegate */
 
 const Cocooned = require('@cocooned/src/javascripts/cocooned')
 const faker = require('@cocooned/tests/support/faker')
-const { asAttribute, asInt, clickEvent } = require('@cocooned/tests/support/helpers')
+const { asAttribute, clickEvent } = require('@cocooned/tests/support/helpers')
 
-const itBehavesLikeAnEventListener = require("@cocooned/tests/unit/shared/events/listener")
-const itBehavesLikeACancellableEvent = require("@cocooned/tests/unit/shared/events/cancelable")
+const itBehavesLikeAnEventListener = require('@cocooned/tests/unit/shared/events/listener')
+const itBehavesLikeACancellableEvent = require('@cocooned/tests/unit/shared/events/cancelable')
 
 describe('A Cocooned reorderable setup', () => {
   given('template', () => `
@@ -35,7 +35,7 @@ describe('A Cocooned reorderable setup', () => {
       <a class="cocooned-move-up" href="#">Up</a>
       <a class="cocooned-move-down" href="#">Down</a>
       
-      <input type="hidden" name="list[items_attributes][${i}][position]" value="${i+1}" />
+      <input type="hidden" name="list[items_attributes][${i}][position]" value="${i + 1}" />
     </div>
   `).join(''))
   given('container', () => document.querySelector('section'))
@@ -101,7 +101,6 @@ describe('A Cocooned reorderable setup', () => {
       })
 
       describe('an after-move event', () => {
-
         it('is triggered', () => {
           const listener = jest.fn()
           given.container.addEventListener('$cocooned:after-move', listener)
@@ -120,7 +119,7 @@ describe('A Cocooned reorderable setup', () => {
       itBehavesLikeACancellableEvent({
         event: 'move',
         dispatch: () => { given.link.dispatchEvent(clickEvent()) },
-        trigger: () => { $(given.link).trigger('click') },
+        trigger: () => { $(given.link).trigger('click') }
       })
     }
 

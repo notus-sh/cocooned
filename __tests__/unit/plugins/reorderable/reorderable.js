@@ -33,7 +33,7 @@ describe('A Cocooned setup', () => {
       <a class="cocooned-move-up" href="#">Up</a>
       <a class="cocooned-move-down" href="#">Down</a>
       
-      <input type="hidden" name="list[items_attributes][${i}][position]" value="${i+1}" />
+      <input type="hidden" name="list[items_attributes][${i}][position]" value="${i + 1}" />
     </div>
   `).join(''))
   given('container', () => document.querySelector('section'))
