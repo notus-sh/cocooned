@@ -25,7 +25,7 @@ describe('A Cocooned setup', () => {
       <input type="hidden" name="list[items_attributes][new_items][position]" value="0" />
     </div>
   `)
-  given('count', () => faker.datatype.number({ min: 2, max: 5 }))
+  given('count', () => faker.datatype.number({ min: 3, max: 8 }))
   given('existing', () => Array.from(Array(given.count), (_, i) => `
     <div class="cocooned-item">
       <input type="hidden" name="list[items_attributes][${i}][_destroy]" />
@@ -87,58 +87,51 @@ describe('A Cocooned setup', () => {
       })
     })
 
-    describe('when moving top the top item', () => {
-      given('topItem', () => given.container.querySelectorAll('.cocooned-item').item(0))
-      given('moveUpLink', () => given.topItem.querySelector('.cocooned-move-up'))
-
-      it('does not change its position', () => {
-        const positionBefore = given.topItem.querySelector('input[name*=position]').getAttribute('value')
-        given.moveUpLink.dispatchEvent(clickEvent())
-        const positionAfter = given.topItem.querySelector('input[name*=position]').getAttribute('value')
-
-        expect(positionAfter).toEqual(positionBefore)
+    describe('with a movable item', () => {
+      beforeEach(() => {
+        delegate('cocooned:before-move', ['event', 'node', 'cocooned'])
+        delegate('cocooned:after-move', ['event', 'node', 'cocooned'])
       })
-    })
-
-    describe('when moving down the bottom item', () => {
-      given('bottomItem', () => given.container.querySelectorAll('.cocooned-item').item(given.count - 1))
-      given('moveDownLink', () => given.bottomItem.querySelector('.cocooned-move-down'))
-
-      it('does not change its position', () => {
-        const positionBefore = asInt(given.bottomItem.querySelector('input[name*=position]').getAttribute('value'))
-        given.moveDownLink.dispatchEvent(clickEvent())
-        const positionAfter = asInt(given.bottomItem.querySelector('input[name*=position]').getAttribute('value'))
-
-        expect(positionAfter).toEqual(positionBefore)
+      afterEach(() => {
+        abnegate('cocooned:before-move')
+        abnegate('cocooned:after-move')
       })
-    })
 
-    describe('when moving up another item', () => {
-      given('index', () => faker.datatype.number({ min: 1, max: given.count - 1 }))
+      given('index', () => faker.datatype.number({ min: 1, max: given.count - 2 }))
       given('item', () => given.items.item(given.index))
-      given('moveUpLink', () => given.item.querySelector('.cocooned-move-down'))
 
-      it('increases its position by 1', () => {
-        const positionBefore = asInt(given.item.querySelector('input[name*=position]').getAttribute('value'))
-        given.moveUpLink.dispatchEvent(clickEvent())
-        const positionAfter = asInt(given.item.querySelector('input[name*=position]').getAttribute('value'))
+      const position = (item) => asInt(item.querySelector('input[name*=position]').getAttribute('value'))
 
-        expect(positionAfter).toEqual(positionBefore + 1)
+      describe('when moving it up', () => {
+        given('moveUpLink', () => given.item.querySelector('.cocooned-move-down'))
+
+        it('increases its position by 1', (done) => {
+          const positionBefore = position(given.item)
+          const listener = jest.fn(() => {
+            const positionAfter = position(given.item)
+            expect(positionAfter).toEqual(positionBefore + 1)
+            done()
+          })
+
+          given.container.addEventListener('$cocooned:after-move', listener)
+          given.moveUpLink.dispatchEvent(clickEvent())
+        })
       })
-    })
 
-    describe('when moving down another item', () => {
-      given('index', () => faker.datatype.number({ max: given.count - 2 }))
-      given('item', () => given.items.item(given.index))
-      given('moveDownLink', () => given.item.querySelector('.cocooned-move-up'))
+      describe('when moving it down', () => {
+        given('moveDownLink', () => given.item.querySelector('.cocooned-move-up'))
 
-      it('decreases its position by 1', () => {
-        const positionField = given.item.querySelector('input[name*=position]')
-        const positionBefore = asInt(positionField.getAttribute('value'))
-        given.moveDownLink.dispatchEvent(clickEvent())
-        const positionAfter = asInt(positionField.getAttribute('value'))
+        it('decreases its position by 1', () => {
+          const positionBefore = position(given.item)
+          const listener = jest.fn(() => {
+            const positionAfter = position(given.item)
+            expect(positionAfter).toEqual(positionBefore - 1)
+            done()
+          })
 
-        expect(positionAfter).toEqual(positionBefore - 1)
+          given.container.addEventListener('$cocooned:after-move', listener)
+          given.moveDownLink.dispatchEvent(clickEvent())
+        })
       })
     })
   })
