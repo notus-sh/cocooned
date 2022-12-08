@@ -103,13 +103,13 @@ describe('A Cocooned setup', () => {
       const position = (item) => asInt(item.querySelector('input[name*=position]').getAttribute('value'))
 
       describe('when moving it up', () => {
-        given('moveUpLink', () => given.item.querySelector('.cocooned-move-down'))
+        given('moveUpLink', () => given.item.querySelector('.cocooned-move-up'))
 
-        it('increases its position by 1', (done) => {
+        it('decreases its position by 1', (done) => {
           const positionBefore = position(given.item)
           const listener = jest.fn(() => {
             const positionAfter = position(given.item)
-            expect(positionAfter).toEqual(positionBefore + 1)
+            expect(positionAfter).toEqual(positionBefore - 1)
             done()
           })
 
@@ -119,13 +119,13 @@ describe('A Cocooned setup', () => {
       })
 
       describe('when moving it down', () => {
-        given('moveDownLink', () => given.item.querySelector('.cocooned-move-up'))
+        given('moveDownLink', () => given.item.querySelector('.cocooned-move-down'))
 
-        it('decreases its position by 1', () => {
+        it('increases its position by 1', () => {
           const positionBefore = position(given.item)
           const listener = jest.fn(() => {
             const positionAfter = position(given.item)
-            expect(positionAfter).toEqual(positionBefore - 1)
+            expect(positionAfter).toEqual(positionBefore + 1)
             done()
           })
 

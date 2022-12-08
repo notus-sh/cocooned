@@ -136,7 +136,10 @@ describe('A Cocooned reorderable setup', () => {
           given.link.dispatchEvent(clickEvent())
           jest.runAllTimers()
         },
-        trigger: () => { $(given.link).trigger('click') }
+        trigger: () => {
+          $(given.link).trigger('click')
+          jest.runAllTimers()
+        }
       })
     }
 
