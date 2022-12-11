@@ -9,6 +9,7 @@ group :development, :test do
   # Dummy app dependencies
   gem 'jquery-rails'
   gem 'rails'
+  gem 'webrick'
   gem 'sqlite3'
   gem "sprockets-rails" # Optional in Rails 7.0+
 
