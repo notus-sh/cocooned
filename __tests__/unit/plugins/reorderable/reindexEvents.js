@@ -2,7 +2,7 @@
 
 const Cocooned = require('@cocooned/src/javascripts/cocooned')
 const faker = require('@cocooned/tests/support/faker')
-const { asAttribute, clickEvent } = require('@cocooned/tests/support/helpers')
+const { setup, asAttribute, clickEvent } = require('@cocooned/tests/support/helpers')
 const { getItems, getAddLink, getRemoveLink, getMoveUpLink, getMoveDownLink } = require('@cocooned/tests/support/selectors')
 
 const itBehavesLikeAnEventListener = require('@cocooned/tests/unit/shared/events/listener')
@@ -48,10 +48,7 @@ describe('A Cocooned setup', () => {
     return item.style.display !== 'none'
   }))
 
-  beforeEach(() => {
-    document.body.innerHTML = given.template
-    given.cocooned
-  })
+  beforeEach(() => setup(document, given))
 
   describe('with options for the reorderable plugin', () => {
     beforeEach(() => {

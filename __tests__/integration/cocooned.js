@@ -2,20 +2,18 @@
 
 const Cocooned = require('@cocooned/src/javascripts/cocooned')
 const faker = require('@cocooned/tests/support/faker')
-const { clickEvent } = require('@cocooned/tests/support/helpers')
+const { setup, clickEvent } = require('@cocooned/tests/support/helpers')
+const { getAddLink, getRemoveLink, getMoveUpLink, getMoveDownLink } = require('@cocooned/tests/support/selectors')
 
 const fixtures = require('@cocooned/tests/fixtures/list.json')
 
 describe('A Rails generated Cocooned setup', () => {
   given('template', () => fixtures.template)
   given('container', () => document.querySelector('*[data-cocooned-options]'))
-  given('addLink', () => document.querySelector('.cocooned-add'))
   given('cocooned', () => new Cocooned(given.container))
+  given('addLink', () => getAddLink(given.container))
 
-  beforeEach(() => {
-    document.body.innerHTML = given.template
-    given.cocooned
-  })
+  beforeEach(() => setup(document, given))
 
   describe('when add link is clicked', () => {
     beforeEach(() => delegate('cocooned:before-insert'))
@@ -37,7 +35,7 @@ describe('A Rails generated Cocooned setup', () => {
       beforeEach(() => delegate('cocooned:before-remove'))
       afterEach(() => abnegate('cocooned:before-remove'))
 
-      given('removeLink', () => document.querySelector('.cocooned-remove'))
+      given('removeLink', () => getRemoveLink(given.container))
 
       it('fires a before-remove event', () => {
         const listener = jest.fn()
@@ -63,7 +61,7 @@ describe('A Rails generated Cocooned setup', () => {
       beforeEach(() => delegate('cocooned:before-move'))
       afterEach(() => abnegate('cocooned:before-move'))
 
-      given('moveLink', () => document.querySelectorAll('.cocooned-move-up').item(given.index))
+      given('moveLink', () => getMoveUpLink(given.container, given.index))
 
       it('fires a before-move event', () => {
         const listener = jest.fn()
@@ -78,7 +76,7 @@ describe('A Rails generated Cocooned setup', () => {
       beforeEach(() => delegate('cocooned:before-move'))
       afterEach(() => abnegate('cocooned:before-move'))
 
-      given('moveLink', () => document.querySelectorAll('.cocooned-move-down').item(given.index))
+      given('moveLink', () => getMoveDownLink(given.container, given.index))
 
       it('fires a before-move event', () => {
         const listener = jest.fn()

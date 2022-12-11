@@ -1,7 +1,7 @@
 /* global given */
 
 const Cocooned = require('@cocooned/src/javascripts/cocooned')
-const { asAttribute, clickEvent } = require('@cocooned/tests/support/helpers')
+const { setup, asAttribute, clickEvent } = require('@cocooned/tests/support/helpers')
 const { getItems, getItem, getRemoveLink } = require('@cocooned/tests/support/selectors')
 
 describe('A Cocooned setup', () => {
@@ -22,13 +22,10 @@ describe('A Cocooned setup', () => {
     </div>
   `)
   given('container', () => document.querySelector('section'))
-  given('item', () => getItem(given.container))
   given('cocooned', () => new Cocooned(given.container))
+  given('item', () => getItem(given.container))
 
-  beforeEach(() => {
-    document.body.innerHTML = given.template
-    given.cocooned
-  })
+  beforeEach(() => setup(document, given))
 
   describe('with existing item', () => {
     beforeEach(() => {

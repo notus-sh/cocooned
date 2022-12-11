@@ -1,7 +1,7 @@
 /* global given, delegate, abnegate */
 
 const Cocooned = require('@cocooned/src/javascripts/cocooned')
-const { asAttribute, clickEvent } = require('@cocooned/tests/support/helpers')
+const { setup, asAttribute, clickEvent } = require('@cocooned/tests/support/helpers')
 const { getItem, getRemoveLink } = require('@cocooned/tests/support/selectors')
 
 const itBehavesLikeAnEventListener = require('@cocooned/tests/unit/shared/events/listener')
@@ -25,14 +25,11 @@ describe('A Cocooned setup', () => {
     </div>
   `)
   given('container', () => document.querySelector('section'))
+  given('cocooned', () => new Cocooned(given.container))
   given('removeLink', () => getRemoveLink(given.container))
   given('item', () => getItem(given.container))
-  given('cocooned', () => new Cocooned(given.container))
 
-  beforeEach(() => {
-    document.body.innerHTML = given.template
-    given.cocooned
-  })
+  beforeEach(() => setup(document, given))
 
   describe('events on remove', () => {
     beforeEach(() => {

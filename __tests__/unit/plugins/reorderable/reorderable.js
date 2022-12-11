@@ -2,7 +2,7 @@
 
 const Cocooned = require('@cocooned/src/javascripts/cocooned')
 const faker = require('@cocooned/tests/support/faker')
-const { asAttribute, asInt, clickEvent } = require('@cocooned/tests/support/helpers')
+const { setup, asAttribute, asInt, clickEvent } = require('@cocooned/tests/support/helpers')
 const { getItems, getAddLink, getRemoveLink, getMoveUpLink, getMoveDownLink } = require('@cocooned/tests/support/selectors')
 
 describe('A Cocooned setup', () => {
@@ -48,10 +48,7 @@ describe('A Cocooned setup', () => {
     return asInt(item.querySelector('input[name$="[position]"]').getAttribute('value'))
   }))
 
-  beforeEach(() => {
-    document.body.innerHTML = given.template
-    given.cocooned
-  })
+  beforeEach(() => setup(document, given))
 
   describe('with options for the reorderable plugin', () => {
     describe('when adding an item', () => {

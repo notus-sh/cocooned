@@ -2,7 +2,7 @@
 
 const Cocooned = require('@cocooned/src/javascripts/cocooned')
 const faker = require('@cocooned/tests/support/faker')
-const { asAttribute, clickEvent } = require('@cocooned/tests/support/helpers')
+const { setup, asAttribute, clickEvent } = require('@cocooned/tests/support/helpers')
 const { getItems, getAddLink, getRemoveLink } = require('@cocooned/tests/support/selectors')
 
 describe('A Cocooned setup', () => {
@@ -19,14 +19,11 @@ describe('A Cocooned setup', () => {
   given('insertionTemplate', () => '<div class="cocooned-item"></div>')
   given('existing', () => '')
   given('container', () => document.querySelector('section'))
-  given('items', () => getItems(given.container))
   given('cocooned', () => new Cocooned(given.container, { limit: given.limit }))
+  given('items', () => getItems(given.container))
   given('addLink', () => getAddLink(given.container))
 
-  beforeEach(() => {
-    document.body.innerHTML = given.template
-    given.cocooned
-  })
+  beforeEach(() => setup(document, given))
 
   describe('with options for the limit plugin', () => {
     given('limit', () => faker.datatype.number({ min: 2, max: 5 }))

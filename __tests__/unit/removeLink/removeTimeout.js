@@ -2,7 +2,7 @@
 
 const Cocooned = require('@cocooned/src/javascripts/cocooned')
 const faker = require('@cocooned/tests/support/faker')
-const { asAttribute, clickEvent } = require('@cocooned/tests/support/helpers')
+const { setup, asAttribute, clickEvent } = require('@cocooned/tests/support/helpers')
 const { getItem, getRemoveLink } = require('@cocooned/tests/support/selectors')
 
 describe('A Cocooned setup with remove-timeout', () => {
@@ -24,13 +24,10 @@ describe('A Cocooned setup with remove-timeout', () => {
   `)
   given('timeout', () => faker.datatype.number({ min: 10, max: 50 }))
   given('container', () => document.querySelector('section'))
-  given('item', () => getItem(given.container))
   given('cocooned', () => new Cocooned(given.container))
+  given('item', () => getItem(given.container))
 
-  beforeEach(() => {
-    document.body.innerHTML = given.template
-    given.cocooned
-  })
+  beforeEach(() => setup(document, given))
 
   describe('with existing item', () => {
     given('existing', () => `

@@ -1,18 +1,18 @@
 /* global given */
 
 const Cocooned = require('@cocooned/src/javascripts/cocooned')
-const { asAttribute, clickEvent } = require('@cocooned/tests/support/helpers')
+const { setup, asAttribute, clickEvent } = require('@cocooned/tests/support/helpers')
 const { getItem, getAddLink } = require('@cocooned/tests/support/selectors')
 
 describe('A Cocooned setup', () => {
   given('insertionTemplate', () => '<div class="cocooned-item"></div>')
   given('container', () => document.querySelector('section'))
+  given('cocooned', () => new Cocooned(given.container))
   given('addLink', () => getAddLink(given.container))
   given('item', () => getItem(given.container))
 
   beforeEach(() => {
-    document.body.innerHTML = given.template
-    new Cocooned(given.container)
+    setup(document, given)
 
     given.addLink.dispatchEvent(clickEvent())
   })

@@ -1,7 +1,7 @@
 /* global given, delegate, abnegate */
 
 const Cocooned = require('@cocooned/src/javascripts/cocooned')
-const { asAttribute, clickEvent } = require('@cocooned/tests/support/helpers')
+const { setup, asAttribute, clickEvent } = require('@cocooned/tests/support/helpers')
 const { getItems, getAddLink } = require('@cocooned/tests/support/selectors')
 
 const itBehavesLikeAnEventListener = require('@cocooned/tests/unit/shared/events/listener')
@@ -20,14 +20,11 @@ describe('A Cocooned setup', () => {
   given('insertionTemplate', () => '<div class="cocooned-item"></div>')
   given('existing', () => given.insertionTemplate)
   given('container', () => document.querySelector('section'))
-  given('items', () => getItems(given.container))
   given('cocooned', () => new Cocooned(given.container, { limit: 1 }))
+  given('items', () => getItems(given.container))
   given('addLink', () => getAddLink(given.container))
 
-  beforeEach(() => {
-    document.body.innerHTML = given.template
-    given.cocooned
-  })
+  beforeEach(() => setup(document, given))
 
   describe('when limit is reached', () => {
     beforeEach(() => delegate('cocooned:limit-reached', ['event', 'node', 'cocooned']))

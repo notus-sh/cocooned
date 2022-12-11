@@ -1,3 +1,10 @@
+const setup = function (doc, context) {
+  doc.body.innerHTML = context.template
+  if (typeof context.prepare === 'function') context.prepare()
+
+  return context.cocooned
+}
+
 const asAttribute = function (string) {
   return string.replaceAll(/</g, '&lt;')
     .replaceAll(/>/g, '&gt;')
@@ -14,6 +21,7 @@ const clickEvent = function () {
 }
 
 module.exports = {
+  setup,
   asAttribute,
   asInt,
   clickEvent
