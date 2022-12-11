@@ -1,4 +1,5 @@
 /* global given, jQuery, jest */
+/* eslint jest/no-export: "off" -- This is a shared examples */
 
 module.exports = ({ listen, dispatch, args = new Set(['link', 'node', 'cocooned']) }) => {
   describe('when triggered', () => {

@@ -7,7 +7,7 @@
   "parserOptions": { "ecmaVersion": 2015 },
   "overrides": [
     {
-      "files": ["__tests__/unit/**/*.js"],
+      "files": ["__tests__/{unit,integration}/**/*.js"],
       "plugins": ["jest", "jest-dom"],
       "extends": ["plugin:jest/recommended", "plugin:jest-dom/recommended"]
     }

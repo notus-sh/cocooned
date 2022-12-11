@@ -59,6 +59,7 @@ describe('A Cocooned reorderable setup', () => {
       abnegate('cocooned:after-move')
     })
 
+    /* eslint-disable jest/no-identical-title */
     const itBehavesLikeASingleMoveLink = () => {
       beforeEach(() => jest.useFakeTimers())
 
@@ -142,6 +143,7 @@ describe('A Cocooned reorderable setup', () => {
         }
       })
     }
+    /* eslint-enable jest/no-identical-title */
 
     describe('with a single item', () => {
       given('count', () => 1)

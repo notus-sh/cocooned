@@ -99,9 +99,9 @@
         const event = $.Event(namespacedEventType, eventData)
         const eventArgs = [eventData.cocooned]
 
-        if (eventData.hasOwnProperty('node')) {
+        if (Object.prototype.hasOwnProperty.call(eventData, 'node')) {
           eventArgs.unshift(eventData.node)
-        } else if (eventData.hasOwnProperty('nodes')) {
+        } else if (Object.prototype.hasOwnProperty.call(eventData, 'nodes')) {
           eventArgs.unshift(eventData.nodes)
         }
 

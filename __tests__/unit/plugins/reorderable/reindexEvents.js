@@ -1,4 +1,4 @@
-/* global given */
+/* global given, delegate, abnegate */
 
 const Cocooned = require('@cocooned/src/javascripts/cocooned')
 const faker = require('@cocooned/tests/support/faker')

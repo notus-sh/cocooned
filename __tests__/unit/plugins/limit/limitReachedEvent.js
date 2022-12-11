@@ -1,9 +1,9 @@
-/* global given */
+/* global given, delegate, abnegate */
 
 const Cocooned = require('@cocooned/src/javascripts/cocooned')
 const { asAttribute, clickEvent } = require('@cocooned/tests/support/helpers')
 
-const itBehavesLikeAnEventListener = require("@cocooned/tests/unit/shared/events/listener");
+const itBehavesLikeAnEventListener = require('@cocooned/tests/unit/shared/events/listener')
 
 describe('A Cocooned setup', () => {
   given('template', () => `

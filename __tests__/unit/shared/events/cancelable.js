@@ -1,8 +1,10 @@
 /* global given, $, jest */
+/* eslint jest/no-export: "off" -- This is a shared examples */
 
 module.exports = ({ event, dispatch, trigger }) => {
   describe('a cancelable operation', () => {
-    // See jQuery alternative below
+    /* TODO: Enable once we moved out ot jQuery events. Temporary alternative below; */
+    /* eslint-disable jest/no-disabled-tests, jest/no-identical-title */
     it.skip('is canceled if propagation of the before event is stopped', () => {
       const canceler = jest.fn(e => e.stopPropagation())
       given.container.addEventListener(`$cocooned:before-${event}`, canceler)
@@ -13,6 +15,7 @@ module.exports = ({ event, dispatch, trigger }) => {
 
       expect(listener).not.toHaveBeenCalled()
     })
+    /* eslint-enable jest/no-disabled-tests */
 
     it('is canceled if propagation of the before event is stopped', () => {
       const canceler = jest.fn(e => e.stopPropagation())
@@ -24,8 +27,10 @@ module.exports = ({ event, dispatch, trigger }) => {
 
       expect(listener).not.toHaveBeenCalled()
     })
+    /* eslint-enable jest/no-identical-title */
 
-    // See jQuery alternative below
+    /* TODO: Enable once we moved out ot jQuery events. Temporary alternative below; */
+    /* eslint-disable jest/no-disabled-tests, jest/no-identical-title */
     it.skip('is canceled if default behavior of the before event is prevented', () => {
       const canceler = jest.fn(e => e.preventDefault())
       given.container.addEventListener(`$cocooned:before-${event}`, canceler)
@@ -36,6 +41,7 @@ module.exports = ({ event, dispatch, trigger }) => {
 
       expect(listener).not.toHaveBeenCalled()
     })
+    /* eslint-enable jest/no-disabled-tests */
 
     it('is canceled if default behavior of the before event is prevented', () => {
       const canceler = jest.fn(e => e.preventDefault())
@@ -47,5 +53,6 @@ module.exports = ({ event, dispatch, trigger }) => {
 
       expect(listener).not.toHaveBeenCalled()
     })
+    /* eslint-enable jest/no-identical-title */
   })
 }

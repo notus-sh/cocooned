@@ -1,4 +1,4 @@
-/* global given */
+/* global given, delegate, abnegate */
 
 const Cocooned = require('@cocooned/src/javascripts/cocooned')
 const faker = require('@cocooned/tests/support/faker')
@@ -119,7 +119,7 @@ describe('A Cocooned setup', () => {
       describe('when moving it down', () => {
         given('moveDownLink', () => given.item.querySelector('.cocooned-move-down'))
 
-        it('increases its position by 1', () => {
+        it('increases its position by 1', (done) => {
           const positionBefore = position(given.item)
           const listener = jest.fn(() => {
             const positionAfter = position(given.item)
