@@ -101,32 +101,36 @@ describe('A Cocooned setup', () => {
       describe('when moving it up', () => {
         given('moveUpLink', () => getMoveUpLink(given.item))
 
-        it('decreases its position by 1', (done) => {
-          const positionBefore = position(given.item)
-          const listener = jest.fn(() => {
-            const positionAfter = position(given.item)
-            expect(positionAfter).toEqual(positionBefore - 1)
-            done()
-          })
+        it('decreases its position by 1', () => {
+          return new Promise(resolve => {
+            const positionBefore = position(given.item)
+            const listener = jest.fn(() => {
+              const positionAfter = position(given.item)
+              expect(positionAfter).toEqual(positionBefore - 1)
+              resolve()
+            })
 
-          given.container.addEventListener('$cocooned:after-move', listener)
-          given.moveUpLink.dispatchEvent(clickEvent())
+            given.container.addEventListener('$cocooned:after-move', listener)
+            given.moveUpLink.dispatchEvent(clickEvent())
+          })
         })
       })
 
       describe('when moving it down', () => {
         given('moveDownLink', () => getMoveDownLink(given.item))
 
-        it('increases its position by 1', (done) => {
-          const positionBefore = position(given.item)
-          const listener = jest.fn(() => {
-            const positionAfter = position(given.item)
-            expect(positionAfter).toEqual(positionBefore + 1)
-            done()
-          })
+        it('increases its position by 1', () => {
+          return new Promise(resolve => {
+            const positionBefore = position(given.item)
+            const listener = jest.fn(() => {
+              const positionAfter = position(given.item)
+              expect(positionAfter).toEqual(positionBefore + 1)
+              resolve()
+            })
 
-          given.container.addEventListener('$cocooned:after-move', listener)
-          given.moveDownLink.dispatchEvent(clickEvent())
+            given.container.addEventListener('$cocooned:after-move', listener)
+            given.moveDownLink.dispatchEvent(clickEvent())
+          })
         })
       })
     })

@@ -42,13 +42,15 @@ describe('A Cocooned setup with remove-timeout', () => {
       expect(given.item).toBeVisible()
     })
 
-    it('waits the specified time before hiding the item', done => {
-      given.removeLink.dispatchEvent(clickEvent())
+    it('waits the specified time before hiding the item', () => {
+      return new Promise(resolve => {
+        given.removeLink.dispatchEvent(clickEvent())
 
-      setTimeout(() => {
-        expect(given.item).not.toBeVisible()
-        done()
-      }, given.timeout)
+        setTimeout(() => {
+          expect(given.item).not.toBeVisible()
+          resolve()
+        }, given.timeout)
+      })
     })
   })
 })
