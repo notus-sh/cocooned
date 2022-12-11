@@ -2,6 +2,7 @@
 
 const Cocooned = require('@cocooned/src/javascripts/cocooned')
 const { asAttribute, clickEvent } = require('@cocooned/tests/support/helpers')
+const { getItem, getRemoveLink } = require('@cocooned/tests/support/selectors')
 
 const itBehavesLikeAnEventListener = require('@cocooned/tests/unit/shared/events/listener')
 const itBehavesLikeACancellableEvent = require('@cocooned/tests/unit/shared/events/cancelable')
@@ -24,8 +25,8 @@ describe('A Cocooned setup', () => {
     </div>
   `)
   given('container', () => document.querySelector('section'))
-  given('removeLink', () => document.querySelector('.cocooned-remove'))
-  given('item', () => given.container.querySelector('.cocooned-item'))
+  given('removeLink', () => getRemoveLink(given.container))
+  given('item', () => getItem(given.container))
   given('cocooned', () => new Cocooned(given.container))
 
   beforeEach(() => {

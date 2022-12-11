@@ -3,6 +3,7 @@
 const Cocooned = require('@cocooned/src/javascripts/cocooned')
 const faker = require('@cocooned/tests/support/faker')
 const { asAttribute, clickEvent } = require('@cocooned/tests/support/helpers')
+const { getItems, getAddLink, getRemoveLink } = require('@cocooned/tests/support/selectors')
 
 describe('A Cocooned setup', () => {
   given('template', () => `
@@ -18,9 +19,9 @@ describe('A Cocooned setup', () => {
   given('insertionTemplate', () => '<div class="cocooned-item"></div>')
   given('existing', () => '')
   given('container', () => document.querySelector('section'))
-  given('items', () => given.container.querySelectorAll('.cocooned-item'))
+  given('items', () => getItems(given.container))
   given('cocooned', () => new Cocooned(given.container, { limit: given.limit }))
-  given('addLink', () => given.container.querySelector('.cocooned-add'))
+  given('addLink', () => getAddLink(given.container))
 
   beforeEach(() => {
     document.body.innerHTML = given.template
@@ -55,7 +56,7 @@ describe('A Cocooned setup', () => {
       })
 
       describe('when removed', () => {
-        given('removeLink', () => document.querySelector('.cocooned-remove'))
+        given('removeLink', () => getRemoveLink(given.container))
 
         it('limits total number of visible items in the container', () => {
           given.removeLink.dispatchEvent(clickEvent())

@@ -3,6 +3,7 @@
 const Cocooned = require('@cocooned/src/javascripts/cocooned')
 const faker = require('@cocooned/tests/support/faker')
 const { asAttribute, clickEvent } = require('@cocooned/tests/support/helpers')
+const { getItems, getAddLink } = require('@cocooned/tests/support/selectors')
 
 describe('A Cocooned setup', () => {
   given('template', () => `
@@ -17,8 +18,8 @@ describe('A Cocooned setup', () => {
   `)
   given('insertionTemplate', () => '<div class="cocooned-item"></div>')
   given('container', () => document.querySelector('section'))
-  given('addLink', () => document.querySelector('.cocooned-add'))
-  given('items', () => given.container.querySelectorAll('.cocooned-item'))
+  given('addLink', () => getAddLink(given.container))
+  given('items', () => getItems(given.container))
 
   beforeEach(() => {
     document.body.innerHTML = given.template

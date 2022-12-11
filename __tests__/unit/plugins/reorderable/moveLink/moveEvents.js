@@ -3,6 +3,7 @@
 const Cocooned = require('@cocooned/src/javascripts/cocooned')
 const faker = require('@cocooned/tests/support/faker')
 const { asAttribute, clickEvent } = require('@cocooned/tests/support/helpers')
+const { getAddLink, getMoveDownLinks, getMoveUpLinks } = require('@cocooned/tests/support/selectors')
 
 const itBehavesLikeAnEventListener = require('@cocooned/tests/unit/shared/events/listener')
 const itBehavesLikeACancellableEvent = require('@cocooned/tests/unit/shared/events/cancelable')
@@ -40,9 +41,9 @@ describe('A Cocooned reorderable setup', () => {
   `).join(''))
   given('container', () => document.querySelector('section'))
   given('cocooned', () => new Cocooned(given.container, { reorderable: true }))
-  given('addLink', () => given.container.querySelector('.cocooned-add'))
-  given('moveUpLinks', () => given.container.querySelectorAll('.cocooned-move-up'))
-  given('moveDownLinks', () => given.container.querySelectorAll('.cocooned-move-down'))
+  given('addLink', () => getAddLink(given.container))
+  given('moveUpLinks', () => getMoveUpLinks(given.container))
+  given('moveDownLinks', () => getMoveDownLinks(given.container))
 
   beforeEach(() => {
     document.body.innerHTML = given.template

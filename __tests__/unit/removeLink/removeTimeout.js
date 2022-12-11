@@ -3,6 +3,7 @@
 const Cocooned = require('@cocooned/src/javascripts/cocooned')
 const faker = require('@cocooned/tests/support/faker')
 const { asAttribute, clickEvent } = require('@cocooned/tests/support/helpers')
+const { getItem, getRemoveLink } = require('@cocooned/tests/support/selectors')
 
 describe('A Cocooned setup with remove-timeout', () => {
   given('template', () => `
@@ -23,7 +24,7 @@ describe('A Cocooned setup with remove-timeout', () => {
   `)
   given('timeout', () => faker.datatype.number({ min: 10, max: 50 }))
   given('container', () => document.querySelector('section'))
-  given('item', () => given.container.querySelector('.cocooned-item'))
+  given('item', () => getItem(given.container))
   given('cocooned', () => new Cocooned(given.container))
 
   beforeEach(() => {
@@ -37,7 +38,7 @@ describe('A Cocooned setup with remove-timeout', () => {
         <a class="cocooned-remove existing" href="#">Remove</a>
       </div>
     `)
-    given('removeLink', () => document.querySelector('.cocooned-remove'))
+    given('removeLink', () => getRemoveLink(given.container))
 
     it('waits before hiding the item', () => {
       given.removeLink.dispatchEvent(clickEvent())

@@ -3,6 +3,7 @@
 const Cocooned = require('@cocooned/src/javascripts/cocooned')
 const faker = require('@cocooned/tests/support/faker')
 const { asAttribute, clickEvent } = require('@cocooned/tests/support/helpers')
+const { getItems, getAddLink, getRemoveLink, getMoveUpLink, getMoveDownLink } = require('@cocooned/tests/support/selectors')
 
 const itBehavesLikeAnEventListener = require('@cocooned/tests/unit/shared/events/listener')
 const itBehavesLikeACancellableEvent = require('@cocooned/tests/unit/shared/events/cancelable')
@@ -41,8 +42,8 @@ describe('A Cocooned setup', () => {
   `).join(''))
   given('container', () => document.querySelector('section'))
   given('cocooned', () => new Cocooned(given.container, { reorderable: true }))
-  given('addLink', () => given.container.querySelector('.cocooned-add'))
-  given('items', () => given.container.querySelectorAll('.cocooned-item'))
+  given('addLink', () => getAddLink(given.container))
+  given('items', () => getItems(given.container))
   given('visibleItems', () => Array.from(given.items).filter(item => {
     return item.style.display !== 'none'
   }))
@@ -128,7 +129,7 @@ describe('A Cocooned setup', () => {
 
     describe('when removing an existing item', () => {
       given('index', () => faker.datatype.number({ max: given.count - 1 }))
-      given('link', () => given.container.querySelectorAll('.cocooned-remove.existing').item(given.index))
+      given('link', () => getRemoveLink(given.container, '.existing', given.index))
 
       itBehavesLikeAReindexer()
     })
@@ -136,7 +137,7 @@ describe('A Cocooned setup', () => {
     describe('when removing a dynamic item', () => {
       beforeEach(() => given.addLink.dispatchEvent(clickEvent()))
 
-      given('link', () => given.container.querySelectorAll('.cocooned-remove.dynamic').item(0))
+      given('link', () => getRemoveLink(given.container, '.dynamic'))
 
       itBehavesLikeAReindexer()
     })
@@ -146,13 +147,13 @@ describe('A Cocooned setup', () => {
       given('item', () => given.items.item(given.index))
 
       describe('when moving it up', () => {
-        given('link', () => given.item.querySelector('.cocooned-move-up'))
+        given('link', () => getMoveUpLink(given.item))
 
         itBehavesLikeAReindexer()
       })
 
       describe('when moving it down', () => {
-        given('link', () => given.item.querySelector('.cocooned-move-down'))
+        given('link', () => getMoveDownLink(given.item))
 
         itBehavesLikeAReindexer()
       })

@@ -2,6 +2,7 @@
 
 const Cocooned = require('@cocooned/src/javascripts/cocooned')
 const { asAttribute, clickEvent } = require('@cocooned/tests/support/helpers')
+const { getItems, getItem, getRemoveLink } = require('@cocooned/tests/support/selectors')
 
 describe('A Cocooned setup', () => {
   given('template', () => `
@@ -21,7 +22,7 @@ describe('A Cocooned setup', () => {
     </div>
   `)
   given('container', () => document.querySelector('section'))
-  given('item', () => given.container.querySelector('.cocooned-item'))
+  given('item', () => getItem(given.container))
   given('cocooned', () => new Cocooned(given.container))
 
   beforeEach(() => {
@@ -40,10 +41,10 @@ describe('A Cocooned setup', () => {
         <a class="cocooned-remove existing" href="#">Remove</a>
       </div>
     `)
-    given('removeLink', () => document.querySelector('.cocooned-remove'))
+    given('removeLink', () => getRemoveLink(given.container))
 
     it('does not remove the item from the container', () => {
-      expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(1)
+      expect(getItems(given.container).length).toEqual(1)
     })
 
     it('hides the item', () => {

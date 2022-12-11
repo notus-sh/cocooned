@@ -2,6 +2,7 @@
 
 const Cocooned = require('@cocooned/src/javascripts/cocooned')
 const { asAttribute, clickEvent } = require('@cocooned/tests/support/helpers')
+const { getItems, getAddLink, getRemoveLink } = require('@cocooned/tests/support/selectors')
 
 describe('A basic Cocooned setup', () => {
   given('template', () => `
@@ -26,7 +27,7 @@ describe('A basic Cocooned setup', () => {
   })
 
   it('does not change container content', () => {
-    expect(document.querySelectorAll('.cocooned-item').length).toEqual(1)
+    expect(getItems(given.container).length).toEqual(1)
   })
 
   it('associates itself with container', () => {
@@ -42,19 +43,19 @@ describe('A basic Cocooned setup', () => {
   })
 
   describe('when add link is clicked', () => {
-    given('addLink', () => document.querySelector('.cocooned-add'))
+    given('addLink', () => getAddLink(given.container))
 
     it('adds an item to the container', () => {
       given.addLink.dispatchEvent(clickEvent())
 
-      expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(2)
+      expect(getItems(given.container).length).toEqual(2)
     })
 
     it('adds an item to the container every time it is clicked', () => {
       given.addLink.dispatchEvent(clickEvent())
       given.addLink.dispatchEvent(clickEvent())
 
-      expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(3)
+      expect(getItems(given.container).length).toEqual(3)
     })
   })
 
@@ -66,26 +67,26 @@ describe('A basic Cocooned setup', () => {
     `)
 
     describe('when remove link is clicked', () => {
-      given('addLink', () => document.querySelector('.cocooned-add'))
-      given('removeLink', () => document.querySelector('.cocooned-remove'))
+      given('addLink', () => getAddLink(given.container))
+      given('removeLink', () => getRemoveLink(given.container))
 
       it('removes an item from the container', () => {
         given.removeLink.dispatchEvent(clickEvent())
 
-        expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(0)
+        expect(getItems(given.container).length).toEqual(0)
       })
 
       it('removes only one item from the container', () => {
         given.addLink.dispatchEvent(clickEvent())
         given.removeLink.dispatchEvent(clickEvent())
 
-        expect(given.container.querySelectorAll('.cocooned-item').length).toEqual(1)
+        expect(getItems(given.container).length).toEqual(1)
       })
 
       it('removes the correct item from the container', () => {
         given.addLink.dispatchEvent(clickEvent())
-        const inserted = Array.from(given.container.querySelectorAll('.cocooned-item')).pop()
-        inserted.querySelector('.cocooned-remove').dispatchEvent(clickEvent())
+        const inserted = Array.from(getItems(given.container)).pop()
+        getRemoveLink(inserted).dispatchEvent(clickEvent())
 
         expect(inserted).not.toBeInTheDocument()
       })

@@ -3,6 +3,7 @@
 const Cocooned = require('@cocooned/src/javascripts/cocooned')
 const faker = require('@cocooned/tests/support/faker')
 const { asAttribute, asInt, clickEvent } = require('@cocooned/tests/support/helpers')
+const { getItems, getAddLink, getRemoveLink, getMoveUpLink, getMoveDownLink } = require('@cocooned/tests/support/selectors')
 
 describe('A Cocooned setup', () => {
   given('template', () => `
@@ -38,8 +39,8 @@ describe('A Cocooned setup', () => {
   `).join(''))
   given('container', () => document.querySelector('section'))
   given('cocooned', () => new Cocooned(given.container, { reorderable: true }))
-  given('addLink', () => given.container.querySelector('.cocooned-add'))
-  given('items', () => given.container.querySelectorAll('.cocooned-item'))
+  given('addLink', () => getAddLink(given.container))
+  given('items', () => getItems(given.container))
   given('visibleItems', () => Array.from(given.items).filter(item => {
     return item.style.display !== 'none'
   }))
@@ -65,7 +66,7 @@ describe('A Cocooned setup', () => {
       beforeEach(() => given.removeLink.dispatchEvent(clickEvent()))
 
       given('index', () => faker.datatype.number({ max: given.count - 1 }))
-      given('removeLink', () => given.container.querySelectorAll('.cocooned-remove.existing').item(given.index))
+      given('removeLink', () => getRemoveLink(given.container, '.existing', given.index))
 
       it('reorders remaining items', () => {
         expect(given.positions).toEqual(Array.from(Array(given.count - 1), (_, i) => i + 1))
@@ -78,7 +79,7 @@ describe('A Cocooned setup', () => {
         given.removeLink.dispatchEvent(clickEvent())
       })
 
-      given('removeLink', () => given.container.querySelectorAll('.cocooned-remove.dynamic').item(0))
+      given('removeLink', () => getRemoveLink(given.container, '.dynamic'))
 
       it('reorders remaining items', () => {
         expect(given.positions).toEqual(Array.from(Array(given.count), (_, i) => i + 1))
@@ -101,7 +102,7 @@ describe('A Cocooned setup', () => {
       const position = (item) => asInt(item.querySelector('input[name*=position]').getAttribute('value'))
 
       describe('when moving it up', () => {
-        given('moveUpLink', () => given.item.querySelector('.cocooned-move-up'))
+        given('moveUpLink', () => getMoveUpLink(given.item))
 
         it('decreases its position by 1', (done) => {
           const positionBefore = position(given.item)
@@ -117,7 +118,7 @@ describe('A Cocooned setup', () => {
       })
 
       describe('when moving it down', () => {
-        given('moveDownLink', () => given.item.querySelector('.cocooned-move-down'))
+        given('moveDownLink', () => getMoveDownLink(given.item))
 
         it('increases its position by 1', (done) => {
           const positionBefore = position(given.item)
