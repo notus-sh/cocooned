@@ -97,9 +97,15 @@
       return !(this.namespaces.events.some(function (namespace) {
         const namespacedEventType = [namespace, eventType].join(':')
         const event = $.Event(namespacedEventType, eventData)
+        const eventArgs = [eventData.cocooned]
 
-        node.trigger(event, [eventData.node, eventData.cocooned])
+        if (eventData.hasOwnProperty('node')) {
+          eventArgs.unshift(eventData.node)
+        } else if (eventData.hasOwnProperty('nodes')) {
+          eventArgs.unshift(eventData.nodes)
+        }
 
+        node.trigger(event, eventArgs)
         return (event.isPropagationStopped() || event.isDefaultPrevented())
       }))
     },

@@ -62,7 +62,7 @@ module.exports = ({ listen, dispatch, args = new Set(['link', 'node', 'cocooned'
     }
 
     if (args.has('nodes')) {
-      xit('receives the manipulated nodes as event data', done => {
+      it('receives the manipulated nodes as event data', done => {
         const listener = jest.fn(e => {
           expect(e).toHaveProperty('detail.event.nodes')
           expect(e.detail.event.nodes).toBeInstanceOf(jQuery)
@@ -73,7 +73,7 @@ module.exports = ({ listen, dispatch, args = new Set(['link', 'node', 'cocooned'
         dispatch()
       })
 
-      xit('receives the manipulated nodes as second argument', done => {
+      it('receives the manipulated nodes as second argument', done => {
         const listener = jest.fn(e => {
           expect(e).toHaveProperty('detail.event.nodes')
           expect(e.detail.nodes).toBeInstanceOf(jQuery)
