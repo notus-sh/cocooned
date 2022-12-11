@@ -25,7 +25,7 @@ Gem::Specification.new do |spec|
       %w[.gitignore .rspec .travis.yml].include?(f) ||
       %w[Gemfile Gemfile.lock package.json yarn.lock].include?(f)
   end
-  spec.required_ruby_version = '>= 2.5'
+  spec.required_ruby_version = '>= 2.6'
 
   spec.add_dependency 'rails', '>= 5.0', '<= 7.1'
 
