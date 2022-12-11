@@ -65,9 +65,7 @@ describe('A Cocooned setup', () => {
       beforeEach(() => given.removeLink.dispatchEvent(clickEvent()))
 
       given('index', () => faker.datatype.number({ max: given.count - 1 }))
-      given('removeLink', () => {
-        return given.container.querySelectorAll('.cocooned-remove.existing').item(given.index)
-      })
+      given('removeLink', () => given.container.querySelectorAll('.cocooned-remove.existing').item(given.index))
 
       it('reorders remaining items', () => {
         expect(given.positions).toEqual(Array.from(Array(given.count - 1), (_, i) => i + 1))
