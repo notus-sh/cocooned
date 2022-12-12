@@ -4,7 +4,7 @@
     "browser": true,
     "jquery": true
   },
-  "parserOptions": { "ecmaVersion": 2015 },
+  "parserOptions": { "ecmaVersion": 2018 },
   "overrides": [
     {
       "files": ["__tests__/{unit,integration}/**/*.js"],

@@ -1,7 +1,7 @@
 /* global given */
 
-const Cocooned = require('@cocooned/src/javascripts/cocooned');
-const { setup, asAttribute, clickEvent } = require('@cocooned/tests/support/helpers');
+const Cocooned = require('@cocooned/src/javascripts/cocooned')
+const { setup, asAttribute, clickEvent } = require('@cocooned/tests/support/helpers')
 const { getItem, getAddLink } = require('@cocooned/tests/support/selectors')
 
 describe('A Cocooned setup', () => {
@@ -31,7 +31,7 @@ describe('A Cocooned setup', () => {
     `)
 
     it('insert new item with correct markup', () => {
-      expect(given.item.outerHTML).toEqual(given.insertionTemplate.trim());
+      expect(given.item.outerHTML).toEqual(given.insertionTemplate.trim())
     })
   })
 
@@ -45,7 +45,7 @@ describe('A Cocooned setup', () => {
                name="list[items_attributes][new_items][label]"
                id="list_items_attributes_new_items_label" />
       </div>
-    `);
+    `)
 
     describe('with underscored attributes', () => {
       const attributes = [
@@ -70,10 +70,10 @@ describe('A Cocooned setup', () => {
           return given.item.querySelector(selector).getAttribute(attribute)
         })
         const uniqIds = values.map(value => {
-          return value.match(/list_items_attributes_(?<id>[0-9]+)_label/).groups.id
+          return value.match(/^list_items_attributes_(?<id>[0-9]+)_label$/).groups.id
         })
 
-        expect([...new Set(uniqIds)]).toEqual([uniqIds[0]]);
+        expect([...new Set(uniqIds)]).toEqual([uniqIds[0]])
       })
     })
 
