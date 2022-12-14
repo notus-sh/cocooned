@@ -1,8 +1,14 @@
 # Change History / Release Notes
 
-## Version 2.0.0 (Not released yet)
+## Version 1.5.0 (Not released yet)
 
-* Remove dependency to jQuery
+* Rewrite JavaScript tests suite with [Jest](https://jestjs.io/)  
+  In replacement of the deprecated Jasmine JavaScript tests runner.
+
+## Version 1.4.1
+
+* Compatibility with Rails >= 7.0
+* Compatibility with Ruby >= 3.1
 
 ## Version 1.4.0
 

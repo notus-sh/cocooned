@@ -25,15 +25,14 @@ Gem::Specification.new do |spec|
       %w[.gitignore .rspec .travis.yml].include?(f) ||
       %w[Gemfile Gemfile.lock package.json yarn.lock].include?(f)
   end
-  spec.required_ruby_version = '>= 2.5'
+  spec.required_ruby_version = '>= 2.6'
 
   spec.add_dependency 'rails', '>= 5.0', '<= 7.1'
 
   spec.add_development_dependency 'bundler', '~> 2.1'
-  spec.add_development_dependency 'jasmine', '~> 3.2'
   spec.add_development_dependency 'rake'
-  spec.add_development_dependency 'rspec', '~> 3.10.0'
-  spec.add_development_dependency 'rspec-rails', '~> 5.0.0'
+  spec.add_development_dependency 'rspec', '~> 3.11'
+  spec.add_development_dependency 'rspec-rails', '~> 6.0'
   spec.add_development_dependency 'rubocop'
   spec.add_development_dependency 'rubocop-performance'
   spec.add_development_dependency 'rubocop-rails'

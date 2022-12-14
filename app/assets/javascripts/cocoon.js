@@ -5,11 +5,11 @@
 // TODO: Remove in 3.0
 function initCocoon () {
   $(Cocooned.prototype.selector('add')).each(function (_i, addLink) {
-    var container = Cocooned.prototype.findContainer(addLink);
-    var limit = parseInt($(addLink).data('limit'), 10) || false;
+    const container = Cocooned.prototype.findContainer(addLink)
+    const limit = parseInt($(addLink).data('limit'), 10) || false
 
-    container.cocooned({ limit: limit });
-  });
+    container.cocooned({ limit })
+  })
 }
 
-$(initCocoon);
+$(initCocoon)

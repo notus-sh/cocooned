@@ -13,6 +13,7 @@
   "author": <%= contributors.first.to_json %>,
   "contributors": <%= contributors.collect { |c| { name: c[:name], email: c[:email] } }.to_json %>,
 
+  "browser": true,
   "main": "cocooned.js",
   "files": ["cocooned.js", "cocooned.css", "README", "LICENSE", "package.json"],
 

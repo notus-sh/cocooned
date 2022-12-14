@@ -10,6 +10,7 @@ inherit_mode:
     - Exclude
 
 AllCops:
+  TargetRubyVersion: 2.6
   Exclude:
     - 'spec/dummy/bin/*'
 
@@ -21,8 +22,7 @@ Metrics/BlockLength:
     - 'Rakefile'
     - '**/cocooned.gemspec'
     - 'spec/dummy/db/schema.rb'
-    - 'spec/cocooned/**/*_spec.rb'
-    - 'spec/shared_examples/**/*.rb'
+    - 'spec/unit/**/*_spec.rb'
 
 RSpec/FilePath:
   Enabled: false
