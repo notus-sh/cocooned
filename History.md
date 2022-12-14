@@ -4,6 +4,10 @@
 
 * Remove dependency to jQuery
 
+## Version 1.4.1
+
+* Compatibility with Rails 7.0
+
 ## Version 1.4.0
 
 ### Breaking changes
@@ -13,22 +17,23 @@
 
 ### New features
 
-* Add support for @hotwired/turbo
+* Add support for @hotwired/turbo (thanks @entretechno-jeremiah in [nathanvda/cocoon#600](https://github.com/nathanvda/cocoon/pull/600))
   
 ### Bug fixes and other changes
 
 * Prevent side effects on options passed to view helpers.
-* Use form builder to add the hidden `_destroy` field instead of `hidden_field`.
+* Prevent event propagation to parent elements (thanks @ashmill23 in [nathanvda/cocoon#560](https://github.com/nathanvda/cocoon/pull/560) and @zmagod in [nathanvda/cocoon#536](https://github.com/nathanvda/cocoon/pull/536))
+* Use form builder to add the hidden `_destroy` field instead of `hidden_field` (thanks @rradonic in [nathanvda/cocoon#559](https://github.com/nathanvda/cocoon/pull/559))
 * Update deprecation warnings to postpone compatibility drop with the original `cocoon` to 3.0 (instead of 2.0)
 
 ## Version 1.3.2
 
-* Compatibility with Mongoid 7+
+* Compatibility with Mongoid 7+ (thanks @startouf in [nathanvda/cocoon#527](https://github.com/nathanvda/cocoon/pull/527))
 
 ## Version 1.3.1
 
 * Use UMD pattern to load the Cocooned module
-* Now publish packages on both rubygems.org and npmjs.com
+* Now publish packages on both rubygems.org and npmjs.com (fixes [nathanvda/cocoon#452](https://github.com/nathanvda/cocoon/issue/452), [nathanvda/cocoon#555](https://github.com/nathanvda/cocoon/issue/555))
 
 ## Version 1.3.0
 
@@ -57,11 +62,11 @@ Other deprecations:
 ### Non-breaking changes
 
 * Refactor cocoon javascript as a self-contained object with same functionalities
-* Automatically remove `required` attributes on destroyed elements (thanks @markkhair)
+* Automatically remove `required` attributes on destroyed elements (thanks @markkhair in [nathanvda/cocoon#496](https://github.com/nathanvda/cocoon/pull/496), fixes [nathanvda/cocoon#386](https://github.com/nathanvda/cocoon/issue/386))
 * Add extra properties on events (thanks @ayaman)
-* Add a basic package.json to be used with Webpack (thanks @dmfrancisco)
-* Compatibility with jQuery 3 (thanks @mstmfm)
-* Namespace click handlers (thanks @chrise86)
+* Add a basic package.json to be used with Webpack (thanks @dmfrancisco in [nathanvda/cocoon#454](https://github.com/nathanvda/cocoon/pull/454))
+* Compatibility with jQuery 3 (thanks @mstmfm  in [nathanvda/cocoon#379](https://github.com/nathanvda/cocoon/pull/379))
+* Namespace click handlers (thanks @chrise86 in [nathanvda/cocoon#310](https://github.com/nathanvda/cocoon/pull/310))
 * Drop support for Ruby 1.9 (thanks @simi)
 * Remove Jeweller (thanks @brixen, @tlynam)
 
