@@ -296,7 +296,7 @@ module Cocooned
 
     def cocooned_extract_data!(html_options)
       data = {
-        count: [
+        association_insertion_count: [
           html_options.delete(:count).to_i,
           (html_options.key?(:data) ? html_options[:data].delete(:count) : 0).to_i,
           1
@@ -312,6 +312,10 @@ module Cocooned
         key = data_key.to_s.gsub(/^data[_-]/, '')
         d[key] = html_options.delete(data_key)
       end
+
+      # Compatibility with the old JavaScript option name
+      data[:count] = data[:association_insertion_count]
+
       data.compact
     end
 

@@ -11,7 +11,7 @@ namespace :test do
       response = ListsController.action(:new).call({ 'REQUEST_METHOD' => 'GET', 'rack.input' => '' })
       template = Nokogiri::HTML(response.last.body).at('body > form')
 
-      File.open('./__tests__/fixtures/list.json', 'w+') do |f|
+      File.open('./npm/__tests__/fixtures/list.json', 'w+') do |f|
         f.puts JSON.dump({ template: template })
       end
     end

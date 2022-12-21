@@ -179,13 +179,13 @@ describe Cocooned::Helpers do
         it 'has the correct data attribute' do
           link = parse_link(method.call('label', form, :posts, count: 2))
 
-          expect(link.attribute('data-count').value.to_i).to eq(2)
+          expect(link.attribute('data-association-insertion-count').value.to_i).to eq(2)
         end
 
         it 'also accepts count as a data attribute' do
           link = parse_link(method.call('label', form, :posts, data: { count: 2 }))
 
-          expect(link.attribute('data-count').value.to_i).to eq(2)
+          expect(link.attribute('data-association-insertion-count').value.to_i).to eq(2)
         end
       end
 

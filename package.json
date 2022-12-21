@@ -4,11 +4,12 @@
   "browser": true,
   "description": "Development dependencies description file. For the real package.json, see ./npm",
   "scripts": {
-    "test": "jest --config __tests__/jest.config.js --showSeed"
+    "build": "rollup --config config/rollup.config.js --bundleConfigAsCjs",
+    "test": "jest --config npm/__tests__/jest.config.js --showSeed"
   },
   "dependencies": {
-    "@cocooned/src": "link:./app/assets",
-    "@cocooned/tests": "link:./__tests__"
+    "@notus.sh/cocooned": "link:./npm/src",
+    "@cocooned/tests": "link:./npm/__tests__"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
@@ -24,6 +25,7 @@
     "jest": "^29.1.2",
     "jest-environment-jsdom": "^29.1.2",
     "jquery": "^3.0.0",
-    "jquery-events-to-dom-events": "^1.1.0"
+    "jquery-events-to-dom-events": "^1.1.0",
+    "rollup": "^3.7.5"
   }
 }

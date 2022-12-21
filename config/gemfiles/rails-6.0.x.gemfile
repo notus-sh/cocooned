@@ -1,0 +1,12 @@
+source 'http://rubygems.org'
+
+gemspec path: '../..'
+
+group :development, :test do
+  gem 'jquery-rails'
+  gem 'rails', '~> 6.0.0'
+  gem 'sqlite3'
+
+  gem 'nokogiri'
+  gem 'simplecov', require: false
+end
