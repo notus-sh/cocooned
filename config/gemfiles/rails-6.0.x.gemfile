@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gemspec path: '..'
+gemspec path: '../..'
 
 group :development, :test do
   gem 'jquery-rails'
