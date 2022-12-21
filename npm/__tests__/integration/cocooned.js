@@ -1,11 +1,12 @@
 /* global given, delegate, abnegate */
 
-const Cocooned = require('@notus.sh/cocooned/cocooned')
-const faker = require('@cocooned/tests/support/faker')
-const { setup, clickEvent } = require('@cocooned/tests/support/helpers')
-const { getAddLink, getRemoveLink, getMoveUpLink, getMoveDownLink } = require('@cocooned/tests/support/selectors')
+import Cocooned from '@notus.sh/cocooned/cocooned'
+import { jest } from '@jest/globals'
+import { faker } from '@cocooned/tests/support/faker'
+import { setup, clickEvent } from '@cocooned/tests/support/helpers'
+import { getAddLink, getRemoveLink, getMoveUpLink, getMoveDownLink } from '@cocooned/tests/support/selectors'
 
-const fixtures = require('@cocooned/tests/fixtures/list.json')
+import fixtures from '@cocooned/tests/fixtures/list.json' assert { type: 'json' }
 
 describe('A Rails generated Cocooned setup', () => {
   given('template', () => fixtures.template)

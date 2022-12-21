@@ -1,7 +1,7 @@
 /* global given */
 
-require('@notus.sh/cocooned/cocooned')
-const { asAttribute } = require('@cocooned/tests/support/helpers')
+import '@notus.sh/cocooned/cocooned'
+import { asAttribute } from '@cocooned/tests/support/helpers'
 
 describe('A Cocooned setup', () => {
   given('template', () => `

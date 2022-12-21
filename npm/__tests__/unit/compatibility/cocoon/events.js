@@ -1,8 +1,9 @@
 /* global given */
 
-const Cocooned = require('@notus.sh/cocooned/cocooned')
-const { setup, asAttribute, clickEvent } = require('@cocooned/tests/support/helpers')
-const { getAddLink, getRemoveLink } = require('@cocooned/tests/support/selectors')
+import Cocooned from '@notus.sh/cocooned/cocooned'
+import { jest } from '@jest/globals'
+import { setup, asAttribute, clickEvent } from '@cocooned/tests/support/helpers'
+import { getAddLink, getRemoveLink } from '@cocooned/tests/support/selectors'
 
 describe('A Cocoon setup using Cocoon events', () => {
   given('template', () => `

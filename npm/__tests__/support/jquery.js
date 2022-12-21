@@ -1,5 +1,5 @@
-const jQuery = require('jquery')
-const { delegate, abnegate } = require('jquery-events-to-dom-events')
+import jQuery from 'jquery'
+import { delegate, abnegate } from 'jquery-events-to-dom-events'
 
 // Change jQuery handler for the document ready event to immediately executed callbacks.
 jQuery.fn.ready = function (fn) {

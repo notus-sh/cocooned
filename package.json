@@ -1,11 +1,13 @@
 {
   "name": "cocooned",
   "private": true,
+  "type": "module",
   "browser": true,
   "description": "Development dependencies description file. For the real package.json, see ./npm",
   "scripts": {
     "build": "rollup --config config/rollup.config.js --bundleConfigAsCjs",
-    "test": "jest --config npm/__tests__/jest.config.js --showSeed"
+    "test": "yarn run jest:esm --config npm/__tests__/jest.config.js --showSeed",
+    "jest:esm": "NODE_NO_WARNINGS=1 yarn node --experimental-vm-modules $(yarn bin jest)"
   },
   "dependencies": {
     "@notus.sh/cocooned": "link:./npm/src",

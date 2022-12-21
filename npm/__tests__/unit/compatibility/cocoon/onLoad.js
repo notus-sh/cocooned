@@ -1,6 +1,7 @@
 /* global given */
 
-const { asAttribute } = require('@cocooned/tests/support/helpers')
+import Cocooned from '@notus.sh/cocooned/cocooned'
+import { asAttribute } from '@cocooned/tests/support/helpers'
 
 describe('A Cocoon setup', () => {
   given('template', () => `
@@ -14,10 +15,10 @@ describe('A Cocoon setup', () => {
   given('insertionTemplate', () => '<div class="cocooned-item"></div>')
   given('container', () => document.querySelector('section'))
 
-  beforeEach(() => {
+  beforeEach(async () => {
     document.body.innerHTML = given.template
-    window.Cocooned = require('@notus.sh/cocooned/cocooned')
-    require('../../../../../app/assets/javascripts/cocoon')
+    window.Cocooned = Cocooned
+    await import('../../../../../app/assets/javascripts/cocoon')
   })
 
   it('is instanciated as a Cocooned instance', () => {

@@ -38,7 +38,7 @@ const getMoveDownLink = function (container, item = 0) {
   return getMoveDownLinks(container).item(item)
 }
 
-module.exports = {
+export {
   getItems,
   getItem,
   getAddLinks,
