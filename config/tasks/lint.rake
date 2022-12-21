@@ -10,7 +10,7 @@ end
 # rubocop:disable Rails/RakeEnvironment
 # eslint related tasks does not need to load Rails environment
 eslint_args = ['--no-eslintrc', '--config config/linters/js.json']
-eslint_path = ['app/assets/', '__tests__/']
+eslint_path = ['npm/src', 'npm/__tests__/']
 
 namespace :eslint do
   desc 'Auto-correct eslint offenses'

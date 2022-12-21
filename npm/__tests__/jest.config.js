@@ -33,8 +33,8 @@ export default {
 
   // An array of regexp pattern strings used to skip coverage collection
   coveragePathIgnorePatterns: [
-    "/node_modules/",
-    "/__tests__/"
+    '/node_modules/',
+    '/__tests__/'
   ],
 
   // Indicates which provider should be used to instrument code for coverage
@@ -47,7 +47,7 @@ export default {
   //   "lcov",
   //   "clover"
   // ],
-  coverageReporters: ["text"],
+  coverageReporters: ['text'],
 
   // An object that configures minimum threshold enforcement for coverage results
   // coverageThreshold: undefined,
@@ -202,7 +202,7 @@ export default {
   // testRunner: "jest-circus/runner",
 
   // A map from regular expressions to paths to transformers
-  transform: {},
+  transform: {}
 
   // An array of regexp pattern strings that are matched against all source file
   // paths, matched files will skip transformation

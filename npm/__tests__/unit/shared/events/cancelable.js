@@ -1,4 +1,4 @@
-/* global given, $, jest */
+/* global given, $ */
 /* eslint jest/no-export: "off" -- This is a shared examples */
 
 import { jest } from '@jest/globals'

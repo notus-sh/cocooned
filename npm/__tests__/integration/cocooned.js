@@ -6,7 +6,10 @@ import { faker } from '@cocooned/tests/support/faker'
 import { setup, clickEvent } from '@cocooned/tests/support/helpers'
 import { getAddLink, getRemoveLink, getMoveUpLink, getMoveDownLink } from '@cocooned/tests/support/selectors'
 
-import fixtures from '@cocooned/tests/fixtures/list.json' assert { type: 'json' }
+// TODO: When officially supported, replace with:
+// import fixtures from '@cocooned/tests/fixtures/list.json' assert { type: 'json' }
+import { readFile } from 'fs/promises'
+const fixtures = JSON.parse(await readFile(new URL('./../fixtures/list.json', import.meta.url)))
 
 describe('A Rails generated Cocooned setup', () => {
   given('template', () => fixtures.template)

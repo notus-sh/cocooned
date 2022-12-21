@@ -1,4 +1,4 @@
-/* global given */
+/* global given, delegate, abnegate */
 
 import Cocooned from '@notus.sh/cocooned/cocooned'
 import { jest } from '@jest/globals'
