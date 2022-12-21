@@ -309,11 +309,7 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@cocooned/src@link:./app/assets":
-  version "0.0.0"
-  uid ""
-
-"@cocooned/tests@link:./__tests__":
+"@cocooned/tests@link:./npm/__tests__":
   version "0.0.0"
   uid ""
 
@@ -624,6 +620,10 @@
   dependencies:
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
+
+"@notus.sh/cocooned@link:./npm/src":
+  version "0.0.0"
+  uid ""
 
 "@sinclair/typebox@^0.24.1":
   version "0.24.51"

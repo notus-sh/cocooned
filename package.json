@@ -5,11 +5,11 @@
   "description": "Development dependencies description file. For the real package.json, see ./npm",
   "scripts": {
     "build": "rollup --config config/rollup.config.js --bundleConfigAsCjs",
-    "test": "jest --config __tests__/jest.config.js --showSeed"
+    "test": "jest --config npm/__tests__/jest.config.js --showSeed"
   },
   "dependencies": {
-    "@cocooned/src": "link:./app/assets",
-    "@cocooned/tests": "link:./__tests__"
+    "@notus.sh/cocooned": "link:./npm/src",
+    "@cocooned/tests": "link:./npm/__tests__"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
