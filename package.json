@@ -4,6 +4,7 @@
   "browser": true,
   "description": "Development dependencies description file. For the real package.json, see ./npm",
   "scripts": {
+    "build": "rollup --config config/rollup.config.js --bundleConfigAsCjs",
     "test": "jest --config __tests__/jest.config.js --showSeed"
   },
   "dependencies": {
@@ -24,6 +25,7 @@
     "jest": "^29.1.2",
     "jest-environment-jsdom": "^29.1.2",
     "jquery": "^3.0.0",
-    "jquery-events-to-dom-events": "^1.1.0"
+    "jquery-events-to-dom-events": "^1.1.0",
+    "rollup": "^3.7.5"
   }
 }
