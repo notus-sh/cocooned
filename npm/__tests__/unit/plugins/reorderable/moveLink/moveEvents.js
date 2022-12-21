@@ -1,12 +1,13 @@
 /* global given, delegate, abnegate */
 
-const Cocooned = require('@notus.sh/cocooned/cocooned')
-const faker = require('@cocooned/tests/support/faker')
-const { setup, asAttribute, clickEvent } = require('@cocooned/tests/support/helpers')
-const { getAddLink, getMoveDownLinks, getMoveUpLinks } = require('@cocooned/tests/support/selectors')
+import Cocooned from '@notus.sh/cocooned/cocooned'
+import { jest } from '@jest/globals'
+import { faker } from '@cocooned/tests/support/faker'
+import { setup, asAttribute, clickEvent } from '@cocooned/tests/support/helpers'
+import { getAddLink, getMoveDownLinks, getMoveUpLinks } from '@cocooned/tests/support/selectors'
 
-const itBehavesLikeAnEventListener = require('@cocooned/tests/unit/shared/events/listener')
-const itBehavesLikeACancellableEvent = require('@cocooned/tests/unit/shared/events/cancelable')
+import itBehavesLikeAnEventListener from '@cocooned/tests/unit/shared/events/listener'
+import itBehavesLikeACancellableEvent from '@cocooned/tests/unit/shared/events/cancelable'
 
 describe('A Cocooned reorderable setup', () => {
   given('template', () => `

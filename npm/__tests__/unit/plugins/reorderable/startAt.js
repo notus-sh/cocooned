@@ -1,9 +1,9 @@
 /* global given */
 
-const Cocooned = require('@notus.sh/cocooned/cocooned')
-const faker = require('@cocooned/tests/support/faker')
-const { setup, asAttribute, asInt, clickEvent } = require('@cocooned/tests/support/helpers')
-const { getItems, getAddLink } = require('@cocooned/tests/support/selectors')
+import Cocooned from '@notus.sh/cocooned/cocooned'
+import { faker } from '@cocooned/tests/support/faker'
+import { setup, asAttribute, asInt, clickEvent } from '@cocooned/tests/support/helpers'
+import { getItems, getAddLink } from '@cocooned/tests/support/selectors'
 
 describe('A Cocooned setup', () => {
   given('template', () => `

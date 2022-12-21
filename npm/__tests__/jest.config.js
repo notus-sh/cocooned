@@ -3,7 +3,7 @@
  * https://jestjs.io/docs/configuration
  */
 
-module.exports = {
+export default {
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 
@@ -33,8 +33,8 @@ module.exports = {
 
   // An array of regexp pattern strings used to skip coverage collection
   coveragePathIgnorePatterns: [
-    "/node_modules/",
-    "/__tests__/"
+    '/node_modules/',
+    '/__tests__/'
   ],
 
   // Indicates which provider should be used to instrument code for coverage
@@ -47,7 +47,7 @@ module.exports = {
   //   "lcov",
   //   "clover"
   // ],
-  coverageReporters: ["text"],
+  coverageReporters: ['text'],
 
   // An object that configures minimum threshold enforcement for coverage results
   // coverageThreshold: undefined,
@@ -190,7 +190,7 @@ module.exports = {
     '/support/',
     '/shared/',
     '/*.config.js'
-  ]
+  ],
 
   // The regexp pattern or array of patterns that Jest uses to detect test files
   // testRegex: [],
@@ -202,7 +202,7 @@ module.exports = {
   // testRunner: "jest-circus/runner",
 
   // A map from regular expressions to paths to transformers
-  // transform: undefined,
+  transform: {}
 
   // An array of regexp pattern strings that are matched against all source file
   // paths, matched files will skip transformation

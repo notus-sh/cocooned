@@ -1,7 +1,9 @@
-/* global given, jQuery, jest */
+/* global given, jQuery */
 /* eslint jest/no-export: "off" -- This is a shared examples */
 
-module.exports = ({ listen, dispatch, args = new Set(['link', 'node', 'cocooned']) }) => {
+import { jest } from '@jest/globals'
+
+export default ({ listen, dispatch, args = new Set(['link', 'node', 'cocooned']) }) => {
   describe('when triggered', () => {
     it('receives the event as first argument', () => {
       return new Promise(resolve => {

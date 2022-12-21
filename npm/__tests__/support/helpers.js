@@ -20,7 +20,7 @@ const clickEvent = function () {
   return new MouseEvent('click', { bubbles: true, cancelable: true, view: window })
 }
 
-module.exports = {
+export {
   setup,
   asAttribute,
   asInt,

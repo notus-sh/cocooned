@@ -4,10 +4,13 @@
     "browser": true,
     "jquery": true
   },
-  "parserOptions": { "ecmaVersion": 2018 },
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
   "overrides": [
     {
-      "files": ["__tests__/{unit,integration}/**/*.js"],
+      "files": ["npm/__tests__/{unit,integration}/**/*.js"],
       "plugins": ["jest", "jest-dom"],
       "extends": ["plugin:jest/recommended", "plugin:jest-dom/recommended"]
     }

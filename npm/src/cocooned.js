@@ -1,4 +1,4 @@
-const $ = require('jquery')
+import $ from 'jquery'
 
 const Cocooned = function (container, options) {
   this.container = $(container)
@@ -471,4 +471,4 @@ $(function () {
   })
 })
 
-module.exports = Cocooned
+export default Cocooned

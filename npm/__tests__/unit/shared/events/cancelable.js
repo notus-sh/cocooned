@@ -1,7 +1,9 @@
-/* global given, $, jest */
+/* global given, $ */
 /* eslint jest/no-export: "off" -- This is a shared examples */
 
-module.exports = ({ event, dispatch, trigger }) => {
+import { jest } from '@jest/globals'
+
+export default ({ event, dispatch, trigger }) => {
   describe('a cancelable operation', () => {
     /* TODO: Enable once we moved out ot jQuery events. Temporary alternative below; */
     /* eslint-disable jest/no-disabled-tests, jest/no-identical-title */
