@@ -621,7 +621,7 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@notus.sh/cocooned@link:./npm/src":
+"@notus.sh/cocooned@link:./npm":
   version "0.0.0"
   uid ""
 

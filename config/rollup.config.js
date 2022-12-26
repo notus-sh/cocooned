@@ -1,5 +1,5 @@
 export default [{
-  input: "npm/src/cocooned.js",
+  input: "npm/cocooned.js",
   output: {
     file: "app/assets/javascripts/cocooned.js",
     format: "umd",
