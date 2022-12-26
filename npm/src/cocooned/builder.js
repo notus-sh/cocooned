@@ -10,18 +10,6 @@ class Replacement {
   #startDelimiter
   #endDelimiter
 
-  get name() {
-    return this.#name
-  }
-
-  get startDelimiter() {
-    return this.#startDelimiter
-  }
-
-  get endDelimiter() {
-    return this.#endDelimiter
-  }
-
   constructor(name, startDelimiter, endDelimiter = null) {
     this.#name = name
     this.#startDelimiter = startDelimiter
@@ -29,11 +17,11 @@ class Replacement {
   }
 
   replacement(id) {
-    return `${this.startDelimiter}${id}${this.endDelimiter}$1`
+    return `${this.#startDelimiter}${id}${this.#endDelimiter}$1`
   }
 
   regexp() {
-    const escaped = this.#escape(`${this.startDelimiter}${this.name}${this.endDelimiter}`)
+    const escaped = this.#escape(`${this.#startDelimiter}${this.#name}${this.#endDelimiter}`)
     return new RegExp(`${escaped}(.*?\\s)`, 'g')
   }
 
@@ -50,7 +38,12 @@ class Builder {
 
   constructor(template, singular, plural) {
     this.#template = template
-    this.#replacements = this.#buildReplacements(singular, plural)
+    this.#replacements = [
+      new Replacement(plural, '[', ']'),
+      new Replacement(singular, '[', ']'),
+      new Replacement(plural, '_'),
+      new Replacement(singular, '_'),
+    ]
   }
 
   build(id) {
@@ -59,15 +52,6 @@ class Builder {
     }, this.#template)
 
     return $(html)
-  }
-
-  #buildReplacements(singular, plural) {
-    return [
-      new Replacement(plural, '[', ']'),
-      new Replacement(singular, '[', ']'),
-      new Replacement(plural, '_'),
-      new Replacement(singular, '_'),
-    ]
   }
 }
 
