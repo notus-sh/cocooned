@@ -1,6 +1,6 @@
 import $ from 'jquery'
 import { Cocooned as Base } from './src/cocooned'
-import { limitMixin, reorderableMixin } from './src/plugins'
+import { limitMixin, reorderableMixin } from './src/cocooned/plugins'
 
 class Cocooned extends reorderableMixin(limitMixin(Base)) {}
 
