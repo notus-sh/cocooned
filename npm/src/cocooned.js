@@ -1,4 +1,5 @@
-import $ from 'jquery'
+import $ from "jquery";
+import Builder from "./cocooned/builder";
 
 class Cocooned {
   static defaultOptions () {
@@ -79,21 +80,7 @@ class Cocooned {
     return (new Date().getTime() + this.elementsCounter++)
   }
 
-  buildContentNode (content) {
-    const id = this.buildId()
-    let html = (content || this.content)
-    const braced = '[' + id + ']'
-    const underscored = '_' + id + '_';
-
-    ['associations', 'association'].forEach(function (a) {
-      html = html.replace(this.regexps[a].braced, braced + '$1')
-      html = html.replace(this.regexps[a].underscored, underscored + '$1')
-    }, this)
-
-    return $(html)
-  }
-
-  getInsertionNode (adder) {
+  getInsertionNode(adder) {
     const $adder = $(adder)
     const insertionNode = $adder.data('association-insertion-node')
     const insertionTraversal = $adder.data('association-insertion-traversal')
@@ -150,25 +137,10 @@ class Cocooned {
 
   init () {
     const self = this
-
     this.addLinks = $(this.selector('add')).filter(function () {
       const container = self.findContainer(this)
       return (container.get(0) === self.container.get(0))
     })
-
-    const addLink = $(this.addLinks.get(0))
-
-    this.content = addLink.data('association-insertion-template')
-    this.regexps = {
-      association: {
-        braced: new RegExp('\\[new_' + addLink.data('association') + '\\](.*?\\s)', 'g'),
-        underscored: new RegExp('_new_' + addLink.data('association') + '_(\\w*)', 'g')
-      },
-      associations: {
-        braced: new RegExp('\\[new_' + addLink.data('associations') + '\\](.*?\\s)', 'g'),
-        underscored: new RegExp('_new_' + addLink.data('associations') + '_(\\w*)', 'g')
-      }
-    }
 
     this.initUi()
     this.bindEvents()
@@ -224,11 +196,12 @@ class Cocooned {
     const $adder = $(adder)
     const insertionMethod = this.getInsertionMethod($adder)
     const insertionNode = this.getInsertionNode($adder)
-    const contentTemplate = $adder.data('association-insertion-template')
     const count = parseInt($adder.data('association-insertion-count'), 10) || parseInt($adder.data('count'), 10) || 1
 
+    const builder = this.#builder($adder)
+
     for (let i = 0; i < count; i++) {
-      const contentNode = this.buildContentNode(contentTemplate)
+      const contentNode = $(builder.build(this.buildId()))
       const eventData = { link: $adder, node: contentNode, cocooned: this, originalEvent }
       const afterNode = (insertionMethod === 'replaceWith' ? contentNode : insertionNode)
 
@@ -282,6 +255,12 @@ class Cocooned {
       const node = self.findItem(removeLink)
       node.hide()
     })
+  }
+
+  #builder(link) {
+    return new Builder(link.data('association-insertion-template'),
+                       `new_${link.data('association')}`,
+                       `new_${link.data('associations')}`)
   }
 }
 
