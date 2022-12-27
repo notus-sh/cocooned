@@ -1,11 +1,11 @@
-import $ from "jquery";
+import $ from 'jquery'
 
 const limitMixin = (Base) => class extends Base {
-  static defaultOptions() {
+  static defaultOptions () {
     return Object.assign({}, super.defaultOptions(), { limit: false })
   }
 
-  bindEvents() {
+  bindEvents () {
     super.bindEvents()
     if (this.options.limit === false) {
       return
@@ -24,7 +24,7 @@ const limitMixin = (Base) => class extends Base {
     })
   }
 
-  getLength() {
+  getLength () {
     // jQuery :visible selector use element.offset(Width|Height), which is not available in jsdom.
     return this.getItems().filter(function () {
       return $(this).css('display') !== 'none'

@@ -1,17 +1,17 @@
-import $ from "jquery";
+import $ from 'jquery'
 
 class Cocooned {
-  static defaultOptions() {
+  static defaultOptions () {
     return {}
   }
 
-  constructor(container, options) {
+  constructor (container, options) {
     this.container = $(container)
     this.options = this.normalizeConfig(Object.assign(
-        {},
-        this.constructor.defaultOptions(),
-        (this.container.data('cocooned-options') || {}),
-        (options || {})
+      {},
+      this.constructor.defaultOptions(),
+      (this.container.data('cocooned-options') || {}),
+      (options || {})
     ))
 
     this.init()
@@ -22,7 +22,7 @@ class Cocooned {
 
   // Compatibility with Cocoon
   // TODO: Remove in 3.0 (Only Cocoon namespaces).
-  get namespaces() {
+  get namespaces () {
     return {
       events: ['cocooned', 'cocoon']
     }
@@ -30,7 +30,7 @@ class Cocooned {
 
   // Compatibility with Cocoon
   // TODO: Remove in 3.0 (Only Cocoon class names).
-  get classes() {
+  get classes () {
     return {
       // Actions link
       add: ['cocooned-add', 'add_fields'],
@@ -43,11 +43,11 @@ class Cocooned {
     }
   }
 
-  normalizeConfig(config) {
+  normalizeConfig (config) {
     return config
   }
 
-  notify(node, eventType, eventData) {
+  notify (node, eventType, eventData) {
     return !(this.namespaces.events.some(function (namespace) {
       const namespacedEventType = [namespace, eventType].join(':')
       const event = $.Event(namespacedEventType, eventData)
@@ -64,22 +64,22 @@ class Cocooned {
     }))
   }
 
-  selector(type, selector) {
+  selector (type, selector) {
     const s = selector || '&'
     return this.classes[type].map(function (klass) { return s.replace(/&/, '.' + klass) }).join(', ')
   }
 
-  namespacedNativeEvents(type) {
+  namespacedNativeEvents (type) {
     const namespaces = this.namespaces.events.map(function (ns) { return '.' + ns })
     namespaces.unshift(type)
     return namespaces.join('')
   }
 
-  buildId() {
+  buildId () {
     return (new Date().getTime() + this.elementsCounter++)
   }
 
-  buildContentNode(content) {
+  buildContentNode (content) {
     const id = this.buildId()
     let html = (content || this.content)
     const braced = '[' + id + ']'
@@ -93,7 +93,7 @@ class Cocooned {
     return $(html)
   }
 
-  getInsertionNode(adder) {
+  getInsertionNode (adder) {
     const $adder = $(adder)
     const insertionNode = $adder.data('association-insertion-node')
     const insertionTraversal = $adder.data('association-insertion-traversal')
@@ -113,12 +113,12 @@ class Cocooned {
     return insertionNode === 'this' ? $adder : $(insertionNode)
   }
 
-  getInsertionMethod(adder) {
+  getInsertionMethod (adder) {
     const $adder = $(adder)
     return $adder.data('association-insertion-method') || 'before'
   }
 
-  getItems(selector) {
+  getItems (selector) {
     selector = selector || ''
     const self = this
     return $(this.selector('item', selector), this.container).filter(function () {
@@ -126,7 +126,7 @@ class Cocooned {
     })
   }
 
-  findContainer(addLink) {
+  findContainer (addLink) {
     const $adder = $(addLink)
     const insertionNode = this.getInsertionNode($adder)
     const insertionMethod = this.getInsertionMethod($adder)
@@ -144,11 +144,11 @@ class Cocooned {
     }
   }
 
-  findItem(removeLink) {
+  findItem (removeLink) {
     return $(removeLink).closest(this.selector('item'))
   }
 
-  init() {
+  init () {
     const self = this
 
     this.addLinks = $(this.selector('add')).filter(function () {
@@ -174,7 +174,7 @@ class Cocooned {
     this.bindEvents()
   }
 
-  initUi() {
+  initUi () {
     const self = this
 
     if (!this.container.attr('id')) {
@@ -186,30 +186,30 @@ class Cocooned {
     $(document).on('page:load turbolinks:load turbo:load', function () { self.hideMarkedForDestruction() })
   }
 
-  bindEvents() {
+  bindEvents () {
     const self = this
 
     // Bind add links
     this.addLinks.on(
-        this.namespacedNativeEvents('click'),
-        function (e) {
-          e.preventDefault()
-          e.stopPropagation()
+      this.namespacedNativeEvents('click'),
+      function (e) {
+        e.preventDefault()
+        e.stopPropagation()
 
-          self.add(this, e)
-        })
+        self.add(this, e)
+      })
 
     // Bind remove links
     // (Binded on document instead of container to not bypass click handler defined in jquery_ujs)
     $(document).on(
-        this.namespacedNativeEvents('click'),
-        this.selector('remove', '#' + this.container.attr('id') + ' &'),
-        function (e) {
-          e.preventDefault()
-          e.stopPropagation()
+      this.namespacedNativeEvents('click'),
+      this.selector('remove', '#' + this.container.attr('id') + ' &'),
+      function (e) {
+        e.preventDefault()
+        e.stopPropagation()
 
-          self.remove(this, e)
-        })
+        self.remove(this, e)
+      })
 
     // Bind options events
     $.each(this.options, function (name, value) {
@@ -220,7 +220,7 @@ class Cocooned {
     })
   }
 
-  add(adder, originalEvent) {
+  add (adder, originalEvent) {
     const $adder = $(adder)
     const insertionMethod = this.getInsertionMethod($adder)
     const insertionNode = this.getInsertionNode($adder)
@@ -243,7 +243,7 @@ class Cocooned {
     }
   }
 
-  remove(remover, originalEvent) {
+  remove (remover, originalEvent) {
     const self = this
     const $remover = $(remover)
     const nodeToDelete = this.findItem($remover)
@@ -276,7 +276,7 @@ class Cocooned {
     }
   }
 
-  hideMarkedForDestruction() {
+  hideMarkedForDestruction () {
     const self = this
     $(this.selector('remove', '&.existing.destroyed'), this.container).each(function (i, removeLink) {
       const node = self.findItem(removeLink)

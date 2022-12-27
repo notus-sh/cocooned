@@ -1,5 +1,5 @@
-import limitMixin from "./plugins/limit"
-import reorderableMixin from "./plugins/reorderable"
+import limitMixin from './plugins/limit'
+import reorderableMixin from './plugins/reorderable'
 
 export {
   limitMixin,
