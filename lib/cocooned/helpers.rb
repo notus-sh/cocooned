@@ -190,7 +190,7 @@ module Cocooned
     #
     # See the documentation of +link_to+ for valid options.
     def cocooned_move_item_up_link(name, form = nil, html_options = {}, &block)
-      cocooned_move_item_link(:up, name, form, html_options, &block)
+      Tags::MoveUp.create(self, cocooned_default_label(:up), *[name, form].compact, **html_options, &block).render
     end
 
     # Output an action link to move an item down.
@@ -209,20 +209,10 @@ module Cocooned
     #
     # See the documentation of +link_to+ for valid options.
     def cocooned_move_item_down_link(name, form = nil, html_options = {}, &block)
-      cocooned_move_item_link(:down, name, form, html_options, &block)
+      Tags::MoveDown.create(self, cocooned_default_label(:down), *[name, form].compact, **html_options, &block).render
     end
 
     private
-
-    def cocooned_move_item_link(direction, name, form = nil, html_options = {}, &block)
-      form, name = name, form if form.nil?
-      return cocooned_move_item_link(direction, capture(&block), form, html_options) if block_given?
-      return cocooned_move_item_link(direction, cocooned_default_label(direction), form, html_options) if name.nil?
-
-      link_options = html_options.dup
-      link_options[:class] = [html_options[:class], Cocooned::HELPER_CLASSES[direction]].flatten.compact.join(' ')
-      link_to name, '#', link_options
-    end
 
     def cocooned_default_label(action, association = nil)
       # TODO: Remove in 3.0
