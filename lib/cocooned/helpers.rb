@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'cocooned/options'
 require 'cocooned/association_builder'
 
 module Cocooned
