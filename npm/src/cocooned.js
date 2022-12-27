@@ -1,81 +1,53 @@
 import $ from 'jquery'
 
-const Cocooned = function (container, options) {
-  this.container = $(container)
-  const opts = $.extend({}, this.defaultOptions(), (this.container.data('cocooned-options') || {}), (options || {}))
-
-  // Autoload plugins
-  for (const pluginName in Cocooned.Plugins) {
-    if (Object.prototype.hasOwnProperty.call(Cocooned.Plugins, pluginName)) {
-      const plugin = Cocooned.Plugins[pluginName]
-      const optionName = pluginName.charAt(0).toLowerCase() + pluginName.slice(1)
-
-      if (opts[optionName] !== false) {
-        if (Object.prototype.hasOwnProperty.call(plugin, 'normalizeConfig') &&
-            typeof plugin.normalizeConfig === 'function') {
-          opts[optionName] = plugin.normalizeConfig(opts[optionName])
-        }
-
-        for (const method in plugin) {
-          if (method === 'normalizeConfig') {
-            continue
-          }
-          if (!Object.prototype.hasOwnProperty.call(plugin, method) || typeof plugin[method] !== 'function') {
-            continue
-          }
-
-          this[method] = plugin[method]
-        }
-      }
-    }
+class Cocooned {
+  static defaultOptions () {
+    return {}
   }
 
-  this.options = opts
-  this.init()
+  constructor (container, options) {
+    this.container = $(container)
+    this.options = this.normalizeConfig(Object.assign(
+      {},
+      this.constructor.defaultOptions(),
+      (this.container.data('cocooned-options') || {}),
+      (options || {})
+    ))
 
-  this.container.get(0).dataset.cocooned = this
-}
+    this.init()
+    this.container.get(0).dataset.cocooned = this
+  }
 
-Cocooned.Plugins = {}
-Cocooned.prototype = {
-
-  elementsCounter: 0,
+  elementsCounter = 0
 
   // Compatibility with Cocoon
   // TODO: Remove in 3.0 (Only Cocoon namespaces).
-  namespaces: {
-    events: ['cocooned', 'cocoon']
-  },
+  get namespaces () {
+    return {
+      events: ['cocooned', 'cocoon']
+    }
+  }
 
   // Compatibility with Cocoon
   // TODO: Remove in 3.0 (Only Cocoon class names).
-  classes: {
-    // Actions link
-    add: ['cocooned-add', 'add_fields'],
-    remove: ['cocooned-remove', 'remove_fields'],
-    up: ['cocooned-move-up'],
-    down: ['cocooned-move-down'],
-    // Containers
-    container: ['cocooned-container'],
-    item: ['cocooned-item', 'nested-fields']
-  },
-
-  defaultOptions: function () {
-    const options = {}
-
-    for (const moduleName in Cocooned.Plugins) {
-      if (Object.prototype.hasOwnProperty.call(Cocooned.Plugins, moduleName)) {
-        const module = Cocooned.Plugins[moduleName]
-        const optionName = moduleName.charAt(0).toLowerCase() + moduleName.slice(1)
-
-        options[optionName] = module.defaultOptionValue
-      }
+  get classes () {
+    return {
+      // Actions link
+      add: ['cocooned-add', 'add_fields'],
+      remove: ['cocooned-remove', 'remove_fields'],
+      up: ['cocooned-move-up'],
+      down: ['cocooned-move-down'],
+      // Containers
+      container: ['cocooned-container'],
+      item: ['cocooned-item', 'nested-fields']
     }
+  }
 
-    return options
-  },
+  normalizeConfig (config) {
+    return config
+  }
 
-  notify: function (node, eventType, eventData) {
+  notify (node, eventType, eventData) {
     return !(this.namespaces.events.some(function (namespace) {
       const namespacedEventType = [namespace, eventType].join(':')
       const event = $.Event(namespacedEventType, eventData)
@@ -90,24 +62,24 @@ Cocooned.prototype = {
       node.trigger(event, eventArgs)
       return (event.isPropagationStopped() || event.isDefaultPrevented())
     }))
-  },
+  }
 
-  selector: function (type, selector) {
+  selector (type, selector) {
     const s = selector || '&'
     return this.classes[type].map(function (klass) { return s.replace(/&/, '.' + klass) }).join(', ')
-  },
+  }
 
-  namespacedNativeEvents: function (type) {
+  namespacedNativeEvents (type) {
     const namespaces = this.namespaces.events.map(function (ns) { return '.' + ns })
     namespaces.unshift(type)
     return namespaces.join('')
-  },
+  }
 
-  buildId: function () {
+  buildId () {
     return (new Date().getTime() + this.elementsCounter++)
-  },
+  }
 
-  buildContentNode: function (content) {
+  buildContentNode (content) {
     const id = this.buildId()
     let html = (content || this.content)
     const braced = '[' + id + ']'
@@ -119,9 +91,9 @@ Cocooned.prototype = {
     }, this)
 
     return $(html)
-  },
+  }
 
-  getInsertionNode: function (adder) {
+  getInsertionNode (adder) {
     const $adder = $(adder)
     const insertionNode = $adder.data('association-insertion-node')
     const insertionTraversal = $adder.data('association-insertion-traversal')
@@ -139,22 +111,22 @@ Cocooned.prototype = {
     }
 
     return insertionNode === 'this' ? $adder : $(insertionNode)
-  },
+  }
 
-  getInsertionMethod: function (adder) {
+  getInsertionMethod (adder) {
     const $adder = $(adder)
     return $adder.data('association-insertion-method') || 'before'
-  },
+  }
 
-  getItems: function (selector) {
+  getItems (selector) {
     selector = selector || ''
     const self = this
     return $(this.selector('item', selector), this.container).filter(function () {
       return ($(this).closest(self.selector('container')).get(0) === self.container.get(0))
     })
-  },
+  }
 
-  findContainer: function (addLink) {
+  findContainer (addLink) {
     const $adder = $(addLink)
     const insertionNode = this.getInsertionNode($adder)
     const insertionMethod = this.getInsertionMethod($adder)
@@ -170,13 +142,13 @@ Cocooned.prototype = {
       default:
         return insertionNode
     }
-  },
+  }
 
-  findItem: function (removeLink) {
+  findItem (removeLink) {
     return $(removeLink).closest(this.selector('item'))
-  },
+  }
 
-  init: function () {
+  init () {
     const self = this
 
     this.addLinks = $(this.selector('add')).filter(function () {
@@ -200,9 +172,9 @@ Cocooned.prototype = {
 
     this.initUi()
     this.bindEvents()
-  },
+  }
 
-  initUi: function () {
+  initUi () {
     const self = this
 
     if (!this.container.attr('id')) {
@@ -212,9 +184,9 @@ Cocooned.prototype = {
 
     $(function () { self.hideMarkedForDestruction() })
     $(document).on('page:load turbolinks:load turbo:load', function () { self.hideMarkedForDestruction() })
-  },
+  }
 
-  bindEvents: function () {
+  bindEvents () {
     const self = this
 
     // Bind add links
@@ -246,9 +218,9 @@ Cocooned.prototype = {
         self[bindMethod]()
       }
     })
-  },
+  }
 
-  add: function (adder, originalEvent) {
+  add (adder, originalEvent) {
     const $adder = $(adder)
     const insertionMethod = this.getInsertionMethod($adder)
     const insertionNode = this.getInsertionNode($adder)
@@ -269,9 +241,9 @@ Cocooned.prototype = {
 
       this.notify(afterNode, 'after-insert', eventData)
     }
-  },
+  }
 
-  remove: function (remover, originalEvent) {
+  remove (remover, originalEvent) {
     const self = this
     const $remover = $(remover)
     const nodeToDelete = this.findItem($remover)
@@ -302,9 +274,9 @@ Cocooned.prototype = {
     } else {
       setTimeout(doRemove, timeout)
     }
-  },
+  }
 
-  hideMarkedForDestruction: function () {
+  hideMarkedForDestruction () {
     const self = this
     $(this.selector('remove', '&.existing.destroyed'), this.container).each(function (i, removeLink) {
       const node = self.findItem(removeLink)
@@ -313,162 +285,6 @@ Cocooned.prototype = {
   }
 }
 
-Cocooned.Plugins.Limit = {
-
-  defaultOptionValue: false,
-
-  bindLimit: function () {
-    this.limit = this.options.limit
-    this.container.on('cocooned:before-insert', function (e) {
-      const cocooned = e.cocooned
-      if (cocooned.getLength() < cocooned.limit) {
-        return
-      }
-
-      e.stopPropagation()
-      const eventData = { link: e.link, node: e.node, cocooned, originalEvent: e }
-      cocooned.notify(cocooned.container, 'limit-reached', eventData)
-    })
-  },
-
-  getLength: function () {
-    // jQuery :visible selector use element.offset(Width|Height), which is not available in jsdom.
-    return this.getItems().filter(function () {
-      return $(this).css('display') !== 'none'
-    }).length
-  }
+export {
+  Cocooned
 }
-
-Cocooned.Plugins.Reorderable = {
-
-  defaultOptionValue: false,
-  defaultConfig: { startAt: 1 },
-
-  normalizeConfig: function (config) {
-    if (typeof config === 'boolean' && config) {
-      return this.defaultConfig
-    }
-    return config
-  },
-
-  bindReorderable: function () {
-    const self = this
-
-    // Maintain indexes
-    this.container
-      .on('cocooned:after-insert', function (e) { self.reindex(e) })
-      .on('cocooned:after-remove', function (e) { self.reindex(e) })
-      .on('cocooned:after-move', function (e) { self.reindex(e) })
-
-    // Move items
-    this.container.on(
-      this.namespacedNativeEvents('click'),
-      [this.selector('up'), this.selector('down')].join(', '),
-      function (e) {
-        e.preventDefault()
-        e.stopPropagation()
-
-        const node = this
-        const up = self.classes.up.some(function (klass) {
-          return node.className.indexOf(klass) !== -1
-        })
-        self.move(this, up ? 'up' : 'down', e)
-      })
-
-    // Ensure positions are unique before save
-    this.container.closest('form').on(
-      this.namespacedNativeEvents('submit'),
-      function (e) {
-        self.reindex(e)
-      })
-  },
-
-  move: function (moveLink, direction, originalEvent) {
-    const self = this
-    const $mover = $(moveLink)
-    const node = $mover.closest(this.selector('item'))
-    const siblings = (direction === 'up'
-      ? node.prevAll(this.selector('item', '&:eq(0)'))
-      : node.nextAll(this.selector('item', '&:eq(0)')))
-
-    if (siblings.length === 0) {
-      return
-    }
-
-    // Move can be prevented through a 'cocooned:before-move' event handler
-    const eventData = { link: $mover, node, cocooned: self, originalEvent }
-    if (!self.notify(node, 'before-move', eventData)) {
-      return false
-    }
-
-    const height = self.container.outerHeight()
-    const width = self.container.outerWidth()
-
-    self.container.css('height', height).css('width', width)
-    self.hide(node, function () {
-      const movedNode = $(this).detach()
-      movedNode[(direction === 'up' ? 'insertBefore' : 'insertAfter')](siblings)
-
-      self.show(movedNode, function () {
-        self.container.css('height', '').css('width', '') // Object notation does not work here.
-        self.notify(movedNode, 'after-move', eventData)
-      })
-    })
-  },
-
-  reindex: function (originalEvent) {
-    let i = this.options.reorderable.startAt
-    const nodes = this.getItems().filter(function () {
-      return $(this).css('display') !== 'none'
-    })
-    const eventData = { link: null, nodes, cocooned: this, originalEvent }
-
-    // Reindex can be prevented through a 'cocooned:before-reindex' event handler
-    if (!this.notify(this.container, 'before-reindex', eventData)) {
-      return false
-    }
-
-    nodes.each(function () { $('input[name$="[position]"]', this).val(i++) })
-    this.notify(this.container, 'after-reindex', eventData)
-  },
-
-  show: function (node, callback) {
-    callback = callback || function () { return true }
-
-    node.addClass('cocooned-visible-item')
-    setTimeout(function () {
-      callback.apply(node)
-      node.removeClass('cocooned-hidden-item')
-    }, 500)
-  },
-
-  hide: function (node, callback) {
-    node.removeClass('cocooned-visible-item').addClass('cocooned-hidden-item')
-    if (callback) {
-      setTimeout(function () {
-        callback.apply(node)
-      }, 500)
-    }
-  }
-}
-
-// Expose a jQuery plugin
-$.fn.cocooned = function (options) {
-  return this.each(function () {
-    const container = $(this)
-    if (typeof container.data('cocooned') !== 'undefined') {
-      return
-    }
-
-    return new Cocooned(container, options)
-  })
-}
-
-// On-load initialization
-$(function () {
-  $('*[data-cocooned-options]').each(function (i, el) {
-    $(el).cocooned()
-  })
-})
-
-export default Cocooned
