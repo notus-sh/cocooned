@@ -8,16 +8,16 @@ module Cocooned
       @bucket = bucket.with_indifferent_access
     end
 
+    def fetch(name, default = nil)
+      candidates = candidates(name)
+      extract(bucket, candidates) || (extract(bucket[:data], candidates) if bucket.key?(:data)) || default
+    end
+
     def slice(*names)
-      names.each_with_object({}) { |name, extracted| extracted[name] = lookup(name) }
+      names.each_with_object({}) { |name, extracted| extracted[name] = fetch(name) }
     end
 
     protected
-
-    def lookup(name)
-      candidates = candidates(name)
-      extract(bucket, candidates) || (extract(bucket[:data], candidates) if bucket.key?(:data))
-    end
 
     def extract(hash, candidates)
       catch(:extracted) do

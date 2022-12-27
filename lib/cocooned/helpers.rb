@@ -265,9 +265,7 @@ module Cocooned
     end
 
     def cocooned_extract_builder_options!(html_options)
-      %i[wrap_object force_non_association_create].each_with_object({}) do |option_name, opts|
-        opts[option_name] = html_options.delete(option_name) if html_options.key?(option_name)
-      end
+      Options.new(html_options).slice(:wrap_object, :force_non_association_create)
     end
 
     def cocooned_extract_render_options!(html_options)
@@ -288,15 +286,13 @@ module Cocooned
     end
 
     def cocooned_extract_data!(html_options)
+      options = Options.new(html_options)
+
       data = {
-        association_insertion_count: [
-          html_options.delete(:count).to_i,
-          (html_options.key?(:data) ? html_options[:data].delete(:count) : 0).to_i,
-          1
-        ].compact.max,
-        association_insertion_node: cocooned_extract_single_data!(html_options, :insertion_node),
-        association_insertion_method: cocooned_extract_single_data!(html_options, :insertion_method),
-        association_insertion_traversal: cocooned_extract_single_data!(html_options, :insertion_traversal)
+        association_insertion_count: [options.fetch(:count, 0).to_i, 1].compact.max,
+        association_insertion_node: options.fetch(:insertion_node),
+        association_insertion_method: options.fetch(:insertion_method),
+        association_insertion_traversal: options.fetch(:insertion_traversal)
       }
 
       # Compatibility with the old way to pass data attributes to Rails view helpers
@@ -310,24 +306,6 @@ module Cocooned
       data[:count] = data[:association_insertion_count]
 
       data.compact
-    end
-
-    def cocooned_extract_single_data!(hash, key)
-      k = key.to_s
-      return hash.delete(k) if hash.key?(k)
-
-      # Compatibility alternatives
-      # TODO: Remove in 2.0
-      return hash.delete("association_#{k}") if hash.key?("association_#{k}")
-      return hash.delete("data_association_#{k}") if hash.key?("data_association_#{k}")
-      return hash.delete("data-association-#{k.tr('_', '-')}") if hash.key?("data-association-#{k.tr('_', '-')}")
-      return nil unless hash.key?(:data)
-
-      d = hash[:data].with_indifferent_access
-      return d.delete("association_#{k}") if d.key?("association_#{k}")
-      return d.delete("association-#{k.tr('_', '-')}") if d.key?("association-#{k.tr('_', '-')}")
-
-      nil
     end
   end
 end
