@@ -1,5 +1,5 @@
-import $ from "jquery";
-import Builder from "./cocooned/builder";
+import $ from 'jquery'
+import Builder from './cocooned/builder'
 
 class Cocooned {
   static defaultOptions () {
@@ -80,7 +80,7 @@ class Cocooned {
     return (new Date().getTime() + this.elementsCounter++)
   }
 
-  getInsertionNode(adder) {
+  getInsertionNode (adder) {
     const $adder = $(adder)
     const insertionNode = $adder.data('association-insertion-node')
     const insertionTraversal = $adder.data('association-insertion-traversal')
@@ -257,7 +257,7 @@ class Cocooned {
     })
   }
 
-  #builder(link) {
+  #builder (link) {
     return new Builder(link.data('association-insertion-template'),
                        `new_${link.data('association')}`,
                        `new_${link.data('associations')}`)
