@@ -12,46 +12,46 @@ describe('Builder', () => {
   const replacements = [
     {
       desc: 'braced singular',
-      i: '<input type="text" name="contacts[person][name]" />',
-      o: (id) => `<input type="text" name="contacts[${id}][name]" />`
+      template: '<input type="text" name="contacts[person][name]" />',
+      expected: (id) => `<input type="text" name="contacts[${id}][name]" />`
     },
     {
       desc: 'underscored singular',
-      i: '<input type="text" id="contacts_person_name" />',
-      o: (id) => `<input type="text" id="contacts_${id}_name" />`
+      template: '<input type="text" id="contacts_person_name" />',
+      expected: (id) => `<input type="text" id="contacts_${id}_name" />`
     },
     {
       desc: 'both singular',
-      i: '<input type="text" id="contacts_person_name" name="contacts[person][name]" />',
-      o: (id) => `<input type="text" id="contacts_${id}_name" name="contacts[${id}][name]" />`
+      template: '<input type="text" id="contacts_person_name" name="contacts[person][name]" />',
+      expected: (id) => `<input type="text" id="contacts_${id}_name" name="contacts[${id}][name]" />`
     },
     {
       desc: 'braced plural',
-      i: '<input type="text" name="contacts[people][name]" />',
-      o: (id) => `<input type="text" name="contacts[${id}][name]" />`
+      template: '<input type="text" name="contacts[people][name]" />',
+      expected: (id) => `<input type="text" name="contacts[${id}][name]" />`
     },
     {
       desc: 'underscored plural',
-      i: '<input type="text" id="contacts_people_name" />',
-      o: (id) => `<input type="text" id="contacts_${id}_name" />`
+      template: '<input type="text" id="contacts_people_name" />',
+      expected: (id) => `<input type="text" id="contacts_${id}_name" />`
     },
     {
       desc: 'both plural',
-      i: '<input type="text" id="contacts_people_name" name="contacts[people][name]" />',
-      o: (id) => `<input type="text" id="contacts_${id}_name" name="contacts[${id}][name]" />`
+      template: '<input type="text" id="contacts_people_name" name="contacts[people][name]" />',
+      expected: (id) => `<input type="text" id="contacts_${id}_name" name="contacts[${id}][name]" />`
     },
     {
       desc: 'singular and plural',
-      i: '<input type="text" id="contacts_people_name" name="contacts[person][name]" />',
-      o: (id) => `<input type="text" id="contacts_${id}_name" name="contacts[${id}][name]" />`
+      template: '<input type="text" id="contacts_people_name" name="contacts[person][name]" />',
+      expected: (id) => `<input type="text" id="contacts_${id}_name" name="contacts[${id}][name]" />`
     }
   ]
 
-  describe.each(replacements)('with $desc occurrences', ({ desc, i, o }) => {
-    given('template', () => i)
+  describe.each(replacements)('with $desc occurrences', ({ desc, template, expected }) => {
+    given('template', () => template)
 
     it('replace occurences', () => {
-      expect(given.builder.build(given.id)).toEqual(o(given.id))
+      expect(given.builder.build(given.id)).toEqual(expected(given.id))
     })
   })
 })
