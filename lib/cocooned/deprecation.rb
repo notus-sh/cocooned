@@ -3,13 +3,12 @@
 require 'active_support/deprecation'
 
 module Cocooned
+  # Custom deprecator to use with ActiveSupport::Deprecation methods
   class Deprecation < ActiveSupport::Deprecation
-    class << self
-      @@deprecators = {}
+    @deprecators = {}
 
-      def [](deprecation_horizon = nil)
-        @@deprecators[deprecation_horizon] ||= new(deprecation_horizon)
-      end
+    def self.[](deprecation_horizon = nil)
+      @deprecators[deprecation_horizon] ||= new(deprecation_horizon)
     end
 
     def initialize(deprecation_horizon = nil, gem_name = 'Cocooned')
@@ -18,6 +17,7 @@ module Cocooned
     end
   end
 
+  # Deprecated methods
   module Deprecated
     module Helpers
       # @deprecated: Please use {#cocooned_add_item_link} instead
