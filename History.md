@@ -2,6 +2,9 @@
 
 ## Version 1.5.0 (Not released yet)
 
+* Integrate deprecation messages with ActiveSupport::Deprecation (#9)
+* Rewrite JavaScript code as ESM modules (#6) and ECMAScript 5 classes (#7)
+* Reorganize JavaScript code and tests into the `npm` folder (#5)
 * Rewrite JavaScript tests suite with [Jest](https://jestjs.io/)  
   In replacement of the deprecated Jasmine JavaScript tests runner.
 
