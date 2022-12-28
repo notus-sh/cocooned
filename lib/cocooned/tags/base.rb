@@ -4,28 +4,50 @@ module Cocooned
   module Tags
     class Base
       class << self
-        def create(template, default_label, *args, **kwargs, &block)
-          return new(template, template.capture(&block), *args, **kwargs) if block_given?
-          return new(template, default_label, *args, **kwargs) unless args.first.is_a?(String)
+        def create(template, *args, **kwargs, &block)
+          return new(template, *args, **kwargs, &block) if block_given?
+          return new(template, *args, **kwargs) unless args.first.is_a?(String)
 
-          new(template, *args, **kwargs)
+          label = args.shift
+          new(template, *args, **kwargs) { label }
         end
       end
 
-      attr_reader :template, :label, :form, :options
+      attr_reader :template, :form, :options
 
-      def initialize(template, label, form, **options)
+      def initialize(template, form, **options, &block)
         @template = template
-        @label = label
         @form = form
         @options = options.dup.with_indifferent_access
+        @label_block = block if block_given?
+      end
+
+      def action
+        self.class.name.demodulize.underscore
       end
 
       def render
-        template.link_to label, '#', html_options
+        template.link_to('#', html_options) { label }
+      end
+
+      def label
+        return default_label unless label_block.present?
+
+        label_block.call
       end
 
       protected
+
+      attr_reader :label_block
+
+      def default_label
+        keys = default_label_i18n_keys.collect(&:to_sym) + [action.to_s.humanize]
+        I18n.translate(keys.first, default: keys.drop(1))
+      end
+
+      def default_label_i18n_keys
+        ["cocooned.defaults.#{action}", "cocoon.defaults.#{action}"]
+      end
 
       def html_options
         @html_options ||= begin

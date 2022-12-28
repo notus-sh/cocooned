@@ -190,7 +190,7 @@ module Cocooned
     #
     # See the documentation of +link_to+ for valid options.
     def cocooned_move_item_up_link(name, form = nil, html_options = {}, &block)
-      Tags::MoveUp.create(self, cocooned_default_label(:up), *[name, form].compact, **html_options, &block).render
+      Tags::Up.create(self, *[name, form].compact, **html_options, &block).render
     end
 
     # Output an action link to move an item down.
@@ -209,7 +209,7 @@ module Cocooned
     #
     # See the documentation of +link_to+ for valid options.
     def cocooned_move_item_down_link(name, form = nil, html_options = {}, &block)
-      Tags::MoveDown.create(self, cocooned_default_label(:down), *[name, form].compact, **html_options, &block).render
+      Tags::Down.create(self, *[name, form].compact, **html_options, &block).render
     end
 
     private

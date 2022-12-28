@@ -4,11 +4,11 @@ require 'cocooned/tags/base'
 
 module Cocooned
   module Tags
-    class MoveUp < Base
+    class Down < Base
       protected
 
       def html_classes
-        super + %w[cocooned-move-up]
+        super + %w[cocooned-move-down]
       end
     end
   end

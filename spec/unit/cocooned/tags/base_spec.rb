@@ -4,13 +4,12 @@ describe Cocooned::Tags::Base do
   let(:template) { ActionView::Base.empty }
 
   describe '.create' do
-    let(:default_label) { 'default' }
     let(:label) { 'label' }
     let(:form) { double }
     let(:options) { { name: 'value' } }
 
     context 'with all arguments' do
-      subject(:tag) { described_class.create(template, default_label, label, form, **options) }
+      subject(:tag) { described_class.create(template, label, form, **options) }
 
       it 'creates a new tag' do
         expect(tag).to be_an_instance_of(described_class)
@@ -31,7 +30,7 @@ describe Cocooned::Tags::Base do
 
     context 'with a block as label' do
       subject(:tag) do
-        described_class.create(template, default_label, form, **options) { label }
+        described_class.create(template, form, **options) { label }
       end
 
       it 'creates a new tag' do
@@ -52,14 +51,14 @@ describe Cocooned::Tags::Base do
     end
 
     context 'without an explicit label' do
-      subject(:tag) { described_class.create(template, default_label, form, **options) }
+      subject(:tag) { described_class.create(template, form, **options) }
 
       it 'creates a new tag' do
         expect(tag).to be_an_instance_of(described_class)
       end
 
       it 'creates a tag with default label' do
-        expect(tag.label).to eq(default_label)
+        expect(tag.label).to eq('Base')
       end
 
       it 'creates a tag with correct form' do
@@ -72,7 +71,7 @@ describe Cocooned::Tags::Base do
     end
 
     context 'when subclassed' do
-      subject(:tag) { subclass.create(template, default_label, label, form, **options) }
+      subject(:tag) { subclass.create(template, label, form, **options) }
 
       let(:subclass) { Class.new(described_class) }
 
