@@ -25,8 +25,13 @@ describe Cocooned::Helpers do
       end
 
       it 'emits a warning' do
+        behavior = Cocooned::Deprecation['3.0'].behavior
+        Cocooned::Deprecation['3.0'].behavior = :raise
         I18n.backend.store_translations(:en, cocoon: { defaults: { remove: 'Remove' } })
-        expect(capture_stderr { method.call(:remove, :people) }).not_to be_empty
+
+        expect { method.call(:remove, :people) }.to raise_error(ActiveSupport::DeprecationException)
+      ensure
+        Cocooned::Deprecation['3.0'].behavior = behavior
       end
     end
   end
