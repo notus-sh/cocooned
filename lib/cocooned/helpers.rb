@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'cocooned/helpers/deprecate'
-require 'cocooned/helpers/cocoon_compatibility'
 require 'cocooned/association_builder'
 
 module Cocooned
@@ -14,9 +12,7 @@ module Cocooned
   }.freeze
 
   module Helpers # rubocop:disable Metrics/ModuleLength
-    # Create aliases to old Cocoon method name
-    # TODO: Remove in 3.0
-    include Cocooned::Helpers::CocoonCompatibility
+    include Cocooned::Deprecated::Helpers
 
     # Output an action link to add an item in a nested form.
     #
@@ -229,10 +225,7 @@ module Cocooned
 
     def cocooned_default_label(action, association = nil)
       # TODO: Remove in 3.0
-      if I18n.exists?(:cocoon)
-        msg = Cocooned::Helpers::Deprecate.deprecate_release_message('the :cocoon i18n scope', ':cocooned')
-        warn msg
-      end
+      Cocooned::Deprecation['3.0'].warn('Support for the :cocoon I18n scope will be removed in 3.0') if I18n.exists?(:cocoon)
 
       keys = ["cocooned.defaults.#{action}", "cocoon.defaults.#{action}"]
       keys.unshift("cocooned.#{association}.#{action}", "cocoon.#{association}.#{action}") unless association.nil?
@@ -281,8 +274,7 @@ module Cocooned
 
       # TODO: Remove in 2.0
       if html_options.key?(:render_options)
-        msg = Cocooned::Helpers::Deprecate.deprecate_release_message(':render_options', :none)
-        warn msg
+        Cocooned::Deprecation.warn 'Support for :render_options will be removed in 3.0'
 
         options = html_options.delete(:render_options)
         render_options[:locals] = options.delete(:locals) if options.key?(:locals)
