@@ -21,15 +21,21 @@ describe Cocooned::Tags::Remove, :tag do
 
   it 'has a .dynamic class for new records' do
     allow(record).to receive(:new_record?).and_return(true)
-
     expect(tag.attribute('class').value.split).to include('dynamic')
+  end
+
+  it 'does not have a .dynamic class for persisted records' do
+    allow(record).to receive(:new_record?).and_return(false)
+    expect(tag.attribute('class').value.split).not_to include('dynamic')
+  end
+
+  it 'does not have an .existing class for new records' do
+    allow(record).to receive(:new_record?).and_return(true)
     expect(tag.attribute('class').value.split).not_to include('existing')
   end
 
   it 'has an .existing class for persisted records' do
     allow(record).to receive(:new_record?).and_return(false)
-
-    expect(tag.attribute('class').value.split).not_to include('dynamic')
     expect(tag.attribute('class').value.split).to include('existing')
   end
 

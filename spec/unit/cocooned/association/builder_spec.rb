@@ -84,7 +84,7 @@ describe Cocooned::Association::Builder do
     context 'with an association without reflection' do
       subject(:builder) { described_class.new(object, :non_reflectable) }
 
-      let(:object) { double('AnyNonActiveRecordObject') }
+      let(:object) { double }
 
       it 'uses #build_association to build an object' do
         allow(object).to receive(:build_non_reflectable).and_return 'custom'
@@ -127,8 +127,9 @@ describe Cocooned::Association::Builder do
       let(:person) { Person.new }
 
       it 'creates using only conditions' do
-        expect(person.alumni).not_to receive(:build)
+        allow(person.alumni).to receive(:build)
         builder.build
+        expect(person.alumni).not_to have_received(:build)
       end
 
       it 'creates associated object of correct type' do

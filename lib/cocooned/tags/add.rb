@@ -32,7 +32,7 @@ module Cocooned
           association_insertion_node: options.delete(:insertion_node),
           association_insertion_method: options.delete(:insertion_method),
           association_insertion_traversal: options.delete(:insertion_traversal),
-          association_insertion_template: CGI.escapeHTML(renderer.render).html_safe
+          association_insertion_template: CGI.escapeHTML(renderer.render).html_safe # rubocop:disable Rails/OutputSafety
         }.compact_blank
       end
     end

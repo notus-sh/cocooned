@@ -45,9 +45,7 @@ module Cocooned
       # Normalize keys as underscored symbol to ease future lookups (as we
       # won't need to check for dashed or underscored option names everytime)
       def html_data_normalize(data)
-        data.each_with_object({}) do |(key, value), normalized|
-          normalized[key.to_s.underscore.to_sym] = value
-        end
+        data.transform_keys { |key| key.to_s.underscore.to_sym }
       end
     end
 

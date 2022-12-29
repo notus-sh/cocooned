@@ -26,9 +26,8 @@ module Cocooned
       # Ex: 'items' from 'list[items_attributes][0]'
       def association
         matches = form.object_name.scan(/\[([^\]]+)\]\[[^\]]+\]\z/).flatten
-        return matches.first.gsub(/_attributes\z/, '') if matches.size.positive?
+        return matches.first.delete_suffix('_attributes') if matches.size.positive?
 
-        # TODO: Remove this fallback once helpers tests have been rewrote
         form.object.class.to_s.tableize
       end
 

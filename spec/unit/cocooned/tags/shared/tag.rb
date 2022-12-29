@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Rails/ContentTag
 RSpec.shared_examples 'an action tag builder', :tag do |action|
   it 'supports explicit label' do
     expect(tag('label').text).to eq('label')
@@ -71,7 +72,7 @@ RSpec.shared_examples 'an action tag builder', :tag do |action|
       expect(tag(data: { attr: 'any' }).attribute('data-attr')).not_to be_nil
     end
 
-    context 'when using older data-* options',  deprecation: '3.0' do
+    context 'when using older data-* options', deprecation: '3.0' do
       it 'supports them as data-attributes' do
         expect(tag('data-attr': 'any').attribute('data-attr')).not_to be_nil
       end
@@ -84,3 +85,4 @@ RSpec.shared_examples 'an action tag builder', :tag do |action|
     end
   end
 end
+# rubocop:enable Rails/ContentTag

@@ -6,6 +6,9 @@ require_relative './shared/tag'
 describe Cocooned::Tags::Add, :tag do
   before { allow(template).to receive(:render).and_return(item) }
 
+  let(:builders) { Cocooned::Association::Builder }
+  let(:renderers) { Cocooned::Association::Renderer }
+
   let(:item) { '<div class"cocooned-item"></div>' }
   let(:template) { ActionView::Base.empty }
   let(:association) { :contacts }
@@ -21,10 +24,6 @@ describe Cocooned::Tags::Add, :tag do
 
   it 'has a compatibility class with the original Cocoon', deprecation: '3.0' do
     expect(tag.attribute('class').value.split).to include('add_fields')
-  end
-
-  it 'supports more classes' do
-    expect(tag(class: %i[one two]).attribute('class').value.split).to include('one', 'two', 'cocooned-add')
   end
 
   it 'supports more classes' do
@@ -106,8 +105,6 @@ describe Cocooned::Tags::Add, :tag do
   #
   # Building options
   #
-  let(:builders) { Cocooned::Association::Builder }
-
   it 'forwards record to a Cocooned::Association::Builder' do
     allow(builders).to receive(:new).with(record, any_args).and_call_original
     tag
@@ -134,8 +131,6 @@ describe Cocooned::Tags::Add, :tag do
   #
   # Rendering options
   #
-  let(:renderers) { Cocooned::Association::Renderer }
-
   it 'forwards template to a Cocooned::Association::Renderer' do
     allow(renderers).to receive(:new).with(template, any_args).and_call_original
     tag
@@ -154,15 +149,20 @@ describe Cocooned::Tags::Add, :tag do
     expect(renderers).to have_received(:new).with(anything, anything, association, any_args).once
   end
 
-  it 'forwards builder result to a Cocooned::Association::Renderer' do
-    builder = instance_double(builders)
-    object = double
+  context 'with a build object' do # rubocop:disable RSpec/MultipleMemoizedHelpers
+    before do
+      allow(builders).to receive(:new).and_return(builder)
+      allow(builder).to receive(:build).and_return(object)
+    end
 
-    allow(builders).to receive(:new).and_return(builder)
-    allow(builder).to receive(:build).and_return(object)
-    allow(renderers).to receive(:new).with(anything, anything, anything, object, any_args).and_call_original
-    tag
-    expect(renderers).to have_received(:new).with(anything, anything, anything, object, any_args).once
+    let(:builder) { instance_double(builders) }
+    let(:object) { double }
+
+    it 'forwards builder result to a Cocooned::Association::Renderer' do
+      allow(renderers).to receive(:new).with(anything, anything, anything, object, any_args).and_call_original
+      tag
+      expect(renderers).to have_received(:new).with(anything, anything, anything, object, any_args).once
+    end
   end
 
   shared_examples 'a renderer options forwarder' do |option, value|

@@ -51,13 +51,20 @@ module Cocooned
         # Compatibility with the old way to pass data attributes to Rails view helpers
         # Has we use the :data key (introduced in Rails 3.1), they will not be looked up.
         def html_data
-          data_keys = options.keys.select { |k| k.to_s.match?(/data[_-]/) }
           return super unless data_keys.size.positive?
 
           Deprecation['3.0'].warn 'Compatibility with options named data-* will be removed in 3.0', caller_locations(3)
-          html_data_normalize data_keys.each_with_object(super || {}) do |original_key, data|
+          html_data_normalize super.merge(data_options)
+        end
+
+        def data_keys
+          options.keys.select { |k| k.to_s.match?(/data[_-]/) }
+        end
+
+        def data_options
+          data_keys.each_with_object({}) do |original_key, extracted|
             key = original_key.to_s.gsub(/^data[_-]/, '')
-            data[key] = options.delete(original_key)
+            extracted[key] = options.delete(original_key)
           end
         end
       end

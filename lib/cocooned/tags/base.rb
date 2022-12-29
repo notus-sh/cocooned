@@ -35,7 +35,7 @@ module Cocooned
       attr_reader :template, :form, :options, :label_block
 
       def label
-        return default_label unless label_block.present?
+        return default_label if label_block.blank?
 
         label_block.call
       end

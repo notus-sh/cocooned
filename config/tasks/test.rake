@@ -2,9 +2,11 @@
 
 namespace :test do
   namespace :integration do
+    # rubocop:disable Rails/RakeEnvironment, Rake/Desc
     task :environment do
       require './spec/dummy/config/environment'
     end
+    # rubocop:enable Rails/RakeEnvironment, Rake/Desc
 
     desc 'Rebuild integration tests templates'
     task prepare: :environment do

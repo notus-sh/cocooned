@@ -14,30 +14,18 @@ AllCops:
   Exclude:
     - 'spec/dummy/bin/*'
 
-Layout/LineLength:
-  Max: 150
-
 Metrics/BlockLength:
   Exclude:
-    - 'Rakefile'
     - '**/cocooned.gemspec'
+    - 'config/**/*.rake'
     - 'spec/dummy/db/schema.rb'
-    - 'spec/unit/**/*_spec.rb'
+    - 'spec/unit/**/*.rb'
 
-RSpec/FilePath:
-  Enabled: false
+Naming/FileName:
+  Exclude:
+    - 'config/**/*.gemfile'
+
 RSpec/NestedGroups:
   Max: 4
-
-RSpec/AnyInstance:
-  Enabled: false
-RSpec/MessageSpies:
-  Enabled: false
-RSpec/VerifiedDoubles:
-  Enabled: false
-RSpec/StubbedMock:
-  Enabled: false
-RSpec/ExpectInHook:
-  Enabled: false
-RSpec/MessageChain:
-  Enabled: false
+RSpec/MultipleMemoizedHelpers:
+  Max: 8
