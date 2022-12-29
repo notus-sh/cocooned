@@ -5,7 +5,7 @@ Bundler.require(:default, :development)
 require 'simplecov'
 SimpleCov.start
 
-# Configure Rails Envinronment
+# Configure Rails Environment
 ENV['RAILS_ENV'] = 'test'
 
 require_relative 'dummy/config/environment'
