@@ -55,7 +55,7 @@ module Cocooned
       protected
 
       def renderer
-        Association::Renderer.new(template, form, builder, renderer_options)
+        Association::Renderer.new(template, form, association, builder.build, renderer_options)
       end
 
       def renderer_options

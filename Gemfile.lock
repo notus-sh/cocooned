@@ -81,6 +81,8 @@ GEM
     diff-lcs (1.5.0)
     docile (1.4.0)
     erubi (1.11.0)
+    formtastic (4.0.0)
+      actionpack (>= 5.2.0)
     globalid (1.0.0)
       activesupport (>= 5.0)
     i18n (1.12.0)
@@ -198,6 +200,9 @@ GEM
     rubocop-rspec (2.15.0)
       rubocop (~> 1.33)
     ruby-progressbar (1.11.0)
+    simple_form (5.1.0)
+      actionpack (>= 5.2)
+      activemodel (>= 5.2)
     simplecov (0.21.2)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -231,6 +236,7 @@ DEPENDENCIES
   bundler (~> 2.1)
   byebug (~> 11.1)
   cocooned!
+  formtastic (~> 4.0)
   jquery-rails
   nokogiri
   rails
@@ -242,6 +248,7 @@ DEPENDENCIES
   rubocop-rails
   rubocop-rake
   rubocop-rspec
+  simple_form (~> 5.1)
   simplecov
   sprockets-rails
   sqlite3

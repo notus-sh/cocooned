@@ -2,7 +2,7 @@
 
 describe Cocooned::Helpers do
   let(:template) { ActionView::Base.empty }
-  let(:form) { ActionView::Base.default_form_builder.new('person', record, template, {}) }
+  let(:form) { ActionView::Helpers::FormBuilder.new('person', record, template, {}) }
   let(:association) { :contacts }
   let(:options) { { rel: :nofollow } }
   let(:record) { Person.new }

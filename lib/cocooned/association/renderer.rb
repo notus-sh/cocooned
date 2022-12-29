@@ -3,50 +3,50 @@
 module Cocooned
   module Association
     class Renderer
-      attr_reader :template, :builder, :form, :options
-
-      def initialize(template, form, builder, options = {})
+      def initialize(template, form, association, object, options = {})
         @template = template
         @form = form
-        @builder = builder
-        @options = options.dup.symbolize_keys.reverse_merge(form_name: :f)
+        @association = association
+        @object = object
+        @options = options.dup.symbolize_keys
       end
 
       def render
         form.public_send(form_method, association, object, form_options) do |form|
-          template.render(partial_name, form_name => form, dynamic: true, **(options.delete(:locals) || {}))
+          template.render(partial, **render_options(form))
         end
       end
 
       protected
 
-      delegate :association, to: :builder, private: true
+      attr_reader :template, :form, :association, :object, :options
 
-      def object
-        builder.build
+      def singular_association
+        association.to_s.singularize
       end
 
       def form_method
         ancestors = form.class.ancestors.map(&:to_s)
-        if ancestors.include?('SimpleForm::FormBuilder')
-          :simple_fields_for
-        elsif ancestors.include?('Formtastic::FormBuilder')
-          :semantic_fields_for
-        else
-          :fields_for
-        end
+        return :simple_fields_for if ancestors.include?('SimpleForm::FormBuilder')
+        return :semantic_fields_for if ancestors.include?('Formtastic::FormBuilder')
+
+        :fields_for
       end
 
       def form_options
-        (options.delete(:form_options) || {}).symbolize_keys.reverse_merge(child_index: "new_#{association}")
+        options.fetch(:form_options, {}).symbolize_keys.reverse_merge(child_index: "new_#{singular_association}")
+      end
+
+      def partial
+        options.fetch(:partial, "#{singular_association}_fields")
+      end
+
+      def render_options(form)
+        options.fetch(:locals, {}).merge(form_name => form)
       end
 
       def form_name
-        options.delete(:form_name).to_sym
-      end
-
-      def partial_name
-        options.delete(:partial) || "#{association.to_s.singularize}_fields"
+        options.fetch(:form_name, :f).to_sym
       end
     end
   end

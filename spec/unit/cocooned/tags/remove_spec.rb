@@ -6,7 +6,7 @@ require_relative './shared/tag'
 describe Cocooned::Tags::Remove, :tag do
   let(:template) { ActionView::Base.empty }
   let(:record) { Person.new }
-  let(:form) { ActionView::Base.default_form_builder.new('person[contacts_attributes][0]', record, template, {}) }
+  let(:form) { ActionView::Helpers::FormBuilder.new('person[contacts_attributes][0]', record, template, {}) }
 
   it_behaves_like 'an action tag builder', :remove
   it_behaves_like 'an action tag builder with an association', :remove, :contacts
