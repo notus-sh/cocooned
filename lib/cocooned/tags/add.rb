@@ -3,6 +3,8 @@
 module Cocooned
   module Tags
     class Add < Base
+      include Cocooned::TagsHelper::AssociationLabel
+
       include Cocooned::TagsHelper::Renderer
       include Cocooned::Deprecated::TagsHelper::Renderer
 
@@ -31,11 +33,7 @@ module Cocooned
           association_insertion_method: options.delete(:insertion_method),
           association_insertion_traversal: options.delete(:insertion_traversal),
           association_insertion_template: CGI.escapeHTML(renderer.render).html_safe
-        }.compact
-      end
-
-      def default_label_i18n_keys
-        super + i18n_namespaces.collect { |ns| "#{ns}.#{association}.#{action}" }
+        }.compact_blank
       end
     end
   end

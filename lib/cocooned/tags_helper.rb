@@ -23,6 +23,18 @@ module Cocooned
       end
     end
 
+    module AssociationLabel
+      protected
+
+      def default_label_i18n_keys
+        super + i18n_namespaces.collect { |ns| "#{ns}.#{association}.#{action}" }
+      end
+
+      def association
+        raise NotImplementedError, '#association must be defined in subclasses'
+      end
+    end
+
     module DataAttributes
       protected
 
@@ -47,7 +59,7 @@ module Cocooned
       end
 
       def renderer_options
-        extract_options(:locals, :partial, :form_name, :form_options).reverse_merge(form_name: :f)
+        extract_options(:locals, :partial, :form_name, :form_options)
       end
 
       def builder

@@ -3,6 +3,8 @@
 module Cocooned
   module Tags
     class Remove < Base
+      include Cocooned::TagsHelper::AssociationLabel
+
       def render
         template.safe_join([hidden_field, super])
       end
@@ -18,10 +20,6 @@ module Cocooned
           classes << (new_record? ? :dynamic : :existing)
           classes << :destroyed if marked_for_destruction?
         end
-      end
-
-      def default_label_i18n_keys
-        super + i18n_namespaces.collect { |ns| "#{ns}.#{association}.#{action}" }
       end
 
       # Extract association name from form's object_name.

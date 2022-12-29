@@ -4,8 +4,9 @@ module Cocooned
   module Tags
     class Base
       include Cocooned::TagsHelper::DefaultLabel
-      include Cocooned::TagsHelper::DataAttributes
       include Cocooned::Deprecated::TagsHelper::DefaultLabel
+
+      include Cocooned::TagsHelper::DataAttributes
       include Cocooned::Deprecated::TagsHelper::DataAttributes
 
       class << self
@@ -21,7 +22,7 @@ module Cocooned
       def initialize(template, form, **options, &block)
         @template = template
         @form = form
-        @options = options.dup.with_indifferent_access
+        @options = options.dup.symbolize_keys
         @label_block = block if block_given?
       end
 

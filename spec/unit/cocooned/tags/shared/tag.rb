@@ -43,6 +43,10 @@ RSpec.shared_examples 'an action tag builder', :tag do |action|
     end
   end
 
+  it 'has a neutral URL as href' do
+    expect(tag.attribute('href').value).to eq('#')
+  end
+
   context 'with a :class option' do
     it 'supports CSS classes as an array' do
       expect(tag(class: %i[one two]).attribute('class').value.split).to include('one', 'two')

@@ -72,7 +72,7 @@ module Cocooned
           legacy_options = options.delete(:render_options)
 
           super.tap do |opts|
-            opts[:locals] = legacy_options.delete(:locals) if legacy_options.key?(:local)
+            opts[:locals] = legacy_options.delete(:locals) if legacy_options.key?(:locals)
             opts[:form_options] = legacy_options
           end
         end

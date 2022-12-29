@@ -11,36 +11,40 @@ describe Cocooned::Tags::Remove, :tag do
   it_behaves_like 'an action tag builder', :remove
   it_behaves_like 'an action tag builder with an association', :remove, :contacts
 
-  it 'have a default class' do
-    expect(link.attribute('class').value.split).to include('cocooned-remove')
+  it 'has a default class' do
+    expect(tag.attribute('class').value.split).to include('cocooned-remove')
   end
 
-  it 'have a .dynamic class for new records' do
+  it 'has a compatibility class with the original Cocoon', deprecation: '3.0' do
+    expect(tag.attribute('class').value.split).to include('remove_fields')
+  end
+
+  it 'has a .dynamic class for new records' do
     allow(record).to receive(:new_record?).and_return(true)
 
-    expect(link.attribute('class').value.split).to include('dynamic')
-    expect(link.attribute('class').value.split).not_to include('existing')
+    expect(tag.attribute('class').value.split).to include('dynamic')
+    expect(tag.attribute('class').value.split).not_to include('existing')
   end
 
-  it 'have an .existing class for persisted records' do
+  it 'has an .existing class for persisted records' do
     allow(record).to receive(:new_record?).and_return(false)
 
-    expect(link.attribute('class').value.split).not_to include('dynamic')
-    expect(link.attribute('class').value.split).to include('existing')
+    expect(tag.attribute('class').value.split).not_to include('dynamic')
+    expect(tag.attribute('class').value.split).to include('existing')
   end
 
   it 'does not have a .destroyed class for alive record' do
     allow(record).to receive(:marked_for_destruction?).and_return(false)
-    expect(link.attribute('class').value.split).not_to include('destroyed')
+    expect(tag.attribute('class').value.split).not_to include('destroyed')
   end
 
-  it 'have a .destroyed class for record marked for destruction' do
+  it 'has a .destroyed class for record marked for destruction' do
     allow(record).to receive(:marked_for_destruction?).and_return(true)
-    expect(link.attribute('class').value.split).to include('destroyed')
+    expect(tag.attribute('class').value.split).to include('destroyed')
   end
 
   it 'supports more classes' do
-    expect(link(class: %i[one two]).attribute('class').value.split).to include('one', 'two', 'cocooned-remove')
+    expect(tag(class: %i[one two]).attribute('class').value.split).to include('one', 'two', 'cocooned-remove')
   end
 
   it 'outputs an input field' do

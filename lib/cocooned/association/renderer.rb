@@ -8,7 +8,7 @@ module Cocooned
       def initialize(template, builder, options = {})
         @template = template
         @builder = builder
-        @options = options
+        @options = options.dup.symbolize_keys.reverse_merge(form_name: :f)
       end
 
       def render
@@ -37,7 +37,7 @@ module Cocooned
       end
 
       def form_options
-        (options.delete(:form_options) || {}).symbolize_keys.reverse_merge!(child_index: "new_#{association}")
+        (options.delete(:form_options) || {}).symbolize_keys.reverse_merge(child_index: "new_#{association}")
       end
 
       def form_name

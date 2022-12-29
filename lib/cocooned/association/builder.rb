@@ -8,7 +8,7 @@ module Cocooned
       def initialize(form, association, options = {})
         self.form = form
         self.association = association
-        self.options = options.reverse_merge(force_non_association_create: false, wrap_object: false)
+        self.options = options.dup.symbolize_keys.reverse_merge(force_non_association_create: false, wrap_object: false)
       end
 
       def build_object
