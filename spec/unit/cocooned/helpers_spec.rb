@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'unit/shared/link_helper'
-
 describe Cocooned::Helpers do
   let(:template) { ActionView::Base.empty }
   let(:form) { ActionView::Base.default_form_builder.new('person', record, template, {}) }
@@ -95,6 +93,42 @@ describe Cocooned::Helpers do
 
       def positional_arguments
         []
+      end
+    end
+  end
+
+  context 'with deprecated methods', deprecation: '3.0' do
+    describe '#link_to_add_association' do
+      it 'is an alias to #cocooned_add_item_link' do
+        allow(template).to receive(:cocooned_add_item_link)
+        template.link_to_add_association('label', form, association)
+
+        expect(template).to have_received(:cocooned_add_item_link).once
+      end
+
+      it 'warns about deprecation' do
+        with_deprecation_as_exception(Cocooned::Deprecation['3.0']) do
+          expect do
+            template.link_to_add_association('label', form, association)
+          end.to raise_error(ActiveSupport::DeprecationException)
+        end
+      end
+    end
+
+    describe '#link_to_remove_association' do
+      it 'is an alias to #cocooned_remove_item_link' do
+        allow(template).to receive(:cocooned_remove_item_link)
+        template.link_to_remove_association('label', form)
+
+        expect(template).to have_received(:cocooned_remove_item_link).once
+      end
+
+      it 'warns about deprecation' do
+        with_deprecation_as_exception(Cocooned::Deprecation['3.0']) do
+          expect do
+            template.link_to_remove_association('label', form)
+          end.to raise_error(ActiveSupport::DeprecationException)
+        end
       end
     end
   end
