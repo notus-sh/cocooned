@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'cocooned/tags/base'
-
 module Cocooned
   module Tags
     class Up < Base

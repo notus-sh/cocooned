@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Cocooned::AssociationBuilder do
+describe Cocooned::Association::Builder do
   describe '#build_object' do
     context 'with belongs_to associations' do
       subject(:builder) { described_class.new(form, :author) }

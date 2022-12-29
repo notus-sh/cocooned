@@ -15,4 +15,5 @@ group :development, :test do
 
   gem 'nokogiri'
   gem 'simplecov', require: false
+  gem 'byebug', '~> 11.1'
 end

@@ -32,5 +32,51 @@ module Cocooned
       end
       deprecate link_to_remove_association: 'Use :cocooned_remove_item_link instead', deprecator: Deprecation['3.0']
     end
+
+    module TagsHelper
+      module DefaultLabel
+        protected
+
+        def i18n_namespaces
+          return super unless I18n.exists?(:cocoon)
+
+          Deprecation['3.0'].warn 'Support for the :cocoon i18n namespace will be removed in 3.0', caller_locations(3)
+          super + %w[cocoon]
+        end
+      end
+
+      module DataAttributes
+        protected
+
+        # Compatibility with the old way to pass data attributes to Rails view helpers
+        # Has we use the :data key (introduced in Rails 3.1), they will not be looked up.
+        def html_data
+          data_keys = options.keys.select { |k| k.to_s.match?(/data[_-]/) }
+          return super unless data_keys.size.positive?
+
+          Deprecation['3.0'].warn 'Compatibility with options named data-* will be removed in 3.0', caller_locations(3)
+          html_data_normalize data_keys.each_with_object(super || {}) do |original_key, data|
+            key = original_key.to_s.gsub(/^data[_-]/, '')
+            data[key] = options.delete(original_key)
+          end
+        end
+      end
+
+      module Renderer
+        protected
+
+        def renderer_options
+          return super unless options.key?(:render_options)
+
+          Deprecation['3.0'].warn 'Support for :render_options will be removed in 3.0', caller_locations(3)
+          legacy_options = options.delete(:render_options)
+
+          super.tap do |opts|
+            opts[:locals] = legacy_options.delete(:locals) if legacy_options.key?(:local)
+            opts[:form_options] = legacy_options
+          end
+        end
+      end
+    end
   end
 end

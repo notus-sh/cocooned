@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'cocooned/options'
-require 'cocooned/association_builder'
 
 module Cocooned
   # TODO: Remove in 3.0 (Only Cocoon class names).
@@ -120,7 +119,7 @@ module Cocooned
         builder_options = cocooned_extract_builder_options!(html_options)
         render_options = cocooned_extract_render_options!(html_options)
 
-        builder = Cocooned::AssociationBuilder.new(form, association, builder_options)
+        builder = Association::Builder.new(form, association, builder_options)
         rendered = cocooned_render_association(builder, render_options)
 
         data = cocooned_extract_data!(html_options).merge!(
@@ -154,24 +153,7 @@ module Cocooned
     #
     # See the documentation of +link_to+ for valid options.
     def cocooned_remove_item_link(name, form = nil, html_options = {}, &block)
-      # rubocop:disable Style/ParallelAssignment
-      html_options, form = form, nil if form.is_a?(Hash)
-      form, name = name, form if form.nil?
-      # rubocop:enable Style/ParallelAssignment
-
-      return cocooned_remove_item_link(capture(&block), form, html_options) if block_given?
-
-      association = form.object.class.to_s.tableize
-      return cocooned_remove_item_link(cocooned_default_label(:remove, association), form, html_options) if name.nil?
-
-      destroy = form.object.respond_to?(:marked_for_destruction?) && form.object.marked_for_destruction?
-
-      link_options = html_options.dup
-      link_options[:class] = [html_options[:class], Cocooned::HELPER_CLASSES[:remove]].flatten.compact
-      link_options[:class] << (form.object.respond_to?(:new_record?) && form.object.new_record? ? :dynamic : :existing)
-      link_options[:class] << :destroyed if destroy.present?
-
-      form.hidden_field(:_destroy, value: destroy) << link_to(name, '#', link_options)
+      Tags::Remove.create(self, *[name, form].compact, **html_options, &block).render
     end
 
     # Output an action link to move an item up.
