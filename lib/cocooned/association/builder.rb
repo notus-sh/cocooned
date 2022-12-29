@@ -2,7 +2,7 @@
 
 module Cocooned
   module Association
-    class Builder
+    class Builder # :nodoc:
       attr_reader :association, :record
 
       def initialize(record, association, options = {})

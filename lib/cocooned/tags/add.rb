@@ -2,7 +2,7 @@
 
 module Cocooned
   module Tags
-    class Add < Base
+    class Add < Base # :nodoc:
       include Cocooned::TagsHelper::AssociationLabel
 
       include Cocooned::TagsHelper::Renderer

@@ -18,8 +18,8 @@ module Cocooned
   end
 
   # Deprecated methods
-  module Deprecated
-    module Helpers
+  module Deprecated # :nodoc:
+    module Helpers # :nodoc:
       # @deprecated: Please use {#cocooned_add_item_link} instead
       def link_to_add_association(*args, &block)
         cocooned_add_item_link(*args, &block)
@@ -33,8 +33,8 @@ module Cocooned
       deprecate link_to_remove_association: 'Use :cocooned_remove_item_link instead', deprecator: Deprecation['3.0']
     end
 
-    module TagsHelper
-      module DefaultLabel
+    module TagsHelper # :nodoc:
+      module DefaultLabel # :nodoc:
         protected
 
         def i18n_namespaces
@@ -45,7 +45,7 @@ module Cocooned
         end
       end
 
-      module DataAttributes
+      module DataAttributes # :nodoc:
         protected
 
         # Compatibility with the old way to pass data attributes to Rails view helpers
@@ -69,7 +69,7 @@ module Cocooned
         end
       end
 
-      module Renderer
+      module Renderer # :nodoc:
         protected
 
         def renderer_options

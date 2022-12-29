@@ -2,7 +2,7 @@
 
 module Cocooned
   module Association
-    class Renderer
+    class Renderer # :nodoc:
       def initialize(template, form, association, object, options = {})
         @template = template
         @form = form

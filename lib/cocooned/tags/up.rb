@@ -2,7 +2,7 @@
 
 module Cocooned
   module Tags
-    class Up < Base
+    class Up < Base # :nodoc:
       protected
 
       def html_classes

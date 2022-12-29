@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Cocooned
-  module Association
+  module Association # :nodoc:
     autoload :Builder, 'cocooned/association/builder'
     autoload :Renderer, 'cocooned/association/renderer'
   end

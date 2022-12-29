@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Cocooned
-  module Tags
+  module Tags # :nodoc:
     autoload :Base, 'cocooned/tags/base'
 
     autoload :Add, 'cocooned/tags/add'

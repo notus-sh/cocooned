@@ -2,7 +2,7 @@
 
 module Cocooned
   module Tags
-    class Remove < Base
+    class Remove < Base # :nodoc:
       include Cocooned::TagsHelper::AssociationLabel
 
       def render

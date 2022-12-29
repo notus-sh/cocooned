@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Cocooned
-  module TagsHelper
-    module DefaultLabel
+  module TagsHelper # :nodoc:
+    module DefaultLabel # :nodoc:
       protected
 
       def default_label
@@ -23,7 +23,7 @@ module Cocooned
       end
     end
 
-    module AssociationLabel
+    module AssociationLabel # :nodoc:
       protected
 
       def default_label_i18n_keys
@@ -35,7 +35,7 @@ module Cocooned
       end
     end
 
-    module DataAttributes
+    module DataAttributes # :nodoc:
       protected
 
       def html_data
@@ -49,7 +49,7 @@ module Cocooned
       end
     end
 
-    module Renderer
+    module Renderer # :nodoc:
       protected
 
       def renderer

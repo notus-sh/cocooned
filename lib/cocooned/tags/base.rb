@@ -2,7 +2,7 @@
 
 module Cocooned
   module Tags
-    class Base
+    class Base # :nodoc:
       include Cocooned::TagsHelper::DefaultLabel
       include Cocooned::Deprecated::TagsHelper::DefaultLabel
 
