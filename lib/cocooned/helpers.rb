@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'cocooned/options'
-
 module Cocooned
   module Helpers
     include Cocooned::Deprecated::Helpers
