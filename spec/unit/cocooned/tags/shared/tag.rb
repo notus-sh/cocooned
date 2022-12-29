@@ -48,11 +48,11 @@ RSpec.shared_examples 'an action tag builder', :tag do |action|
   end
 
   it 'forwards options to ActionView helper' do
-    expect(tag(rel: :'nofollow').attribute('rel').value).to eq('nofollow')
+    expect(tag(rel: :nofollow).attribute('rel').value).to eq('nofollow')
   end
 
   it 'does not alter options' do
-    options = { rel: :'nofollow', class: :btn }
+    options = { rel: :nofollow, class: :btn }
     expect { tag(**options) }.not_to change(options, :size)
   end
 
