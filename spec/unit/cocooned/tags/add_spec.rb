@@ -108,10 +108,10 @@ describe Cocooned::Tags::Add, :tag do
   #
   let(:builder) { Cocooned::Association::Builder }
 
-  it 'forwards form to a Cocooned::Association::Builder' do
-    allow(builder).to receive(:new).with(form, any_args).and_call_original
+  it 'forwards record to a Cocooned::Association::Builder' do
+    allow(builder).to receive(:new).with(record, any_args).and_call_original
     tag
-    expect(builder).to have_received(:new).with(form, any_args).once
+    expect(builder).to have_received(:new).with(record, any_args).once
   end
 
   it 'forwards association to a Cocooned::Association::Builder' do
@@ -122,9 +122,9 @@ describe Cocooned::Tags::Add, :tag do
 
   shared_examples 'a builder options forwarder' do |option, value|
     it "forwards #{option} to a Cocooned::Association::Builder" do
-      allow(builder).to receive(:new).with(form, association, hash_including(option => value)).and_call_original
+      allow(builder).to receive(:new).with(record, association, hash_including(option => value)).and_call_original
       tag(option => value)
-      expect(builder).to have_received(:new).with(form, association, hash_including(option => value))
+      expect(builder).to have_received(:new).with(record, association, hash_including(option => value))
     end
   end
 
@@ -142,11 +142,17 @@ describe Cocooned::Tags::Add, :tag do
     expect(renderer).to have_received(:new).with(template, any_args).once
   end
 
+  it 'forwards form to a Cocooned::Association::Renderer' do
+    allow(renderer).to receive(:new).with(anything, form, any_args).and_call_original
+    tag
+    expect(renderer).to have_received(:new).with(anything, form, any_args).once
+  end
+
   shared_examples 'a renderer options forwarder' do |option, value|
     it "forwards #{option} to a Cocooned::Association::Renderer" do
-      allow(renderer).to receive(:new).with(template, anything, hash_including(option => value)).and_call_original
+      allow(renderer).to receive(:new).with(template, form, anything, hash_including(option => value)).and_call_original
       tag(option => value)
-      expect(renderer).to have_received(:new).with(template, anything, hash_including(option => value))
+      expect(renderer).to have_received(:new).with(template, form, anything, hash_including(option => value))
     end
   end
 
@@ -160,9 +166,9 @@ describe Cocooned::Tags::Add, :tag do
       let(:render_options) { { locals: { a: 1 } } }
 
       it 'forwards :locals to a Cocooned::Association::Renderer' do
-        allow(renderer).to receive(:new).with(template, anything, hash_including(**render_options)).and_call_original
+        allow(renderer).to receive(:new).with(template, form, anything, hash_including(**render_options)).and_call_original
         tag(render_options: render_options)
-        expect(renderer).to have_received(:new).with(template, anything, hash_including(**render_options))
+        expect(renderer).to have_received(:new).with(template, form, anything, hash_including(**render_options))
       end
 
       it 'warns about deprecation' do
@@ -176,9 +182,9 @@ describe Cocooned::Tags::Add, :tag do
       let(:render_options) { { namespace: :any } }
 
       it 'forwards :locals to a Cocooned::Association::Renderer' do
-        allow(renderer).to receive(:new).with(template, anything, hash_including(form_options: render_options)).and_call_original
+        allow(renderer).to receive(:new).with(template, form, anything, hash_including(form_options: render_options)).and_call_original
         tag(render_options: render_options)
-        expect(renderer).to have_received(:new).with(template, anything, hash_including(form_options: render_options))
+        expect(renderer).to have_received(:new).with(template, form, anything, hash_including(form_options: render_options))
       end
 
       it 'warns about deprecation' do

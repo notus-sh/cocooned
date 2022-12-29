@@ -3,16 +3,17 @@
 module Cocooned
   module Association
     class Renderer
-      attr_reader :template, :builder, :options
+      attr_reader :template, :builder, :form, :options
 
-      def initialize(template, builder, options = {})
+      def initialize(template, form, builder, options = {})
         @template = template
+        @form = form
         @builder = builder
         @options = options.dup.symbolize_keys.reverse_merge(form_name: :f)
       end
 
       def render
-        builder.form.public_send(form_method, association, object, form_options) do |form|
+        form.public_send(form_method, association, object, form_options) do |form|
           template.render(partial_name, form_name => form, dynamic: true, **(options.delete(:locals) || {}))
         end
       end
@@ -22,11 +23,11 @@ module Cocooned
       delegate :association, to: :builder, private: true
 
       def object
-        builder.build_object
+        builder.build
       end
 
       def form_method
-        ancestors = builder.form.class.ancestors.map(&:to_s)
+        ancestors = form.class.ancestors.map(&:to_s)
         if ancestors.include?('SimpleForm::FormBuilder')
           :simple_fields_for
         elsif ancestors.include?('Formtastic::FormBuilder')
@@ -45,7 +46,7 @@ module Cocooned
       end
 
       def partial_name
-        options.delete(:partial) || "#{builder.singular_name}_fields"
+        options.delete(:partial) || "#{association.to_s.singularize}_fields"
       end
     end
   end

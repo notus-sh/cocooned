@@ -3,35 +3,30 @@
 module Cocooned
   module Association
     class Builder
-      attr_accessor :association, :form, :options
+      attr_reader :association, :record
 
-      def initialize(form, association, options = {})
-        self.form = form
-        self.association = association
-        self.options = options.dup.symbolize_keys.reverse_merge(force_non_association_create: false, wrap_object: false)
+      def initialize(record, association, options = {})
+        @record = record
+        @association = association
+        @options = options.dup.symbolize_keys.reverse_merge(force_non_association_create: false, wrap_object: false)
       end
 
-      def build_object
+      def build
         model = reflection ? build_with_reflection : build_without_reflection
-        model = @options[:wrap_object].call(model) if @options[:wrap_object].respond_to?(:call)
+        model = options[:wrap_object].call(model) if options[:wrap_object].respond_to?(:call)
         model
       end
 
-      def singular_name
-        association.to_s.singularize
-      end
+      protected
 
-      def plural_name
-        association.to_s.pluralize
-      end
+      attr_reader :options
 
-      private
+      def model
+        record.class
+      end
 
       def reflection
-        @reflection ||= begin
-          klass = form.object.class
-          klass.respond_to?(:reflect_on_association) ? klass.reflect_on_association(association) : nil
-        end
+        @reflection ||= model.try(:reflect_on_association, association)
       end
 
       def build_with_reflection
@@ -40,7 +35,7 @@ module Cocooned
         # Assume ActiveRecord or compatible
         # We use a clone of the current form object to not link
         # object together (even if unsaved)
-        dummy = form.object.dup
+        dummy = record.dup
         model = if reflection.collection?
                   dummy.send(association).build
                 else
@@ -51,14 +46,15 @@ module Cocooned
       end
 
       def build_without_reflection
-        methods = %W[build_#{plural_name} build_#{singular_name}].select { |m| form.object.respond_to?(m) }
-        raise "Association #{association} doesn't exist on #{form.object.class}" unless methods.any?
+        methods = %W[build_#{association.to_s.pluralize} build_#{association.to_s.singularize}]
+        available_methods = methods.select { |m| record.respond_to?(m) }
+        raise "Association #{association} doesn't exist on #{model}" unless available_methods.any?
 
-        form.object.send(methods.first)
+        record.send(available_methods.first)
       end
 
       def should_use_conditions?
-        reflection.class.name.starts_with?('Mongoid::') || @options[:force_non_association_create]
+        reflection.class.name.starts_with?('Mongoid::') || options[:force_non_association_create]
       end
 
       def build_with_conditions
