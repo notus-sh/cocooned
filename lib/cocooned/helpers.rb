@@ -3,15 +3,7 @@
 require 'cocooned/options'
 
 module Cocooned
-  # TODO: Remove in 3.0 (Only Cocoon class names).
-  HELPER_CLASSES = {
-    add: %w[cocooned-add add_fields],
-    remove: %w[cocooned-remove remove_fields],
-    up: %w[cocooned-move-up],
-    down: %w[cocooned-move-down]
-  }.freeze
-
-  module Helpers # rubocop:disable Metrics/ModuleLength
+  module Helpers
     include Cocooned::Deprecated::Helpers
 
     # Output an action link to add an item in a nested form.
@@ -100,40 +92,11 @@ module Cocooned
     # These options are supported for backward compatibility with the original Cocoon.
     # **Support for these options will be removed in the next major release !**.
     #
-    # - **render_options**: A nested Hash originaly used to pass locals and form builder
+    # - **render_options**: A nested Hash originally used to pass locals and form builder
     #   options.
     #
     def cocooned_add_item_link(*args, &block)
-      if block_given?
-        cocooned_add_item_link(capture(&block), *args)
-
-      elsif args.first.respond_to?(:object)
-        association = args.second
-        cocooned_add_item_link(cocooned_default_label(:add, association), *args)
-
-      else
-        name, form, association, html_options = *args
-        html_options ||= {}
-        html_options = html_options.dup.with_indifferent_access
-
-        builder_options = cocooned_extract_builder_options!(html_options)
-        render_options = cocooned_extract_render_options!(html_options)
-
-        builder = Association::Builder.new(form, association, builder_options)
-        rendered = cocooned_render_association(builder, render_options)
-
-        data = cocooned_extract_data!(html_options).merge!(
-          association: builder.singular_name,
-          associations: builder.plural_name,
-          association_insertion_template: CGI.escapeHTML(rendered.to_str).html_safe
-        )
-
-        html_options[:data] = (html_options[:data] || {}).merge(data)
-        html_options[:class] = [Array(html_options.delete(:class)).collect { |k| k.to_s.split(' ') },
-                                Cocooned::HELPER_CLASSES[:add]].flatten.compact.uniq.join(' ')
-
-        link_to(name, '#', html_options)
-      end
+      cocooned_link(Tags::Add, *args, &block)
     end
 
     # Output an action link to remove an item (and an hidden field to mark
@@ -152,8 +115,8 @@ module Cocooned
     #     # Use default name
     #
     # See the documentation of +link_to+ for valid options.
-    def cocooned_remove_item_link(name, form = nil, html_options = {}, &block)
-      Tags::Remove.create(self, *[name, form].compact, **html_options, &block).render
+    def cocooned_remove_item_link(*args, &block)
+      cocooned_link(Tags::Remove, *args, &block)
     end
 
     # Output an action link to move an item up.
@@ -171,8 +134,8 @@ module Cocooned
     #     # Use default name
     #
     # See the documentation of +link_to+ for valid options.
-    def cocooned_move_item_up_link(name, form = nil, html_options = {}, &block)
-      Tags::Up.create(self, *[name, form].compact, **html_options, &block).render
+    def cocooned_move_item_up_link(*args, &block)
+      cocooned_link(Tags::Up, *args, &block)
     end
 
     # Output an action link to move an item down.
@@ -190,94 +153,15 @@ module Cocooned
     #     # Use default name
     #
     # See the documentation of +link_to+ for valid options.
-    def cocooned_move_item_down_link(name, form = nil, html_options = {}, &block)
-      Tags::Down.create(self, *[name, form].compact, **html_options, &block).render
+    def cocooned_move_item_down_link(*args, &block)
+      cocooned_link(Tags::Down, *args, &block)
     end
 
-    private
+    protected
 
-    def cocooned_default_label(action, association = nil)
-      # TODO: Remove in 3.0
-      Cocooned::Deprecation['3.0'].warn('Support for the :cocoon I18n scope will be removed in 3.0') if I18n.exists?(:cocoon)
-
-      keys = ["cocooned.defaults.#{action}", "cocoon.defaults.#{action}"]
-      keys.unshift("cocooned.#{association}.#{action}", "cocoon.#{association}.#{action}") unless association.nil?
-      keys.collect!(&:to_sym)
-      keys << action.to_s.humanize
-
-      I18n.translate(keys.take(1).first, default: keys.drop(1))
-    end
-
-    def cocooned_render_association(builder, options = {})
-      render_options = options.dup
-      locals = (render_options.delete(:locals) || {}).symbolize_keys
-      partial = render_options.delete(:partial) || "#{builder.singular_name}_fields"
-      form_name = render_options.delete(:form_name)
-      form_options = (render_options.delete(:form_options) || {}).symbolize_keys
-      form_options.reverse_merge!(child_index: "new_#{builder.association}")
-
-      builder.form.send(cocooned_form_method(builder.form),
-                        builder.association,
-                        builder.build_object,
-                        form_options) do |form_builder|
-        partial_options = { form_name.to_sym => form_builder, :dynamic => true }.merge(locals)
-        render(partial, partial_options)
-      end
-    end
-
-    def cocooned_form_method(form)
-      ancestors = form.class.ancestors.map(&:to_s)
-      if ancestors.include?('SimpleForm::FormBuilder')
-        :simple_fields_for
-      elsif ancestors.include?('Formtastic::FormBuilder')
-        :semantic_fields_for
-      else
-        :fields_for
-      end
-    end
-
-    def cocooned_extract_builder_options!(html_options)
-      Options.new(html_options).slice(:wrap_object, :force_non_association_create)
-    end
-
-    def cocooned_extract_render_options!(html_options)
-      render_options = { form_name: :f }
-
-      # TODO: Remove in 2.0
-      if html_options.key?(:render_options)
-        Cocooned::Deprecation.warn 'Support for :render_options will be removed in 3.0'
-
-        options = html_options.delete(:render_options)
-        render_options[:locals] = options.delete(:locals) if options.key?(:locals)
-        render_options[:form_options] = options
-      end
-
-      %i[locals partial form_name form_options].each_with_object(render_options) do |option_name, opts|
-        opts[option_name] = html_options.delete(option_name) if html_options.key?(option_name)
-      end
-    end
-
-    def cocooned_extract_data!(html_options)
-      options = Options.new(html_options)
-
-      data = {
-        association_insertion_count: [options.fetch(:count, 0).to_i, 1].compact.max,
-        association_insertion_node: options.fetch(:insertion_node),
-        association_insertion_method: options.fetch(:insertion_method),
-        association_insertion_traversal: options.fetch(:insertion_traversal)
-      }
-
-      # Compatibility with the old way to pass data attributes to Rails view helpers
-      # Has we build a :data key, they will not be looked up.
-      html_options.keys.select { |k| k.to_s.match?(/data[_-]/) }.each_with_object(data) do |data_key, d|
-        key = data_key.to_s.gsub(/^data[_-]/, '')
-        d[key] = html_options.delete(data_key)
-      end
-
-      # Compatibility with the old JavaScript option name
-      data[:count] = data[:association_insertion_count]
-
-      data.compact
+    def cocooned_link(klass, *args, &block)
+      options = args.extract_options!
+      klass.create(self, *args, **options, &block).render
     end
   end
 end

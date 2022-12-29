@@ -58,7 +58,14 @@ describe Cocooned::Tags::Add, :tag do
     end
 
     it 'has a data attribute for insertion method when given' do
-      expect(tag(insertion_method: :after).attribute('data-association-insertion-method').value).to eq('after')
+      attr = tag(insertion_method: :after).attribute('data-association-insertion-method')
+      expect(attr.value).to eq('after')
+    end
+
+    # Not recommended
+    it 'supports association_insertion_method as a data attribute' do
+      attr = tag(data: { association_insertion_method: :after }).attribute('data-association-insertion-method')
+      expect(attr.value).to eq('after')
     end
   end
 
@@ -68,7 +75,14 @@ describe Cocooned::Tags::Add, :tag do
     end
 
     it 'has a data attribute for insertion node when given' do
-      expect(tag(insertion_node: '.container').attribute('data-association-insertion-node').value).to eq('.container')
+      attr = tag(insertion_node: '.container').attribute('data-association-insertion-node')
+      expect(attr.value).to eq('.container')
+    end
+
+    # Not recommended
+    it 'supports association_insertion_node as a data attribute' do
+      attr = tag(data: { association_insertion_node: '.container' }).attribute('data-association-insertion-node')
+      expect(attr.value).to eq('.container')
     end
   end
 
@@ -78,7 +92,14 @@ describe Cocooned::Tags::Add, :tag do
     end
 
     it 'has a data attribute for insertion traversal when given' do
-      expect(tag(insertion_traversal: :parent).attribute('data-association-insertion-traversal').value).to eq('parent')
+      attr = tag(insertion_traversal: :parent).attribute('data-association-insertion-traversal')
+      expect(attr.value).to eq('parent')
+    end
+
+    # Not recommended
+    it 'supports association_insertion_traversal as a data attribute' do
+      attr = tag(data: { association_insertion_traversal: :parent }).attribute('data-association-insertion-traversal')
+      expect(attr.value).to eq('parent')
     end
   end
 

@@ -47,6 +47,10 @@ RSpec.shared_examples 'an action tag builder', :tag do |action|
     expect(tag.attribute('href').value).to eq('#')
   end
 
+  it 'forwards options to ActionView helper' do
+    expect(tag(rel: :'nofollow').attribute('rel').value).to eq('nofollow')
+  end
+
   context 'with a :class option' do
     it 'supports CSS classes as an array' do
       expect(tag(class: %i[one two]).attribute('class').value.split).to include('one', 'two')
