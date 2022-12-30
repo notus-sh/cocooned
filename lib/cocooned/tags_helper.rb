@@ -30,8 +30,13 @@ module Cocooned
         super + i18n_namespaces.collect { |ns| "#{ns}.#{association}.#{action}" }
       end
 
+      # Extract association name from form's object_name.
+      # Ex: 'items' from 'list[items_attributes][0]'
       def association
-        raise NotImplementedError, '#association must be defined in subclasses'
+        matches = form.object_name.scan(/\[([^\]]+)\]\[[^\]]+\]\z/).flatten
+        return matches.first.delete_suffix('_attributes') if matches.size.positive?
+
+        form.object.class.to_s.tableize
       end
     end
 

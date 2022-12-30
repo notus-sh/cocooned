@@ -3,7 +3,12 @@
 require_relative './shared/tag'
 
 describe Cocooned::Tags::Down, :tag do
+  let(:template) { ActionView::Base.empty }
+  let(:record) { Person.new }
+  let(:form) { ActionView::Helpers::FormBuilder.new('person[contacts_attributes][0]', record, template, {}) }
+
   it_behaves_like 'an action tag builder', :down
+  it_behaves_like 'an action tag builder with an association', :down, :contacts
 
   it 'has a default class' do
     expect(tag.attribute('class').value.split).to include('cocooned-move-down')

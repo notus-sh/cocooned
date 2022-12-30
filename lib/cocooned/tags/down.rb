@@ -3,6 +3,8 @@
 module Cocooned
   module Tags
     class Down < Base # :nodoc:
+      include Cocooned::TagsHelper::AssociationLabel
+
       protected
 
       def html_classes
