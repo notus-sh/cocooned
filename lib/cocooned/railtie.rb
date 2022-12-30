@@ -4,7 +4,7 @@ require 'rails'
 require 'cocooned/helpers'
 
 module Cocooned
-  class Railtie < ::Rails::Engine
+  class Railtie < ::Rails::Engine # :nodoc:
     initializer 'cocooned.initialize' do |_app|
       ActiveSupport.on_load :action_view do
         ActionView::Base.include Cocooned::Helpers

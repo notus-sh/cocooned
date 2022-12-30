@@ -30,6 +30,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rails', '>= 5.0', '<= 7.1'
 
   spec.add_development_dependency 'bundler', '~> 2.1'
+  spec.add_development_dependency 'formtastic', '~> 4.0'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rspec', '~> 3.11'
   spec.add_development_dependency 'rspec-rails', '~> 6.0'
@@ -38,4 +39,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop-rails'
   spec.add_development_dependency 'rubocop-rake'
   spec.add_development_dependency 'rubocop-rspec'
+  spec.add_development_dependency 'simple_form', '~> 5.1'
 end

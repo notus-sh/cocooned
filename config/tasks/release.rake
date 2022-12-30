@@ -28,6 +28,7 @@ namespace :npm do
     end
   end
 
+  desc 'Build package.json from template'
   task :'package-json' do
     contributors = []
     spec.authors.each_with_index do |name, i|

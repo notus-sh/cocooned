@@ -13,6 +13,7 @@ group :development, :test do
   gem 'sqlite3'
   gem 'webrick'
 
+  gem 'byebug', '~> 11.1'
   gem 'nokogiri'
   gem 'simplecov', require: false
 end
