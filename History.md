@@ -2,6 +2,7 @@
 
 ## Version 1.5.0 (Not released yet)
 
+* Refactor helpers as tag classes (#10)
 * Integrate deprecation messages with ActiveSupport::Deprecation (#9)
 * Rewrite JavaScript code as ESM modules (#6) and ECMAScript 5 classes (#7)
 * Reorganize JavaScript code and tests into the `npm` folder (#5)
