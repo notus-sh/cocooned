@@ -2,11 +2,7 @@
 
 module TagHelper
   def html(*args, **options, &block)
-    tag_template = try(:template) || ActionView::Base.empty
-    tag_form = try(:form) || double
-    tag_association = try(:association)
-    tag = described_class.create(tag_template, *(args + [tag_form, tag_association].compact), **options, &block)
-
+    tag = described_class.create(template, *(args + [form, try(:association)].compact), **options, &block)
     Nokogiri::HTML(tag.render)
   end
 

@@ -22,15 +22,6 @@ module Cocooned
         end
       end
 
-      # Extract association name from form's object_name.
-      # Ex: 'items' from 'list[items_attributes][0]'
-      def association
-        matches = form.object_name.scan(/\[([^\]]+)\]\[[^\]]+\]\z/).flatten
-        return matches.first.delete_suffix('_attributes') if matches.size.positive?
-
-        form.object.class.to_s.tableize
-      end
-
       def new_record?
         !!form.object.try(:new_record?)
       end

@@ -3,10 +3,10 @@
 require_relative './shared/tag'
 
 describe Cocooned::Tags::Base, :tag do
-  describe '.create' do
-    let(:template) { ActionView::Base.empty }
-    let(:form) { double }
+  let(:template) { ActionView::Base.empty }
+  let(:form) { double }
 
+  describe '.create' do
     it 'creates a new tag' do
       expect(described_class.create(template, form)).to be_an_instance_of(described_class)
     end

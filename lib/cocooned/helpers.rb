@@ -15,8 +15,11 @@ module Cocooned
   # The label of any action links can be given explicitly as helper's first argument
   # or as a block, just as you can do on ActionView's `link_to` or similar helpers.
   # Additionally, Cocooned helpers will lookup I18n translations for a default label
-  # based on the action name (`add`, `remove`, `up`, `down`) and the association name
-  # (only for `add` and `remove`).
+  # based on the action name (`add`, `remove`, `up`, `down`) and the association name.
+  #
+  # For `add` action links, the association name used is the same as passed as
+  # argument. On other action links, it is extracted from nested form's
+  # #object_name.
   #
   # You can declare default labels in your translation files with following keys:
   #
