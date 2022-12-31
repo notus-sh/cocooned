@@ -4,11 +4,11 @@
 // Compatibility with the original Cocoon
 // TODO: Remove in 3.0
 function initCocoon () {
-  $(Cocooned.prototype.selector('add')).each(function (_i, addLink) {
-    const container = Cocooned.prototype.findContainer(addLink)
-    const limit = parseInt($(addLink).data('limit'), 10) || false
+  $(Cocooned.prototype.selector('add')).each(function (_i, adder) {
+    const container = Cocooned.prototype.findContainer(adder)
+    const limit = parseInt(adder.dataset?.limit, 10) || false
 
-    container.cocooned({ limit })
+    $(container).cocooned({ limit })
   })
 }
 

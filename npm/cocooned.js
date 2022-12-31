@@ -7,12 +7,11 @@ class Cocooned extends reorderableMixin(limitMixin(Base)) {}
 // Expose a jQuery plugin
 $.fn.cocooned = function (options) {
   return this.each(function () {
-    const container = $(this)
-    if (typeof container.data('cocooned') !== 'undefined') {
+    if (typeof $(this).data('cocooned') !== 'undefined') {
       return
     }
 
-    return new Cocooned(container, options)
+    return new Cocooned(this, options)
   })
 }
 

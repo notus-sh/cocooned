@@ -10,7 +10,7 @@ class Cocooned {
     this.container = $(container)
     this.options = this.normalizeConfig({
       ...this.constructor.defaultOptions(),
-      ...(this.container.data('cocooned-options') || {}),
+      ...('cocoonedOptions' in container.dataset ? JSON.parse(container.dataset.cocoonedOptions) : {}),
       ...(options || {})
     })
 
@@ -81,8 +81,8 @@ class Cocooned {
 
   getInsertionNode (adder) {
     const $adder = $(adder)
-    const insertionNode = $adder.data('association-insertion-node')
-    const insertionTraversal = $adder.data('association-insertion-traversal')
+    const insertionNode = adder.dataset?.associationInsertionNode
+    const insertionTraversal = adder.dataset?.associationInsertionTraversal
 
     if (typeof insertionNode === 'undefined') {
       return $adder.parent()
@@ -100,8 +100,7 @@ class Cocooned {
   }
 
   getInsertionMethod (adder) {
-    const $adder = $(adder)
-    return $adder.data('association-insertion-method') || 'before'
+    return adder.dataset?.associationInsertionMethod || 'before'
   }
 
   getItems (selector) {
@@ -113,9 +112,8 @@ class Cocooned {
   }
 
   findContainer (addLink) {
-    const $adder = $(addLink)
-    const insertionNode = this.getInsertionNode($adder)
-    const insertionMethod = this.getInsertionMethod($adder)
+    const insertionNode = this.getInsertionNode(addLink)
+    const insertionMethod = this.getInsertionMethod(addLink)
 
     switch (insertionMethod) {
       case 'before':
@@ -185,11 +183,11 @@ class Cocooned {
 
   add (adder, originalEvent) {
     const $adder = $(adder)
-    const insertionMethod = this.getInsertionMethod($adder)
-    const insertionNode = this.getInsertionNode($adder)
-    const count = parseInt($adder.data('association-insertion-count'), 10) || parseInt($adder.data('count'), 10) || 1
+    const insertionMethod = this.getInsertionMethod(adder)
+    const insertionNode = this.getInsertionNode(adder)
+    const count = parseInt(adder.dataset?.associationInsertionCount, 10) || parseInt(adder.dataset?.count, 10) || 1
 
-    const builder = this.#builder($adder)
+    const builder = this.#builder(adder)
 
     for (let i = 0; i < count; i++) {
       const contentNode = $(builder.build(this.buildId()))
@@ -231,7 +229,7 @@ class Cocooned {
       }
       self.notify(triggerNode, 'after-remove', eventData)
     }
-    const timeout = parseInt(triggerNode.data('remove-timeout'), 10) || 0
+    const timeout = parseInt(triggerNode.get(0).dataset?.removeTimeout, 10) || 0
 
     if (timeout === 0) {
       doRemove()
@@ -249,8 +247,8 @@ class Cocooned {
   }
 
   #builder (link) {
-    const template = document.querySelector(`template[data-name=${link.data('template')}]`)
-    return new Builder(template.content, `new_${link.data('association')}`)
+    const template = document.querySelector(`template[data-name=${link.dataset.template}]`)
+    return new Builder(template.content, `new_${link.dataset.association}`)
   }
 }
 
