@@ -1,7 +1,7 @@
 /* global given */
 
 import Cocooned from '@notus.sh/cocooned/cocooned'
-import { setup, asAttribute, clickEvent } from '@cocooned/tests/support/helpers'
+import { setup, clickEvent } from '@cocooned/tests/support/helpers'
 import { getItems, getItem, getRemoveLink } from '@cocooned/tests/support/selectors'
 
 describe('A Cocooned setup', () => {

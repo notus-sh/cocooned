@@ -219,12 +219,12 @@ describe Cocooned::Tags::Add, :tag do
   it "outputs an HTML template with the same name as link's data-template attribute" do
     rendered = html
     link_template = rendered.at('a').attribute('data-template').value
-    link_template = rendered.at('template').attribute('data-name').value
+    template_name = rendered.at('template').attribute('data-name').value
 
-    expect(link_template).to eq(link_template)
+    expect(template_name).to eq(link_template)
   end
 
-  it "outputs an HTML template with renderer output" do
+  it 'outputs an HTML template with renderer output' do
     expect(html.at('template').inner_html).to eq(item)
   end
 end

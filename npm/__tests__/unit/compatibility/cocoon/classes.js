@@ -2,7 +2,7 @@
 
 import Cocooned from '@notus.sh/cocooned/cocooned'
 import { jest } from '@jest/globals'
-import { setup, asAttribute, clickEvent } from '@cocooned/tests/support/helpers'
+import { setup, clickEvent } from '@cocooned/tests/support/helpers'
 
 describe('A Cocoon setup using Cocoon classes', () => {
   given('template', () => `

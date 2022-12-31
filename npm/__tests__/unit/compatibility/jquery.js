@@ -1,7 +1,6 @@
 /* global given */
 
 import '@notus.sh/cocooned/cocooned'
-import { asAttribute } from '@cocooned/tests/support/helpers'
 
 describe('A Cocooned setup', () => {
   given('template', () => `

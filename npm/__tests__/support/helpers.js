@@ -5,13 +5,6 @@ const setup = function (doc, context) {
   return context.cocooned
 }
 
-const asAttribute = function (string) {
-  return string.replaceAll(/</g, '&lt;')
-    .replaceAll(/>/g, '&gt;')
-    .replaceAll(/"/g, '&quot;')
-    .trim()
-}
-
 const asInt = function (value) {
   return parseInt(value, 10)
 }
@@ -22,7 +15,6 @@ const clickEvent = function () {
 
 export {
   setup,
-  asAttribute,
   asInt,
   clickEvent
 }

@@ -56,7 +56,7 @@ class Builder {
     this.#replacements = [
       new Replacement('for', association, '_'),
       new Replacement('id', association, '_'),
-      new Replacement('name', association, '[', ']'),
+      new Replacement('name', association, '[', ']')
     ]
   }
 

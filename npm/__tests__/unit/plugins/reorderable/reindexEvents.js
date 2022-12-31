@@ -3,7 +3,7 @@
 import Cocooned from '@notus.sh/cocooned/cocooned'
 import { jest } from '@jest/globals'
 import { faker } from '@cocooned/tests/support/faker'
-import { setup, asAttribute, clickEvent } from '@cocooned/tests/support/helpers'
+import { setup, clickEvent } from '@cocooned/tests/support/helpers'
 import { getItems, getAddLink, getRemoveLink, getMoveUpLink, getMoveDownLink } from '@cocooned/tests/support/selectors'
 
 import itBehavesLikeAnEventListener from '@cocooned/tests/unit/shared/events/listener'

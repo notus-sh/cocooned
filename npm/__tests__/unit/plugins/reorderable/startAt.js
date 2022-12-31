@@ -2,7 +2,7 @@
 
 import Cocooned from '@notus.sh/cocooned/cocooned'
 import { faker } from '@cocooned/tests/support/faker'
-import { setup, asAttribute, asInt, clickEvent } from '@cocooned/tests/support/helpers'
+import { setup, asInt, clickEvent } from '@cocooned/tests/support/helpers'
 import { getItems, getAddLink } from '@cocooned/tests/support/selectors'
 
 describe('A Cocooned setup', () => {
