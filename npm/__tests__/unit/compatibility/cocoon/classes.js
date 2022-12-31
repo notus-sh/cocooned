@@ -11,8 +11,9 @@ describe('A Cocoon setup using Cocoon classes', () => {
 
       <div>
         <a class="add_fields" href="#"
-           data-associations="items"
-           data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
+           data-association="items"
+           data-template-id="template">Add</a>
+        <template id="template">${given.insertionTemplate}</template>
       </div>
     </section>
   `)

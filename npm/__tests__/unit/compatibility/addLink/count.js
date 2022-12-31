@@ -10,9 +10,10 @@ describe('A Cocooned setup', () => {
     <section>
       <div>
         <a class="cocooned-add" href="#"
-           data-associations="items"
-           data-count="${given.count}"
-           data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
+           data-association="items"
+           data-template-id="template"
+           data-count="${given.count}">Add</a>
+        <template id="template">${given.insertionTemplate}</template>
       </div>
     </section>
   `)

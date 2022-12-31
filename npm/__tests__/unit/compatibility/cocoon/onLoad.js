@@ -8,7 +8,9 @@ describe('A Cocoon setup', () => {
     <section>
       <div>
         <a class="add_fields" href="#"
-           data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
+           data-association="items"
+           data-template-id="template">Add</a>
+        <template id="template">${given.insertionTemplate}</template>
       </div>
     </section>
   `)

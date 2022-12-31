@@ -7,7 +7,9 @@ describe('A Cocooned setup with cocooned-options', () => {
     <section data-cocooned-options="{}">
       <div>
         <a class="cocooned-add" href="#"
-           data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
+           data-association="items"
+           data-template-id="template">Add</a>
+        <template id="template">${given.insertionTemplate}</template>
       </div>
     </section>
   `)

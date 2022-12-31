@@ -22,8 +22,9 @@ describe('A Cocooned setup', () => {
       <section>
         <div>
           <a class="cocooned-add" href="#"
-             data-associations="items"
-             data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
+             data-association="items"
+             data-template-id="template">Add</a>
+          <template id="template">${given.insertionTemplate}</template>
         </div>
       </section>
     `)
@@ -63,9 +64,10 @@ describe('A Cocooned setup', () => {
     given('template', () => `
       <section>
         <a class="cocooned-add" href="#"
-           data-associations="items"
-           data-association-insertion-method="${given.insertionMethod}"
-           data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
+           data-association="items"
+           data-template-id="template"
+           data-association-insertion-method="${given.insertionMethod}">Add</a>
+        <template id="template">${given.insertionTemplate}</template>
       </section>
     `)
 
@@ -83,10 +85,11 @@ describe('A Cocooned setup', () => {
           <div class="insertion-node"></div>
           
           <a class="cocooned-add" href="#"
-             data-associations="items"
+             data-association="items"
+             data-template-id="template"
              data-association-insertion-node=".insertion-node"
-             data-association-insertion-method="${given.insertionMethod}"
-             data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
+             data-association-insertion-method="${given.insertionMethod}">Add</a>
+          <template id="template">${given.insertionTemplate}</template>
         </section>
       `)
       given('insertionMethod', () => 'replaceWith')

@@ -24,8 +24,9 @@ describe('A Cocooned setup', () => {
       <section>
         <div>
           <a class="cocooned-add" href="#"
-             data-associations="items"
-             data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
+             data-association="items"
+             data-template-id="template">Add</a>
+          <template id="template">${given.insertionTemplate}</template>
         </div>
       </section>
     `)
@@ -40,9 +41,10 @@ describe('A Cocooned setup', () => {
     given('template', () => `
       <section>
         <a class="cocooned-add" href="#"
-           data-associations="items"
-           data-association-insertion-node="this"
-           data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
+           data-association="items"
+           data-template-id="template"
+           data-association-insertion-node="this">Add</a>
+        <template id="template">${given.insertionTemplate}</template>
       </section>
     `)
     given('insertionNode', () => given.addLink)
@@ -60,8 +62,9 @@ describe('A Cocooned setup', () => {
       <section>
         <div class="closest">
           <a class="cocooned-add" href="#"
-             data-associations="items"
-             data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
+             data-association="items"
+             data-template-id="template">Add</a>
+          <template id="template">${given.insertionTemplate}</template>
         </div>
       </section>
     `)
@@ -83,9 +86,10 @@ describe('A Cocooned setup', () => {
         <div class="insertion-node"></div>
         
         <a class="cocooned-add" href="#"
-           data-associations="items"
-           data-association-insertion-node=".insertion-node"
-           data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
+           data-association="items"
+           data-template-id="template"
+           data-association-insertion-node=".insertion-node">Add</a>
+        <template id="template">${given.insertionTemplate}</template>
       </section>
     `)
     given('insertionNode', () => given.container.querySelector('.insertion-node'))
@@ -128,13 +132,17 @@ describe('A Cocooned setup', () => {
       describe.each(traversals)('when $traversal', ({ traversal, finder, template }) => {
         given('adder', () => `
           <a class="cocooned-add" href="#"
-             data-associations="items"
+             data-association="items"
+             data-template-id="template"
              data-association-insertion-node=".${given.insertionTraversal}"
-             data-association-insertion-traversal="${given.insertionTraversal}"
-             data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
+             data-association-insertion-traversal="${given.insertionTraversal}">Add</a>
         `)
         given('insertionTraversal', () => traversal)
-        given('template', () => `<section>${template(given.adder)}</section>`)
+        given('template', () => `
+          <section>
+            ${template(given.adder)}
+            <template id="template">${given.insertionTemplate}</template>
+          </section>`)
 
         it('insert new items before the expected element', () => {
           expect(finder(given.addLink).previousElementSibling).toBe(given.item)
