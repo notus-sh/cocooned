@@ -20,15 +20,17 @@ const reorderableMixin = (Base) => class extends Base {
       return
     }
 
-    const self = this
-
     // Maintain indexes
     this.container
-      .on('cocooned:after-insert', function (e) { self.reindex(e) })
-      .on('cocooned:after-remove', function (e) { self.reindex(e) })
-      .on('cocooned:after-move', function (e) { self.reindex(e) })
+      .on('cocooned:after-insert', e => this.reindex(e))
+      .on('cocooned:after-remove', e => this.reindex(e))
+      .on('cocooned:after-move', e => this.reindex(e))
+    
+    // Ensure positions are unique before save
+    this.container.closest('form').on(this.namespacedNativeEvents('submit'), e => this.reindex(e))
 
     // Move items
+    const self = this
     this.container.on(
       this.namespacedNativeEvents('click'),
       [this.selector('up'), this.selector('down')].join(', '),
@@ -37,22 +39,12 @@ const reorderableMixin = (Base) => class extends Base {
         e.stopPropagation()
 
         const node = this
-        const up = self.classes.up.some(function (klass) {
-          return node.className.indexOf(klass) !== -1
-        })
+        const up = self.classes.up.some(c => node.className.indexOf(c) !== -1)
         self.move(this, up ? 'up' : 'down', e)
-      })
-
-    // Ensure positions are unique before save
-    this.container.closest('form').on(
-      this.namespacedNativeEvents('submit'),
-      function (e) {
-        self.reindex(e)
       })
   }
 
   move (moveLink, direction, originalEvent) {
-    const self = this
     const $mover = $(moveLink)
     const node = $mover.closest(this.selector('item'))
     const siblings = (direction === 'up'
@@ -64,31 +56,28 @@ const reorderableMixin = (Base) => class extends Base {
     }
 
     // Move can be prevented through a 'cocooned:before-move' event handler
-    const eventData = { link: $mover, node, cocooned: self, originalEvent }
-    if (!self.notify(node, 'before-move', eventData)) {
+    const eventData = { link: $mover, node, cocooned: this, originalEvent }
+    if (!this.notify(node, 'before-move', eventData)) {
       return false
     }
 
-    const height = self.container.outerHeight()
-    const width = self.container.outerWidth()
+    const height = this.container.outerHeight()
+    const width = this.container.outerWidth()
 
-    self.container.css('height', height).css('width', width)
-    self.hide(node, function () {
-      const movedNode = $(this).detach()
+    this.container.css('height', height).css('width', width)
+    this.hide(node, () => {
+      const movedNode = $(node).detach()
       movedNode[(direction === 'up' ? 'insertBefore' : 'insertAfter')](siblings)
 
-      self.show(movedNode, function () {
-        self.container.css('height', '').css('width', '') // Object notation does not work here.
-        self.notify(movedNode, 'after-move', eventData)
+      this.show(movedNode, () => {
+        this.container.css('height', '').css('width', '') // Object notation does not work here.
+        this.notify(movedNode, 'after-move', eventData)
       })
     })
   }
 
   reindex (originalEvent) {
-    let i = this.options.reorderable.startAt
-    const nodes = this.getItems().filter(function () {
-      return $(this).css('display') !== 'none'
-    })
+    const nodes = this.getItems().filter((_i, element) => $(element).css('display') !== 'none')
     const eventData = { link: null, nodes, cocooned: this, originalEvent }
 
     // Reindex can be prevented through a 'cocooned:before-reindex' event handler
@@ -96,25 +85,23 @@ const reorderableMixin = (Base) => class extends Base {
       return false
     }
 
-    nodes.each(function () { $('input[name$="[position]"]', this).val(i++) })
+    let i = this.options.reorderable.startAt
+    nodes.each((_i, element) => $('input[name$="[position]"]', element).val(i++))
+
     this.notify(this.container, 'after-reindex', eventData)
   }
 
   show (node, callback = () => true) {
     node.addClass('cocooned-visible-item')
-    setTimeout(function () {
-      callback.apply(node)
+    setTimeout(() => {
+      callback.call(node)
       node.removeClass('cocooned-hidden-item')
     }, 500)
   }
 
-  hide (node, callback) {
+  hide (node, callback = () => true) {
     node.removeClass('cocooned-visible-item').addClass('cocooned-hidden-item')
-    if (callback) {
-      setTimeout(function () {
-        callback.apply(node)
-      }, 500)
-    }
+    setTimeout(() => callback.call(node), 500)
   }
 }
 

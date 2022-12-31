@@ -48,7 +48,7 @@ class Cocooned {
   }
 
   notify (node, eventType, eventData) {
-    return !(this.namespaces.events.some(function (namespace) {
+    return !(this.namespaces.events.some(namespace => {
       const namespacedEventType = [namespace, eventType].join(':')
       const event = $.Event(namespacedEventType, eventData)
       const eventArgs = [eventData.cocooned]
@@ -65,17 +65,17 @@ class Cocooned {
   }
 
   selector (type, selector = '&') {
-    return this.classes[type].map(klass => selector.replace(/&/, '.' + klass)).join(', ')
+    return this.classes[type].map(klass => selector.replace(/&/, `.${klass}`)).join(', ')
   }
 
   namespacedNativeEvents (type) {
-    const namespaces = this.namespaces.events.map(function (ns) { return '.' + ns })
+    const namespaces = this.namespaces.events.map(ns => `.${ns}`)
     namespaces.unshift(type)
     return namespaces.join('')
   }
 
   buildId () {
-    return (new Date().getTime() + this.elementsCounter++)
+    return `${new Date().getTime()}${this.elementsCounter++}`
   }
 
   getInsertionNode (adder) {
@@ -103,9 +103,8 @@ class Cocooned {
   }
 
   getItems (selector) {
-    const self = this
-    return $(this.selector('item', selector), this.container).filter(function () {
-      return ($(this).closest(self.selector('container')).get(0) === self.container.get(0))
+    return $(this.selector('item', selector), this.container).filter((_i, element) => {
+      return ($(element).closest(this.selector('container')).get(0) === this.container.get(0))
     })
   }
 
@@ -131,10 +130,8 @@ class Cocooned {
   }
 
   init () {
-    const self = this
-    this.addLinks = $(this.selector('add')).filter(function () {
-      const container = self.findContainer(this)
-      return (container.get(0) === self.container.get(0))
+    this.addLinks = $(this.selector('add')).filter((_i, element) => {
+      return (this.findContainer(element).get(0) === this.container.get(0))
     })
 
     this.initUi()
@@ -142,15 +139,13 @@ class Cocooned {
   }
 
   initUi () {
-    const self = this
-
     if (!this.container.attr('id')) {
       this.container.attr('id', this.buildId())
     }
     this.container.addClass(this.classes.container.join(' '))
 
-    $(function () { self.hideMarkedForDestruction() })
-    $(document).on('page:load turbolinks:load turbo:load', function () { self.hideMarkedForDestruction() })
+    $(() => this.hideMarkedForDestruction())
+    $(document).on('page:load turbolinks:load turbo:load', () => this.hideMarkedForDestruction())
   }
 
   bindEvents () {
@@ -170,7 +165,7 @@ class Cocooned {
     // (Binded on document instead of container to not bypass click handler defined in jquery_ujs)
     $(document).on(
       this.namespacedNativeEvents('click'),
-      this.selector('remove', '#' + this.container.attr('id') + ' &'),
+      this.selector('remove', `#${this.container.attr('id')} &`),
       function (e) {
         e.preventDefault()
         e.stopPropagation()
@@ -219,9 +214,7 @@ class Cocooned {
       if ($remover.hasClass('dynamic')) {
         nodeToDelete.remove()
       } else {
-        nodeToDelete.find('input[required], select[required]').each(function (index, element) {
-          $(element).removeAttr('required')
-        })
+        nodeToDelete.find('input[required], select[required]').each((_i, element) => $(element).removeAttr('required'))
         $remover.siblings('input[type=hidden][name$="[_destroy]"]').val('true')
         nodeToDelete.hide()
       }
@@ -237,11 +230,7 @@ class Cocooned {
   }
 
   hideMarkedForDestruction () {
-    const self = this
-    $(this.selector('remove', '&.existing.destroyed'), this.container).each(function (i, removeLink) {
-      const node = self.findItem(removeLink)
-      node.hide()
-    })
+    $(this.selector('remove', '&.existing.destroyed'), this.container).each((i, link) => this.findItem(link).hide())
   }
 
   #builder (link) {

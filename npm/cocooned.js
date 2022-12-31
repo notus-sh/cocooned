@@ -16,10 +16,6 @@ $.fn.cocooned = function (options) {
 }
 
 // On-load initialization
-$(function () {
-  $('*[data-cocooned-options]').each(function (i, el) {
-    $(el).cocooned()
-  })
-})
+$(() => $('*[data-cocooned-options]').each((_i, el) => $(el).cocooned()))
 
 export default Cocooned
