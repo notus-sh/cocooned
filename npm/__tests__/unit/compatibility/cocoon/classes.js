@@ -2,7 +2,7 @@
 
 import Cocooned from '@notus.sh/cocooned/cocooned'
 import { jest } from '@jest/globals'
-import { setup, asAttribute, clickEvent } from '@cocooned/tests/support/helpers'
+import { setup, clickEvent } from '@cocooned/tests/support/helpers'
 
 describe('A Cocoon setup using Cocoon classes', () => {
   given('template', () => `
@@ -11,8 +11,9 @@ describe('A Cocoon setup using Cocoon classes', () => {
 
       <div>
         <a class="add_fields" href="#"
-           data-associations="items"
-           data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
+           data-association="items"
+           data-template="template">Add</a>
+        <template data-name="template">${given.insertionTemplate}</template>
       </div>
     </section>
   `)

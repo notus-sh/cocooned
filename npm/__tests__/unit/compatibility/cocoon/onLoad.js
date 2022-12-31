@@ -1,14 +1,15 @@
 /* global given */
 
 import Cocooned from '@notus.sh/cocooned/cocooned'
-import { asAttribute } from '@cocooned/tests/support/helpers'
 
 describe('A Cocoon setup', () => {
   given('template', () => `
     <section>
       <div>
         <a class="add_fields" href="#"
-           data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
+           data-association="items"
+           data-template="template">Add</a>
+        <template data-name="template">${given.insertionTemplate}</template>
       </div>
     </section>
   `)

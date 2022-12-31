@@ -9,7 +9,7 @@ describe Cocooned::Tags::Add, :tag do
   let(:builders) { Cocooned::Association::Builder }
   let(:renderers) { Cocooned::Association::Renderer }
 
-  let(:item) { '<div class"cocooned-item"></div>' }
+  let(:item) { '<div class="cocooned-item"></div>'.html_safe }
   let(:template) { ActionView::Base.empty }
   let(:association) { :contacts }
   let(:record) { Person.new }
@@ -32,10 +32,6 @@ describe Cocooned::Tags::Add, :tag do
 
   it 'has a data attribute for association' do
     expect(tag.attribute('data-association').value).to eq(association.to_s)
-  end
-
-  it 'has a data attribute for association insertion template' do
-    expect(tag.attribute('data-association-insertion-template').value).to eq(CGI.escapeHTML(item))
   end
 
   #
@@ -210,5 +206,25 @@ describe Cocooned::Tags::Add, :tag do
         end
       end
     end
+  end
+
+  it 'outputs an HTML template' do
+    expect(html.at('template')).not_to be_nil
+  end
+
+  it 'outputs an HTML template with a data-name attribute' do
+    expect(html.at('template').attribute('data-name')).not_to be_nil
+  end
+
+  it "outputs an HTML template with the same name as link's data-template attribute" do
+    rendered = html
+    link_template = rendered.at('a').attribute('data-template').value
+    template_name = rendered.at('template').attribute('data-name').value
+
+    expect(template_name).to eq(link_template)
+  end
+
+  it 'outputs an HTML template with renderer output' do
+    expect(html.at('template').inner_html).to eq(item)
   end
 end

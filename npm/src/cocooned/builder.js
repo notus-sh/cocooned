@@ -6,23 +6,36 @@ const reRegExpChar = /[\\^$.*+?()[\]{}|]/g
 const reHasRegExpChar = RegExp(reRegExpChar.source)
 
 class Replacement {
+  attribute
+
   #name
   #startDelimiter
   #endDelimiter
 
-  constructor (name, startDelimiter, endDelimiter = null) {
+  constructor (attribute, name, startDelimiter, endDelimiter = null) {
+    this.attribute = attribute
+
     this.#name = name
     this.#startDelimiter = startDelimiter
     this.#endDelimiter = endDelimiter || startDelimiter
   }
 
-  replacement (id) {
+  apply (node, id) {
+    const value = node.getAttribute(this.attribute)
+    if (!this.#regexp.test(value)) {
+      return
+    }
+
+    node.setAttribute(this.attribute, value.replace(this.#regexp, this.#replacement(id)))
+  }
+
+  #replacement (id) {
     return `${this.#startDelimiter}${id}${this.#endDelimiter}$1`
   }
 
-  regexp () {
+  get #regexp () {
     const escaped = this.#escape(`${this.#startDelimiter}${this.#name}${this.#endDelimiter}`)
-    return new RegExp(`${escaped}(.*?\\s)`, 'g')
+    return new RegExp(`${escaped}(.*?)`, 'g')
   }
 
   #escape (string) {
@@ -33,23 +46,27 @@ class Replacement {
 }
 
 class Builder {
-  #template
+  #association
+  #documentFragment
   #replacements
 
-  constructor (template, singular, plural) {
-    this.#template = template
+  constructor (documentFragment, association) {
+    this.#documentFragment = documentFragment
+    this.#association = association
     this.#replacements = [
-      new Replacement(plural, '[', ']'),
-      new Replacement(singular, '[', ']'),
-      new Replacement(plural, '_'),
-      new Replacement(singular, '_')
+      new Replacement('for', association, '_'),
+      new Replacement('id', association, '_'),
+      new Replacement('name', association, '[', ']')
     ]
   }
 
   build (id) {
-    return this.#replacements.reduce((string, replacement) => {
-      return string.replace(replacement.regexp(), replacement.replacement(id))
-    }, this.#template)
+    const node = this.#documentFragment.cloneNode(true)
+    this.#replacements.forEach(replacement => {
+      node.querySelectorAll(`*[${replacement.attribute}]`).forEach(node => replacement.apply(node, id))
+    })
+
+    return node
   }
 }
 

@@ -1,7 +1,7 @@
 /* global given */
 
 import Cocooned from '@notus.sh/cocooned/cocooned'
-import { setup, asAttribute, clickEvent } from '@cocooned/tests/support/helpers'
+import { setup, clickEvent } from '@cocooned/tests/support/helpers'
 import { getItems, getItem, getRemoveLink } from '@cocooned/tests/support/selectors'
 
 describe('A Cocooned setup', () => {
@@ -11,8 +11,9 @@ describe('A Cocooned setup', () => {
       
       <div>
         <a class="cocooned-add" href="#"
-           data-associations="items"
-           data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
+           data-association="items"
+           data-template="template">Add</a>
+        <template data-name="template">${given.insertionTemplate}</template>
       </div>
     </section>
   `)

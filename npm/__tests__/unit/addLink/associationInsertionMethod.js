@@ -1,7 +1,7 @@
 /* global given */
 
 import Cocooned from '@notus.sh/cocooned/cocooned'
-import { setup, asAttribute, clickEvent } from '@cocooned/tests/support/helpers'
+import { setup, clickEvent } from '@cocooned/tests/support/helpers'
 import { getItem, getAddLink } from '@cocooned/tests/support/selectors'
 
 describe('A Cocooned setup', () => {
@@ -22,8 +22,9 @@ describe('A Cocooned setup', () => {
       <section>
         <div>
           <a class="cocooned-add" href="#"
-             data-associations="items"
-             data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
+             data-association="items"
+             data-template="template">Add</a>
+          <template data-name="template">${given.insertionTemplate}</template>
         </div>
       </section>
     `)
@@ -63,9 +64,10 @@ describe('A Cocooned setup', () => {
     given('template', () => `
       <section>
         <a class="cocooned-add" href="#"
-           data-associations="items"
-           data-association-insertion-method="${given.insertionMethod}"
-           data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
+           data-association="items"
+           data-template="template"
+           data-association-insertion-method="${given.insertionMethod}">Add</a>
+        <template data-name="template">${given.insertionTemplate}</template>
       </section>
     `)
 
@@ -83,10 +85,11 @@ describe('A Cocooned setup', () => {
           <div class="insertion-node"></div>
           
           <a class="cocooned-add" href="#"
-             data-associations="items"
+             data-association="items"
+             data-template="template"
              data-association-insertion-node=".insertion-node"
-             data-association-insertion-method="${given.insertionMethod}"
-             data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
+             data-association-insertion-method="${given.insertionMethod}">Add</a>
+          <template data-name="template">${given.insertionTemplate}</template>
         </section>
       `)
       given('insertionMethod', () => 'replaceWith')

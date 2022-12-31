@@ -2,7 +2,7 @@
 
 import Cocooned from '@notus.sh/cocooned/cocooned'
 import { faker } from '@cocooned/tests/support/faker'
-import { setup, asAttribute, asInt, clickEvent } from '@cocooned/tests/support/helpers'
+import { setup, asInt, clickEvent } from '@cocooned/tests/support/helpers'
 import { getItems, getAddLink } from '@cocooned/tests/support/selectors'
 
 describe('A Cocooned setup', () => {
@@ -10,8 +10,9 @@ describe('A Cocooned setup', () => {
     <section>
       <div>
         <a class="cocooned-add" href="#"
-           data-associations="items"
-           data-association-insertion-template="${asAttribute(given.insertionTemplate)}">Add</a>
+           data-association="items"
+           data-template="template">Add</a>
+        <template data-name="template">${given.insertionTemplate}</template>
       </div>
     </section>
   `)
