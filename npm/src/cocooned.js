@@ -64,9 +64,8 @@ class Cocooned {
     }))
   }
 
-  selector (type, selector) {
-    const s = selector || '&'
-    return this.classes[type].map(function (klass) { return s.replace(/&/, '.' + klass) }).join(', ')
+  selector (type, selector = '&') {
+    return this.classes[type].map(klass => selector.replace(/&/, '.' + klass)).join(', ')
   }
 
   namespacedNativeEvents (type) {
@@ -104,7 +103,6 @@ class Cocooned {
   }
 
   getItems (selector) {
-    selector = selector || ''
     const self = this
     return $(this.selector('item', selector), this.container).filter(function () {
       return ($(this).closest(self.selector('container')).get(0) === self.container.get(0))

@@ -100,9 +100,7 @@ const reorderableMixin = (Base) => class extends Base {
     this.notify(this.container, 'after-reindex', eventData)
   }
 
-  show (node, callback) {
-    callback = callback || function () { return true }
-
+  show (node, callback = () => true) {
     node.addClass('cocooned-visible-item')
     setTimeout(function () {
       callback.apply(node)
