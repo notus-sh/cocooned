@@ -53,9 +53,9 @@ class Cocooned {
       const event = $.Event(namespacedEventType, eventData)
       const eventArgs = [eventData.cocooned]
 
-      if (Object.prototype.hasOwnProperty.call(eventData, 'node')) {
+      if ('node' in eventData) {
         eventArgs.unshift(eventData.node)
-      } else if (Object.prototype.hasOwnProperty.call(eventData, 'nodes')) {
+      } else if ('nodes' in eventData) {
         eventArgs.unshift(eventData.nodes)
       }
 
