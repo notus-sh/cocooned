@@ -8,12 +8,11 @@ class Cocooned {
 
   constructor (container, options) {
     this.container = $(container)
-    this.options = this.normalizeConfig(Object.assign(
-      {},
-      this.constructor.defaultOptions(),
-      (this.container.data('cocooned-options') || {}),
-      (options || {})
-    ))
+    this.options = this.normalizeConfig({
+      ...this.constructor.defaultOptions(),
+      ...(this.container.data('cocooned-options') || {}),
+      ...(options || {})
+    })
 
     this.init()
     this.container.get(0).dataset.cocooned = this

@@ -2,7 +2,7 @@ import $ from 'jquery'
 
 const limitMixin = (Base) => class extends Base {
   static defaultOptions () {
-    return Object.assign({}, super.defaultOptions(), { limit: false })
+    return { ...super.defaultOptions(), ...{ limit: false } }
   }
 
   bindEvents () {

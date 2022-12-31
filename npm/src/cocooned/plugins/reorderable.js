@@ -2,7 +2,7 @@ import $ from 'jquery'
 
 const reorderableMixin = (Base) => class extends Base {
   static defaultOptions () {
-    return Object.assign({}, super.defaultOptions(), { reorderable: false })
+    return { ...super.defaultOptions(), ...{ reorderable: false } }
   }
 
   normalizeConfig (config) {
