@@ -212,13 +212,16 @@ describe Cocooned::Tags::Add, :tag do
     expect(html.at('template')).not_to be_nil
   end
 
-  it 'outputs an HTML template with an ID' do
-    expect(html.at('template').attribute('id')).not_to be_nil
+  it 'outputs an HTML template with a data-name attribute' do
+    expect(html.at('template').attribute('data-name')).not_to be_nil
   end
 
-  it "outputs an HTML template with the same ID as link's data-template-id attribute" do
+  it "outputs an HTML template with the same name as link's data-template attribute" do
     rendered = html
-    expect(rendered.at('template').attribute('id').value).to eq(rendered.at('a').attribute('data-template-id').value)
+    link_template = rendered.at('a').attribute('data-template').value
+    link_template = rendered.at('template').attribute('data-name').value
+
+    expect(link_template).to eq(link_template)
   end
 
   it "outputs an HTML template with renderer output" do

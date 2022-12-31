@@ -11,8 +11,8 @@ describe('A Cocooned setup', () => {
       <div>
         <a class="cocooned-add" href="#"
            data-association="items"
-           data-template-id="template">Add</a>
-        <template id="template">${given.insertionTemplate}</template>
+           data-template="template">Add</a>
+        <template data-name="template">${given.insertionTemplate}</template>
       </div>
     </section>
   `)
@@ -40,9 +40,9 @@ describe('A Cocooned setup', () => {
         <div>
           <a class="cocooned-add" href="#"
              data-association="items"
-             data-template-id="template"
+             data-template="template"
              data-association-insertion-count="${given.insertionCount}">Add</a>
-          <template id="template">${given.insertionTemplate}</template>
+          <template data-name="template">${given.insertionTemplate}</template>
         </div>
       </section>
     `)

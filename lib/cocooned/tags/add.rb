@@ -22,13 +22,13 @@ module Cocooned
       attr_reader :association
 
       def html_template
-        template.content_tag(:template, id: html_template_id) do
+        template.content_tag(:template, data: { name: html_template_name }) do
           renderer.render.html_safe # rubocop:disable Rails/OutputSafety
         end
       end
 
-      def html_template_id
-        @html_template_id ||= SecureRandom.uuid
+      def html_template_name
+        @html_template_name ||= SecureRandom.uuid
       end
 
       def html_classes
@@ -42,7 +42,7 @@ module Cocooned
       def association_options
         {
           association: association,
-          template_id: html_template_id,
+          template: html_template_name,
           association_insertion_count: [options.delete(:count).to_i, 1].compact.max,
           association_insertion_node: options.delete(:insertion_node),
           association_insertion_method: options.delete(:insertion_method),

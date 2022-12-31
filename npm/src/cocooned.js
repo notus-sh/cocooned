@@ -258,7 +258,7 @@ class Cocooned {
   }
 
   #builder (link) {
-    const template = document.getElementById(link.data('template-id'));
+    const template = document.querySelector(`template[data-name=${link.data('template')}]`);
     return new Builder(template.content, `new_${link.data('association')}`)
   }
 }

@@ -11,9 +11,9 @@ describe('A Cocooned setup', () => {
       <div>
         <a class="cocooned-add" href="#"
            data-association="items"
-           data-template-id="template"
+           data-template="template"
            data-count="${given.count}">Add</a>
-        <template id="template">${given.insertionTemplate}</template>
+        <template data-name="template">${given.insertionTemplate}</template>
       </div>
     </section>
   `)
