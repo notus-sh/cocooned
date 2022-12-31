@@ -181,14 +181,6 @@ class Cocooned {
 
         self.remove(this, e)
       })
-
-    // Bind options events
-    $.each(this.options, function (name, value) {
-      const bindMethod = 'bind' + name.charAt(0).toUpperCase() + name.slice(1)
-      if (value && self[bindMethod]) {
-        self[bindMethod]()
-      }
-    })
   }
 
   add (adder, originalEvent) {
