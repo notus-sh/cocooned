@@ -8,12 +8,11 @@ class Cocooned {
 
   constructor (container, options) {
     this.container = $(container)
-    this.options = this.normalizeConfig(Object.assign(
-      {},
-      this.constructor.defaultOptions(),
-      (this.container.data('cocooned-options') || {}),
-      (options || {})
-    ))
+    this.options = this.normalizeConfig({
+      ...this.constructor.defaultOptions(),
+      ...('cocoonedOptions' in container.dataset ? JSON.parse(container.dataset.cocoonedOptions) : {}),
+      ...(options || {})
+    })
 
     this.init()
     this.container.get(0).dataset.cocooned = this
@@ -49,14 +48,14 @@ class Cocooned {
   }
 
   notify (node, eventType, eventData) {
-    return !(this.namespaces.events.some(function (namespace) {
+    return !(this.namespaces.events.some(namespace => {
       const namespacedEventType = [namespace, eventType].join(':')
       const event = $.Event(namespacedEventType, eventData)
       const eventArgs = [eventData.cocooned]
 
-      if (Object.prototype.hasOwnProperty.call(eventData, 'node')) {
+      if ('node' in eventData) {
         eventArgs.unshift(eventData.node)
-      } else if (Object.prototype.hasOwnProperty.call(eventData, 'nodes')) {
+      } else if ('nodes' in eventData) {
         eventArgs.unshift(eventData.nodes)
       }
 
@@ -65,25 +64,24 @@ class Cocooned {
     }))
   }
 
-  selector (type, selector) {
-    const s = selector || '&'
-    return this.classes[type].map(function (klass) { return s.replace(/&/, '.' + klass) }).join(', ')
+  selector (type, selector = '&') {
+    return this.classes[type].map(klass => selector.replace(/&/, `.${klass}`)).join(', ')
   }
 
   namespacedNativeEvents (type) {
-    const namespaces = this.namespaces.events.map(function (ns) { return '.' + ns })
+    const namespaces = this.namespaces.events.map(ns => `.${ns}`)
     namespaces.unshift(type)
     return namespaces.join('')
   }
 
   buildId () {
-    return (new Date().getTime() + this.elementsCounter++)
+    return `${new Date().getTime()}${this.elementsCounter++}`
   }
 
   getInsertionNode (adder) {
     const $adder = $(adder)
-    const insertionNode = $adder.data('association-insertion-node')
-    const insertionTraversal = $adder.data('association-insertion-traversal')
+    const insertionNode = adder.dataset?.associationInsertionNode
+    const insertionTraversal = adder.dataset?.associationInsertionTraversal
 
     if (typeof insertionNode === 'undefined') {
       return $adder.parent()
@@ -101,22 +99,18 @@ class Cocooned {
   }
 
   getInsertionMethod (adder) {
-    const $adder = $(adder)
-    return $adder.data('association-insertion-method') || 'before'
+    return adder.dataset?.associationInsertionMethod || 'before'
   }
 
   getItems (selector) {
-    selector = selector || ''
-    const self = this
-    return $(this.selector('item', selector), this.container).filter(function () {
-      return ($(this).closest(self.selector('container')).get(0) === self.container.get(0))
+    return $(this.selector('item', selector), this.container).filter((_i, element) => {
+      return ($(element).closest(this.selector('container')).get(0) === this.container.get(0))
     })
   }
 
   findContainer (addLink) {
-    const $adder = $(addLink)
-    const insertionNode = this.getInsertionNode($adder)
-    const insertionMethod = this.getInsertionMethod($adder)
+    const insertionNode = this.getInsertionNode(addLink)
+    const insertionMethod = this.getInsertionMethod(addLink)
 
     switch (insertionMethod) {
       case 'before':
@@ -136,10 +130,8 @@ class Cocooned {
   }
 
   init () {
-    const self = this
-    this.addLinks = $(this.selector('add')).filter(function () {
-      const container = self.findContainer(this)
-      return (container.get(0) === self.container.get(0))
+    this.addLinks = $(this.selector('add')).filter((_i, element) => {
+      return (this.findContainer(element).get(0) === this.container.get(0))
     })
 
     this.initUi()
@@ -147,15 +139,13 @@ class Cocooned {
   }
 
   initUi () {
-    const self = this
-
     if (!this.container.attr('id')) {
       this.container.attr('id', this.buildId())
     }
     this.container.addClass(this.classes.container.join(' '))
 
-    $(function () { self.hideMarkedForDestruction() })
-    $(document).on('page:load turbolinks:load turbo:load', function () { self.hideMarkedForDestruction() })
+    $(() => this.hideMarkedForDestruction())
+    $(document).on('page:load turbolinks:load turbo:load', () => this.hideMarkedForDestruction())
   }
 
   bindEvents () {
@@ -175,30 +165,22 @@ class Cocooned {
     // (Binded on document instead of container to not bypass click handler defined in jquery_ujs)
     $(document).on(
       this.namespacedNativeEvents('click'),
-      this.selector('remove', '#' + this.container.attr('id') + ' &'),
+      this.selector('remove', `#${this.container.attr('id')} &`),
       function (e) {
         e.preventDefault()
         e.stopPropagation()
 
         self.remove(this, e)
       })
-
-    // Bind options events
-    $.each(this.options, function (name, value) {
-      const bindMethod = 'bind' + name.charAt(0).toUpperCase() + name.slice(1)
-      if (value && self[bindMethod]) {
-        self[bindMethod]()
-      }
-    })
   }
 
   add (adder, originalEvent) {
     const $adder = $(adder)
-    const insertionMethod = this.getInsertionMethod($adder)
-    const insertionNode = this.getInsertionNode($adder)
-    const count = parseInt($adder.data('association-insertion-count'), 10) || parseInt($adder.data('count'), 10) || 1
+    const insertionMethod = this.getInsertionMethod(adder)
+    const insertionNode = this.getInsertionNode(adder)
+    const count = parseInt(adder.dataset?.associationInsertionCount, 10) || parseInt(adder.dataset?.count, 10) || 1
 
-    const builder = this.#builder($adder)
+    const builder = this.#builder(adder)
 
     for (let i = 0; i < count; i++) {
       const contentNode = $(builder.build(this.buildId()))
@@ -232,15 +214,13 @@ class Cocooned {
       if ($remover.hasClass('dynamic')) {
         nodeToDelete.remove()
       } else {
-        nodeToDelete.find('input[required], select[required]').each(function (index, element) {
-          $(element).removeAttr('required')
-        })
+        nodeToDelete.find('input[required], select[required]').each((_i, element) => $(element).removeAttr('required'))
         $remover.siblings('input[type=hidden][name$="[_destroy]"]').val('true')
         nodeToDelete.hide()
       }
       self.notify(triggerNode, 'after-remove', eventData)
     }
-    const timeout = parseInt(triggerNode.data('remove-timeout'), 10) || 0
+    const timeout = parseInt(triggerNode.get(0).dataset?.removeTimeout, 10) || 0
 
     if (timeout === 0) {
       doRemove()
@@ -250,16 +230,12 @@ class Cocooned {
   }
 
   hideMarkedForDestruction () {
-    const self = this
-    $(this.selector('remove', '&.existing.destroyed'), this.container).each(function (i, removeLink) {
-      const node = self.findItem(removeLink)
-      node.hide()
-    })
+    $(this.selector('remove', '&.existing.destroyed'), this.container).each((i, link) => this.findItem(link).hide())
   }
 
   #builder (link) {
-    const template = document.querySelector(`template[data-name=${link.data('template')}]`)
-    return new Builder(template.content, `new_${link.data('association')}`)
+    const template = document.querySelector(`template[data-name=${link.dataset.template}]`)
+    return new Builder(template.content, `new_${link.dataset.association}`)
   }
 }
 
