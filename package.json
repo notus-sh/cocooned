@@ -10,8 +10,8 @@
     "jest:esm": "NODE_NO_WARNINGS=1 yarn node --experimental-vm-modules $(yarn bin jest)"
   },
   "dependencies": {
-    "@notus.sh/cocooned": "link:./npm",
-    "@cocooned/tests": "link:./npm/__tests__"
+    "@cocooned/tests": "link:./npm/__tests__",
+    "@notus.sh/cocooned": "link:./npm"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
