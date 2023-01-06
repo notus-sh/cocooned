@@ -30,6 +30,4 @@ class EmitterDecorator {
   }
 }
 
-export {
-  EmitterDecorator
-}
+export default EmitterDecorator

@@ -1,5 +1,7 @@
 import $ from 'jquery'
 import Builder from './cocooned/builder'
+import EmitterDecorator from "./integrations/jquery/emitterDecorator.js";
+import Emitter from "./cocooned/emitter.js";
 
 class Cocooned {
   static defaultOptions () {
@@ -17,6 +19,22 @@ class Cocooned {
     this.init()
     this.container.get(0).dataset.cocooned = this
   }
+
+  /*
+  #emitter
+
+  get emitter () {
+    if (typeof this.#emitter === 'undefined') {
+      this.#emitter = new Emitter()
+    }
+
+    return this.#emitter
+  }
+
+  notify (node, eventType, eventData) {
+    return this.#emitter.emit(node, eventType, eventData)
+  }
+  */
 
   elementsCounter = 0
 

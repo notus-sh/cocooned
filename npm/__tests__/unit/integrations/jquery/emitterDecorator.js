@@ -1,6 +1,6 @@
 /* global given */
 
-import { EmitterDecorator } from '@notus.sh/cocooned/src/cocooned/integrations/jquery'
+import { EmitterDecorator } from '@notus.sh/cocooned/src/integrations/jquery'
 import Emitter from '@notus.sh/cocooned/src/cocooned/emitter'
 import { jest } from '@jest/globals'
 
