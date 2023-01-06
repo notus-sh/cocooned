@@ -1,7 +1,8 @@
 import EmitterDecorator from './jquery/emitterDecorator'
-import { jQuerySupportMixin } from './jquery/mixins'
+import { jQuerySupportMixin, jQueryPluginMixin } from './jquery/mixins'
 
 export {
   EmitterDecorator,
-  jQuerySupportMixin
+  jQuerySupportMixin,
+  jQueryPluginMixin
 }

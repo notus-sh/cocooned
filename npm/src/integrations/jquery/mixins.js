@@ -1,9 +1,7 @@
 import EmitterDecorator from './emitterDecorator'
-import Emitter from '../../cocooned/emitter';
-import $ from "jquery";
-import Cocooned from "../../../cocooned.js";
+import Emitter from '../../cocooned/emitter'
 
-const jQuerySupportMixin = (Base) => class extends Base {
+const jQuerySupportMixin = (jQuery, Base) => class extends Base {
   #emitter
 
   get emitter () {
@@ -15,7 +13,7 @@ const jQuerySupportMixin = (Base) => class extends Base {
   }
 
   notify (node, eventType, eventData) {
-    if (node instanceof $) {
+    if (node instanceof jQuery) {
       return super.notify(node.get(0), eventType, eventData)
     }
     return super.notify(node, eventType, eventData)

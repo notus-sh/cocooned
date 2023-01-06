@@ -7,7 +7,7 @@ import { jest } from '@jest/globals'
 import itBehavesLikeAnEventEmitter from '@cocooned/tests/shared/events/emitter'
 
 describe('Emitter', () => {
-  itBehavesLikeAnEventEmitter({ emitter: (namespaces) => new EmitterDecorator(new Emitter(namespaces)) })
+  itBehavesLikeAnEventEmitter({ emitter: (namespaces) => new EmitterDecorator(new Emitter(namespaces), $) })
 
   describe('a jQuery event emitter', () => {
     beforeEach(() => document.body.innerHTML = `<section></section>`)
@@ -16,7 +16,7 @@ describe('Emitter', () => {
     afterEach(() => abnegate('cocooned:event', ['event', 'a', 'b']))
 
     given('container', () => document.querySelector('section'))
-    given('emitter', () => new EmitterDecorator(new Emitter()))
+    given('emitter', () => new EmitterDecorator(new Emitter(), $))
     given('detail', () => ({ a: 1, b: 2 }))
 
     it('emits jQuery events', () => {
@@ -50,7 +50,7 @@ describe('Emitter', () => {
       beforeEach(() => namespaces.forEach(ns => delegate(`${ns}:event`)))
       afterEach(() => namespaces.forEach(ns => abnegate(`${ns}:event`)))
 
-      given('emitter', () => new EmitterDecorator(new Emitter(namespaces)))
+      given('emitter', () => new EmitterDecorator(new Emitter(namespaces), $))
 
       describe.each(namespaces)('for each namespace', (namespace) => {
         it('emits jQuery events', () => {

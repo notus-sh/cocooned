@@ -1,10 +1,10 @@
-import $ from "jquery"
-
 class EmitterDecorator {
   emitter
+  $
 
-  constructor (emitter) {
+  constructor (emitter, $) {
     this.emitter = emitter
+    this.$ = $
   }
 
   get namespaces () {
@@ -21,12 +21,12 @@ class EmitterDecorator {
   }
 
   #dispatch(target, event, args) {
-    $(target).trigger(event, args)
+    this.$(target).trigger(event, args)
     return event.isDefaultPrevented()
   }
 
   #events (type, detail) {
-    return this.namespaces.map(ns => $.Event(`${ns}:${type}`, detail))
+    return this.namespaces.map(ns => this.$.Event(`${ns}:${type}`, detail))
   }
 }
 
