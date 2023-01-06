@@ -1,5 +1,7 @@
 import EmitterDecorator from './emitterDecorator'
 import Emitter from '../../cocooned/emitter';
+import $ from "jquery";
+import Cocooned from "../../../cocooned.js";
 
 const jQuerySupportMixin = (Base) => class extends Base {
   #emitter
@@ -20,6 +22,13 @@ const jQuerySupportMixin = (Base) => class extends Base {
   }
 }
 
+const jQueryPluginMixin = function (jQuery, Cocooned) {
+  jQuery.fn.cocooned = function (options) {
+    return this.each((_i, el) => Cocooned.create(el, options))
+  }
+}
+
 export {
+  jQueryPluginMixin,
   jQuerySupportMixin
 }
