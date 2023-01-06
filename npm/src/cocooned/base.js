@@ -1,9 +1,7 @@
 import $ from 'jquery'
-import Builder from './cocooned/builder'
-import EmitterDecorator from "./integrations/jquery/emitterDecorator.js";
-import Emitter from "./cocooned/emitter.js";
+import Builder from './builder'
 
-class Cocooned {
+class Base {
   static defaultOptions () {
     return {}
   }
@@ -258,5 +256,5 @@ class Cocooned {
 }
 
 export {
-  Cocooned
+  Base
 }

@@ -5,7 +5,7 @@ import { jest } from '@jest/globals'
 import { setup, clickEvent } from '@cocooned/tests/support/helpers'
 import { getItems, getAddLink } from '@cocooned/tests/support/selectors'
 
-import itBehavesLikeAnEventListener from '@cocooned/tests/unit/shared/events/listener'
+import itBehavesLikeAnEventListener from '@cocooned/tests/shared/events/listener'
 
 describe('A Cocooned setup', () => {
   given('template', () => `

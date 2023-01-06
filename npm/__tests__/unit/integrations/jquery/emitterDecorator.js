@@ -4,7 +4,7 @@ import { EmitterDecorator } from '@notus.sh/cocooned/src/integrations/jquery'
 import Emitter from '@notus.sh/cocooned/src/cocooned/emitter'
 import { jest } from '@jest/globals'
 
-import itBehavesLikeAnEventEmitter from '@cocooned/tests/unit/shared/events/emitter'
+import itBehavesLikeAnEventEmitter from '@cocooned/tests/shared/events/emitter'
 
 describe('Emitter', () => {
   itBehavesLikeAnEventEmitter({ emitter: (namespaces) => new EmitterDecorator(new Emitter(namespaces)) })

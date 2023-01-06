@@ -5,8 +5,8 @@ import { jest } from '@jest/globals'
 import { setup, clickEvent } from '@cocooned/tests/support/helpers'
 import { getItem, getAddLink } from '@cocooned/tests/support/selectors'
 
-import itBehavesLikeAnEventListener from '@cocooned/tests/unit/shared/events/listener'
-import itBehavesLikeACancellableEvent from '@cocooned/tests/unit/shared/events/cancelable'
+import itBehavesLikeAnEventListener from '@cocooned/tests/shared/events/listener'
+import itBehavesLikeACancellableEvent from '@cocooned/tests/shared/events/cancelable'
 
 describe('A Cocooned setup', () => {
   given('template', () => `
