@@ -19,7 +19,7 @@ describe('A Cocoon setup', () => {
   beforeEach(async () => {
     document.body.innerHTML = given.template
     window.Cocooned = Cocooned
-    await import('../../../../../app/assets/javascripts/cocoon')
+    await import('../../../../app/assets/javascripts/cocoon')
   })
 
   it('is instanciated as a Cocooned instance', () => {
