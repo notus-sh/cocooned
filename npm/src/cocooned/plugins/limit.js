@@ -11,13 +11,13 @@ const limitMixin = (Base) => class extends Base {
       return
     }
 
-    this.container.on('cocooned:before-insert', e => {
+    this.container.get(0).addEventListener('cocooned:before-insert', e => {
       if (this.length < this.options.limit) {
         return
       }
 
-      e.stopPropagation()
-      const eventData = { link: e.link, node: e.node, cocooned: this, originalEvent: e }
+      e.preventDefault()
+      const eventData = { link: e.detail.link, node: e.detail.node, cocooned: this, originalEvent: e }
       this.notify(this.container, 'limit-reached', eventData)
     })
   }

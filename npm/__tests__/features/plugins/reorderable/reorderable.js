@@ -1,4 +1,4 @@
-/* global given, delegate, abnegate */
+/* global given */
 
 import Cocooned from '@notus.sh/cocooned/cocooned'
 import { jest } from '@jest/globals'
@@ -86,15 +86,6 @@ describe('A Cocooned setup', () => {
     })
 
     describe('with a movable item', () => {
-      beforeEach(() => {
-        delegate('cocooned:before-move', ['event', 'node', 'cocooned'])
-        delegate('cocooned:after-move', ['event', 'node', 'cocooned'])
-      })
-      afterEach(() => {
-        abnegate('cocooned:before-move')
-        abnegate('cocooned:after-move')
-      })
-
       given('index', () => faker.datatype.number({ min: 1, max: given.count - 2 }))
       given('item', () => given.items.item(given.index))
 
@@ -112,7 +103,7 @@ describe('A Cocooned setup', () => {
               resolve()
             })
 
-            given.container.addEventListener('$cocooned:after-move', listener)
+            given.container.addEventListener('cocooned:after-move', listener)
             given.moveUpLink.dispatchEvent(clickEvent())
           })
         })
@@ -130,7 +121,7 @@ describe('A Cocooned setup', () => {
               resolve()
             })
 
-            given.container.addEventListener('$cocooned:after-move', listener)
+            given.container.addEventListener('cocooned:after-move', listener)
             given.moveDownLink.dispatchEvent(clickEvent())
           })
         })

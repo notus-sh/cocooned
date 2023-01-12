@@ -3,6 +3,7 @@
 import EmitterDecorator from '@notus.sh/cocooned/src/integrations/jquery/emitterDecorator'
 import Emitter from '@notus.sh/cocooned/src/cocooned/emitter'
 import { jest } from '@jest/globals'
+import { delegate, abnegate } from 'jquery-events-to-dom-events'
 
 import itBehavesLikeAnEventEmitter from '@cocooned/tests/shared/events/emitter'
 

@@ -21,27 +21,27 @@ const reorderableMixin = (Base) => class extends Base {
     }
 
     // Maintain indexes
-    this.container
-      .on('cocooned:after-insert', e => this.reindex(e))
-      .on('cocooned:after-remove', e => this.reindex(e))
-      .on('cocooned:after-move', e => this.reindex(e))
-    
+    this.container.get(0).addEventListener('cocooned:after-insert', e => this.reindex(e))
+    this.container.get(0).addEventListener('cocooned:after-remove', e => this.reindex(e))
+    this.container.get(0).addEventListener('cocooned:after-move', e => this.reindex(e))
     // Ensure positions are unique before save
-    this.container.closest('form').on(this.namespacedNativeEvents('submit'), e => this.reindex(e))
+    const form = this.container.get(0).closest('form')
+    if (form !== null) {
+      form.addEventListener('submit', e => this.reindex(e))
+    }
 
     // Move items
     const self = this
-    this.container.on(
-      this.namespacedNativeEvents('click'),
-      [this.selector('up'), this.selector('down')].join(', '),
-      function (e) {
-        e.preventDefault()
-        e.stopPropagation()
+    this.container.get(0).addEventListener('click', function (e) {
+      const { target } = e;
+      if (!target.matches(self.selector('up')) && !target.matches(self.selector('down'))) {
+        return
+      }
 
-        const node = this
-        const up = self.classes.up.some(c => node.className.indexOf(c) !== -1)
-        self.move(this, up ? 'up' : 'down', e)
-      })
+      e.preventDefault()
+      const up = self.classes.up.some(c => target.className.indexOf(c) !== -1)
+      self.move(target, up ? 'up' : 'down', e)
+    })
   }
 
   move (moveLink, direction, originalEvent) {

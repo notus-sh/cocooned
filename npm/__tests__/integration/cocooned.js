@@ -1,4 +1,4 @@
-/* global given, delegate, abnegate */
+/* global given */
 
 import Cocooned from '@notus.sh/cocooned/cocooned'
 import { jest } from '@jest/globals'
@@ -20,12 +20,9 @@ describe('A Rails generated Cocooned setup', () => {
   beforeEach(() => setup(document, given))
 
   describe('when add link is clicked', () => {
-    beforeEach(() => delegate('cocooned:before-insert'))
-    afterEach(() => abnegate('cocooned:before-insert'))
-
     it('fires a before-insert event', () => {
       const listener = jest.fn()
-      given.container.addEventListener('$cocooned:before-insert', listener)
+      given.container.addEventListener('cocooned:before-insert', listener)
       given.addLink.dispatchEvent(clickEvent())
 
       expect(listener).toHaveBeenCalled()
@@ -36,14 +33,11 @@ describe('A Rails generated Cocooned setup', () => {
     beforeEach(() => given.addLink.dispatchEvent(clickEvent()))
 
     describe('when remove link is clicked', () => {
-      beforeEach(() => delegate('cocooned:before-remove'))
-      afterEach(() => abnegate('cocooned:before-remove'))
-
       given('removeLink', () => getRemoveLink(given.container))
 
       it('fires a before-remove event', () => {
         const listener = jest.fn()
-        given.container.addEventListener('$cocooned:before-remove', listener)
+        given.container.addEventListener('cocooned:before-remove', listener)
         given.removeLink.dispatchEvent(clickEvent())
 
         expect(listener).toHaveBeenCalled()
@@ -62,14 +56,11 @@ describe('A Rails generated Cocooned setup', () => {
     given('index', () => faker.datatype.number({ min: 1, max: given.count - 2 }))
 
     describe('when move up link is clicked', () => {
-      beforeEach(() => delegate('cocooned:before-move'))
-      afterEach(() => abnegate('cocooned:before-move'))
-
       given('moveLink', () => getMoveUpLink(given.container, given.index))
 
       it('fires a before-move event', () => {
         const listener = jest.fn()
-        given.container.addEventListener('$cocooned:before-move', listener)
+        given.container.addEventListener('cocooned:before-move', listener)
         given.moveLink.dispatchEvent(clickEvent())
 
         expect(listener).toHaveBeenCalled()
@@ -77,14 +68,11 @@ describe('A Rails generated Cocooned setup', () => {
     })
 
     describe('when move down link is clicked', () => {
-      beforeEach(() => delegate('cocooned:before-move'))
-      afterEach(() => abnegate('cocooned:before-move'))
-
       given('moveLink', () => getMoveDownLink(given.container, given.index))
 
       it('fires a before-move event', () => {
         const listener = jest.fn()
-        given.container.addEventListener('$cocooned:before-move', listener)
+        given.container.addEventListener('cocooned:before-move', listener)
         given.moveLink.dispatchEvent(clickEvent())
 
         expect(listener).toHaveBeenCalled()

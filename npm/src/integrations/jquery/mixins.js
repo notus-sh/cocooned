@@ -6,7 +6,7 @@ const jQuerySupportMixin = (jQuery, Base) => class extends Base {
 
   get emitter () {
     if (typeof this.#emitter === 'undefined') {
-      this.#emitter = new EmitterDecorator(new Emitter(['cocooned', 'cocoon']))
+      this.#emitter = new EmitterDecorator(new Emitter(['cocooned', 'cocoon']), jQuery)
     }
 
     return this.#emitter

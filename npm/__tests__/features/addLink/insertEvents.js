@@ -1,4 +1,4 @@
-/* global given, delegate, abnegate */
+/* global given */
 
 import Cocooned from '@notus.sh/cocooned/cocooned'
 import { jest } from '@jest/globals'
@@ -28,26 +28,17 @@ describe('A Cocooned setup', () => {
   beforeEach(() => setup(document, given))
 
   describe('events on insert', () => {
-    beforeEach(() => {
-      delegate('cocooned:before-insert', ['event', 'node', 'cocooned'])
-      delegate('cocooned:after-insert', ['event', 'node', 'cocooned'])
-    })
-    afterEach(() => {
-      abnegate('cocooned:before-insert')
-      abnegate('cocooned:after-insert')
-    })
-
     describe('a before-insert event', () => {
       it('is triggered', () => {
         const listener = jest.fn()
-        given.container.addEventListener('$cocooned:before-insert', listener)
+        given.container.addEventListener('cocooned:before-insert', listener)
         given.addLink.dispatchEvent(clickEvent())
 
         expect(listener).toHaveBeenCalled()
       })
 
       itBehavesLikeAnEventListener({
-        listen: (listener) => given.container.addEventListener('$cocooned:before-insert', listener),
+        listen: (listener) => given.container.addEventListener('cocooned:before-insert', listener),
         dispatch: () => given.addLink.dispatchEvent(clickEvent())
       })
     })
@@ -55,22 +46,21 @@ describe('A Cocooned setup', () => {
     describe('an after-insert event', () => {
       it('is triggered', () => {
         const listener = jest.fn()
-        given.container.addEventListener('$cocooned:after-insert', listener)
+        given.container.addEventListener('cocooned:after-insert', listener)
         given.addLink.dispatchEvent(clickEvent())
 
         expect(listener).toHaveBeenCalled()
       })
 
       itBehavesLikeAnEventListener({
-        listen: (listener) => given.container.addEventListener('$cocooned:after-insert', listener),
+        listen: (listener) => given.container.addEventListener('cocooned:after-insert', listener),
         dispatch: () => given.addLink.dispatchEvent(clickEvent())
       })
     })
 
     itBehavesLikeACancellableEvent({
       event: 'insert',
-      dispatch: () => { given.link.dispatchEvent(clickEvent()) },
-      trigger: () => { $(given.link).trigger('click') }
+      dispatch: () => { given.addLink.dispatchEvent(clickEvent()) }
     })
   })
 })

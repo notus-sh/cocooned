@@ -1,4 +1,4 @@
-/* global given, delegate, abnegate */
+/* global given */
 
 import Cocooned from '@notus.sh/cocooned/cocooned'
 import { jest } from '@jest/globals'
@@ -53,31 +53,22 @@ describe('A Cocooned setup', () => {
   beforeEach(() => setup(document, given))
 
   describe('with options for the reorderable plugin', () => {
-    beforeEach(() => {
-      delegate('cocooned:before-reindex', ['event', 'nodes', 'cocooned'])
-      delegate('cocooned:after-reindex', ['event', 'nodes', 'cocooned'])
-    })
-    afterEach(() => {
-      abnegate('cocooned:before-reindex')
-      abnegate('cocooned:after-reindex')
-    })
-
     const itBehavesLikeAReindexer = () => {
       beforeEach(() => jest.useFakeTimers())
 
       describe('a before-reindex event', () => {
         it('is triggered', () => {
           const listener = jest.fn()
-          given.container.addEventListener('$cocooned:before-reindex', listener)
+          given.container.addEventListener('cocooned:before-reindex', listener)
           given.link.dispatchEvent(clickEvent())
           jest.runAllTimers()
 
           expect(listener).toHaveBeenCalled()
-          given.container.removeEventListener('$cocooned:before-reindex', listener)
+          given.container.removeEventListener('cocooned:before-reindex', listener)
         })
 
         itBehavesLikeAnEventListener({
-          listen: (listener) => given.container.addEventListener('$cocooned:before-reindex', listener),
+          listen: (listener) => given.container.addEventListener('cocooned:before-reindex', listener),
           dispatch: () => {
             given.link.dispatchEvent(clickEvent())
             jest.runAllTimers()
@@ -89,16 +80,16 @@ describe('A Cocooned setup', () => {
       describe('an after-reindex event', () => {
         it('is triggered', () => {
           const listener = jest.fn()
-          given.container.addEventListener('$cocooned:after-reindex', listener)
+          given.container.addEventListener('cocooned:after-reindex', listener)
           given.link.dispatchEvent(clickEvent())
           jest.runAllTimers()
 
           expect(listener).toHaveBeenCalled()
-          given.container.removeEventListener('$cocooned:after-reindex', listener)
+          given.container.removeEventListener('cocooned:after-reindex', listener)
         })
 
         itBehavesLikeAnEventListener({
-          listen: (listener) => given.container.addEventListener('$cocooned:after-reindex', listener),
+          listen: (listener) => given.container.addEventListener('cocooned:after-reindex', listener),
           dispatch: () => {
             given.link.dispatchEvent(clickEvent())
             jest.runAllTimers()
@@ -111,10 +102,6 @@ describe('A Cocooned setup', () => {
         event: 'reindex',
         dispatch: () => {
           given.link.dispatchEvent(clickEvent())
-          jest.runAllTimers()
-        },
-        trigger: () => {
-          $(given.link).trigger('click')
           jest.runAllTimers()
         }
       })

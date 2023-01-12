@@ -1,5 +1,6 @@
 import $ from 'jquery'
 import Builder from './builder'
+import Emitter from './emitter'
 
 class Base {
   static defaultOptions () {
@@ -18,7 +19,6 @@ class Base {
     this.container.get(0).dataset.cocooned = this
   }
 
-  /*
   #emitter
 
   get emitter () {
@@ -30,9 +30,12 @@ class Base {
   }
 
   notify (node, eventType, eventData) {
-    return this.#emitter.emit(node, eventType, eventData)
+    if (node instanceof $) {
+      return this.emitter.emit(node.get(0), eventType, eventData)
+    }
+
+    return this.emitter.emit(node, eventType, eventData)
   }
-  */
 
   elementsCounter = 0
 
@@ -63,25 +66,12 @@ class Base {
     return config
   }
 
-  notify (node, eventType, eventData) {
-    return !(this.namespaces.events.some(namespace => {
-      const namespacedEventType = [namespace, eventType].join(':')
-      const event = $.Event(namespacedEventType, eventData)
-      const eventArgs = [eventData.cocooned]
-
-      if ('node' in eventData) {
-        eventArgs.unshift(eventData.node)
-      } else if ('nodes' in eventData) {
-        eventArgs.unshift(eventData.nodes)
-      }
-
-      node.trigger(event, eventArgs)
-      return (event.isPropagationStopped() || event.isDefaultPrevented())
-    }))
+  selectors (type, selector = '&') {
+    return this.classes[type].map(klass => selector.replace(/&/, `.${klass}`))
   }
 
   selector (type, selector = '&') {
-    return this.classes[type].map(klass => selector.replace(/&/, `.${klass}`)).join(', ')
+    return this.selectors(type, selector).join(', ')
   }
 
   namespacedNativeEvents (type) {
@@ -168,26 +158,25 @@ class Base {
     const self = this
 
     // Bind add links
-    this.addLinks.on(
-      this.namespacedNativeEvents('click'),
-      function (e) {
+    this.addLinks.each((_i, link) => {
+      link.addEventListener('click', function (e) {
         e.preventDefault()
-        e.stopPropagation()
-
         self.add(this, e)
       })
+    })
 
     // Bind remove links
     // (Binded on document instead of container to not bypass click handler defined in jquery_ujs)
-    $(document).on(
-      this.namespacedNativeEvents('click'),
-      this.selector('remove', `#${this.container.attr('id')} &`),
-      function (e) {
-        e.preventDefault()
-        e.stopPropagation()
+    document.addEventListener('click', function (e) {
+      const { target } = e
+      if (!self.selectors('remove').some(s => target.matches(s)) ||
+          target.closest(self.selector('container')) !== self.container.get(0)) {
+        return
+      }
 
-        self.remove(this, e)
-      })
+      e.preventDefault()
+      self.remove(target, e)
+    })
   }
 
   add (adder, originalEvent) {
