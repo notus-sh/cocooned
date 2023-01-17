@@ -5,19 +5,6 @@ import { jest } from '@jest/globals'
 
 export default ({ listen, dispatch, args = new Set(['link', 'node', 'cocooned']) }) => {
   describe('when triggered', () => {
-    it.skip('receives the event as first argument', () => {
-      return new Promise(resolve => {
-        const listener = jest.fn(e => {
-          expect(e).toHaveProperty('detail.event')
-          expect(e.detail.event).toBeInstanceOf(jQuery.Event)
-          resolve()
-        })
-
-        listen(listener)
-        dispatch()
-      })
-    })
-
     it('receives the original event as event detail', () => {
       return new Promise(resolve => {
         const listener = jest.fn(e => {
@@ -59,19 +46,6 @@ export default ({ listen, dispatch, args = new Set(['link', 'node', 'cocooned'])
           dispatch()
         })
       })
-
-      it.skip('receives the manipulated node as second argument', () => {
-        return new Promise(resolve => {
-          const listener = jest.fn(e => {
-            expect(e).toHaveProperty('detail.node')
-            expect(e.detail.node).toBeInstanceOf(jQuery)
-            resolve()
-          })
-
-          listen(listener)
-          dispatch()
-        })
-      })
     }
 
     if (args.has('nodes')) {
@@ -87,36 +61,10 @@ export default ({ listen, dispatch, args = new Set(['link', 'node', 'cocooned'])
           dispatch()
         })
       })
-
-      it.skip('receives the manipulated nodes as second argument', () => {
-        return new Promise(resolve => {
-          const listener = jest.fn(e => {
-            expect(e).toHaveProperty('detail.event.nodes')
-            expect(e.detail.nodes).toBeInstanceOf(jQuery)
-            resolve()
-          })
-
-          listen(listener)
-          dispatch()
-        })
-      })
     }
 
     if (args.has('cocooned')) {
       it('receives the Cocooned instance as event data', () => {
-        return new Promise(resolve => {
-          const listener = jest.fn(e => {
-            expect(e).toHaveProperty('detail.cocooned')
-            expect(e.detail.cocooned).toBe(given.cocooned)
-            resolve()
-          })
-
-          listen(listener)
-          dispatch()
-        })
-      })
-
-      it.skip('receives the Cocooned instance as third argument', () => {
         return new Promise(resolve => {
           const listener = jest.fn(e => {
             expect(e).toHaveProperty('detail.cocooned')

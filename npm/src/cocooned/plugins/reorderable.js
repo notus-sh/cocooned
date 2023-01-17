@@ -33,7 +33,7 @@ const reorderableMixin = (Base) => class extends Base {
     // Move items
     const self = this
     this.container.get(0).addEventListener('click', function (e) {
-      const { target } = e;
+      const { target } = e
       if (!target.matches(self.selector('up')) && !target.matches(self.selector('down'))) {
         return
       }

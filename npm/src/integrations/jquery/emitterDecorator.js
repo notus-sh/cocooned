@@ -7,26 +7,31 @@ class EmitterDecorator {
     this.$ = $
   }
 
-  get namespaces () {
-    return this.emitter.namespaces
-  }
-
   emit (target, type, detail = {}) {
-    const nativePrevented = this.emitter.emit(target, type, detail)
-    return this.#emit(target, type, detail) && nativePrevented
+    return !this.emitted(target, type, detail).some(e => e.isDefaultPrevented())
   }
 
-  #emit (target, type, detail) {
-    return !this.#events(type, detail).map(e => this.#dispatch(target, e, Object.values(detail))).includes(true)
+  emitted (target, type, detail) {
+    const natives = this.emitter.emitted(target, type, detail)
+    const events = natives.map(e => this.#event(e, detail))
+    events.forEach(e => this.#dispatch(target, e, Object.values(detail)))
+
+    return events
   }
 
   #dispatch(target, event, args) {
-    this.$(target).trigger(event, args)
-    return event.isDefaultPrevented()
+    if (this.#stopped(event.originalEvent)) {
+      return
+    }
+    return this.$(target).trigger(event, args)
   }
 
-  #events (type, detail) {
-    return this.namespaces.map(ns => this.$.Event(`${ns}:${type}`, detail))
+  #stopped(originalEvent) {
+    return typeof originalEvent.isPropagationStopped === 'function' && originalEvent.isPropagationStopped()
+  }
+
+  #event (type, detail) {
+    return this.$.Event(type, detail)
   }
 }
 

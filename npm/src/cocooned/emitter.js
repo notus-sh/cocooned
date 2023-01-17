@@ -1,3 +1,21 @@
+class EmitterEvent extends CustomEvent {
+  #stopped = false
+
+  isPropagationStopped() {
+    return this.#stopped
+  }
+
+  stopPropagation () {
+    this.#stopped = true
+    super.stopPropagation()
+  }
+
+  stopImmediatePropagation () {
+    this.#stopped = true
+    super.stopImmediatePropagation()
+  }
+}
+
 class Emitter {
   namespaces
 
@@ -6,12 +24,18 @@ class Emitter {
   }
 
   emit (target, type, detail = {}) {
-    return !this.#events(type, detail).map(e => this.#dispatch(target, e)).includes(true)
+    return !this.emitted(target, type, detail).some(e => e.defaultPrevented)
+  }
+
+  emitted (target, type, detail = {}) {
+    const events = this.#events(type, detail)
+    events.forEach(e => this.#dispatch(target, e))
+
+    return events
   }
 
   #dispatch(target, event) {
-    target.dispatchEvent(event)
-    return event.defaultPrevented
+    return target.dispatchEvent(event)
   }
 
   #events (type, detail) {
@@ -19,7 +43,7 @@ class Emitter {
   }
 
   #event (type, detail) {
-    return new CustomEvent(type, { bubbles: true, cancelable: true, detail })
+    return new EmitterEvent(type, { bubbles: true, cancelable: true, detail })
   }
 }
 
