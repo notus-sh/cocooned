@@ -1,9 +1,10 @@
 import $ from 'jquery'
 import { Base } from './src/cocooned/base'
 import { limitMixin, reorderableMixin } from './src/cocooned/plugins'
-import { jQuerySupportMixin, jQueryPluginMixin } from './src/integrations/jquery/mixins'
+import { CocoonSupportMixin } from './src/integrations/cocoon'
+import { jQueryPluginMixin } from './src/integrations/jquery/mixins'
 
-class Cocooned extends jQuerySupportMixin($, reorderableMixin(limitMixin(Base))) {
+class Cocooned extends CocoonSupportMixin(reorderableMixin(limitMixin(Base))) {
   static create (container, options) {
     if ('cocooned' in container.dataset) {
       return

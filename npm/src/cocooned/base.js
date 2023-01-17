@@ -7,6 +7,10 @@ class Base {
     return {}
   }
 
+  static eventNamespaces () {
+    return ['cocooned']
+  }
+
   constructor (container, options) {
     this.container = $(container)
     this.options = this.normalizeConfig({
@@ -23,7 +27,7 @@ class Base {
 
   get emitter () {
     if (typeof this.#emitter === 'undefined') {
-      this.#emitter = new Emitter()
+      this.#emitter = new Emitter(this.constructor.eventNamespaces())
     }
 
     return this.#emitter
