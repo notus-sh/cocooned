@@ -4,12 +4,9 @@
 
 ### Breaking changes
 
-#### Events listener now use CustomEvents
+#### Events listener now use CustomEvents (#17)
 
-To be able to remove our dependency to jQuery, Cocooned events have been rewritten around CustomEvents and standard `addEventListener` / `dispatchEvent`.
-
-As `jQuery.on` and other event listening methods internaly use `addEventListener`, `target.dispatchEvent(e)` triggers both native and jQuery event listeners with a single CustomEvent. On the other side `$(target).trigger(e)` triggers only jQuery listeners with a jQuery event and additional arguments. As it is not possible to discriminate native and jQuery listeners from emitter's (nor event's) point of view, we had no other choice than to deprecate event listeners extraneous arguments.
-
+Cocooned events have been rewritten around CustomEvents and standard `addEventListener` / `dispatchEvent`.
 You should either rewrite your event binding with `addEventListener` or change your jQuery ones as follow:
 
 ```javascript
