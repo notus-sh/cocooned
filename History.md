@@ -1,6 +1,25 @@
 # Change History / Release Notes
 
-## Version 1.5.0 (Not released yet)
+## Version 2.0.0 (Not released yet)
+
+### Breaking changes
+
+#### Events listener now use CustomEvents
+
+To be able to remove our dependency to jQuery, Cocooned events have been rewritten around CustomEvents and standard `addEventListener` / `dispatchEvent`.
+
+As `jQuery.on` and other event listening methods internaly use `addEventListener`, `target.dispatchEvent(e)` triggers both native and jQuery event listeners with a single CustomEvent. On the other side `$(target).trigger(e)` triggers only jQuery listeners with a jQuery event and additional arguments. As it is not possible to discriminate native and jQuery listeners from emitter's (nor event's) point of view, we had no other choice than to deprecate event listeners extraneous arguments.
+
+You should either rewrite your event binding with `addEventListener` or change your jQuery ones as follow:
+
+```javascript
+- $(element).on('cocooned:event', (e, node, cocooned) => {
++ $(element).on('cocooned:event', e => {
++   { node, cocooned } = e.detail // Use nodes in 'cocooned:before-reindex' / 'cocooned:after-reindex' events
+  })
+```
+
+### Bug fixes and other changes
 
 * Refactor helpers as tag classes (#10)
 * Integrate deprecation messages with ActiveSupport::Deprecation (#9)
@@ -28,7 +47,7 @@
 ### New features
 
 * Add support for @hotwired/turbo (thanks @entretechno-jeremiah in [nathanvda/cocoon#600](https://github.com/nathanvda/cocoon/pull/600))
-  
+
 ### Bug fixes and other changes
 
 * Prevent side effects on options passed to view helpers.

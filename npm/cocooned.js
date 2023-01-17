@@ -2,7 +2,7 @@ import $ from 'jquery'
 import { Base } from './src/cocooned/base'
 import { limitMixin, reorderableMixin } from './src/cocooned/plugins'
 import { CocoonSupportMixin } from './src/integrations/cocoon'
-import { jQueryPluginMixin } from './src/integrations/jquery/mixins'
+import { jQueryPluginMixin } from './src/integrations/jquery'
 
 class Cocooned extends CocoonSupportMixin(reorderableMixin(limitMixin(Base))) {
   static create (container, options) {

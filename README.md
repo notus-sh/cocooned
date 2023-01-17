@@ -300,23 +300,20 @@ And so does the reorderable plugin:
 To listen to the events in your JavaScript:
 
 ```javascript
-$('#container').on('cocooned:before-insert', function(event, node, cocoonedInstance) {
+container.addEventListener('cocooned:before-insert', event => {
   /* Do something */
 });
 ```
 
-An event handler is called with 3 arguments:
+Event handlers receive a `CustomEvent` with following detail:
 
-The event `event` is an instance of `jQuery.Event` and carry some additional data:
-
-* `event.link`, the clicked link
-* `event.node`, the nested item that will be added, removed or moved, as a jQuery object. This is null for `cocooned:limit-reached` and `cocooned:*-reindex` events
-* `event.nodes`, the nested items that will be or just have been reindexed on `cocooned:*-reindex` events, as a jQuery object. Null otherwise. 
-* `event.cocooned`, the Cocooned javascript object instance handling the nested association.
-* `event.originalEvent`, the original (browser) event.
-
-The `node` argument is the same jQuery object as `event.node`.
-The `cocooned` argument is the same as `event.cocooned`.
+* `event.detail.link`, the clicked link
+* `event.detail.node`, the nested item that will be added, removed or moved.  
+  Does not exist in `cocooned:limit-reached` and `cocooned:*-reindex` events 
+* `event.nodes`, the nested items that will be or just have been reindexed.  
+  On `cocooned:*-reindex` events only 
+* `event.detail.cocooned`, the Cocooned instance handling the nested association.
+* `event.detail.originalEvent`, the original (browser) event.
 
 #### Canceling an action
 
