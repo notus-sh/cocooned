@@ -52,4 +52,23 @@ describe('A Cocooned setup', () => {
       expect(given.items.length).toEqual(given.insertionCount)
     })
   })
+
+  describe('with count', () => {
+    given('template', () => `
+      <section>
+        <div>
+          <a class="cocooned-add" href="#"
+             data-association="items"
+             data-template="template"
+             data-count="${given.insertionCount}">Add</a>
+          <template data-name="template">${given.insertionTemplate}</template>
+        </div>
+      </section>
+    `)
+    given('insertionCount', () => faker.datatype.number({ min: 2, max: 5 }))
+
+    it('insert the correct count of items', () => {
+      expect(given.items.length).toEqual(given.insertionCount)
+    })
+  })
 })

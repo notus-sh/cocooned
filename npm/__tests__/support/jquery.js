@@ -1,5 +1,4 @@
 import jQuery from 'jquery'
-import { delegate, abnegate } from 'jquery-events-to-dom-events'
 
 // Change jQuery handler for the document ready event to immediately executed callbacks.
 jQuery.fn.ready = function (fn) {
@@ -8,8 +7,6 @@ jQuery.fn.ready = function (fn) {
 
 if (typeof global !== 'undefined') {
   global.$ = global.jQuery = jQuery
-  global.delegate = delegate
-  global.abnegate = abnegate
 }
 
 if (typeof window !== 'undefined') {

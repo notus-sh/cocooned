@@ -1,4 +1,4 @@
-/* global given, delegate, abnegate */
+/* global given */
 
 import Cocooned from '@notus.sh/cocooned/cocooned'
 import { jest } from '@jest/globals'
@@ -6,8 +6,8 @@ import { faker } from '@cocooned/tests/support/faker'
 import { setup, clickEvent } from '@cocooned/tests/support/helpers'
 import { getAddLink, getMoveDownLinks, getMoveUpLinks } from '@cocooned/tests/support/selectors'
 
-import itBehavesLikeAnEventListener from '@cocooned/tests/unit/shared/events/listener'
-import itBehavesLikeACancellableEvent from '@cocooned/tests/unit/shared/events/cancelable'
+import itBehavesLikeAnEventListener from '@cocooned/tests/shared/events/listener'
+import itBehavesLikeACancellableEvent from '@cocooned/tests/shared/events/cancelable'
 
 describe('A Cocooned reorderable setup', () => {
   given('template', () => `
@@ -50,15 +50,6 @@ describe('A Cocooned reorderable setup', () => {
   beforeEach(() => setup(document, given))
 
   describe('events on move', () => {
-    beforeEach(() => {
-      delegate('cocooned:before-move', ['event', 'node', 'cocooned'])
-      delegate('cocooned:after-move', ['event', 'node', 'cocooned'])
-    })
-    afterEach(() => {
-      abnegate('cocooned:before-move')
-      abnegate('cocooned:after-move')
-    })
-
     /* eslint-disable jest/no-identical-title */
     const itBehavesLikeASingleMoveLink = () => {
       beforeEach(() => jest.useFakeTimers())
@@ -66,24 +57,24 @@ describe('A Cocooned reorderable setup', () => {
       describe('a before-move event', () => {
         it('is not triggered', () => {
           const listener = jest.fn()
-          given.container.addEventListener('$cocooned:before-move', listener)
+          given.container.addEventListener('cocooned:before-move', listener)
           given.link.dispatchEvent(clickEvent())
           jest.runAllTimers()
 
           expect(listener).not.toHaveBeenCalled()
-          given.container.removeEventListener('$cocooned:before-move', listener)
+          given.container.removeEventListener('cocooned:before-move', listener)
         })
       })
 
       describe('an after-move event', () => {
         it('is not triggered', () => {
           const listener = jest.fn()
-          given.container.addEventListener('$cocooned:after-move', listener)
+          given.container.addEventListener('cocooned:after-move', listener)
           given.link.dispatchEvent(clickEvent())
           jest.runAllTimers()
 
           expect(listener).not.toHaveBeenCalled()
-          given.container.removeEventListener('$cocooned:after-move', listener)
+          given.container.removeEventListener('cocooned:after-move', listener)
         })
       })
     }
@@ -94,16 +85,16 @@ describe('A Cocooned reorderable setup', () => {
       describe('a before-move event', () => {
         it('is triggered', () => {
           const listener = jest.fn()
-          given.container.addEventListener('$cocooned:before-move', listener)
+          given.container.addEventListener('cocooned:before-move', listener)
           given.link.dispatchEvent(clickEvent())
           jest.runAllTimers()
 
           expect(listener).toHaveBeenCalled()
-          given.container.removeEventListener('$cocooned:before-move', listener)
+          given.container.removeEventListener('cocooned:before-move', listener)
         })
 
         itBehavesLikeAnEventListener({
-          listen: (listener) => given.container.addEventListener('$cocooned:before-move', listener),
+          listen: (listener) => given.container.addEventListener('cocooned:before-move', listener),
           dispatch: () => {
             given.link.dispatchEvent(clickEvent())
             jest.runAllTimers()
@@ -114,16 +105,16 @@ describe('A Cocooned reorderable setup', () => {
       describe('an after-move event', () => {
         it('is triggered', () => {
           const listener = jest.fn()
-          given.container.addEventListener('$cocooned:after-move', listener)
+          given.container.addEventListener('cocooned:after-move', listener)
           given.link.dispatchEvent(clickEvent())
           jest.runAllTimers()
 
           expect(listener).toHaveBeenCalled()
-          given.container.removeEventListener('$cocooned:before-move', listener)
+          given.container.removeEventListener('cocooned:before-move', listener)
         })
 
         itBehavesLikeAnEventListener({
-          listen: (listener) => given.container.addEventListener('$cocooned:after-move', listener),
+          listen: (listener) => given.container.addEventListener('cocooned:after-move', listener),
           dispatch: () => {
             given.link.dispatchEvent(clickEvent())
             jest.runAllTimers()
@@ -135,10 +126,6 @@ describe('A Cocooned reorderable setup', () => {
         event: 'move',
         dispatch: () => {
           given.link.dispatchEvent(clickEvent())
-          jest.runAllTimers()
-        },
-        trigger: () => {
-          $(given.link).trigger('click')
           jest.runAllTimers()
         }
       })

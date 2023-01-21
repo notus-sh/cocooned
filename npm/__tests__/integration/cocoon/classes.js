@@ -1,4 +1,4 @@
-/* global given, delegate, abnegate */
+/* global given */
 
 import Cocooned from '@notus.sh/cocooned/cocooned'
 import { jest } from '@jest/globals'
@@ -30,12 +30,9 @@ describe('A Cocoon setup using Cocoon classes', () => {
   beforeEach(() => setup(document, given))
 
   describe('when add link is clicked', () => {
-    beforeEach(() => delegate('cocooned:before-insert'))
-    afterEach(() => abnegate('cocooned:before-insert'))
-
     it('fires a before-insert event', () => {
       const listener = jest.fn()
-      given.container.addEventListener('$cocooned:before-insert', listener)
+      given.container.addEventListener('cocooned:before-insert', listener)
       given.addLink.dispatchEvent(clickEvent())
 
       expect(listener).toHaveBeenCalled()
@@ -46,14 +43,11 @@ describe('A Cocoon setup using Cocoon classes', () => {
     beforeEach(() => given.addLink.dispatchEvent(clickEvent()))
 
     describe('when remove link is clicked', () => {
-      beforeEach(() => delegate('cocooned:before-remove'))
-      afterEach(() => abnegate('cocooned:before-remove'))
-
       given('removeLink', () => given.container.querySelector('.remove_fields'))
 
       it('fires a before-remove event', () => {
         const listener = jest.fn()
-        given.container.addEventListener('$cocooned:before-remove', listener)
+        given.container.addEventListener('cocooned:before-remove', listener)
         given.removeLink.dispatchEvent(clickEvent())
 
         expect(listener).toHaveBeenCalled()
