@@ -9,22 +9,10 @@ import { getItem, getItems, getRemoveLink} from '@cocooned/tests/support/selecto
 import itBehavesLikeAnEventListener from "@cocooned/tests/shared/events/customListener";
 import itBehavesLikeACancellableEvent from "@cocooned/tests/shared/events/cancelable";
 
-class RemoveAutoAnimate extends Remove {
-  _hide (node, callback) {
-    super._hide(node)
-    if (typeof callback === 'function') callback()
-  }
-
-  _show (node, callback) {
-    super._show(node)
-    if (typeof callback === 'function') callback()
-  }
-}
-
 describe('Remove', () => {
   beforeEach(() => document.body.innerHTML = given.html)
 
-  given('remove', () => new RemoveAutoAnimate(given.removeTrigger, new Cocooned(given.container)))
+  given('remove', () => new Remove(given.removeTrigger, new Cocooned(given.container)))
   given('removeTrigger', () => getRemoveLink(given.container))
   given('container', () => document.querySelector('.cocooned-container'))
   given('item', () => getItem(given.container))
@@ -36,45 +24,7 @@ describe('Remove', () => {
     </div>
   `)
 
-  describe('handle', () => {
-    describe('with a dynamic item', () => {
-      it('remove item from document', () => {
-        given.remove.handle(clickEvent())
-        expect(getItems(given.container)).toHaveLength(0)
-      })
-    })
-
-    describe('with an existing item', () => {
-      given('html', () => `
-        <div class="cocooned-container">
-          <div class="cocooned-item">
-            <input type="hidden" name="items[0][_destroy]" required />
-            <a class="cocooned-remove existing" href="#">Remove</a>
-          </div>
-        </div>
-      `)
-
-      it('does not remove item from document', () => {
-        given.remove.handle(clickEvent())
-        expect(getItems(given.container)).toHaveLength(1)
-      })
-
-      it('hides item', () => {
-        given.remove.handle(clickEvent())
-        expect(given.item.classList).toContain('cocooned-item--hidden')
-      })
-
-      it('marks item for destruction', () => {
-        given.remove.handle(clickEvent())
-        expect(given.item.querySelector('input').getAttribute('value')).toBeTruthy()
-      })
-
-      it('removes required on inputs', () => {
-        given.remove.handle(clickEvent())
-        expect(given.item.querySelector('input').getAttributeNames()).not.toContain('required')
-      })
-    })
-
+  const itBehavesLikeARemoteTrigger = () => {
     describe('a before-remove event', () => {
       it('is triggered', () => {
         const listener = jest.fn()
@@ -108,6 +58,50 @@ describe('Remove', () => {
     itBehavesLikeACancellableEvent({
       event: 'remove',
       dispatch: () => { given.remove.handle(clickEvent()) }
+    })
+  }
+
+  describe('handle', () => {
+    describe('with a dynamic item', () => {
+      it('remove item from document', () => {
+        given.remove.handle(clickEvent())
+        expect(getItems(given.container)).toHaveLength(0)
+      })
+
+      itBehavesLikeARemoteTrigger()
+    })
+
+    describe('with an existing item', () => {
+      given('html', () => `
+        <div class="cocooned-container">
+          <div class="cocooned-item">
+            <input type="hidden" name="items[0][_destroy]" required />
+            <a class="cocooned-remove existing" href="#">Remove</a>
+          </div>
+        </div>
+      `)
+
+      it('does not remove item from document', () => {
+        given.remove.handle(clickEvent())
+        expect(getItems(given.container)).toHaveLength(1)
+      })
+
+      it('hides item', () => {
+        given.remove.handle(clickEvent())
+        expect(given.item.classList).toContain('cocooned-item--hidden')
+      })
+
+      it('marks item for destruction', () => {
+        given.remove.handle(clickEvent())
+        expect(given.item.querySelector('input').getAttribute('value')).toBeTruthy()
+      })
+
+      it('removes required on inputs', () => {
+        given.remove.handle(clickEvent())
+        expect(given.item.querySelector('input').getAttributeNames()).not.toContain('required')
+      })
+
+      itBehavesLikeARemoteTrigger()
     })
   })
 })

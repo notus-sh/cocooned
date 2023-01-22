@@ -11,12 +11,12 @@ class Base {
     throw new TypeError('handle() must be defined in subclasses')
   }
 
-  get _node () {
+  get _item () {
     return this._trigger.closest('.cocooned-item')
   }
 
   get _notified () {
-    return this._node
+    return this._item
   }
 
   _notify (eventName, originalEvent) {
@@ -24,7 +24,7 @@ class Base {
   }
 
   _eventData (originalEvent) {
-    return { link: this._trigger, node: this._node, cocooned: this._cocooned, originalEvent }
+    return { link: this._trigger, node: this._item, cocooned: this._cocooned, originalEvent }
   }
 
   _hide (node, callback) {

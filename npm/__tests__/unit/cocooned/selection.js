@@ -1,14 +1,14 @@
 /* global given */
 
-import Container from '@notus.sh/cocooned/src/cocooned/container'
+import Selection from '@notus.sh/cocooned/src/cocooned/selection.js'
 import { jest } from '@jest/globals'
 import { faker } from '@cocooned/tests/support/faker'
 
-describe('Container', () => {
+describe('Selection', () => {
   beforeEach(() => document.body.innerHTML = given.html)
 
-  given('container', () => new Container(given.wrapper))
-  given('wrapper', () => document.querySelector('.cocooned-container'))
+  given('selection', () => new Selection(given.container, { transitions: true }))
+  given('container', () => document.querySelector('.cocooned-container'))
   given('count', () => faker.datatype.number({ min: 1, max: 5 }))
   given('items', () => Array.from(Array(given.count), (_, i) => `
     <div class="cocooned-item"></div>
@@ -20,9 +20,9 @@ describe('Container', () => {
   `)
 
   describe('when created', () => {
-    beforeEach(() => new Container(given.wrapper))
+    beforeEach(() => new Selection(given.container))
 
-    given('styles', () => given.wrapper.firstElementChild)
+    given('styles', () => given.container.firstElementChild)
 
     it('inject styles to container', () => {
       expect(given.styles.tagName).toEqual('STYLE')
@@ -35,19 +35,19 @@ describe('Container', () => {
 
   describe('items', () => {
     it('returns an array', () => {
-      expect(given.container.items).toBeInstanceOf(Array)
+      expect(given.selection.items).toBeInstanceOf(Array)
     })
 
     it('returns an array of DOM Node', () => {
-      const constructors = given.container.items.map(item => item.constructor.name)
+      const constructors = given.selection.items.map(item => item.constructor.name)
       expect([...new Set(constructors)]).toEqual([HTMLDivElement.name])
     })
 
     it('returns correct number of items', () => {
-      expect(given.container.items.length).toEqual(given.count)
+      expect(given.selection.items.length).toEqual(given.count)
     })
 
-    describe('with nested wrappers', () => {
+    describe('with nested containers', () => {
       given('nested', () => Array.from(Array(given.count), (_, i) => `
         <div class="cocooned-item nested"></div>
       `))
@@ -61,14 +61,34 @@ describe('Container', () => {
       `)
 
       it('returns correct number of items', () => {
-        expect(given.container.items.length).toEqual(given.count)
+        expect(given.selection.items.length).toEqual(given.count)
       })
 
       it("returns only container's items", () => {
-        const nested = given.container.items.map(item => item.matches('.nested'))
+        const nested = given.selection.items.map(item => item.matches('.nested'))
         expect([...new Set(nested)]).toEqual([false])
       })
     })
+  })
+
+  describe('contains', () => {
+    describe('when given node is one of the container items', () => {
+      given('item', () => document.querySelector('.cocooned-item'))
+
+      it('returns true', () => {
+        expect(given.selection.contains(given.item)).toBeTruthy()
+      })
+    })
+
+    describe('when given node is not one of container items', () => {
+      it('returns true', () => {
+        expect(given.selection.contains(given.container)).toBeFalsy()
+      })
+    })
+  })
+
+  describe('matches', () => {
+    it.skip('should be tested', () => {})
   })
 
   const itBehavesLikeAVisibilityMethod = ({ expected, other, toggle }) => {
@@ -86,21 +106,34 @@ describe('Container', () => {
       expect(given.item.classList).not.toContain(other)
     })
 
-    it(`supports callback`, () => {
-      const listener = jest.fn()
-      toggle(given.item, listener)
-      given.item.dispatchEvent(new Event('transitionend'))
+    describe('with transitions', () => {
+      it(`supports callback`, () => {
+        const listener = jest.fn()
+        toggle(given.item, listener)
+        given.item.dispatchEvent(new Event('transitionend'))
 
-      expect(listener).toHaveBeenCalled()
+        expect(listener).toHaveBeenCalled()
+      })
+
+      it(`supports single use callback`, () => {
+        const listener = jest.fn()
+        toggle(given.item, listener)
+        given.item.dispatchEvent(new Event('transitionend'))
+        given.item.dispatchEvent(new Event('transitionend'))
+
+        expect(listener).toHaveBeenCalledTimes(1)
+      })
     })
 
-    it(`supports single use callback`, () => {
-      const listener = jest.fn()
-      toggle(given.item, listener)
-      given.item.dispatchEvent(new Event('transitionend'))
-      given.item.dispatchEvent(new Event('transitionend'))
+    describe('without transitions', () => {
+      given('selection', () => new Selection(given.container, { transitions: false }))
 
-      expect(listener).toHaveBeenCalledTimes(1)
+      it(`triggers callback automatically`, () => {
+        const listener = jest.fn()
+        toggle(given.item, listener)
+
+        expect(listener).toHaveBeenCalled()
+      })
     })
   }
 
@@ -108,7 +141,7 @@ describe('Container', () => {
     itBehavesLikeAVisibilityMethod({
       expected: 'cocooned-item--hidden',
       other: 'cocooned-item--visible',
-      toggle: (...args) => given.container.hide(...args)
+      toggle: (...args) => given.selection.hide(...args)
     })
   })
 
@@ -116,7 +149,7 @@ describe('Container', () => {
     itBehavesLikeAVisibilityMethod({
       expected: 'cocooned-item--visible',
       other: 'cocooned-item--hidden',
-      toggle: (...args) => given.container.show(...args)
+      toggle: (...args) => given.selection.show(...args)
     })
   })
 })

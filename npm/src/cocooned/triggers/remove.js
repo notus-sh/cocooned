@@ -9,7 +9,7 @@ class Remove extends Base {
       return false
     }
 
-    this._hide(this._node, () => {
+    this._hide(this._item, () => {
       this._remove()
       this._notify('after-remove', event)
     })
@@ -19,19 +19,19 @@ class Remove extends Base {
   // events on their parent and memoize it so we still can find it after removal
   get _notified () {
     if (typeof this.#notified === 'undefined') {
-      this.#notified = this._node.parentElement
+      this.#notified = this._item.parentElement
     }
 
     return this.#notified
   }
 
   _remove () {
-    this._trigger.matches('.dynamic') ? this._node.remove() : this._markForDestruction()
+    this._trigger.matches('.dynamic') ? this._item.remove() : this._markForDestruction()
   }
 
   _markForDestruction () {
-    this._node.querySelectorAll('input[required], select[required]').forEach(input => input.removeAttribute('required'))
-    this._node.querySelector('input[type=hidden][name$="[_destroy]"]').setAttribute('value', 'true')
+    this._item.querySelectorAll('input[required], select[required]').forEach(input => input.removeAttribute('required'))
+    this._item.querySelector('input[type=hidden][name$="[_destroy]"]').setAttribute('value', 'true')
   }
 }
 

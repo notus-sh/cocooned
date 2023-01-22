@@ -1,6 +1,6 @@
 import $ from 'jquery'
 import Builder from './builder'
-import Container from './container'
+import Selection from './selection.js'
 import Emitter from './emitter'
 
 class Base {
@@ -46,7 +46,7 @@ class Base {
 
   get selection () {
     if (typeof this.#selection === 'undefined') {
-      this.#selection = new Container(this.container.get(0))
+      this.#selection = new Selection(this.container.get(0))
     }
 
     return this.#selection
@@ -95,12 +95,6 @@ class Base {
 
   selector (type, selector = '&') {
     return this.selectors(type, selector).join(', ')
-  }
-
-  namespacedNativeEvents (type) {
-    const namespaces = this.namespaces.events.map(ns => `.${ns}`)
-    namespaces.unshift(type)
-    return namespaces.join('')
   }
 
   buildId () {

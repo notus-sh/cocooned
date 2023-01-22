@@ -15,17 +15,5 @@ export default ({ event, dispatch }) => {
 
       expect(listener).not.toHaveBeenCalled()
     })
-
-    it.skip('is canceled if default behavior of the before event is prevented', () => {
-      const canceler = jest.fn(e => e.preventDefault())
-      $(given.container).on(`cocooned:before-${event}`, canceler)
-
-      const listener = jest.fn()
-      $(given.container).on(`cocooned:after-${event}`, listener)
-      trigger()
-
-      expect(listener).not.toHaveBeenCalled()
-    })
-    /* eslint-enable jest/no-identical-title */
   })
 }

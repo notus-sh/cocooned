@@ -13,7 +13,7 @@ function createScopedStyles(container, styles) {
   return element
 }
 
-class Container {
+class Selection {
   static scopedStyles = scopedStyles
   static get selectors () {
     return {
@@ -26,16 +26,31 @@ class Container {
     }
   }
 
-  #container
+  _container
+  _options = { transitions: !('test' === process?.env?.NODE_ENV) }
 
-  constructor (container) {
-    this.#container = container
-    this.#container.prepend(createScopedStyles(this.#container, this.constructor.scopedStyles))
+  constructor (container, options = {}) {
+    this._container = container
+    this._options = { ...this._options, ...options }
+
+    this._container.prepend(createScopedStyles(this._container, this.constructor.scopedStyles))
   }
 
   get items () {
-    return Array.from(this.#container.querySelectorAll(this.selector('item')))
-                .filter(element =>  element.closest(this.selector('container')) === this.#container)
+    return Array.from(this._container.querySelectorAll(this.selector('item')))
+                .filter(element =>  element.closest(this.selector('container')) === this._container)
+  }
+
+  toItem (node) {
+    return node.closest(this.selector('item'))
+  }
+
+  contains (node) {
+    return this.items.includes(this.toItem(node))
+  }
+
+  matches (node, selectorName) {
+    return this.selectors(selectorName).some(s => node.matches(s)) && this.contains(node)
   }
 
   selectors (name) {
@@ -47,15 +62,15 @@ class Container {
   }
 
   hide(item, callback) {
-    this.#toggle(item, 'cocooned-item--visible', 'cocooned-item--hidden', callback)
+    this._toggle(item, 'cocooned-item--visible', 'cocooned-item--hidden', callback)
   }
 
   show(item, callback) {
-    this.#toggle(item, 'cocooned-item--hidden', 'cocooned-item--visible', callback)
+    this._toggle(item, 'cocooned-item--hidden', 'cocooned-item--visible', callback)
   }
 
-  #toggle (item, removedClass, addedClass, callback) {
-    if (typeof callback === 'function') {
+  _toggle (item, removedClass, addedClass, callback) {
+    if (typeof callback === 'function' && this._options.transitions) {
       item.addEventListener('transitionend', callback, { once: true })
     }
 
@@ -64,7 +79,11 @@ class Container {
     } else {
       item.classList.add(addedClass)
     }
+
+    if (typeof callback === 'function' && !this._options.transitions) {
+      callback()
+    }
   }
 }
 
-export default Container
+export default Selection
