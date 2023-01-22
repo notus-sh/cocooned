@@ -105,4 +105,6 @@ const reorderableMixin = (Base) => class extends Base {
   }
 }
 
-export default reorderableMixin
+export {
+  reorderableMixin
+}

@@ -86,4 +86,6 @@ class Selection {
   }
 }
 
-export default Selection
+export {
+  Selection
+}

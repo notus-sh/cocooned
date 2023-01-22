@@ -1,4 +1,4 @@
-import Base from './base'
+import { Base } from './base'
 
 class Remove extends Base {
   #notified
@@ -35,4 +35,4 @@ class Remove extends Base {
   }
 }
 
-export default Remove
+export { Remove }

@@ -1,7 +1,7 @@
 import $ from 'jquery'
-import Builder from './builder'
-import Selection from './selection.js'
-import Emitter from './emitter'
+import { Builder } from './builder'
+import { Emitter } from './emitter'
+import { Selection } from './selection'
 
 class Base {
   static defaultOptions () {

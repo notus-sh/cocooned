@@ -70,4 +70,6 @@ class Builder {
   }
 }
 
-export default Builder
+export {
+  Builder
+}

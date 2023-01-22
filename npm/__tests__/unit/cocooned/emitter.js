@@ -1,6 +1,6 @@
 /* global given */
 
-import Emitter from '@notus.sh/cocooned/src/cocooned/emitter'
+import { Emitter } from '@notus.sh/cocooned/src/cocooned/emitter'
 import { jest } from "@jest/globals";
 
 describe('Emitter', () => {

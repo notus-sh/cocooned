@@ -28,4 +28,6 @@ const limitMixin = (Base) => class extends Base {
   }
 }
 
-export default limitMixin
+export {
+  limitMixin
+}

@@ -1,7 +1,7 @@
 /* global given */
 
 import { Base as Cocooned } from '@notus.sh/cocooned/src/cocooned/base'
-import Remove from '@notus.sh/cocooned/src/cocooned/triggers/remove'
+import { Remove } from '@notus.sh/cocooned/src/cocooned/triggers/remove'
 import { jest } from '@jest/globals'
 import { clickEvent } from '@cocooned/tests/support/helpers';
 import { getItem, getItems, getRemoveLink} from '@cocooned/tests/support/selectors';
