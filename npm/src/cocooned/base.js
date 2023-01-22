@@ -1,5 +1,6 @@
 import $ from 'jquery'
 import Builder from './builder'
+import Container from './container'
 import Emitter from './emitter'
 
 class Base {
@@ -39,6 +40,24 @@ class Base {
     }
 
     return this.emitter.emit(node, eventType, eventData)
+  }
+
+  #selection
+
+  get selection () {
+    if (typeof this.#selection === 'undefined') {
+      this.#selection = new Container(this.container.get(0))
+    }
+
+    return this.#selection
+  }
+
+  hide (node, callback) {
+    return this.selection.hide(node, callback)
+  }
+
+  show (node, callback) {
+    return this.selection.show(node, callback)
   }
 
   elementsCounter = 0
