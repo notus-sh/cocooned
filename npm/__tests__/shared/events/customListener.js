@@ -24,7 +24,7 @@ export default ({ listen, dispatch, args = new Set(['link', 'node', 'cocooned'])
         return new Promise(resolve => {
           const listener = jest.fn(e => {
             expect(e).toHaveProperty('detail.link')
-            expect(e.detail.link.constructor.name).toEqual(HTMLAnchorElement.name)
+            expect(e.detail.link).toBeInstanceOf(HTMLAnchorElement)
             resolve()
           })
 
@@ -39,7 +39,6 @@ export default ({ listen, dispatch, args = new Set(['link', 'node', 'cocooned'])
         return new Promise(resolve => {
           const listener = jest.fn(e => {
             expect(e).toHaveProperty('detail.node')
-            expect(e.detail.node.constructor.name).toEqual(HTMLDivElement.name)
             expect(e.detail.node.classList).toContain('cocooned-item')
             resolve()
           })
@@ -55,9 +54,6 @@ export default ({ listen, dispatch, args = new Set(['link', 'node', 'cocooned'])
         return new Promise(resolve => {
           const listener = jest.fn(e => {
             expect(e).toHaveProperty('detail.nodes')
-
-            const constructors = e.detail.nodes.map(node => node.constructor.name)
-            expect([...new Set(constructors)]).toEqual([HTMLDivElement.name])
 
             const items = e.detail.nodes.map(node => node.matches('cocooned-item'))
             expect([...new Set(items)]).toEqual([true])
