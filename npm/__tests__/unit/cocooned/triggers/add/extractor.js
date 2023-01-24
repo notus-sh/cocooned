@@ -1,6 +1,6 @@
 /* global given */
 
-import { Extractor } from '@notus.sh/cocooned/src/cocooned/triggers/add'
+import { Extractor } from '@notus.sh/cocooned/src/cocooned/triggers/add/extractor'
 import { Builder } from '@notus.sh/cocooned/src/cocooned/builder'
 import { faker } from '@cocooned/tests/support/faker'
 import { getAddLink } from '@cocooned/tests/support/selectors';
