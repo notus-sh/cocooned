@@ -16,8 +16,26 @@ You should either rewrite your event binding with `addEventListener` or change y
   })
 ```
 
+### Deprecations
+
+These features are now deprecated and will be removed in Cocooned 3.0:
+
+* `:insertion_traversal` option on `cocooned_add_item_link` / `link_to_add_association`  
+  Use a more specific selector as `:insertion_node` instead.
+
+These features were already deprecated but now emit a warning message:
+
+* `link_to_add_association` (replaced by `cocooned_add_item_link`)
+* `link_to_remove_association` (replaced by `cocooned_remove_item_link`)
+* The `cocoon` I18n namespace (replaced by `cocooned`)
+* `:render_option` option on `cocooned_add_item_link` / `link_to_add_association`  
+  Use `:form_options` and/or `:locals` instead.
+
+
 ### Bug fixes and other changes
 
+* Use HTML `<template>` instead of a data-attribute to pass subform template to JavaScript (#12)
+* Add support for association scoped label to `cocooned_move_item_up_link` and `cocooned_move_item_down_link` (#11)
 * Refactor helpers as tag classes (#10)
 * Integrate deprecation messages with ActiveSupport::Deprecation (#9)
 * Rewrite JavaScript code as ESM modules (#6) and ECMAScript 5 classes (#7)

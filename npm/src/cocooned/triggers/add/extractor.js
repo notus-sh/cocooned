@@ -1,5 +1,5 @@
 import { Builder } from '../../builder'
-import { Traverser } from './traverser'
+import { deprecator, Traverser } from '../../deprecation'
 
 class Extractor {
   #trigger
@@ -72,8 +72,8 @@ class Extractor {
       return this.#trigger.ownerDocument.querySelector(node)
     }
 
-    const traversal = this.#dataset.associationInsertionTraversal
-    const traverser = new Traverser(this.#trigger, traversal)
+    deprecator('3.0').warn('associationInsertionTraversal is deprecated')
+    const traverser = new Traverser(this.#trigger, this.#dataset.associationInsertionTraversal)
 
     return traverser.resolve(node)
   }

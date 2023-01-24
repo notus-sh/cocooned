@@ -96,6 +96,12 @@ describe Cocooned::Tags::Add, :tag do
       attr = tag(data: { association_insertion_traversal: :parent }).attribute('data-association-insertion-traversal')
       expect(attr.value).to eq('parent')
     end
+
+    it 'warns about deprecation', deprecation: '3.0' do
+      with_deprecation_as_exception(Cocooned::Deprecation['3.0']) do
+        expect { tag(insertion_traversal: :parent) }.to raise_error(ActiveSupport::DeprecationException)
+      end
+    end
   end
 
   #

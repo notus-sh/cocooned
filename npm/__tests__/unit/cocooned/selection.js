@@ -1,6 +1,6 @@
 /* global given */
 
-import { Selection } from '@notus.sh/cocooned/src/cocooned/selection.js'
+import { Selection } from '@notus.sh/cocooned/src/cocooned/selection'
 import { jest } from '@jest/globals'
 import { faker } from '@cocooned/tests/support/faker'
 

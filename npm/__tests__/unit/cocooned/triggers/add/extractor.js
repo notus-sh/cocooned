@@ -2,8 +2,10 @@
 
 import { Extractor } from '@notus.sh/cocooned/src/cocooned/triggers/add/extractor'
 import { Builder } from '@notus.sh/cocooned/src/cocooned/builder'
+import { deprecator } from '@notus.sh/cocooned/src/cocooned/deprecation'
+import { jest } from '@jest/globals'
 import { faker } from '@cocooned/tests/support/faker'
-import { getAddLink } from '@cocooned/tests/support/selectors';
+import { getAddLink } from '@cocooned/tests/support/selectors'
 
 describe('Extractor', () => {
   beforeEach(() => document.body.innerHTML = given.html)
@@ -124,7 +126,26 @@ describe('Extractor', () => {
         })
 
         describe('with data-association-insertion-traversal', () => {
-          it.skip('falls back on Traverser resolution', () => {})
+          afterEach(() => jest.restoreAllMocks())
+
+          given('html', () => `
+            <div class="node"></div>
+            <a class="cocooned-add"
+               data-association-insertion-node=".node"
+               data-association-insertion-traversal="prev"
+               href="#">Add</a>
+          `)
+
+          it('emits a deprecation warning', () => {
+            const spy = jest.spyOn(deprecator('3.0'), 'warn')
+            given.options
+
+            expect(spy).toHaveBeenCalled()
+          })
+
+          it("returns expected node", () => {
+            expect(given.options).toEqual(expect.objectContaining({ node: given.node }))
+          })
         })
       })
     })
