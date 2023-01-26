@@ -38,7 +38,11 @@ class Selection {
 
   get items () {
     return Array.from(this._container.querySelectorAll(this.selector('item')))
-                .filter(element =>  element.closest(this.selector('container')) === this._container)
+                .filter(element => element.closest(this.selector('container')) === this._container)
+  }
+
+  get visibleItems () {
+    return this.items.filter(item => !item.classList.contains('cocooned-item--hidden'))
   }
 
   toItem (node) {

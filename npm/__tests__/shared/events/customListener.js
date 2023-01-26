@@ -55,8 +55,7 @@ export default ({ listen, dispatch, args = new Set(['link', 'node', 'cocooned'])
           const listener = jest.fn(e => {
             expect(e).toHaveProperty('detail.nodes')
 
-            const items = e.detail.nodes.map(node => node.matches('cocooned-item'))
-            expect([...new Set(items)]).toEqual([true])
+            e.detail.nodes.forEach(node => expect(node.classList).toContain('cocooned-item'))
             resolve()
           })
 

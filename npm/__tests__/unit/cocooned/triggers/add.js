@@ -5,11 +5,11 @@ import { Builder } from '@notus.sh/cocooned/src/cocooned/builder'
 import { Add } from '@notus.sh/cocooned/src/cocooned/triggers/add'
 import { jest } from '@jest/globals'
 import { faker } from '@cocooned/tests/support/faker'
-import { clickEvent } from '@cocooned/tests/support/helpers';
-import { getItems, getAddLink } from '@cocooned/tests/support/selectors';
+import { clickEvent } from '@cocooned/tests/support/helpers'
+import { getItems, getAddLink } from '@cocooned/tests/support/selectors'
 
-import itBehavesLikeAnEventListener from "@cocooned/tests/shared/events/customListener";
-import itBehavesLikeACancellableEvent from "@cocooned/tests/shared/events/cancelable";
+import itBehavesLikeAnEventListener from "@cocooned/tests/shared/events/customListener"
+import itBehavesLikeACancellableEvent from "@cocooned/tests/shared/events/cancelable"
 
 describe('Add', () => {
   beforeEach(() => document.body.innerHTML = given.html)
