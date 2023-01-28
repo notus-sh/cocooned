@@ -25,7 +25,7 @@ describe('Reindexer', () => {
   `)
   given('html', () => `
     <div class="cocooned-container">
-      ${Array.from(Array(given.count), (_, i) => given.template).join('')}
+      ${Array.from(Array(given.count), () => given.template).join('')}
     </div>
   `)
 
