@@ -26,23 +26,24 @@ class Selection {
     }
   }
 
-  _container
-  _options = { transitions: !('test' === process?.env?.NODE_ENV) }
-
   constructor (container, options = {}) {
-    this._container = container
-    this._options = { ...this._options, ...options }
+    this.#container = container
+    this.#options = { ...this.#options, ...options }
 
-    this._container.prepend(createScopedStyles(this._container, this.constructor.scopedStyles))
+    this.#container.prepend(createScopedStyles(this.#container, this.constructor.scopedStyles))
   }
 
   get items () {
-    return Array.from(this._container.querySelectorAll(this.selector('item')))
-                .filter(element => element.closest(this.selector('container')) === this._container)
+    return Array.from(this.#container.querySelectorAll(this.selector('item')))
+                .filter(element => element.closest(this.selector('container')) === this.#container)
   }
 
   get visibleItems () {
     return this.items.filter(item => !item.classList.contains('cocooned-item--hidden'))
+  }
+
+  toContainer (node) {
+    return node.closest(this.selector('container'))
   }
 
   toItem (node) {
@@ -66,15 +67,19 @@ class Selection {
   }
 
   hide(item, callback) {
-    this._toggle(item, 'cocooned-item--visible', 'cocooned-item--hidden', callback)
+    this.#toggle(item, 'cocooned-item--visible', 'cocooned-item--hidden', callback)
   }
 
   show(item, callback) {
-    this._toggle(item, 'cocooned-item--hidden', 'cocooned-item--visible', callback)
+    this.#toggle(item, 'cocooned-item--hidden', 'cocooned-item--visible', callback)
   }
 
-  _toggle (item, removedClass, addedClass, callback) {
-    if (typeof callback === 'function' && this._options.transitions) {
+  /* Protected and private attributes and methods */
+  #container
+  #options = { transitions: !('test' === process?.env?.NODE_ENV) }
+
+  #toggle (item, removedClass, addedClass, callback) {
+    if (typeof callback === 'function' && this.#options.transitions) {
       item.addEventListener('transitionend', callback, { once: true })
     }
 
@@ -84,7 +89,7 @@ class Selection {
       item.classList.add(addedClass)
     }
 
-    if (typeof callback === 'function' && !this._options.transitions) {
+    if (typeof callback === 'function' && !this.#options.transitions) {
       callback()
     }
   }

@@ -1,10 +1,8 @@
 import { Base } from './base'
 
 class Remove extends Base {
-  #notified
-
-  // Removal can be prevented through a 'cocooned:before-remove' event handler
   handle (event) {
+    // Removal can be prevented through a 'cocooned:before-remove' event handler
     if (!this._notify('before-remove', event)) {
       return false
     }
@@ -14,6 +12,9 @@ class Remove extends Base {
       this._notify('after-remove', event)
     })
   }
+
+  /* Protected and private attributes and methods */
+  #notified
 
   // Dynamic nodes are plainly removed from document, so we need to trigger
   // events on their parent and memoize it so we still can find it after removal

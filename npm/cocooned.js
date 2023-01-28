@@ -1,6 +1,7 @@
 import $ from 'jquery'
 import { Base } from './src/cocooned/base'
-import { limitMixin, reorderableMixin } from './src/cocooned/plugins'
+import { limitMixin } from './src/cocooned/plugins/limit'
+import { reorderableMixin } from './src/cocooned/plugins/reorderable'
 import { CocoonSupportMixin } from './src/integrations/cocoon'
 import { jQueryPluginMixin } from './src/integrations/jquery'
 

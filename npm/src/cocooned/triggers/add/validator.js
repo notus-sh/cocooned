@@ -4,8 +4,6 @@ class Validator {
     return validator.validates()
   }
 
-  #options
-
   constructor(options) {
     this.#options = options
   }
@@ -21,6 +19,9 @@ class Validator {
 
     throw new TypeError(`Missing options: ${Array.from(missing.values()).join(', ')}`)
   }
+
+  /* Protected and private attributes and methods */
+  #options
 }
 
 export {

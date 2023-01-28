@@ -1,8 +1,6 @@
 import { Traverser } from './deprecation/traverser'
 
 class Deprecator {
-  #emitted = Object.create(null)
-
   logger
   package
   version
@@ -24,6 +22,9 @@ class Deprecator {
 
     this.#emitted[message] = true
   }
+
+  /* Protected and private attributes and methods */
+  #emitted = Object.create(null)
 }
 
 const deprecators = Object.create(null)

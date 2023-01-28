@@ -2,8 +2,6 @@ import { Builder } from './builder'
 import { deprecator, Traverser } from '../../deprecation'
 
 class Extractor {
-  #trigger
-
   constructor (trigger) {
     this.#trigger = trigger
   }
@@ -20,6 +18,9 @@ class Extractor {
       return options
     }, {})
   }
+
+  /* Protected and private attributes and methods */
+  #trigger
 
   get #dataset () {
     return this.#trigger.dataset

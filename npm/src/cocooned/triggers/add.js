@@ -14,15 +14,6 @@ class Add extends Base {
     return new Add(trigger, cocooned, extractor.extract())
   }
 
-  #item
-  #options = {
-    count: 1,
-    // Other expected options:
-    // builder: A Builder instance
-    // method: Insertion method (one of: append, prepend, before, after, replaceWith)
-    // node: Insertion Node as a DOM Element
-  }
-
   constructor (trigger, cocooned, options = {}) {
     super(trigger, cocooned)
 
@@ -33,6 +24,8 @@ class Add extends Base {
   handle (event) {
     for (let i = 0; i < this.#options.count; i++) {
       this.#item = this._build()
+
+      // Insert can be prevented through a 'cocooned:before-insert' event handler
       if (!this._notify('before-insert', event)) {
         return false
       }
@@ -40,6 +33,16 @@ class Add extends Base {
       this._insert()
       this._notify('after-insert', event)
     }
+  }
+
+  /* Protected and private attributes and methods */
+  #item
+  #options = {
+    count: 1,
+    // Other expected options:
+    // builder: A Builder instance
+    // method: Insertion method (one of: append, prepend, before, after, replaceWith)
+    // node: Insertion Node as a DOM Element
   }
 
   get _item () {

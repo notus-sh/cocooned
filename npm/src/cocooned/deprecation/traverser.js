@@ -1,7 +1,4 @@
 class Traverser {
-  #origin
-  #traversal
-
   constructor (origin, traversal) {
     this.#origin = origin
     this.#traversal = traversal
@@ -23,6 +20,10 @@ class Traverser {
 
     return null
   }
+
+  /* Protected and private attributes and methods */
+  #origin
+  #traversal
 
   _tryMethod(method, selector) {
     try {

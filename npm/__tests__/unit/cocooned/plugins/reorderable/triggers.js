@@ -4,11 +4,11 @@ import { Base as Cocooned } from '@notus.sh/cocooned/src/cocooned/base'
 import { Up, Down } from '@notus.sh/cocooned/src/cocooned/plugins/reorderable/triggers'
 import { jest } from '@jest/globals'
 import { faker } from '@cocooned/tests/support/faker'
-import { clickEvent } from '@cocooned/tests/support/helpers';
-import { getItems, getMoveUpLink, getMoveDownLink } from '@cocooned/tests/support/selectors';
+import { clickEvent } from '@cocooned/tests/support/helpers'
+import { getItems, getMoveUpLink, getMoveDownLink } from '@cocooned/tests/support/selectors'
 
-import itBehavesLikeAnEventListener from "@cocooned/tests/shared/events/customListener";
-import itBehavesLikeACancellableEvent from "@cocooned/tests/shared/events/cancelable";
+import itBehavesLikeAnEventListener from "@cocooned/tests/shared/events/customListener"
+import itBehavesLikeACancellableEvent from "@cocooned/tests/shared/events/cancelable"
 
 describe('Move', () => {
   beforeEach(() => document.body.innerHTML = given.html)

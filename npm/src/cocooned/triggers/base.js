@@ -1,7 +1,4 @@
 class Base {
-  _cocooned
-  _trigger
-
   constructor (trigger, cocooned) {
     this._trigger = trigger
     this._cocooned = cocooned
@@ -10,6 +7,10 @@ class Base {
   handle (event) {
     throw new TypeError('handle() must be defined in subclasses')
   }
+
+  /* Protected and private attributes and methods */
+  _cocooned
+  _trigger
 
   get _item () {
     return this._trigger.closest('.cocooned-item')
