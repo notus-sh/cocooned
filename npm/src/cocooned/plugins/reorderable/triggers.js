@@ -6,6 +6,7 @@ class Move extends Base {
       return
     }
 
+    // Moves can be prevented through a 'cocooned:before-move' event handler
     if (!this._notify('before-move', event)) {
       return false
     }
@@ -16,6 +17,7 @@ class Move extends Base {
     })
   }
 
+  /* Protected and private attributes and methods */
   get _pivotItem () {
     if (this._sibling !== null && this._cocooned.selection.contains(this._sibling)) {
       return this._sibling
@@ -33,6 +35,7 @@ class Move extends Base {
 }
 
 class Up extends Move {
+  /* Protected and private attributes and methods */
   get _sibling () {
     return this._item.previousElementSibling
   }
@@ -43,6 +46,7 @@ class Up extends Move {
 }
 
 class Down extends Move {
+  /* Protected and private attributes and methods */
   get _sibling () {
     return this._item.nextElementSibling
   }

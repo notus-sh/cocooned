@@ -1,14 +1,11 @@
 class Reindexer {
-  #cocooned
-  #startAt
-
   constructor (cocooned, startAt = 0) {
     this.#cocooned = cocooned
     this.#startAt = startAt
   }
 
-  // Reindex can be prevented through a 'cocooned:before-reindex' event handler
   reindex (event) {
+    // Reindex can be prevented through a 'cocooned:before-reindex' event handler
     if (!this.#notify('before-reindex', event)) {
       return false
     }
@@ -16,6 +13,10 @@ class Reindexer {
     this.#positionFields.forEach((field, i) => field.setAttribute('value', i + this.#startAt))
     this.#notify('after-reindex', event)
   }
+
+  /* Protected and private attributes and methods */
+  #cocooned
+  #startAt
 
   get #positionFields () {
     return this.#nodes.map(node => node.querySelector('input[name$="[position]"]'))
