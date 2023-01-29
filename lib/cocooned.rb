@@ -3,7 +3,7 @@
 require 'cocooned/deprecation'
 require 'cocooned/railtie'
 
-module Cocooned
+module Cocooned # :nodoc:
   autoload :Association, 'cocooned/association'
   autoload :Helpers, 'cocooned/helpers'
   autoload :Tags, 'cocooned/tags'

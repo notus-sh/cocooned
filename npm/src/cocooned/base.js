@@ -5,7 +5,7 @@ import { Add } from './triggers/add'
 import { Remove } from './triggers/remove'
 
 function hideMarkedForDestruction (cocooned, items) {
-  items.map(item => {
+  items.forEach(item => {
     const destroy = item.querySelector('input[type=hidden][name$="[_destroy]"]')
     if (destroy === null) {
       return
@@ -55,8 +55,8 @@ class Base {
   start () {
     this.container.classList.add('cocooned-container')
     this.addTriggers = Array.from(this.container.ownerDocument.querySelectorAll(this.selection.selector('triggers.add')))
-        .map(element => Add.create(element, this))
-        .filter(trigger => this.selection.toContainer(trigger.insertionNode) === this.container)
+      .map(element => Add.create(element, this))
+      .filter(trigger => this.selection.toContainer(trigger.insertionNode) === this.container)
 
     this._bindEvents()
     hideMarkedForDestruction(this, this.selection.items)

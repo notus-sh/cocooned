@@ -3,14 +3,14 @@
 import { Base as Cocooned } from '@notus.sh/cocooned/src/cocooned/base'
 import { Remove } from '@notus.sh/cocooned/src/cocooned/triggers/remove'
 import { jest } from '@jest/globals'
-import { clickEvent } from '@cocooned/tests/support/helpers';
-import { getItem, getItems, getRemoveLink} from '@cocooned/tests/support/selectors';
+import { clickEvent } from '@cocooned/tests/support/helpers'
+import { getItem, getItems, getRemoveLink } from '@cocooned/tests/support/selectors'
 
-import itBehavesLikeAnEventListener from "@cocooned/tests/shared/events/customListener";
-import itBehavesLikeACancellableEvent from "@cocooned/tests/shared/events/cancelable";
+import itBehavesLikeAnEventListener from '@cocooned/tests/shared/events/customListener'
+import itBehavesLikeACancellableEvent from '@cocooned/tests/shared/events/cancelable'
 
 describe('Remove', () => {
-  beforeEach(() => document.body.innerHTML = given.html)
+  beforeEach(() => { document.body.innerHTML = given.html })
 
   given('remove', () => new Remove(given.removeTrigger, new Cocooned(given.container)))
   given('removeTrigger', () => getRemoveLink(given.container))

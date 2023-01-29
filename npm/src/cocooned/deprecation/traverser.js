@@ -4,7 +4,7 @@ class Traverser {
     this.#traversal = traversal
   }
 
-  resolve(selector) {
+  resolve (selector) {
     if (this.#traversal in this.#origin && typeof this.#origin[this.#traversal] === 'function') {
       return this._tryMethod(this.#traversal, selector)
     }
@@ -25,48 +25,48 @@ class Traverser {
   #origin
   #traversal
 
-  _tryMethod(method, selector) {
+  _tryMethod (method, selector) {
     try {
       const resolved = this.#origin[method](selector)
       if (resolved instanceof HTMLElement) {
-        return resolved;
+        return resolved
       }
     } catch (e) {}
 
     return null
   }
 
-  _tryProperty(property) {
+  _tryProperty (property) {
     const resolved = this.#origin[property]
     if (resolved instanceof HTMLElement) {
-      return resolved;
+      return resolved
     }
 
     return null
   }
 
-  _parent(selector) {
+  _parent (selector) {
     if (this.#origin.parentElement.matches(selector)) {
       return this.#origin.parentElement
     }
     return null
   }
 
-  _prev(selector) {
+  _prev (selector) {
     if (this.#origin.previousElementSibling.matches(selector)) {
       return this.#origin.previousElementSibling
     }
     return null
   }
 
-  _next(selector) {
+  _next (selector) {
     if (this.#origin.nextElementSibling.matches(selector)) {
       return this.#origin.nextElementSibling
     }
     return null
   }
 
-  _siblings(selector) {
+  _siblings (selector) {
     return this.#origin.parentElement.querySelector(selector)
   }
 }

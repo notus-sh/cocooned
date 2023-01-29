@@ -5,7 +5,7 @@ import { Emitter } from '@notus.sh/cocooned/src/cocooned/events/emitter'
 import { Selection } from '@notus.sh/cocooned/src/cocooned/selection'
 import { jest } from '@jest/globals'
 import { faker } from '@cocooned/tests/support/faker'
-import { clickEvent } from "@cocooned/tests/support/helpers"
+import { clickEvent } from '@cocooned/tests/support/helpers'
 import { getMoveUpLink, getMoveDownLink } from '@cocooned/tests/support/selectors'
 
 describe('reorderableMixin', () => {
@@ -19,7 +19,7 @@ describe('reorderableMixin', () => {
       return options
     }
 
-    constructor () {
+    start () {
       this._bindEvents()
     }
 
@@ -35,7 +35,7 @@ describe('reorderableMixin', () => {
       return new Selection(given.container)
     }
 
-    notify(target, eventType, eventDetails) {
+    notify (target, eventType, eventDetails) {
       return given.emitter.emit(target, eventType, eventDetails)
     }
 
@@ -58,19 +58,21 @@ describe('reorderableMixin', () => {
 
     it('does not change configuration when already normalized', () => {
       expect(given.extended._normalizeOptions({ reorderable: { startAt: given.startAt } }))
-          .toEqual(expect.objectContaining({ reorderable: { startAt: given.startAt } }))
+        .toEqual(expect.objectContaining({ reorderable: { startAt: given.startAt } }))
     })
 
     it('sets default value when enabled', () => {
       expect(given.extended._normalizeOptions({ reorderable: true }))
-          .toEqual(expect.objectContaining({ reorderable: { startAt: 1 } }))
+        .toEqual(expect.objectContaining({ reorderable: { startAt: 1 } }))
     })
   })
 
   describe('when instanciated', () => {
     beforeEach(() => {
       document.body.innerHTML = given.html
-      const instance = new given.extended()
+
+      const instance = new given.extended() // eslint-disable-line new-cap
+      instance.start()
     })
 
     given('emitter', () => new Emitter())
@@ -87,7 +89,7 @@ describe('reorderableMixin', () => {
     given('html', () => `
       <form>
         <div class="cocooned-container">
-          ${Array.from(Array(given.count), () => given.template).join("\n")}
+          ${Array.from(Array(given.count), () => given.template).join('\n')}
         </div>
       </form>
     `)

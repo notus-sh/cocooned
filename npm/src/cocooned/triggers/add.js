@@ -42,7 +42,7 @@ class Add extends Base {
   /* Protected and private attributes and methods */
   #item
   #options = {
-    count: 1,
+    count: 1
     // Other expected options:
     // builder: A Builder instance
     // method: Insertion method (one of: append, prepend, before, after, replaceWith)

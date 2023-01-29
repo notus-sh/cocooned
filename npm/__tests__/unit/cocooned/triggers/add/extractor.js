@@ -8,7 +8,7 @@ import { faker } from '@cocooned/tests/support/faker'
 import { getAddLink } from '@cocooned/tests/support/selectors'
 
 describe('Extractor', () => {
-  beforeEach(() => document.body.innerHTML = given.html)
+  beforeEach(() => { document.body.innerHTML = given.html })
 
   given('extractor', () => new Extractor(given.addTrigger))
   given('addTrigger', () => getAddLink(document))
@@ -20,11 +20,11 @@ describe('Extractor', () => {
     given('options', () => given.extractor.extract())
 
     it('returns default options', () => {
-      expect(given.options).toEqual(expect.objectContaining({method: 'before'}))
+      expect(given.extractor.extract()).toEqual(expect.objectContaining({ method: 'before' }))
     })
 
     describe('with data-count', () => {
-      given('count', () => faker.datatype.number({min: 2, max: 5}))
+      given('count', () => faker.datatype.number({ min: 2, max: 5 }))
       given('html', () => `
         <a class="cocooned-add"
            data-count="${given.count}"
@@ -32,12 +32,12 @@ describe('Extractor', () => {
       `)
 
       it('returns expected count option', () => {
-        expect(given.options).toEqual(expect.objectContaining({count: given.count}))
+        expect(given.extractor.extract()).toEqual(expect.objectContaining({ count: given.count }))
       })
     })
 
     describe('with data-association-insertion-count', () => {
-      given('count', () => faker.datatype.number({min: 2, max: 5}))
+      given('count', () => faker.datatype.number({ min: 2, max: 5 }))
       given('html', () => `
         <a class="cocooned-add"
            data-association-insertion-count="${given.count}"
@@ -45,12 +45,12 @@ describe('Extractor', () => {
       `)
 
       it('returns expected count option', () => {
-        expect(given.options).toEqual(expect.objectContaining({count: given.count}))
+        expect(given.extractor.extract()).toEqual(expect.objectContaining({ count: given.count }))
       })
     })
 
     describe('with data-association and data-template', () => {
-      given('template', () => `<p>Template content</p>`)
+      given('template', () => '<p>Template content</p>')
       given('html', () => `
         <a class="cocooned-add"
            data-association="item"
@@ -60,15 +60,15 @@ describe('Extractor', () => {
       `)
 
       it('returns expected builder options', () => {
-        expect(given.options).toEqual(expect.objectContaining({builder: expect.anything(),}))
+        expect(given.extractor.extract()).toEqual(expect.objectContaining({ builder: expect.anything() }))
       })
 
       it('returns a Builder instance', () => {
-        expect(given.options).toEqual(expect.objectContaining({builder: expect.any(Builder),}))
+        expect(given.extractor.extract()).toEqual(expect.objectContaining({ builder: expect.any(Builder) }))
       })
 
       it('returns a configured Builder instance', () => {
-        const builder = given.options.builder
+        const builder = given.extractor.extract().builder
         expect(builder.build('').firstElementChild.outerHTML).toEqual(given.template)
       })
     })
@@ -82,7 +82,7 @@ describe('Extractor', () => {
       `)
 
       it('returns expected method options', () => {
-        expect(given.options).toEqual(expect.objectContaining({method: given.method}))
+        expect(given.extractor.extract()).toEqual(expect.objectContaining({ method: given.method }))
       })
     })
 
@@ -97,7 +97,7 @@ describe('Extractor', () => {
         `)
 
         it("returns trigger's parent", () => {
-          expect(given.options).toEqual(expect.objectContaining({ node: given.node }))
+          expect(given.extractor.extract()).toEqual(expect.objectContaining({ node: given.node }))
         })
       })
 
@@ -108,8 +108,8 @@ describe('Extractor', () => {
              href="#">Add</a>
         `)
 
-        it("returns expected node", () => {
-          expect(given.options).toEqual(expect.objectContaining({ node: given.addTrigger }))
+        it('returns expected node', () => {
+          expect(given.extractor.extract()).toEqual(expect.objectContaining({ node: given.addTrigger }))
         })
       })
 
@@ -121,12 +121,12 @@ describe('Extractor', () => {
              href="#">Add</a>
         `)
 
-        it("returns expected node", () => {
-          expect(given.options).toEqual(expect.objectContaining({ node: given.node }))
+        it('returns expected node', () => {
+          expect(given.extractor.extract()).toEqual(expect.objectContaining({ node: given.node }))
         })
 
         describe('with data-association-insertion-traversal', () => {
-          beforeEach(() => given.deprecator.logger = { warn: jest.fn() })
+          beforeEach(() => { given.deprecator.logger = { warn: jest.fn() } })
           afterEach(() => jest.restoreAllMocks())
 
           given('deprecator', () => deprecator('3.0'))
@@ -140,12 +140,12 @@ describe('Extractor', () => {
 
           it('emits a deprecation warning', () => {
             const spy = jest.spyOn(given.deprecator, 'warn')
-            given.options
+            given.extractor.extract()
 
             expect(spy).toHaveBeenCalled()
           })
 
-          it("returns expected node", () => {
+          it('returns expected node', () => {
             expect(given.options).toEqual(expect.objectContaining({ node: given.node }))
           })
         })

@@ -7,11 +7,11 @@ import { faker } from '@cocooned/tests/support/faker'
 import { clickEvent } from '@cocooned/tests/support/helpers'
 import { getItems, getMoveUpLink, getMoveDownLink } from '@cocooned/tests/support/selectors'
 
-import itBehavesLikeAnEventListener from "@cocooned/tests/shared/events/customListener"
-import itBehavesLikeACancellableEvent from "@cocooned/tests/shared/events/cancelable"
+import itBehavesLikeAnEventListener from '@cocooned/tests/shared/events/customListener'
+import itBehavesLikeACancellableEvent from '@cocooned/tests/shared/events/cancelable'
 
 describe('Move', () => {
-  beforeEach(() => document.body.innerHTML = given.html)
+  beforeEach(() => { document.body.innerHTML = given.html })
 
   given('container', () => document.querySelector('.cocooned-container'))
   given('count', () => faker.datatype.number({ min: 2, max: 5 }))
@@ -24,10 +24,11 @@ describe('Move', () => {
   `)
   given('html', () => `
     <div class="cocooned-container">
-      ${Array.from(Array(given.count), () => given.template).join("\n")}
+      ${Array.from(Array(given.count), () => given.template).join('\n')}
     </div>
   `)
 
+  /* eslint-disable jest/no-identical-title */
   const itBehavesLikeASingleMoveTrigger = () => {
     it('does not change item position', () => {
       given.move.handle(clickEvent())
@@ -96,6 +97,7 @@ describe('Move', () => {
       dispatch: () => { given.move.handle(clickEvent()) }
     })
   }
+  /* eslint-enable jest/no-identical-title */
 
   describe('Up', () => {
     given('moveTrigger', () => getMoveUpLink(given.container, given.index))

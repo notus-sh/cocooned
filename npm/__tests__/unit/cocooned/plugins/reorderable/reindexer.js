@@ -4,14 +4,14 @@ import { Reindexer } from '@notus.sh/cocooned/src/cocooned/plugins/reorderable/r
 import { Base as Cocooned } from '@notus.sh/cocooned/src/cocooned/base'
 import { jest } from '@jest/globals'
 import { faker } from '@cocooned/tests/support/faker'
-import { setup, asInt, clickEvent } from '@cocooned/tests/support/helpers'
+import { asInt, clickEvent } from '@cocooned/tests/support/helpers'
 import { getItems } from '@cocooned/tests/support/selectors'
 
-import itBehavesLikeAnEventListener from "@cocooned/tests/shared/events/customListener"
-import itBehavesLikeACancellableEvent from "@cocooned/tests/shared/events/cancelable"
+import itBehavesLikeAnEventListener from '@cocooned/tests/shared/events/customListener'
+import itBehavesLikeACancellableEvent from '@cocooned/tests/shared/events/cancelable'
 
 describe('Reindexer', () => {
-  beforeEach(() => document.body.innerHTML = given.html)
+  beforeEach(() => { document.body.innerHTML = given.html })
 
   given('reindexer', () => new Reindexer(given.cocooned))
   given('cocooned', () => new Cocooned(given.container))
@@ -42,7 +42,7 @@ describe('Reindexer', () => {
       given.cocooned.hide(given.item)
       given.reindexer.reindex(clickEvent())
 
-      const items = Array.from(getItems(given.container)).filter(item => (item != given.item))
+      const items = Array.from(getItems(given.container)).filter(item => (item !== given.item))
       const inputs = items.map(item => item.querySelector('input[name$="[position]"]'))
       const positions = Array.from(inputs).map(input => asInt(input.getAttribute('value')))
 

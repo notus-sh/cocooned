@@ -1,11 +1,12 @@
 /* global given */
 
 import { Emitter } from '@notus.sh/cocooned/src/cocooned/events/emitter'
-import { jest } from "@jest/globals";
+import { jest } from '@jest/globals'
 
 describe('Emitter', () => {
-  beforeEach(() => document.body.innerHTML = `<section></section>`)
+  beforeEach(() => { document.body.innerHTML = given.html })
 
+  given('html', () => '<section></section>')
   given('container', () => document.querySelector('section'))
   given('emitter', () => new Emitter())
 
