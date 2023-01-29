@@ -1,27 +1,9 @@
-import $ from 'jquery'
-import { Base } from './src/cocooned/base'
-import { limitMixin } from './src/cocooned/plugins/limit'
-import { reorderableMixin } from './src/cocooned/plugins/reorderable'
-import { CocoonSupportMixin } from './src/integrations/cocoon'
-import { jQueryPluginMixin } from './src/integrations/jquery'
+import Cocooned from './jquery'
+import { deprecator } from './src/cocooned/deprecation'
 
-class Cocooned extends CocoonSupportMixin(reorderableMixin(limitMixin(Base))) {
-  static create (container, options) {
-    const cocooned = new Cocooned(container, options)
-    cocooned.start()
-
-    return cocooned
-  }
-
-  static start () {
-    document.querySelectorAll('*[data-cocooned-options]').forEach(element => Cocooned.create(element))
-  }
-}
-
-// Expose a jQuery plugin
-jQueryPluginMixin($, Cocooned)
-
-// On-load initialization
-$(() => Cocooned.start())
+deprecator('3.0').warn(
+  'Loading @notus.sh/cocooned/cocooned is deprecated',
+  '@notus.sh/cocooned/jquery, @notus.sh/cocooned or @notus.sh/cocooned/src/base'
+)
 
 export default Cocooned

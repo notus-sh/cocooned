@@ -1,6 +1,6 @@
 /* global given */
 
-import Cocooned from '@notus.sh/cocooned/cocooned'
+import Cocooned from '@notus.sh/cocooned'
 import { jest } from '@jest/globals'
 import { clickEvent } from '@cocooned/tests/support/helpers'
 import { getItem, getItems, getAddLink, getRemoveLink } from '@cocooned/tests/support/selectors'
@@ -34,7 +34,7 @@ describe('A basic Cocooned setup', () => {
   })
 
   it('add a class to container', () => {
-    expect(given.container).toHaveClass('cocooned-container')
+    expect(given.container.classList).toContain('cocooned-container')
   })
 
   describe('when add link is clicked', () => {
