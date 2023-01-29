@@ -1,11 +1,11 @@
-function clickHandler(callback) {
+function clickHandler (callback) {
   return e => {
     e.preventDefault()
     callback(e)
   }
 }
 
-function delegatedClickHandler(selector, callback) {
+function delegatedClickHandler (selector, callback) {
   return e => {
     const { target } = e
     if (!target.matches(selector)) {

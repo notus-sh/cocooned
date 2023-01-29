@@ -4,7 +4,7 @@ const scopedStyles = `
   .cocooned-item--hidden { opacity: 0; max-height: 0%; }
 `
 
-function createScopedStyles(container, styles) {
+function createScopedStyles (container, styles) {
   const element = container.ownerDocument.createElement('style')
   element.setAttribute('scoped', 'scoped')
   element.setAttribute('type', 'text/css')
@@ -17,8 +17,8 @@ class Selection {
   static scopedStyles = scopedStyles
   static get selectors () {
     return {
-      'container': ['.cocooned-container'],
-      'item': ['.cocooned-item', '.nested-fields'],
+      container: ['.cocooned-container'],
+      item: ['.cocooned-item', '.nested-fields'],
       'triggers.add': ['.cocooned-add', '.add_fields'],
       'triggers.remove': ['.cocooned-remove', '.remove_fields'],
       'triggers.up': ['.cocooned-move-up'],
@@ -35,7 +35,7 @@ class Selection {
 
   get items () {
     return Array.from(this.#container.querySelectorAll(this.selector('item')))
-                .filter(element => element.closest(this.selector('container')) === this.#container)
+      .filter(element => element.closest(this.selector('container')) === this.#container)
   }
 
   get visibleItems () {
@@ -66,17 +66,17 @@ class Selection {
     return this.selectors(name).join(', ')
   }
 
-  hide(item, callback) {
+  hide (item, callback) {
     this.#toggle(item, 'cocooned-item--visible', 'cocooned-item--hidden', callback)
   }
 
-  show(item, callback) {
+  show (item, callback) {
     this.#toggle(item, 'cocooned-item--hidden', 'cocooned-item--visible', callback)
   }
 
   /* Protected and private attributes and methods */
   #container
-  #options = { transitions: !('test' === process?.env?.NODE_ENV) }
+  #options = { transitions: !(process?.env?.NODE_ENV === 'test') }
 
   #toggle (item, removedClass, addedClass, callback) {
     if (typeof callback === 'function' && this.#options.transitions) {

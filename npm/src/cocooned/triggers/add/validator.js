@@ -4,7 +4,7 @@ class Validator {
     return validator.validates()
   }
 
-  constructor(options) {
+  constructor (options) {
     this.#options = options
   }
 

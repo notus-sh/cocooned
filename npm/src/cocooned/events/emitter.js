@@ -17,7 +17,7 @@ class Emitter {
     return events
   }
 
-  #dispatch(target, event) {
+  #dispatch (target, event) {
     return target.dispatchEvent(event)
   }
 

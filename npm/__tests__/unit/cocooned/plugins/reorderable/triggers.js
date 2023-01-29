@@ -7,8 +7,8 @@ import { faker } from '@cocooned/tests/support/faker'
 import { clickEvent } from '@cocooned/tests/support/helpers'
 import { getItems, getMoveUpLink, getMoveDownLink } from '@cocooned/tests/support/selectors'
 
-import itBehavesLikeAnEventListener from "@cocooned/tests/shared/events/customListener"
-import itBehavesLikeACancellableEvent from "@cocooned/tests/shared/events/cancelable"
+import itBehavesLikeAnEventListener from '@cocooned/tests/shared/events/customListener'
+import itBehavesLikeACancellableEvent from '@cocooned/tests/shared/events/cancelable'
 
 describe('Move', () => {
   beforeEach(() => document.body.innerHTML = given.html)
@@ -24,7 +24,7 @@ describe('Move', () => {
   `)
   given('html', () => `
     <div class="cocooned-container">
-      ${Array.from(Array(given.count), () => given.template).join("\n")}
+      ${Array.from(Array(given.count), () => given.template).join('\n')}
     </div>
   `)
 

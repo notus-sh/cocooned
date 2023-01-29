@@ -8,8 +8,8 @@ import { faker } from '@cocooned/tests/support/faker'
 import { clickEvent } from '@cocooned/tests/support/helpers'
 import { getItems, getAddLink } from '@cocooned/tests/support/selectors'
 
-import itBehavesLikeAnEventListener from "@cocooned/tests/shared/events/customListener"
-import itBehavesLikeACancellableEvent from "@cocooned/tests/shared/events/cancelable"
+import itBehavesLikeAnEventListener from '@cocooned/tests/shared/events/customListener'
+import itBehavesLikeACancellableEvent from '@cocooned/tests/shared/events/cancelable'
 
 describe('Add', () => {
   beforeEach(() => document.body.innerHTML = given.html)
@@ -18,8 +18,8 @@ describe('Add', () => {
   given('addTrigger', () => getAddLink(given.container))
   given('container', () => document.querySelector('.cocooned-container'))
   given('builder', () => {
-    const template = document.querySelector(`template[data-name="template"]`)
-    return new Builder(template.content, `new_item`)
+    const template = document.querySelector('template[data-name="template"]')
+    return new Builder(template.content, 'new_item')
   })
   given('options', () => ({ builder: given.builder, node: given.addTrigger.parentElement, method: 'before' }))
 
@@ -189,7 +189,7 @@ describe('Add', () => {
       ]
 
       describe.each(methods)('when method is $method', ({ method, finder }) => {
-        given('options', () => ({ builder: given.builder, node: given.node, method: method }))
+        given('options', () => ({ builder: given.builder, node: given.node, method }))
 
         it('insert new item at the right place', () => {
           expect(finder(given.node).classList).toContain('cocooned-item')

@@ -107,7 +107,7 @@ describe('Selection', () => {
     })
 
     describe('with transitions', () => {
-      it(`supports callback`, () => {
+      it('supports callback', () => {
         const listener = jest.fn()
         toggle(given.item, listener)
         given.item.dispatchEvent(new Event('transitionend'))
@@ -115,7 +115,7 @@ describe('Selection', () => {
         expect(listener).toHaveBeenCalled()
       })
 
-      it(`supports single use callback`, () => {
+      it('supports single use callback', () => {
         const listener = jest.fn()
         toggle(given.item, listener)
         given.item.dispatchEvent(new Event('transitionend'))
@@ -128,7 +128,7 @@ describe('Selection', () => {
     describe('without transitions', () => {
       given('selection', () => new Selection(given.container, { transitions: false }))
 
-      it(`triggers callback automatically`, () => {
+      it('triggers callback automatically', () => {
         const listener = jest.fn()
         toggle(given.item, listener)
 

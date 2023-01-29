@@ -5,7 +5,7 @@ class Deprecator {
   package
   version
 
-  constructor(version, packageName, logger) {
+  constructor (version, packageName, logger) {
     this.version = version
     this.package = packageName
     this.logger = logger
@@ -13,7 +13,7 @@ class Deprecator {
 
   warn (message, replacement = null) {
     if (message in this.#emitted) {
-      return;
+      return
     }
 
     const warning = `${message}. It will be removed from ${this.package} ${this.version}`
@@ -29,7 +29,7 @@ class Deprecator {
 
 const deprecators = Object.create(null)
 
-function deprecator(version, packageName = 'Cocooned', logger = console) {
+function deprecator (version, packageName = 'Cocooned', logger = console) {
   const hash = [version, packageName].join('#')
   if (!(hash in deprecators)) {
     deprecators[hash] = new Deprecator(version, packageName, logger)

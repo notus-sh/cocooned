@@ -20,11 +20,11 @@ describe('Extractor', () => {
     given('options', () => given.extractor.extract())
 
     it('returns default options', () => {
-      expect(given.options).toEqual(expect.objectContaining({method: 'before'}))
+      expect(given.options).toEqual(expect.objectContaining({ method: 'before' }))
     })
 
     describe('with data-count', () => {
-      given('count', () => faker.datatype.number({min: 2, max: 5}))
+      given('count', () => faker.datatype.number({ min: 2, max: 5 }))
       given('html', () => `
         <a class="cocooned-add"
            data-count="${given.count}"
@@ -32,12 +32,12 @@ describe('Extractor', () => {
       `)
 
       it('returns expected count option', () => {
-        expect(given.options).toEqual(expect.objectContaining({count: given.count}))
+        expect(given.options).toEqual(expect.objectContaining({ count: given.count }))
       })
     })
 
     describe('with data-association-insertion-count', () => {
-      given('count', () => faker.datatype.number({min: 2, max: 5}))
+      given('count', () => faker.datatype.number({ min: 2, max: 5 }))
       given('html', () => `
         <a class="cocooned-add"
            data-association-insertion-count="${given.count}"
@@ -45,12 +45,12 @@ describe('Extractor', () => {
       `)
 
       it('returns expected count option', () => {
-        expect(given.options).toEqual(expect.objectContaining({count: given.count}))
+        expect(given.options).toEqual(expect.objectContaining({ count: given.count }))
       })
     })
 
     describe('with data-association and data-template', () => {
-      given('template', () => `<p>Template content</p>`)
+      given('template', () => '<p>Template content</p>')
       given('html', () => `
         <a class="cocooned-add"
            data-association="item"
@@ -60,11 +60,11 @@ describe('Extractor', () => {
       `)
 
       it('returns expected builder options', () => {
-        expect(given.options).toEqual(expect.objectContaining({builder: expect.anything(),}))
+        expect(given.options).toEqual(expect.objectContaining({ builder: expect.anything() }))
       })
 
       it('returns a Builder instance', () => {
-        expect(given.options).toEqual(expect.objectContaining({builder: expect.any(Builder),}))
+        expect(given.options).toEqual(expect.objectContaining({ builder: expect.any(Builder) }))
       })
 
       it('returns a configured Builder instance', () => {
@@ -82,7 +82,7 @@ describe('Extractor', () => {
       `)
 
       it('returns expected method options', () => {
-        expect(given.options).toEqual(expect.objectContaining({method: given.method}))
+        expect(given.options).toEqual(expect.objectContaining({ method: given.method }))
       })
     })
 
@@ -108,7 +108,7 @@ describe('Extractor', () => {
              href="#">Add</a>
         `)
 
-        it("returns expected node", () => {
+        it('returns expected node', () => {
           expect(given.options).toEqual(expect.objectContaining({ node: given.addTrigger }))
         })
       })
@@ -121,7 +121,7 @@ describe('Extractor', () => {
              href="#">Add</a>
         `)
 
-        it("returns expected node", () => {
+        it('returns expected node', () => {
           expect(given.options).toEqual(expect.objectContaining({ node: given.node }))
         })
 
@@ -145,7 +145,7 @@ describe('Extractor', () => {
             expect(spy).toHaveBeenCalled()
           })
 
-          it("returns expected node", () => {
+          it('returns expected node', () => {
             expect(given.options).toEqual(expect.objectContaining({ node: given.node }))
           })
         })

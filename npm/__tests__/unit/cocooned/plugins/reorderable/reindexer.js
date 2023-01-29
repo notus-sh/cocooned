@@ -7,8 +7,8 @@ import { faker } from '@cocooned/tests/support/faker'
 import { setup, asInt, clickEvent } from '@cocooned/tests/support/helpers'
 import { getItems } from '@cocooned/tests/support/selectors'
 
-import itBehavesLikeAnEventListener from "@cocooned/tests/shared/events/customListener"
-import itBehavesLikeACancellableEvent from "@cocooned/tests/shared/events/cancelable"
+import itBehavesLikeAnEventListener from '@cocooned/tests/shared/events/customListener'
+import itBehavesLikeACancellableEvent from '@cocooned/tests/shared/events/cancelable'
 
 describe('Reindexer', () => {
   beforeEach(() => document.body.innerHTML = given.html)

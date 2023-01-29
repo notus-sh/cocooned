@@ -3,7 +3,7 @@
 import { Base as Cocooned } from '@notus.sh/cocooned/src/cocooned/base'
 import { jest } from '@jest/globals'
 import { faker } from '@cocooned/tests/support/faker'
-import { clickEvent } from "@cocooned/tests/support/helpers"
+import { clickEvent } from '@cocooned/tests/support/helpers'
 import { getItem, getAddLinks, getAddLink, getRemoveLink } from '@cocooned/tests/support/selectors'
 
 describe('Cocooned', () => {
@@ -114,7 +114,7 @@ describe('Cocooned', () => {
     `)
     given('html', () => `
       <div class="cocooned-container">
-        ${Array.from(Array(given.count), () => given.template).join("\n")}
+        ${Array.from(Array(given.count), () => given.template).join('\n')}
       </div>
     `)
 

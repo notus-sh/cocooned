@@ -33,7 +33,7 @@ describe('limitMixin', () => {
       return new Selection(given.container)
     }
 
-    notify(target, eventType, eventDetails) {
+    notify (target, eventType, eventDetails) {
       return given.emitter.emit(target, eventType, eventDetails)
     }
 
@@ -57,10 +57,10 @@ describe('limitMixin', () => {
     given('emitter', () => new Emitter())
     given('container', () => document.querySelector('.cocooned-container'))
     given('count', () => faker.datatype.number({ min: 2, max: 5 }))
-    given('template', () => `<div class="cocooned-item"></div>`)
+    given('template', () => '<div class="cocooned-item"></div>')
     given('html', () => `
       <div class="cocooned-container">
-        ${Array.from(Array(given.count), () => given.template).join("\n")}
+        ${Array.from(Array(given.count), () => given.template).join('\n')}
       </div>
     `)
 
