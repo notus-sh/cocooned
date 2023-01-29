@@ -1,6 +1,6 @@
 /* global given */
 
-import Builder from '@notus.sh/cocooned/src/cocooned/builder'
+import { Builder } from '@notus.sh/cocooned/src/cocooned/triggers/add/builder'
 import { faker } from '@cocooned/tests/support/faker'
 
 describe('Builder', () => {

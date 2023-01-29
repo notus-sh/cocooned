@@ -8,10 +8,6 @@ const reHasRegExpChar = RegExp(reRegExpChar.source)
 class Replacement {
   attribute
 
-  #name
-  #startDelimiter
-  #endDelimiter
-
   constructor (attribute, name, startDelimiter, endDelimiter = null) {
     this.attribute = attribute
 
@@ -28,6 +24,11 @@ class Replacement {
 
     node.setAttribute(this.attribute, value.replace(this.#regexp, this.#replacement(id)))
   }
+
+  /* Protected and private attributes and methods */
+  #name
+  #startDelimiter
+  #endDelimiter
 
   #replacement (id) {
     return `${this.#startDelimiter}${id}${this.#endDelimiter}$1`
@@ -46,10 +47,6 @@ class Replacement {
 }
 
 class Builder {
-  #association
-  #documentFragment
-  #replacements
-
   constructor (documentFragment, association) {
     this.#documentFragment = documentFragment
     this.#association = association
@@ -68,6 +65,13 @@ class Builder {
 
     return node
   }
+
+  /* Protected and private attributes and methods */
+  #association
+  #documentFragment
+  #replacements
 }
 
-export default Builder
+export {
+  Builder
+}

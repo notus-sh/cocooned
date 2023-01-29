@@ -69,6 +69,18 @@ module Cocooned
         end
       end
 
+      module AssociationOptions
+        protected
+
+        def association_options
+          if options.key? :insertion_traversal
+            Deprecation['3.0'].warn 'Support for the :insertion8traversal will be removed in 3.0', caller_locations(3)
+          end
+
+          super
+        end
+      end
+
       module Renderer # :nodoc:
         protected
 

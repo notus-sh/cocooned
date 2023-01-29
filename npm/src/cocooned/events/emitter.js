@@ -1,13 +1,14 @@
 class Emitter {
-  namespaces
-
   constructor (namespaces = ['cocooned']) {
-    this.namespaces = namespaces
+    this.#namespaces = namespaces
   }
 
   emit (target, type, detail = {}) {
     return !this.#emitted(target, type, detail).some(e => e.defaultPrevented)
   }
+
+  /* Protected and private attributes and methods */
+  #namespaces
 
   #emitted (target, type, detail = {}) {
     const events = this.#events(type, detail)
@@ -21,7 +22,7 @@ class Emitter {
   }
 
   #events (type, detail) {
-    return this.namespaces.map(ns => this.#event(`${ns}:${type}`, detail))
+    return this.#namespaces.map(ns => this.#event(`${ns}:${type}`, detail))
   }
 
   #event (type, detail) {
@@ -29,4 +30,6 @@ class Emitter {
   }
 }
 
-export default Emitter
+export {
+  Emitter
+}

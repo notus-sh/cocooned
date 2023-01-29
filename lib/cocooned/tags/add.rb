@@ -3,10 +3,27 @@
 module Cocooned
   module Tags
     class Add < Base # :nodoc:
+      module AssociationOptions # :nodoc:
+        protected
+
+        def association_options
+          {
+            association: association,
+            template: html_template_name,
+            association_insertion_count: [options.delete(:count).to_i, 1].compact.max,
+            association_insertion_node: options.delete(:insertion_node),
+            association_insertion_method: options.delete(:insertion_method),
+            association_insertion_traversal: options.delete(:insertion_traversal)
+          }.compact_blank
+        end
+      end
+
       include Cocooned::TagsHelper::AssociationLabel
 
       include Cocooned::TagsHelper::Renderer
       include Cocooned::Deprecated::TagsHelper::Renderer
+      include AssociationOptions
+      include Cocooned::Deprecated::TagsHelper::AssociationOptions
 
       def initialize(template, form, association, **options, &block)
         @association = association
@@ -37,17 +54,6 @@ module Cocooned
 
       def html_data
         super.merge(association_options)
-      end
-
-      def association_options
-        {
-          association: association,
-          template: html_template_name,
-          association_insertion_count: [options.delete(:count).to_i, 1].compact.max,
-          association_insertion_node: options.delete(:insertion_node),
-          association_insertion_method: options.delete(:insertion_method),
-          association_insertion_traversal: options.delete(:insertion_traversal)
-        }.compact_blank
       end
     end
   end
