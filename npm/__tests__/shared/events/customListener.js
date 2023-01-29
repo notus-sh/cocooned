@@ -1,4 +1,3 @@
-/* global given, jQuery */
 /* eslint jest/no-export: "off" -- This is a shared examples */
 
 import { Base as Cocooned } from '@notus.sh/cocooned/src/cocooned/base'

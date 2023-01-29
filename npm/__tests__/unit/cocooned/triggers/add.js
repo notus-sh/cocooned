@@ -12,7 +12,7 @@ import itBehavesLikeAnEventListener from '@cocooned/tests/shared/events/customLi
 import itBehavesLikeACancellableEvent from '@cocooned/tests/shared/events/cancelable'
 
 describe('Add', () => {
-  beforeEach(() => document.body.innerHTML = given.html)
+  beforeEach(() => { document.body.innerHTML = given.html })
 
   given('add', () => new Add(given.addTrigger, new Cocooned(given.container), given.options))
   given('addTrigger', () => getAddLink(given.container))

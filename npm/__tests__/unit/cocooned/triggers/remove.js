@@ -10,7 +10,7 @@ import itBehavesLikeAnEventListener from '@cocooned/tests/shared/events/customLi
 import itBehavesLikeACancellableEvent from '@cocooned/tests/shared/events/cancelable'
 
 describe('Remove', () => {
-  beforeEach(() => document.body.innerHTML = given.html)
+  beforeEach(() => { document.body.innerHTML = given.html })
 
   given('remove', () => new Remove(given.removeTrigger, new Cocooned(given.container)))
   given('removeTrigger', () => getRemoveLink(given.container))

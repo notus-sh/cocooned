@@ -17,7 +17,7 @@ describe('limitMixin', () => {
       return options
     }
 
-    constructor () {
+    start () {
       this._bindEvents()
     }
 
@@ -51,7 +51,9 @@ describe('limitMixin', () => {
   describe('when instanciated', () => {
     beforeEach(() => {
       document.body.innerHTML = given.html
-      const instance = new given.extended()
+
+      const instance = new given.extended() // eslint-disable-line new-cap
+      instance.start()
     })
 
     given('emitter', () => new Emitter())

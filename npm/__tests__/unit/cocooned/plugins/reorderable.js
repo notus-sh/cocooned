@@ -19,7 +19,7 @@ describe('reorderableMixin', () => {
       return options
     }
 
-    constructor () {
+    start () {
       this._bindEvents()
     }
 
@@ -70,7 +70,9 @@ describe('reorderableMixin', () => {
   describe('when instanciated', () => {
     beforeEach(() => {
       document.body.innerHTML = given.html
-      const instance = new given.extended()
+
+      const instance = new given.extended() // eslint-disable-line new-cap
+      instance.start()
     })
 
     given('emitter', () => new Emitter())

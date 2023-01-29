@@ -11,7 +11,7 @@ import itBehavesLikeAnEventListener from '@cocooned/tests/shared/events/customLi
 import itBehavesLikeACancellableEvent from '@cocooned/tests/shared/events/cancelable'
 
 describe('Move', () => {
-  beforeEach(() => document.body.innerHTML = given.html)
+  beforeEach(() => { document.body.innerHTML = given.html })
 
   given('container', () => document.querySelector('.cocooned-container'))
   given('count', () => faker.datatype.number({ min: 2, max: 5 }))
@@ -28,6 +28,7 @@ describe('Move', () => {
     </div>
   `)
 
+  /* eslint-disable jest/no-identical-title */
   const itBehavesLikeASingleMoveTrigger = () => {
     it('does not change item position', () => {
       given.move.handle(clickEvent())
@@ -96,6 +97,7 @@ describe('Move', () => {
       dispatch: () => { given.move.handle(clickEvent()) }
     })
   }
+  /* eslint-enable jest/no-identical-title */
 
   describe('Up', () => {
     given('moveTrigger', () => getMoveUpLink(given.container, given.index))

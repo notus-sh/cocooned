@@ -4,7 +4,7 @@ import { Traverser } from '@notus.sh/cocooned/src/cocooned/deprecation/traverser
 
 describe('Traverser', () => {
   describe('extract', () => {
-    beforeEach(() => document.body.innerHTML = given.html)
+    beforeEach(() => { document.body.innerHTML = given.html })
 
     given('traverser', () => new Traverser(given.origin, given.traversal))
     given('origin', () => document.querySelector('.origin'))

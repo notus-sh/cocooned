@@ -2,9 +2,9 @@ import { Up, Down } from './reorderable/triggers'
 import { Reindexer } from './reorderable/reindexer'
 import { delegatedClickHandler } from '../events/handlers'
 
-function clickHandler (selector, cocooned, triggerClass) {
+function clickHandler (selector, cocooned, TriggerClass) {
   return delegatedClickHandler(selector, (e) => {
-    const trigger = new triggerClass(e.target, cocooned)
+    const trigger = new TriggerClass(e.target, cocooned)
     trigger.handle(e)
   })
 }

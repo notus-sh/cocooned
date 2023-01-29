@@ -5,8 +5,9 @@ import { jest } from '@jest/globals'
 import { clickEvent } from '@cocooned/tests/support/helpers'
 
 describe('handlers', () => {
-  beforeEach(() => document.body.innerHTML = '<section><a class="trigger" href="#">Trigger</a></section>')
+  beforeEach(() => { document.body.innerHTML = given.html })
 
+  given('html', () => '<section><a class="trigger" href="#">Trigger</a></section>')
   given('container', () => document.querySelector('section'))
   given('trigger', () => document.querySelector('a'))
 

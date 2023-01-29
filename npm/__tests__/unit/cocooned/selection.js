@@ -5,7 +5,7 @@ import { jest } from '@jest/globals'
 import { faker } from '@cocooned/tests/support/faker'
 
 describe('Selection', () => {
-  beforeEach(() => document.body.innerHTML = given.html)
+  beforeEach(() => { document.body.innerHTML = given.html })
 
   given('selection', () => new Selection(given.container, { transitions: true }))
   given('container', () => document.querySelector('.cocooned-container'))
