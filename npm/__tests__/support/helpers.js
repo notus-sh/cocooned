@@ -2,7 +2,8 @@ const setup = function (doc, context) {
   doc.body.innerHTML = context.template
   if (typeof context.prepare === 'function') context.prepare()
 
-  return context.cocooned
+  const cocooned = context.cocooned
+  cocooned.start()
 }
 
 const asInt = function (value) {

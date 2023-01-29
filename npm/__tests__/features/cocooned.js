@@ -1,11 +1,22 @@
 /* global given */
 
 import Cocooned from '@notus.sh/cocooned/cocooned'
-import { setup, clickEvent } from '@cocooned/tests/support/helpers'
-import { getItems, getAddLink, getRemoveLink } from '@cocooned/tests/support/selectors'
+import { jest } from '@jest/globals'
+import { clickEvent } from '@cocooned/tests/support/helpers'
+import { getItem, getItems, getAddLink, getRemoveLink } from '@cocooned/tests/support/selectors'
 
 describe('A basic Cocooned setup', () => {
-  given('template', () => `
+  beforeEach(() => {
+    document.body.innerHTML = given.html
+
+    const cocooned = new Cocooned(given.container)
+    cocooned.start()
+  })
+
+  given('template', () => '<div class="cocooned-item"></div>')
+  given('existing', () => given.template)
+  given('container', () => document.querySelector('section'))
+  given('html', () => `
     <section>
       ${given.existing}
 
@@ -13,27 +24,13 @@ describe('A basic Cocooned setup', () => {
         <a class="cocooned-add" href="#"
            data-association="items"
            data-template="template">Add</a>
-        <template data-name="template">${given.insertionTemplate}</template>
+        <template data-name="template">${given.template}</template>
       </div>
     </section>
   `)
-  given('insertionTemplate', () => '<div class="cocooned-item"></div>')
-  given('existing', () => given.insertionTemplate)
-  given('container', () => document.querySelector('section'))
-  given('cocooned', () => new Cocooned(given.container))
-
-  beforeEach(() => setup(document, given))
 
   it('does not change container content', () => {
     expect(getItems(given.container).length).toEqual(1)
-  })
-
-  it('associates itself with container', () => {
-    expect(given.container.dataset).toHaveProperty('cocooned')
-  })
-
-  it('add an ID to container', () => {
-    expect(given.container).toHaveAttribute('id')
   })
 
   it('add a class to container', () => {
@@ -55,10 +52,18 @@ describe('A basic Cocooned setup', () => {
 
       expect(getItems(given.container).length).toEqual(3)
     })
+
+    it('triggers a before-insert event', () => {
+      const listener = jest.fn()
+      given.container.addEventListener('cocooned:before-insert', listener)
+      given.addLink.dispatchEvent(clickEvent())
+
+      expect(listener).toHaveBeenCalled()
+    })
   })
 
   describe('with items including a remove link', () => {
-    given('insertionTemplate', () => `
+    given('template', () => `
       <div class="cocooned-item">
         <a class="cocooned-remove dynamic" href="#">Remove</a>
       </div>
@@ -86,27 +91,29 @@ describe('A basic Cocooned setup', () => {
         const inserted = Array.from(getItems(given.container)).pop()
         getRemoveLink(inserted).dispatchEvent(clickEvent())
 
-        expect(inserted).not.toBeInTheDocument()
+        expect(getItems(given.container)).not.toContain(inserted)
+      })
+
+      it('triggers a before-remove event', () => {
+        const listener = jest.fn()
+        given.container.addEventListener('cocooned:before-remove', listener)
+        given.removeLink.dispatchEvent(clickEvent())
+
+        expect(listener).toHaveBeenCalled()
       })
     })
 
     describe('with existing items marked for destruction', () => {
-      given('insertionTemplate', () => `
-        <div class="cocooned-item">
-          <input type="hidden" name="list[items_attributes][new_items][_destroy]" />
-          <a class="cocooned-remove dynamic" href="#">Remove</a>
-        </div>
-      `)
       given('existing', () => `
         <div class="cocooned-item">
-          <input type="hidden" name="list[items_attributes][0][_destroy]" />
+          <input type="hidden" name="list[items_attributes][0][_destroy]" value="true" />
           <a class="cocooned-remove existing destroyed" href="#">Remove</a>
         </div>
       `)
       given('item', () => document.querySelector('.cocooned-item'))
 
       it('hides those item when instanced', () => {
-        expect(given.item).not.toBeVisible()
+        expect(getItem(given.container).classList).toContain('cocooned-item--hidden')
       })
     })
   })

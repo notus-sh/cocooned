@@ -7,11 +7,10 @@ import { jQueryPluginMixin } from './src/integrations/jquery'
 
 class Cocooned extends CocoonSupportMixin(reorderableMixin(limitMixin(Base))) {
   static create (container, options) {
-    if ('cocooned' in container.dataset) {
-      return
-    }
+    const cocooned = new Cocooned(container, options)
+    cocooned.start()
 
-    return new Cocooned(container, options)
+    return cocooned
   }
 
   static start () {

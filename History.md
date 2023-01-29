@@ -16,6 +16,10 @@ You should either rewrite your event binding with `addEventListener` or change y
   })
 ```
 
+### Use of a function as `data-association-insertion-node` on add triggers support have been dropped (#18)
+
+As HTML dataset are `DOMStringMap`, they only support strings as values. The only way to use a function to loop up for insertion node on an add trigger was to use jQuery (ex: `$(addTrigger).data('association-insertion-node', (add) => {})`).
+
 ### `data-remove-timeout` on remove triggers support have been dropped (#18)
 
 Removing (or moving) items have been rewritten around scoped CSS transitions instead of jQuery animation functions. There is currently no way to customize scoped styles to adjust animation details or timing.
@@ -24,8 +28,9 @@ Removing (or moving) items have been rewritten around scoped CSS transitions ins
 
 These features are now deprecated and will be removed in Cocooned 3.0:
 
-* `:insertion_traversal` option on `cocooned_add_item_link` / `link_to_add_association` (#18)  
-  Use a more specific selector as `:insertion_node` instead.
+* `data-association-insertion-traversal` on add triggers (#18)
+  Usually set through the `:insertion_traversal` option on `cocooned_add_item_link` / `link_to_add_association`.
+  Use a more specific selector as `data-association-insertion-node` (set through `:insertion_node`) instead.
 
 These features were already deprecated but now emit a warning message:
 
