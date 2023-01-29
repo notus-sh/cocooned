@@ -20,18 +20,16 @@ const reorderableMixin = (Base) => class extends Base {
       return
     }
 
-    const container = this.container
-    const form = container.closest('form')
-
-    container.addEventListener('cocooned:after-insert', e => this._reindexer.reindex(e))
-    container.addEventListener('cocooned:after-remove', e => this._reindexer.reindex(e))
-    container.addEventListener('cocooned:after-move', e => this._reindexer.reindex(e))
+    this.container.addEventListener('cocooned:after-insert', e => this._reindexer.reindex(e))
+    this.container.addEventListener('cocooned:after-remove', e => this._reindexer.reindex(e))
+    this.container.addEventListener('cocooned:after-move', e => this._reindexer.reindex(e))
+    const form = this.container.closest('form')
     if (form !== null) {
       form.addEventListener('submit', e => this._reindexer.reindex(e))
     }
 
-    container.addEventListener('click', clickHandler(this.selection.selector('triggers.up'), this, Up))
-    container.addEventListener('click', clickHandler(this.selection.selector('triggers.down'), this, Down))
+    this.container.addEventListener('click', clickHandler(this.selection.selector('triggers.up'), this, Up))
+    this.container.addEventListener('click', clickHandler(this.selection.selector('triggers.down'), this, Down))
   }
 
   /* Protected and private attributes and methods */

@@ -16,7 +16,7 @@ class Deprecator {
       return;
     }
 
-    const warning = `DEPRECATION WARNING: ${message}. It will be removed from ${this.package} ${this.version}`
+    const warning = `${message}. It will be removed from ${this.package} ${this.version}`
     const alternative = (replacement !== null ? `, use ${replacement} instead` : '')
     this.logger.warn(`DEPRECATION WARNING: ${warning}${alternative}.`)
 

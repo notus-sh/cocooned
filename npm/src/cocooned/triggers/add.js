@@ -21,6 +21,10 @@ class Add extends Base {
     Validator.validates(this.#options)
   }
 
+  get insertionNode () {
+    return this.#options.node
+  }
+
   handle (event) {
     for (let i = 0; i < this.#options.count; i++) {
       this.#item = this._build()

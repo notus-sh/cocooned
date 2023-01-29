@@ -4,6 +4,10 @@ class Base {
     this._cocooned = cocooned
   }
 
+  get trigger () {
+    return this._trigger
+  }
+
   handle (event) {
     throw new TypeError('handle() must be defined in subclasses')
   }

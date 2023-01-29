@@ -35,7 +35,7 @@ describe('Add', () => {
 
   describe('when created', () => {
     describe('with invalid options', () => {
-      given('options', () => ({ builder: given.builder,  }))
+      given('options', () => ({ builder: given.builder }))
 
       it('throws a TypeError', () => {
         expect(() => given.add).toThrow(TypeError)

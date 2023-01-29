@@ -126,8 +126,10 @@ describe('Extractor', () => {
         })
 
         describe('with data-association-insertion-traversal', () => {
+          beforeEach(() => given.deprecator.logger = { warn: jest.fn() })
           afterEach(() => jest.restoreAllMocks())
 
+          given('deprecator', () => deprecator('3.0'))
           given('html', () => `
             <div class="node"></div>
             <a class="cocooned-add"
@@ -137,7 +139,7 @@ describe('Extractor', () => {
           `)
 
           it('emits a deprecation warning', () => {
-            const spy = jest.spyOn(deprecator('3.0'), 'warn')
+            const spy = jest.spyOn(given.deprecator, 'warn')
             given.options
 
             expect(spy).toHaveBeenCalled()

@@ -127,7 +127,7 @@ describe('reorderableMixin', () => {
         expect(listener).toHaveBeenCalled()
       })
 
-      it('binds move on move up links', () => {
+      it('binds move on move up triggers', () => {
         const listener = jest.fn(e => e.preventDefault())
         given.container.addEventListener('cocooned:before-move', listener)
         getMoveUpLink(given.container, given.count - 1).dispatchEvent(clickEvent())
@@ -135,7 +135,7 @@ describe('reorderableMixin', () => {
         expect(listener).toHaveBeenCalled()
       })
 
-      it('binds move on move down links', () => {
+      it('binds move on move down triggers', () => {
         const listener = jest.fn(e => e.preventDefault())
         given.container.addEventListener('cocooned:before-move', listener)
         getMoveDownLink(given.container, 0).dispatchEvent(clickEvent())
