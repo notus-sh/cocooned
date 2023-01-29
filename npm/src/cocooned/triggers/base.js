@@ -17,7 +17,7 @@ class Base {
   _trigger
 
   get _item () {
-    return this._trigger.closest('.cocooned-item')
+    return this._cocooned.selection.toItem(this._trigger)
   }
 
   get _notified () {
