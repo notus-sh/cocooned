@@ -26,7 +26,7 @@ describe('A Cocooned setup with options for the reorderable plugin', () => {
   `)
   given('html', () => `
     <section>
-      ${Array.from(Array(given.count), () => given.template).join("\n")}
+      ${Array.from(Array(given.count), () => given.template).join('\n')}
       <div>
         <a class="cocooned-add" href="#"
            data-association="items"
