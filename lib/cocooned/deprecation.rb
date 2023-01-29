@@ -69,7 +69,7 @@ module Cocooned
         end
       end
 
-      module AssociationOptions
+      module AssociationOptions # :nodoc:
         protected
 
         def association_options
