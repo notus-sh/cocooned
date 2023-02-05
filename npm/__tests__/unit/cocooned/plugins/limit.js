@@ -11,7 +11,7 @@ describe('limitMixin', () => {
 
   describe('defaultOptions', () => {
     it('merges default options', () => {
-      expect(given.extended.defaultOptions()).toEqual(expect.objectContaining({ limit: false }))
+      expect(given.extended.defaultOptions).toEqual(expect.objectContaining({ limit: false }))
     })
   })
 

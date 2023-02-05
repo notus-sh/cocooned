@@ -13,7 +13,17 @@ describe('reorderableMixin', () => {
 
   describe('defaultOptions', () => {
     it('merges default options', () => {
-      expect(given.extended.defaultOptions()).toEqual(expect.objectContaining({ reorderable: false }))
+      expect(given.extended.defaultOptions).toEqual(expect.objectContaining({ reorderable: false }))
+    })
+  })
+
+  describe('selectors', () => {
+    it('add up trigger selector', () => {
+      expect(given.extended.selectors).toEqual(expect.objectContaining({ 'triggers.up':  ['.cocooned-move-up'] }))
+    })
+
+    it('add down trigger selector', () => {
+      expect(given.extended.selectors).toEqual(expect.objectContaining({ 'triggers.down': ['.cocooned-move-down'] }))
     })
   })
 

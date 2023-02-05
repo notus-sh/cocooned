@@ -10,8 +10,12 @@ function clickHandler (selector, cocooned, TriggerClass) {
 }
 
 const reorderableMixin = (Base) => class extends Base {
-  static defaultOptions () {
-    return { ...super.defaultOptions(), ...{ reorderable: false } }
+  static get defaultOptions () {
+    return { ...super.defaultOptions, ...{ reorderable: false } }
+  }
+
+  static get selectors () {
+    return { ...super.selectors, 'triggers.up': ['.cocooned-move-up'], 'triggers.down': ['.cocooned-move-down'] }
   }
 
   start () {

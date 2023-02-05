@@ -10,6 +10,16 @@ import {getAddLink, getAddLinks, getItem, getRemoveLink} from '@cocooned/tests/s
 describe('coreMixin', () => {
   given('extended', () => coreMixin(Base))
 
+  describe('selectors', () => {
+    it('add add trigger selector', () => {
+      expect(given.extended.selectors).toEqual(expect.objectContaining({ 'triggers.add': ['.cocooned-add'] }))
+    })
+
+    it('add remove trigger selector', () => {
+      expect(given.extended.selectors).toEqual(expect.objectContaining({ 'triggers.remove': ['.cocooned-remove'] }))
+    })
+  })
+
   describe('when instanciated', () => {
     beforeEach(() => {
       document.body.innerHTML = given.html

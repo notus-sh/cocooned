@@ -3,6 +3,10 @@ import { Remove } from './core/triggers/remove'
 import { clickHandler, delegatedClickHandler } from '../events/handlers'
 
 const coreMixin = (Base) => class extends Base {
+  static get selectors () {
+    return { ...super.selectors, 'triggers.add': ['.cocooned-add'], 'triggers.remove': ['.cocooned-remove'] }
+  }
+
   start () {
     super.start()
 

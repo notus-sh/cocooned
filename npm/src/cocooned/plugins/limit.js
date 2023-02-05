@@ -1,6 +1,6 @@
 const limitMixin = (Base) => class extends Base {
-  static defaultOptions () {
-    return { ...super.defaultOptions(), ...{ limit: false } }
+  static get defaultOptions () {
+    return { ...super.defaultOptions, ...{ limit: false } }
   }
 
   start () {

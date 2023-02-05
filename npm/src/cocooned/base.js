@@ -46,11 +46,11 @@ function toggle (item, removedClass, addedClass, useTransitions, callback) {
 }
 
 class Base {
-  static defaultOptions () {
+  static get defaultOptions () {
     return {}
   }
 
-  static eventNamespaces () {
+  static get eventNamespaces () {
     return ['cocooned']
   }
 
@@ -59,11 +59,7 @@ class Base {
   static get selectors () {
     return {
       container: ['.cocooned-container'],
-      item: ['.cocooned-item', '.nested-fields'],
-      'triggers.add': ['.cocooned-add', '.add_fields'],
-      'triggers.remove': ['.cocooned-remove', '.remove_fields'],
-      'triggers.up': ['.cocooned-move-up'],
-      'triggers.down': ['.cocooned-move-down']
+      item: ['.cocooned-item']
     }
   }
 
@@ -71,7 +67,7 @@ class Base {
     this._container = container
     this._options = this.constructor._normalizeOptions({
       ...this._options,
-      ...this.constructor.defaultOptions(),
+      ...this.constructor.defaultOptions,
       ...('cocoonedOptions' in container.dataset ? JSON.parse(container.dataset.cocoonedOptions) : {}),
       ...(options || {})
     })
@@ -139,7 +135,7 @@ class Base {
 
   get _emitter () {
     if (typeof this.__emitter === 'undefined') {
-      this.__emitter = new Emitter(this.constructor.eventNamespaces())
+      this.__emitter = new Emitter(this.constructor.eventNamespaces)
     }
 
     return this.__emitter
