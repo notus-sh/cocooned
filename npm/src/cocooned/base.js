@@ -8,7 +8,7 @@ function uuidv4() {
 }
 
 const scopedStyles = `
-  .cocooned-item { overflow: hidden; transition: opacity .45s ease-out, max-height .45s ease-out .45; }
+  .cocooned-item { overflow: hidden; transition: opacity .45s ease-out, max-height .45s ease-out; }
   .cocooned-item--visible { opacity: 1; max-height: 100%; }
   .cocooned-item--hidden { opacity: 0; max-height: 0%; }
 `
