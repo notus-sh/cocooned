@@ -33,7 +33,7 @@ const findContainer = function (trigger) {
 }
 
 const cocoonAutoStart = function (jQuery) {
-  jQuery('.add_fields').map((_i, adder) => findContainer(adder)).each((_i, container) => Jquery(container).cocooned())
+  jQuery('.add_fields').map((_i, adder) => findContainer(adder)).each((_i, container) => jQuery(container).cocooned())
 }
 
 export {
