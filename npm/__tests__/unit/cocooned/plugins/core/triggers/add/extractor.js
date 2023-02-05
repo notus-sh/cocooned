@@ -1,7 +1,7 @@
 /* global given */
 
-import { Extractor } from '@notus.sh/cocooned/src/cocooned/triggers/add/extractor'
-import { Builder } from '@notus.sh/cocooned/src/cocooned/triggers/add/builder'
+import { Extractor } from '@notus.sh/cocooned/src/cocooned/plugins/core/triggers/add/extractor'
+import { Builder } from '@notus.sh/cocooned/src/cocooned/plugins/core/triggers/add/builder'
 import { deprecator } from '@notus.sh/cocooned/src/cocooned/deprecation'
 import { jest } from '@jest/globals'
 import { faker } from '@cocooned/tests/support/faker'

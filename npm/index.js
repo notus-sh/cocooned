@@ -1,9 +1,9 @@
-import { Base } from './src/cocooned/base'
+import { Cocooned as Base } from './src/cocooned/cocooned'
 import { limitMixin } from './src/cocooned/plugins/limit'
 import { reorderableMixin } from './src/cocooned/plugins/reorderable'
-import { CocoonSupportMixin } from './src/integrations/cocoon'
+import { cocoonSupportMixin } from './src/integrations/cocoon'
 
-class Cocooned extends CocoonSupportMixin(reorderableMixin(limitMixin(Base))) {
+class Cocooned extends reorderableMixin(limitMixin(cocoonSupportMixin(Base))) {
   static create (container, options = {}) {
     const cocooned = new Cocooned(container, options)
     cocooned.start()

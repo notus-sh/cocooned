@@ -1,129 +1,37 @@
 /* global given */
 
-import { Base as Cocooned } from '@notus.sh/cocooned/src/cocooned/base'
+import { Base } from '@notus.sh/cocooned/src/cocooned/base'
 import { jest } from '@jest/globals'
 import { faker } from '@cocooned/tests/support/faker'
-import { clickEvent } from '@cocooned/tests/support/helpers'
-import { getItem, getAddLinks, getAddLink, getRemoveLink } from '@cocooned/tests/support/selectors'
+import { getItem } from '@cocooned/tests/support/selectors'
 
-describe('Cocooned', () => {
+describe('Base', () => {
   beforeEach(() => {
     document.body.innerHTML = given.html
-    const cocooned = new Cocooned(given.container)
-    cocooned.start()
+    given.instance.start()
   })
 
+  given('instance', () => new Base(given.container, { transitions: true }))
   given('container', () => document.querySelector('.cocooned-container'))
   given('count', () => faker.datatype.number({ min: 1, max: 5 }))
-  given('template', () => `
-    <div class="cocooned-item">
-      <a class="cocooned-remove dynamic" href="#">Remove</a>
-    </div>
-  `)
+  given('items', () => Array.from(Array(given.count), () => `
+    <div class="cocooned-item"></div>
+  `))
   given('html', () => `
     <div class="cocooned-container">
-      <div>
-        <a class="cocooned-add"
-           data-association="item"
-           data-template="template"
-           href="#">Add</a>
-      </div>
-      <template data-name="template">${given.template}</template>
+      ${given.items.join('')}
     </div>
   `)
 
-  describe('with add triggers', () => {
-    describe('when inside container', () => {
-      given('html', () => `
-        <div class="cocooned-container">
-          <div>
-            <a class="cocooned-add"
-               data-association="item"
-               data-template="template"
-               href="#">Add</a>
-            <template data-name="template">${given.template}</template>
-          </div>
-        </div>
-      `)
+  describe('when created', () => {
+    given('styles', () => given.container.firstElementChild)
 
-      it('binds add on add triggers', () => {
-        const listener = jest.fn(e => e.preventDefault())
-        given.container.addEventListener('cocooned:before-insert', listener)
-        getAddLink(document).dispatchEvent(clickEvent())
-
-        expect(listener).toHaveBeenCalled()
-      })
+    it('inject styles to container', () => {
+      expect(given.styles.tagName).toEqual('STYLE')
     })
 
-    describe('when outside container', () => {
-      given('html', () => `
-        <div class="cocooned-container"></div>
-        <a class="cocooned-add"
-           data-association="item"
-           data-template="template"
-           data-association-insertion-node=".cocooned-container"
-           data-association-insertion-method="prepend"
-           href="#">Add</a>
-        <template data-name="template">${given.template}</template>
-      `)
-
-      it('binds add on add triggers', () => {
-        const listener = jest.fn(e => e.preventDefault())
-        given.container.addEventListener('cocooned:before-insert', listener)
-        getAddLink(document).dispatchEvent(clickEvent())
-
-        expect(listener).toHaveBeenCalled()
-      })
-    })
-
-    describe('with multiple add triggers', () => {
-      given('html', () => `
-        <div class="cocooned-container">
-          <div>
-            <a class="cocooned-add"
-               data-association="item"
-               data-template="template-inside"
-               href="#">Add</a>
-            <template data-name="template-inside">${given.template}</template>
-          </div>
-        </div>
-        <a class="cocooned-add"
-           data-association="item"
-           data-template="template-outside"
-           data-association-insertion-node=".cocooned-container"
-           data-association-insertion-method="prepend"
-           href="#">Add</a>
-        <template data-name="template-outside">${given.template}</template>
-      `)
-
-      it('binds add on all add triggers', () => {
-        const listener = jest.fn(e => e.preventDefault())
-        given.container.addEventListener('cocooned:before-insert', listener)
-        Array.from(getAddLinks(document)).forEach(trigger => trigger.dispatchEvent(clickEvent()))
-
-        expect(listener).toHaveBeenCalledTimes(getAddLinks(document).length)
-      })
-    })
-  })
-
-  describe('with remove triggers', () => {
-    given('template', () => `
-      <div class="cocooned-item">
-        <a class="cocooned-remove dynamic" href="#">Remove</a>
-      </div>
-    `)
-    given('html', () => `
-      <div class="cocooned-container">
-        ${Array.from(Array(given.count), () => given.template).join('\n')}
-      </div>
-    `)
-
-    it('binds remove on remove triggers', () => {
-      const listener = jest.fn(e => e.preventDefault())
-      given.container.addEventListener('cocooned:before-remove', listener)
-      getRemoveLink(document).dispatchEvent(clickEvent())
-
-      expect(listener).toHaveBeenCalled()
+    it('inject scoped styles to container', () => {
+      expect(given.styles.getAttribute('scoped')).toBeTruthy()
     })
   })
 
@@ -139,6 +47,158 @@ describe('Cocooned', () => {
 
     it('hides them', () => {
       expect(getItem(document).classList).toContain('cocooned-item--hidden')
+    })
+  })
+
+  describe('items', () => {
+    it('returns an array', () => {
+      expect(given.instance.items).toBeInstanceOf(Array)
+    })
+
+    it('returns an array of DOM Node', () => {
+      const constructors = given.instance.items.map(item => item.constructor.name)
+      expect([...new Set(constructors)]).toEqual([HTMLDivElement.name])
+    })
+
+    it('returns correct number of items', () => {
+      expect(given.instance.items.length).toEqual(given.count)
+    })
+
+    describe('with nested containers', () => {
+      given('nested', () => Array.from(Array(given.count), (_, i) => `
+        <div class="cocooned-item nested"></div>
+      `))
+      given('html', () => `
+        <div class="cocooned-container">
+          ${given.items.join('')}
+          <div class="cocooned-container">
+            ${given.nested.join('')}
+          </div>
+        </div>
+      `)
+
+      it('returns correct number of items', () => {
+        expect(given.instance.items.length).toEqual(given.count)
+      })
+
+      it("returns only container's items", () => {
+        const nested = given.instance.items.map(item => item.matches('.nested'))
+        expect([...new Set(nested)]).toEqual([false])
+      })
+    })
+
+    describe('with hidden items', () => {
+      given('items', () => Array.from(Array(given.count), () => `
+        <div class="cocooned-item cocooned-item--hidden"></div>
+      `))
+
+      it('ignores them', () => {
+        expect(given.instance.items.length).toEqual(0)
+      })
+    })
+  })
+
+  describe('toContainer', () => {
+    given('origin', () => document.querySelector('.origin'))
+    given('items', () => [`
+      <div class="cocooned-item">
+        <div class="origin"></div>
+      </div>
+    `])
+
+    it('returns the closest container', () => {
+      expect(given.instance.toContainer(given.origin)).toEqual(given.container)
+    })
+  })
+
+  describe('toItem', () => {
+    given('origin', () => document.querySelector('.origin'))
+    given('items', () => [`
+      <div class="cocooned-item">
+        <div class="origin"></div>
+      </div>
+    `])
+
+    it('returns the closest item', () => {
+      expect(given.instance.toItem(given.origin)).toEqual(getItem(given.container))
+    })
+  })
+
+  describe('contains', () => {
+    describe('when given node is one of the container items', () => {
+      given('item', () => document.querySelector('.cocooned-item'))
+
+      it('returns true', () => {
+        expect(given.instance.contains(given.item)).toBeTruthy()
+      })
+    })
+
+    describe('when given node is not one of container items', () => {
+      it('returns true', () => {
+        expect(given.instance.contains(given.container)).toBeFalsy()
+      })
+    })
+  })
+
+  const itBehavesLikeAVisibilityMethod = ({ expected, other, toggle }) => {
+    given('item', () => document.querySelector('.cocooned-item'))
+
+    it(`adds a ${expected} class to item`, () => {
+      toggle(given.item)
+      expect(given.item.classList).toContain(expected)
+    })
+
+    it(`removes ${other} class if present`, () => {
+      given.item.classList.add(other)
+      toggle(given.item)
+
+      expect(given.item.classList).not.toContain(other)
+    })
+
+    describe('with transitions', () => {
+      it('supports callback', () => {
+        const listener = jest.fn()
+        toggle(given.item, listener)
+        given.item.dispatchEvent(new Event('transitionend'))
+
+        expect(listener).toHaveBeenCalled()
+      })
+
+      it('supports single use callback', () => {
+        const listener = jest.fn()
+        toggle(given.item, listener)
+        given.item.dispatchEvent(new Event('transitionend'))
+        given.item.dispatchEvent(new Event('transitionend'))
+
+        expect(listener).toHaveBeenCalledTimes(1)
+      })
+    })
+
+    describe('without transitions', () => {
+      given('instance', () => new Base(given.container, { transitions: false }))
+
+      it('triggers callback automatically', () => {
+        const listener = jest.fn()
+        toggle(given.item, listener)
+
+        expect(listener).toHaveBeenCalled()
+      })
+    })
+  }
+
+  describe('hide', () => {
+    itBehavesLikeAVisibilityMethod({
+      expected: 'cocooned-item--hidden',
+      other: 'cocooned-item--visible',
+      toggle: (...args) => given.instance.hide(...args)
+    })
+  })
+
+  describe('show', () => {
+    itBehavesLikeAVisibilityMethod({
+      expected: 'cocooned-item--visible',
+      other: 'cocooned-item--hidden',
+      toggle: (...args) => given.instance.show(...args)
     })
   })
 })

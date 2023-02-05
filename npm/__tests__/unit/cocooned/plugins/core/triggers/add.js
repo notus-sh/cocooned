@@ -1,8 +1,8 @@
 /* global given */
 
 import { Base as Cocooned } from '@notus.sh/cocooned/src/cocooned/base'
-import { Builder } from '@notus.sh/cocooned/src/cocooned/triggers/add/builder'
-import { Add } from '@notus.sh/cocooned/src/cocooned/triggers/add'
+import { Builder } from '@notus.sh/cocooned/src/cocooned/plugins/core/triggers/add/builder'
+import { Add } from '@notus.sh/cocooned/src/cocooned/plugins/core/triggers/add'
 import { jest } from '@jest/globals'
 import { faker } from '@cocooned/tests/support/faker'
 import { clickEvent } from '@cocooned/tests/support/helpers'

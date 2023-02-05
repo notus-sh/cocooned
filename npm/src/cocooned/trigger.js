@@ -1,4 +1,4 @@
-class Base {
+class Trigger {
   constructor (trigger, cocooned) {
     this._trigger = trigger
     this._cocooned = cocooned
@@ -17,7 +17,7 @@ class Base {
   _trigger
 
   get _item () {
-    return this._cocooned.selection.toItem(this._trigger)
+    return this._cocooned.toItem(this._trigger)
   }
 
   get _notified () {
@@ -42,5 +42,5 @@ class Base {
 }
 
 export {
-  Base
+  Trigger
 }

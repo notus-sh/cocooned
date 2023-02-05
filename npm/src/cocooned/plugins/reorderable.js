@@ -10,12 +10,16 @@ function clickHandler (selector, cocooned, TriggerClass) {
 }
 
 const reorderableMixin = (Base) => class extends Base {
-  static defaultOptions () {
-    return { ...super.defaultOptions(), ...{ reorderable: false } }
+  static get defaultOptions () {
+    return { ...super.defaultOptions, ...{ reorderable: false } }
   }
 
-  _bindEvents () {
-    super._bindEvents()
+  static get selectors () {
+    return { ...super.selectors, 'triggers.up': ['.cocooned-move-up'], 'triggers.down': ['.cocooned-move-down'] }
+  }
+
+  start () {
+    super.start()
     if (this.options.reorderable === false) {
       return
     }
@@ -28,8 +32,8 @@ const reorderableMixin = (Base) => class extends Base {
       form.addEventListener('submit', e => this._reindexer.reindex(e))
     }
 
-    this.container.addEventListener('click', clickHandler(this.selection.selector('triggers.up'), this, Up))
-    this.container.addEventListener('click', clickHandler(this.selection.selector('triggers.down'), this, Down))
+    this.container.addEventListener('click', clickHandler(this._selector('triggers.up'), this, Up))
+    this.container.addEventListener('click', clickHandler(this._selector('triggers.down'), this, Down))
   }
 
   /* Protected and private attributes and methods */

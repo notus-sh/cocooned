@@ -1,8 +1,19 @@
 import { Emitter } from './events/emitter'
-import { clickHandler, delegatedClickHandler } from './events/handlers'
-import { Selection } from './selection'
-import { Add } from './triggers/add'
-import { Remove } from './triggers/remove'
+
+const scopedStyles = `
+  .cocooned-item { overflow: hidden; transition: opacity .45s ease-out, max-height .45s ease-out .45; }
+  .cocooned-item--visible { opacity: 1; max-height: 100%; }
+  .cocooned-item--hidden { opacity: 0; max-height: 0%; }
+`
+
+function createScopedStyles (container, styles) {
+  const element = container.ownerDocument.createElement('style')
+  element.setAttribute('scoped', 'scoped')
+  element.setAttribute('type', 'text/css')
+  element.innerHTML = styles
+
+  return element
+}
 
 function hideMarkedForDestruction (cocooned, items) {
   items.forEach(item => {
@@ -18,71 +29,99 @@ function hideMarkedForDestruction (cocooned, items) {
   })
 }
 
+function toggle (item, removedClass, addedClass, useTransitions, callback) {
+  if (typeof callback === 'function' && useTransitions) {
+    item.addEventListener('transitionend', callback, { once: true })
+  }
+
+  if (item.classList.contains(removedClass)) {
+    item.classList.replace(removedClass, addedClass)
+  } else {
+    item.classList.add(addedClass)
+  }
+
+  if (typeof callback === 'function' && !useTransitions) {
+    callback()
+  }
+}
+
 class Base {
-  static defaultOptions () {
+  static get defaultOptions () {
     return {}
   }
 
-  static eventNamespaces () {
+  static get eventNamespaces () {
     return ['cocooned']
   }
 
-  static create (container, options) {
-    const cocooned = new this.constructor(container, options)
-    cocooned.start()
+  static scopedStyles = scopedStyles
 
-    return cocooned
-  }
-
-  static start () {
-    document.querySelectorAll('*[data-cocooned-options]').forEach(element => this.constructor.create(element))
+  static get selectors () {
+    return {
+      container: ['.cocooned-container'],
+      item: ['.cocooned-item']
+    }
   }
 
   constructor (container, options) {
-    this.container = container
-    this.options = this.constructor._normalizeOptions({
-      ...this.constructor.defaultOptions(),
+    this._container = container
+    this._options = this.constructor._normalizeOptions({
+      ...this._options,
+      ...this.constructor.defaultOptions,
       ...('cocoonedOptions' in container.dataset ? JSON.parse(container.dataset.cocoonedOptions) : {}),
       ...(options || {})
     })
   }
 
-  get emitter () {
-    if (typeof this.#emitter === 'undefined') {
-      this.#emitter = new Emitter(this.constructor.eventNamespaces())
-    }
-
-    return this.#emitter
+  get container () {
+    return this._container
   }
 
-  get selection () {
-    if (typeof this.#selection === 'undefined') {
-      this.#selection = new Selection(this.container)
-    }
-
-    return this.#selection
+  get options () {
+    return this._options
   }
 
   start () {
     this.container.classList.add('cocooned-container')
-    this.addTriggers = Array.from(this.container.ownerDocument.querySelectorAll(this.selection.selector('triggers.add')))
-      .map(element => Add.create(element, this))
-      .filter(trigger => this.selection.toContainer(trigger.insertionNode) === this.container)
+    this.container.prepend(createScopedStyles(this.container, this.constructor.scopedStyles))
 
-    this._bindEvents()
-    hideMarkedForDestruction(this, this.selection.items)
+    const hideDestroyed = () => { hideMarkedForDestruction(this, this.items) }
+
+    hideDestroyed()
+    this.container.ownerDocument.addEventListener('page:load', hideDestroyed)
+    this.container.ownerDocument.addEventListener('turbo:load', hideDestroyed)
+    this.container.ownerDocument.addEventListener('turbolinks:load', hideDestroyed)
   }
 
   notify (node, eventType, eventData) {
-    return this.emitter.emit(node, eventType, eventData)
+    return this._emitter.emit(node, eventType, eventData)
   }
 
-  hide (node, callback) {
-    return this.selection.hide(node, callback)
+  /* Selections methods */
+  get items () {
+    return Array.from(this.container.querySelectorAll(this._selector('item')))
+        .filter(item => this.toContainer(item) === this.container)
+        .filter(item => !item.classList.contains('cocooned-item--hidden'))
   }
 
-  show (node, callback) {
-    return this.selection.show(node, callback)
+  toContainer (node) {
+    return node.closest(this._selector('container'))
+  }
+
+  toItem (node) {
+    return node.closest(this._selector('item'))
+  }
+
+  contains (node) {
+    return this.items.includes(this.toItem(node))
+  }
+
+  hide (item, callback) {
+    return toggle(item, 'cocooned-item--visible', 'cocooned-item--hidden', this.options.transitions, callback)
+  }
+
+  show (item, callback) {
+    return toggle(item, 'cocooned-item--hidden', 'cocooned-item--visible', this.options.transitions, callback)
   }
 
   /* Protected and private attributes and methods */
@@ -90,27 +129,24 @@ class Base {
     return options
   }
 
-  #emitter
-  #selection
+  _container
+  __emitter
+  _options = { transitions: !(process?.env?.NODE_ENV === 'test') }
 
-  _bindEvents () {
-    this.addTriggers.forEach(add => add.trigger.addEventListener(
-      'click',
-      clickHandler((e) => add.handle(e))
-    ))
+  get _emitter () {
+    if (typeof this.__emitter === 'undefined') {
+      this.__emitter = new Emitter(this.constructor.eventNamespaces)
+    }
 
-    this.container.addEventListener(
-      'click',
-      delegatedClickHandler(this.selection.selector('triggers.remove'), (e) => {
-        const trigger = new Remove(e.target, this)
-        trigger.handle(e)
-      })
-    )
+    return this.__emitter
+  }
 
-    const hideDestroyed = () => { hideMarkedForDestruction(this, this.selection.items) }
-    this.container.ownerDocument.addEventListener('page:load', hideDestroyed)
-    this.container.ownerDocument.addEventListener('turbo:load', hideDestroyed)
-    this.container.ownerDocument.addEventListener('turbolinks:load', hideDestroyed)
+  _selectors (name) {
+    return this.constructor.selectors[name]
+  }
+
+  _selector (name) {
+    return this._selectors(name).join(', ')
   }
 }
 

@@ -1,6 +1,6 @@
-import { Base } from './base'
+import { Trigger } from '../../../trigger'
 
-class Remove extends Base {
+class Remove extends Trigger {
   handle (event) {
     // Removal can be prevented through a 'cocooned:before-remove' event handler
     if (!this._notify('before-remove', event)) {

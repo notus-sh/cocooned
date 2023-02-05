@@ -1,16 +1,16 @@
 const limitMixin = (Base) => class extends Base {
-  static defaultOptions () {
-    return { ...super.defaultOptions(), ...{ limit: false } }
+  static get defaultOptions () {
+    return { ...super.defaultOptions, ...{ limit: false } }
   }
 
-  _bindEvents () {
-    super._bindEvents()
+  start () {
+    super.start()
     if (this.options.limit === false) {
       return
     }
 
     this.container.addEventListener('cocooned:before-insert', e => {
-      if (this.selection.visibleItems.length < this.options.limit) {
+      if (this.items.length < this.options.limit) {
         return
       }
 
