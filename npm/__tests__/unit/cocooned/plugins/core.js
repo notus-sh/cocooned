@@ -115,20 +115,5 @@ describe('coreMixin', () => {
         expect(listener).toHaveBeenCalled()
       })
     })
-
-    describe('with items marked for destruction', () => {
-      given('html', () => `
-        <div class="cocooned-container">
-          <div class="cocooned-item">
-            <a class="cocooned-remove existing destroyed" href="#">Remove</a>
-            <input type="hidden" name="items[0][_destroy]" value="true" />
-          </div>
-        </div>
-      `)
-
-      it('hides them', () => {
-        expect(getItem(document).classList).toContain('cocooned-item--hidden')
-      })
-    })
   })
 })

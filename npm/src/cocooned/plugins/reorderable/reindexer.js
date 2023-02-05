@@ -23,7 +23,7 @@ class Reindexer {
   }
 
   get #nodes () {
-    return this.#cocooned.visibleItems
+    return this.#cocooned.items
   }
 
   #notify (eventName, originalEvent) {

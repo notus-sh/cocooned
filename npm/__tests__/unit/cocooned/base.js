@@ -3,6 +3,7 @@
 import { Base } from '@notus.sh/cocooned/src/cocooned/base'
 import { jest } from '@jest/globals'
 import { faker } from '@cocooned/tests/support/faker'
+import { getItem } from '@cocooned/tests/support/selectors'
 
 describe('Base', () => {
   beforeEach(() => {
@@ -13,7 +14,7 @@ describe('Base', () => {
   given('instance', () => new Base(given.container, { transitions: true }))
   given('container', () => document.querySelector('.cocooned-container'))
   given('count', () => faker.datatype.number({ min: 1, max: 5 }))
-  given('items', () => Array.from(Array(given.count), (_, i) => `
+  given('items', () => Array.from(Array(given.count), () => `
     <div class="cocooned-item"></div>
   `))
   given('html', () => `
@@ -31,6 +32,21 @@ describe('Base', () => {
 
     it('inject scoped styles to container', () => {
       expect(given.styles.getAttribute('scoped')).toBeTruthy()
+    })
+  })
+
+  describe('with items marked for destruction', () => {
+    given('html', () => `
+      <div class="cocooned-container">
+        <div class="cocooned-item">
+          <a class="cocooned-remove existing destroyed" href="#">Remove</a>
+          <input type="hidden" name="items[0][_destroy]" value="true" />
+        </div>
+      </div>
+    `)
+
+    it('hides them', () => {
+      expect(getItem(document).classList).toContain('cocooned-item--hidden')
     })
   })
 
@@ -70,6 +86,42 @@ describe('Base', () => {
         expect([...new Set(nested)]).toEqual([false])
       })
     })
+
+    describe('with hidden items', () => {
+      given('items', () => Array.from(Array(given.count), () => `
+        <div class="cocooned-item cocooned-item--hidden"></div>
+      `))
+
+      it('ignores them', () => {
+        expect(given.instance.items.length).toEqual(0)
+      })
+    })
+  })
+
+  describe('toContainer', () => {
+    given('origin', () => document.querySelector('.origin'))
+    given('items', () => [`
+      <div class="cocooned-item">
+        <div class="origin"></div>
+      </div>
+    `])
+
+    it('returns the closest container', () => {
+      expect(given.instance.toContainer(given.origin)).toEqual(given.container)
+    })
+  })
+
+  describe('toItem', () => {
+    given('origin', () => document.querySelector('.origin'))
+    given('items', () => [`
+      <div class="cocooned-item">
+        <div class="origin"></div>
+      </div>
+    `])
+
+    it('returns the closest item', () => {
+      expect(given.instance.toItem(given.origin)).toEqual(getItem(given.container))
+    })
   })
 
   describe('contains', () => {
@@ -86,10 +138,6 @@ describe('Base', () => {
         expect(given.instance.contains(given.container)).toBeFalsy()
       })
     })
-  })
-
-  describe('matches', () => {
-    it.skip('should be tested', () => {})
   })
 
   const itBehavesLikeAVisibilityMethod = ({ expected, other, toggle }) => {

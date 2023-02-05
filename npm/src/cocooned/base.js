@@ -15,6 +15,36 @@ function createScopedStyles (container, styles) {
   return element
 }
 
+function hideMarkedForDestruction (cocooned, items) {
+  items.forEach(item => {
+    const destroy = item.querySelector('input[type=hidden][name$="[_destroy]"]')
+    if (destroy === null) {
+      return
+    }
+    if (destroy.getAttribute('value') !== 'true') {
+      return
+    }
+
+    cocooned.hide(item)
+  })
+}
+
+function toggle (item, removedClass, addedClass, useTransitions, callback) {
+  if (typeof callback === 'function' && useTransitions) {
+    item.addEventListener('transitionend', callback, { once: true })
+  }
+
+  if (item.classList.contains(removedClass)) {
+    item.classList.replace(removedClass, addedClass)
+  } else {
+    item.classList.add(addedClass)
+  }
+
+  if (typeof callback === 'function' && !useTransitions) {
+    callback()
+  }
+}
+
 class Base {
   static defaultOptions () {
     return {}
@@ -55,65 +85,47 @@ class Base {
     return this._options
   }
 
-  /* Notification methods */
-  get emitter () {
-    if (typeof this._emitter === 'undefined') {
-      this._emitter = new Emitter(this.constructor.eventNamespaces())
-    }
-
-    return this._emitter
-  }
-
-  notify (node, eventType, eventData) {
-    return this.emitter.emit(node, eventType, eventData)
-  }
-
-  /* Startup methods */
   start () {
     this.container.classList.add('cocooned-container')
     this.container.prepend(createScopedStyles(this.container, this.constructor.scopedStyles))
+
+    const hideDestroyed = () => { hideMarkedForDestruction(this, this.items) }
+
+    hideDestroyed()
+    this.container.ownerDocument.addEventListener('page:load', hideDestroyed)
+    this.container.ownerDocument.addEventListener('turbo:load', hideDestroyed)
+    this.container.ownerDocument.addEventListener('turbolinks:load', hideDestroyed)
+  }
+
+  notify (node, eventType, eventData) {
+    return this._emitter.emit(node, eventType, eventData)
   }
 
   /* Selections methods */
   get items () {
-    return Array.from(this.container.querySelectorAll(this.selector('item')))
-        .filter(element => element.closest(this.selector('container')) === this.container)
-  }
-
-  get visibleItems () {
-    return this.items.filter(item => !item.classList.contains('cocooned-item--hidden'))
+    return Array.from(this.container.querySelectorAll(this._selector('item')))
+        .filter(item => this.toContainer(item) === this.container)
+        .filter(item => !item.classList.contains('cocooned-item--hidden'))
   }
 
   toContainer (node) {
-    return node.closest(this.selector('container'))
+    return node.closest(this._selector('container'))
   }
 
   toItem (node) {
-    return node.closest(this.selector('item'))
+    return node.closest(this._selector('item'))
   }
 
   contains (node) {
     return this.items.includes(this.toItem(node))
   }
 
-  matches (node, selectorName) {
-    return this.selectors(selectorName).some(s => node.matches(s)) && this.contains(node)
-  }
-
-  selectors (name) {
-    return this.constructor.selectors[name]
-  }
-
-  selector (name) {
-    return this.selectors(name).join(', ')
-  }
-
   hide (item, callback) {
-    this._toggle(item, 'cocooned-item--visible', 'cocooned-item--hidden', callback)
+    return toggle(item, 'cocooned-item--visible', 'cocooned-item--hidden', this.options.transitions, callback)
   }
 
   show (item, callback) {
-    this._toggle(item, 'cocooned-item--hidden', 'cocooned-item--visible', callback)
+    return toggle(item, 'cocooned-item--hidden', 'cocooned-item--visible', this.options.transitions, callback)
   }
 
   /* Protected and private attributes and methods */
@@ -122,23 +134,23 @@ class Base {
   }
 
   _container
-  _emitter
+  __emitter
   _options = { transitions: !(process?.env?.NODE_ENV === 'test') }
 
-  _toggle (item, removedClass, addedClass, callback) {
-    if (typeof callback === 'function' && this.options.transitions) {
-      item.addEventListener('transitionend', callback, { once: true })
+  get _emitter () {
+    if (typeof this.__emitter === 'undefined') {
+      this.__emitter = new Emitter(this.constructor.eventNamespaces())
     }
 
-    if (item.classList.contains(removedClass)) {
-      item.classList.replace(removedClass, addedClass)
-    } else {
-      item.classList.add(addedClass)
-    }
+    return this.__emitter
+  }
 
-    if (typeof callback === 'function' && !this.options.transitions) {
-      callback()
-    }
+  _selectors (name) {
+    return this.constructor.selectors[name]
+  }
+
+  _selector (name) {
+    return this._selectors(name).join(', ')
   }
 }
 
