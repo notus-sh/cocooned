@@ -1,4 +1,4 @@
-import { Base } from './src/cocooned/base'
+import { Cocooned as Base } from './src/cocooned/cocooned'
 import { limitMixin } from './src/cocooned/plugins/limit'
 import { reorderableMixin } from './src/cocooned/plugins/reorderable'
 import { CocoonSupportMixin } from './src/integrations/cocoon'

@@ -1,47 +1,14 @@
 /* global given */
 
 import { reorderableMixin } from '@notus.sh/cocooned/src/cocooned/plugins/reorderable'
-import { Emitter } from '@notus.sh/cocooned/src/cocooned/events/emitter'
-import { Selection } from '@notus.sh/cocooned/src/cocooned/selection'
+import { Base } from '@notus.sh/cocooned/src/cocooned/base'
 import { jest } from '@jest/globals'
 import { faker } from '@cocooned/tests/support/faker'
 import { clickEvent } from '@cocooned/tests/support/helpers'
 import { getMoveUpLink, getMoveDownLink } from '@cocooned/tests/support/selectors'
 
 describe('reorderableMixin', () => {
-  // TODO: Remove once Cocooned Base will be rewritten.
-  given('extendable', () => class Extendable {
-    static defaultOptions () {
-      return {}
-    }
-
-    static _normalizeOptions (options) {
-      return options
-    }
-
-    start () {
-      this._bindEvents()
-    }
-
-    get container () {
-      return given.container
-    }
-
-    get options () {
-      return given.options
-    }
-
-    get selection () {
-      return new Selection(given.container)
-    }
-
-    notify (target, eventType, eventDetails) {
-      return given.emitter.emit(target, eventType, eventDetails)
-    }
-
-    _bindEvents () {}
-  })
-  given('extended', () => reorderableMixin(given.extendable))
+  given('extended', () => reorderableMixin(Base))
   given('startAt', () => faker.datatype.number({ min: 2, max: 5 }))
 
   describe('defaultOptions', () => {
@@ -70,12 +37,10 @@ describe('reorderableMixin', () => {
   describe('when instanciated', () => {
     beforeEach(() => {
       document.body.innerHTML = given.html
-
-      const instance = new given.extended() // eslint-disable-line new-cap
-      instance.start()
+      given.instance.start()
     })
 
-    given('emitter', () => new Emitter())
+    given('instance', () => new given.extended(given.container, given.options)) // eslint-disable-line new-cap
     given('container', () => document.querySelector('.cocooned-container'))
     given('form', () => document.querySelector('form'))
     given('count', () => faker.datatype.number({ min: 2, max: 5 }))
@@ -100,7 +65,7 @@ describe('reorderableMixin', () => {
       it('binds reindex after each insertion', () => {
         const listener = jest.fn(e => e.preventDefault())
         given.container.addEventListener('cocooned:before-reindex', listener)
-        given.emitter.emit(given.container, 'after-insert')
+        given.instance.notify(given.container, 'after-insert')
 
         expect(listener).toHaveBeenCalled()
       })
@@ -108,7 +73,7 @@ describe('reorderableMixin', () => {
       it('binds reindex after each removal', () => {
         const listener = jest.fn(e => e.preventDefault())
         given.container.addEventListener('cocooned:before-reindex', listener)
-        given.emitter.emit(given.container, 'after-remove')
+        given.instance.notify(given.container, 'after-remove')
 
         expect(listener).toHaveBeenCalled()
       })
@@ -116,7 +81,7 @@ describe('reorderableMixin', () => {
       it('binds reindex after each move', () => {
         const listener = jest.fn(e => e.preventDefault())
         given.container.addEventListener('cocooned:before-reindex', listener)
-        given.emitter.emit(given.container, 'after-move')
+        given.instance.notify(given.container, 'after-move')
 
         expect(listener).toHaveBeenCalled()
       })

@@ -1,45 +1,12 @@
 /* global given */
 
 import { limitMixin } from '@notus.sh/cocooned/src/cocooned/plugins/limit'
-import { Emitter } from '@notus.sh/cocooned/src/cocooned/events/emitter'
-import { Selection } from '@notus.sh/cocooned/src/cocooned/selection'
+import { Base } from '@notus.sh/cocooned/src/cocooned/base'
 import { jest } from '@jest/globals'
 import { faker } from '@cocooned/tests/support/faker'
 
 describe('limitMixin', () => {
-  // TODO: Remove once Cocooned Base will be rewritten.
-  given('extendable', () => class Extendable {
-    static defaultOptions () {
-      return {}
-    }
-
-    static _normalizeOptions (options) {
-      return options
-    }
-
-    start () {
-      this._bindEvents()
-    }
-
-    get container () {
-      return given.container
-    }
-
-    get options () {
-      return given.options
-    }
-
-    get selection () {
-      return new Selection(given.container)
-    }
-
-    notify (target, eventType, eventDetails) {
-      return given.emitter.emit(target, eventType, eventDetails)
-    }
-
-    _bindEvents () {}
-  })
-  given('extended', () => limitMixin(given.extendable))
+  given('extended', () => limitMixin(Base))
   given('limit', () => faker.datatype.number({ min: 2, max: 5 }))
 
   describe('defaultOptions', () => {
@@ -51,12 +18,10 @@ describe('limitMixin', () => {
   describe('when instanciated', () => {
     beforeEach(() => {
       document.body.innerHTML = given.html
-
-      const instance = new given.extended() // eslint-disable-line new-cap
-      instance.start()
+      given.instance.start()
     })
 
-    given('emitter', () => new Emitter())
+    given('instance', () => new given.extended(given.container, given.options)) // eslint-disable-line new-cap
     given('container', () => document.querySelector('.cocooned-container'))
     given('count', () => faker.datatype.number({ min: 2, max: 5 }))
     given('template', () => '<div class="cocooned-item"></div>')
@@ -72,7 +37,7 @@ describe('limitMixin', () => {
       it('raises an event when limit is reached', () => {
         const listener = jest.fn()
         given.container.addEventListener('cocooned:limit-reached', listener)
-        given.emitter.emit(given.container, 'before-insert')
+        given.instance.notify(given.container, 'before-insert')
 
         expect(listener).toHaveBeenCalled()
       })
@@ -84,7 +49,7 @@ describe('limitMixin', () => {
             resolve()
           })
           given.container.addEventListener('cocooned:before-insert', listener)
-          given.emitter.emit(given.container, 'before-insert')
+          given.instance.notify(given.container, 'before-insert')
         })
       })
     })

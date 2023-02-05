@@ -1,6 +1,5 @@
 import { Emitter } from './events/emitter'
 import { Selection } from './selection'
-import { coreMixin } from './plugins/core'
 
 function hideMarkedForDestruction (cocooned, items) {
   items.forEach(item => {
@@ -16,7 +15,7 @@ function hideMarkedForDestruction (cocooned, items) {
   })
 }
 
-class Core {
+class Base {
   static defaultOptions () {
     return {}
   }
@@ -94,8 +93,6 @@ class Core {
     this.container.ownerDocument.addEventListener('turbolinks:load', hideDestroyed)
   }
 }
-
-class Base extends coreMixin(Core) {}
 
 export {
   Base
