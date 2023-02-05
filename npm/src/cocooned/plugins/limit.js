@@ -3,8 +3,8 @@ const limitMixin = (Base) => class extends Base {
     return { ...super.defaultOptions(), ...{ limit: false } }
   }
 
-  _bindEvents () {
-    super._bindEvents()
+  start () {
+    super.start()
     if (this.options.limit === false) {
       return
     }

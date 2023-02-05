@@ -3,8 +3,8 @@ import { Remove } from './core/triggers/remove'
 import { clickHandler, delegatedClickHandler } from '../events/handlers'
 
 const coreMixin = (Base) => class extends Base {
-  _bindEvents () {
-    super._bindEvents()
+  start () {
+    super.start()
 
     this.addTriggers = Array.from(this.container.ownerDocument.querySelectorAll(this.selection.selector('triggers.add')))
         .map(element => Add.create(element, this))

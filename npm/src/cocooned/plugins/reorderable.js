@@ -14,8 +14,8 @@ const reorderableMixin = (Base) => class extends Base {
     return { ...super.defaultOptions(), ...{ reorderable: false } }
   }
 
-  _bindEvents () {
-    super._bindEvents()
+  start () {
+    super.start()
     if (this.options.reorderable === false) {
       return
     }

@@ -24,17 +24,6 @@ class Base {
     return ['cocooned']
   }
 
-  static create (container, options) {
-    const cocooned = new this.constructor(container, options)
-    cocooned.start()
-
-    return cocooned
-  }
-
-  static start () {
-    document.querySelectorAll('*[data-cocooned-options]').forEach(element => this.constructor.create(element))
-  }
-
   constructor (container, options) {
     this.container = container
     this.options = this.constructor._normalizeOptions({
@@ -62,8 +51,13 @@ class Base {
 
   start () {
     this.container.classList.add('cocooned-container')
-    this._bindEvents()
-    hideMarkedForDestruction(this, this.selection.items)
+
+    const hideDestroyed = () => { hideMarkedForDestruction(this, this.selection.items) }
+
+    hideDestroyed()
+    this.container.ownerDocument.addEventListener('page:load', hideDestroyed)
+    this.container.ownerDocument.addEventListener('turbo:load', hideDestroyed)
+    this.container.ownerDocument.addEventListener('turbolinks:load', hideDestroyed)
   }
 
   notify (node, eventType, eventData) {
@@ -85,13 +79,6 @@ class Base {
 
   #emitter
   #selection
-
-  _bindEvents () {
-    const hideDestroyed = () => { hideMarkedForDestruction(this, this.selection.items) }
-    this.container.ownerDocument.addEventListener('page:load', hideDestroyed)
-    this.container.ownerDocument.addEventListener('turbo:load', hideDestroyed)
-    this.container.ownerDocument.addEventListener('turbolinks:load', hideDestroyed)
-  }
 }
 
 export {
