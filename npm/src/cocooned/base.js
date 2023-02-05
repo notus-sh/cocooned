@@ -1,19 +1,6 @@
 import { Emitter } from './events/emitter'
 import { Selection } from './selection'
 
-function hideMarkedForDestruction (cocooned, items) {
-  items.forEach(item => {
-    const destroy = item.querySelector('input[type=hidden][name$="[_destroy]"]')
-    if (destroy === null) {
-      return
-    }
-    if (destroy.getAttribute('value') !== 'true') {
-      return
-    }
-
-    cocooned.hide(item)
-  })
-}
 
 class Base {
   static defaultOptions () {
@@ -51,13 +38,6 @@ class Base {
 
   start () {
     this.container.classList.add('cocooned-container')
-
-    const hideDestroyed = () => { hideMarkedForDestruction(this, this.selection.items) }
-
-    hideDestroyed()
-    this.container.ownerDocument.addEventListener('page:load', hideDestroyed)
-    this.container.ownerDocument.addEventListener('turbo:load', hideDestroyed)
-    this.container.ownerDocument.addEventListener('turbolinks:load', hideDestroyed)
   }
 
   notify (node, eventType, eventData) {

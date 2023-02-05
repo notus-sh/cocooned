@@ -5,7 +5,7 @@ import { Base } from '@notus.sh/cocooned/src/cocooned/base'
 import { jest } from '@jest/globals'
 import { faker } from '@cocooned/tests/support/faker'
 import { clickEvent } from '@cocooned/tests/support/helpers'
-import { getAddLink, getAddLinks, getRemoveLink } from '@cocooned/tests/support/selectors'
+import {getAddLink, getAddLinks, getItem, getRemoveLink} from '@cocooned/tests/support/selectors'
 
 describe('coreMixin', () => {
   given('extended', () => coreMixin(Base))
@@ -113,6 +113,21 @@ describe('coreMixin', () => {
         getRemoveLink(document).dispatchEvent(clickEvent())
 
         expect(listener).toHaveBeenCalled()
+      })
+    })
+
+    describe('with items marked for destruction', () => {
+      given('html', () => `
+        <div class="cocooned-container">
+          <div class="cocooned-item">
+            <a class="cocooned-remove existing destroyed" href="#">Remove</a>
+            <input type="hidden" name="items[0][_destroy]" value="true" />
+          </div>
+        </div>
+      `)
+
+      it('hides them', () => {
+        expect(getItem(document).classList).toContain('cocooned-item--hidden')
       })
     })
   })
