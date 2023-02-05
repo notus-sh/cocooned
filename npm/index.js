@@ -5,6 +5,10 @@ import { cocoonSupportMixin } from './src/integrations/cocoon'
 
 class Cocooned extends reorderableMixin(limitMixin(cocoonSupportMixin(Base))) {
   static create (container, options = {}) {
+    if ('cocoonedUuid' in container.dataset) {
+      return Cocooned.getInstance(container.dataset.cocoonedUuid)
+    }
+
     const cocooned = new Cocooned(container, options)
     cocooned.start()
 
