@@ -1,4 +1,4 @@
-import { Trigger } from '../trigger'
+import { Trigger } from '../../../trigger'
 import { Extractor } from './add/extractor'
 import { Validator } from './add/validator'
 

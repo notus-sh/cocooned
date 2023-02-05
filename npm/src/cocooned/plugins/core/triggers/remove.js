@@ -1,4 +1,4 @@
-import { Trigger } from '../trigger'
+import { Trigger } from '../../../trigger'
 
 class Remove extends Trigger {
   handle (event) {

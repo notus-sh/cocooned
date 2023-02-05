@@ -1,8 +1,6 @@
 import { Emitter } from './events/emitter'
-import { clickHandler, delegatedClickHandler } from './events/handlers'
 import { Selection } from './selection'
-import { Add } from './triggers/add'
-import { Remove } from './triggers/remove'
+import { coreMixin } from './plugins/core'
 
 function hideMarkedForDestruction (cocooned, items) {
   items.forEach(item => {
@@ -18,7 +16,7 @@ function hideMarkedForDestruction (cocooned, items) {
   })
 }
 
-class Base {
+class Core {
   static defaultOptions () {
     return {}
   }
@@ -65,10 +63,6 @@ class Base {
 
   start () {
     this.container.classList.add('cocooned-container')
-    this.addTriggers = Array.from(this.container.ownerDocument.querySelectorAll(this.selection.selector('triggers.add')))
-      .map(element => Add.create(element, this))
-      .filter(trigger => this.selection.toContainer(trigger.insertionNode) === this.container)
-
     this._bindEvents()
     hideMarkedForDestruction(this, this.selection.items)
   }
@@ -94,25 +88,14 @@ class Base {
   #selection
 
   _bindEvents () {
-    this.addTriggers.forEach(add => add.trigger.addEventListener(
-      'click',
-      clickHandler((e) => add.handle(e))
-    ))
-
-    this.container.addEventListener(
-      'click',
-      delegatedClickHandler(this.selection.selector('triggers.remove'), (e) => {
-        const trigger = new Remove(e.target, this)
-        trigger.handle(e)
-      })
-    )
-
     const hideDestroyed = () => { hideMarkedForDestruction(this, this.selection.items) }
     this.container.ownerDocument.addEventListener('page:load', hideDestroyed)
     this.container.ownerDocument.addEventListener('turbo:load', hideDestroyed)
     this.container.ownerDocument.addEventListener('turbolinks:load', hideDestroyed)
   }
 }
+
+class Base extends coreMixin(Core) {}
 
 export {
   Base
