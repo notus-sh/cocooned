@@ -19,7 +19,7 @@ class Move extends Trigger {
 
   /* Protected and private attributes and methods */
   get _pivotItem () {
-    if (this._sibling !== null && this._cocooned.selection.contains(this._sibling)) {
+    if (this._sibling !== null && this._cocooned.contains(this._sibling)) {
       return this._sibling
     }
     return null

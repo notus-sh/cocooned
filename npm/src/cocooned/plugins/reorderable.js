@@ -28,8 +28,8 @@ const reorderableMixin = (Base) => class extends Base {
       form.addEventListener('submit', e => this._reindexer.reindex(e))
     }
 
-    this.container.addEventListener('click', clickHandler(this.selection.selector('triggers.up'), this, Up))
-    this.container.addEventListener('click', clickHandler(this.selection.selector('triggers.down'), this, Down))
+    this.container.addEventListener('click', clickHandler(this.selector('triggers.up'), this, Up))
+    this.container.addEventListener('click', clickHandler(this.selector('triggers.down'), this, Down))
   }
 
   /* Protected and private attributes and methods */

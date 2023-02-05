@@ -20,16 +20,16 @@ const coreMixin = (Base) => class extends Base {
   start () {
     super.start()
 
-    const hideDestroyed = () => { hideMarkedForDestruction(this, this.selection.items) }
+    const hideDestroyed = () => { hideMarkedForDestruction(this, this.items) }
 
     hideDestroyed()
     this.container.ownerDocument.addEventListener('page:load', hideDestroyed)
     this.container.ownerDocument.addEventListener('turbo:load', hideDestroyed)
     this.container.ownerDocument.addEventListener('turbolinks:load', hideDestroyed)
 
-    this.addTriggers = Array.from(this.container.ownerDocument.querySelectorAll(this.selection.selector('triggers.add')))
+    this.addTriggers = Array.from(this.container.ownerDocument.querySelectorAll(this.selector('triggers.add')))
         .map(element => Add.create(element, this))
-        .filter(trigger => this.selection.toContainer(trigger.insertionNode) === this.container)
+        .filter(trigger => this.toContainer(trigger.insertionNode) === this.container)
 
     this.addTriggers.forEach(add => add.trigger.addEventListener(
         'click',
@@ -38,7 +38,7 @@ const coreMixin = (Base) => class extends Base {
 
     this.container.addEventListener(
         'click',
-        delegatedClickHandler(this.selection.selector('triggers.remove'), (e) => {
+        delegatedClickHandler(this.selector('triggers.remove'), (e) => {
           const trigger = new Remove(e.target, this)
           trigger.handle(e)
         })
