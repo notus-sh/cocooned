@@ -1,4 +1,4 @@
-import { Base } from './base'
+import { Trigger } from '../trigger'
 import { Extractor } from './add/extractor'
 import { Validator } from './add/validator'
 
@@ -8,7 +8,7 @@ function uniqueId () {
   return `${new Date().getTime()}${counter++}`
 }
 
-class Add extends Base {
+class Add extends Trigger {
   static create (trigger, cocooned) {
     const extractor = new Extractor(trigger)
     return new Add(trigger, cocooned, extractor.extract())

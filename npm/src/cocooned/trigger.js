@@ -1,4 +1,4 @@
-class Base {
+class Trigger {
   constructor (trigger, cocooned) {
     this._trigger = trigger
     this._cocooned = cocooned
@@ -42,5 +42,5 @@ class Base {
 }
 
 export {
-  Base
+  Trigger
 }

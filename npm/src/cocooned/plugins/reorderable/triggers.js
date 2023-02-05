@@ -1,6 +1,6 @@
-import { Base } from '../../triggers/base'
+import { Trigger } from '../../trigger'
 
-class Move extends Base {
+class Move extends Trigger {
   handle (event) {
     if (this._pivotItem === null) {
       return
