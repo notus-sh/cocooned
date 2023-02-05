@@ -36,9 +36,9 @@ describe Cocooned::Association::Renderer do
       end
 
       it 'specifies a child_index based on association name' do
-        allow(form).to receive(method).with(any_args, hash_including(child_index: 'new_contact'))
+        allow(form).to receive(method).with(any_args, hash_including(child_index: 'new_contacts'))
         renderer.render
-        expect(form).to have_received(method).with(any_args, hash_including(child_index: 'new_contact'))
+        expect(form).to have_received(method).with(any_args, hash_including(child_index: 'new_contacts'))
       end
 
       context 'with form_options' do

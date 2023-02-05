@@ -34,7 +34,7 @@ module Cocooned
       end
 
       def form_options
-        options.fetch(:form_options, {}).symbolize_keys.reverse_merge(child_index: "new_#{singular_association}")
+        options.fetch(:form_options, {}).symbolize_keys.reverse_merge(child_index: "new_#{association}")
       end
 
       def partial
