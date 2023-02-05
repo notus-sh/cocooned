@@ -149,7 +149,7 @@ class Base {
   __uuid
   _container
   __emitter
-  _options = { transitions: !(process?.env?.NODE_ENV === 'test') }
+  _options = { transitions: !(typeof process !== 'undefined' && process.env.NODE_ENV === 'test') }
 
   get _emitter () {
     if (typeof this.__emitter === 'undefined') {
