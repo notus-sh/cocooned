@@ -23,6 +23,16 @@ describe('Base', () => {
     </div>
   `)
 
+  it('associates itself with the container', () => {
+    expect(given.container.dataset).toEqual(expect.objectContaining({ cocoonedUuid: expect.any(String) }))
+  })
+
+  describe('getInstance', () => {
+    it('finds an instance by its UUID', () => {
+      expect(Base.getInstance(given.container.dataset.cocoonedUuid)).toEqual(given.instance)
+    })
+  })
+
   describe('when created', () => {
     given('styles', () => given.container.firstElementChild)
 

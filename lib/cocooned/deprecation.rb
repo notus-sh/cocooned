@@ -74,7 +74,7 @@ module Cocooned
 
         def association_options
           if options.key? :insertion_traversal
-            Deprecation['3.0'].warn 'Support for the :insertion8traversal will be removed in 3.0', caller_locations(3)
+            Deprecation['3.0'].warn 'Support for the :insertion_traversal will be removed in 3.0', caller_locations(3)
           end
 
           super

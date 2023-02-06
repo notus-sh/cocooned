@@ -1,7 +1,14 @@
 import { Emitter } from './events/emitter'
 
+// Borrowed from <https://stackoverflow.com/a/2117523>
+function uuidv4() {
+  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+      (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+  );
+}
+
 const scopedStyles = `
-  .cocooned-item { overflow: hidden; transition: opacity .45s ease-out, max-height .45s ease-out .45; }
+  .cocooned-item { overflow: hidden; transition: opacity .45s ease-out, max-height .45s ease-out; }
   .cocooned-item--visible { opacity: 1; max-height: 100%; }
   .cocooned-item--hidden { opacity: 0; max-height: 0%; }
 `
@@ -45,6 +52,8 @@ function toggle (item, removedClass, addedClass, useTransitions, callback) {
   }
 }
 
+const instances = Object.create(null)
+
 class Base {
   static get defaultOptions () {
     return {}
@@ -63,8 +72,13 @@ class Base {
     }
   }
 
+  static getInstance(uuid) {
+    return instances[uuid]
+  }
+
   constructor (container, options) {
     this._container = container
+    this._uuid = uuidv4()
     this._options = this.constructor._normalizeOptions({
       ...this._options,
       ...this.constructor.defaultOptions,
@@ -82,6 +96,9 @@ class Base {
   }
 
   start () {
+    this.container.dataset.cocoonedUuid = this._uuid
+    instances[this._uuid] = this
+
     this.container.classList.add('cocooned-container')
     this.container.prepend(createScopedStyles(this.container, this.constructor.scopedStyles))
 
@@ -129,9 +146,10 @@ class Base {
     return options
   }
 
+  __uuid
   _container
   __emitter
-  _options = { transitions: !(process?.env?.NODE_ENV === 'test') }
+  _options = { transitions: !(typeof process !== 'undefined' && process.env.NODE_ENV === 'test') }
 
   get _emitter () {
     if (typeof this.__emitter === 'undefined') {

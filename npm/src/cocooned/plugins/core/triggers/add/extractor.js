@@ -31,7 +31,7 @@ class Extractor {
       return null
     }
 
-    const template = document.querySelector(`template[data-name=${this.#dataset.template}]`)
+    const template = document.querySelector(`template[data-name="${this.#dataset.template}"]`)
     if (template === null) {
       return null
     }
