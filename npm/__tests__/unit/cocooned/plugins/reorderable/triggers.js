@@ -124,6 +124,28 @@ describe('Move', () => {
         })
 
         itBehavesLikeAMoveTrigger()
+
+        describe('when item is persisted', () => {
+          given('template', () => `
+            <div class="cocooned-item">
+              <a class="cocooned-move-up" href="#">Up</a>
+              <a class="cocooned-move-down" href="#">Down</a>
+              <input type="hidden" name="items[0][position]" />
+            </div>
+            <!-- Inserted by Rails-->
+            <input type="hidden" value="" name="items[0][id]" id="items_1_id" />
+          `)
+
+          it('moves item up', () => {
+            given.move.handle(clickEvent())
+
+            const items = getItems(given.container)
+            const item = given.moveTrigger.closest('.cocooned-item')
+            const index = Array.from(items).findIndex(i => i === item)
+
+            expect(index).toEqual(given.index - 1)
+          })
+        })
       })
     })
   })
@@ -153,6 +175,28 @@ describe('Move', () => {
         })
 
         itBehavesLikeAMoveTrigger()
+
+        describe('when item is persisted', () => {
+          given('template', () => `
+            <div class="cocooned-item">
+              <a class="cocooned-move-up" href="#">Up</a>
+              <a class="cocooned-move-down" href="#">Down</a>
+              <input type="hidden" name="items[0][position]" />
+            </div>
+            <!-- Inserted by Rails-->
+            <input type="hidden" value="" name="items[0][id]" id="items_1_id" />
+          `)
+
+          it('moves item down', () => {
+            given.move.handle(clickEvent())
+
+            const items = getItems(given.container)
+            const item = given.moveTrigger.closest('.cocooned-item')
+            const index = Array.from(items).findIndex(i => i === item)
+
+            expect(index).toEqual(given.index + 1)
+          })
+        })
       })
     })
   })

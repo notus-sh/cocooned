@@ -19,25 +19,31 @@ class Move extends Trigger {
 
   /* Protected and private attributes and methods */
   get _pivotItem () {
-    if (this._sibling !== null && this._cocooned.contains(this._sibling)) {
-      return this._sibling
-    }
-    return null
-  }
-
-  get _sibling () {
-    throw new TypeError('_sibling() must be defined in subclasses')
+    throw new TypeError('_pivotItem() must be defined in subclasses')
   }
 
   _move () {
     throw new TypeError('_move() must be defined in subclasses')
   }
+
+  _findPivotItem(origin, method) {
+    let sibling = origin
+
+    do {
+      sibling = sibling[method]
+      if (sibling !== null && this._cocooned.contains(sibling)) {
+        break
+      }
+    } while (sibling !== null)
+
+    return sibling
+  }
 }
 
 class Up extends Move {
   /* Protected and private attributes and methods */
-  get _sibling () {
-    return this._item.previousElementSibling
+  get _pivotItem () {
+    return this._findPivotItem(this._item, 'previousElementSibling')
   }
 
   _move () {
@@ -47,8 +53,8 @@ class Up extends Move {
 
 class Down extends Move {
   /* Protected and private attributes and methods */
-  get _sibling () {
-    return this._item.nextElementSibling
+  get _pivotItem () {
+    return this._findPivotItem(this._item, 'nextElementSibling')
   }
 
   _move () {
