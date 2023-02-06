@@ -1,10 +1,10 @@
 import { Emitter } from './events/emitter'
 
 // Borrowed from <https://stackoverflow.com/a/2117523>
-function uuidv4() {
-  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-      (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-  );
+function uuidv4 () {
+  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+  )
 }
 
 const scopedStyles = `
@@ -72,7 +72,7 @@ class Base {
     }
   }
 
-  static getInstance(uuid) {
+  static getInstance (uuid) {
     return instances[uuid]
   }
 
@@ -117,8 +117,8 @@ class Base {
   /* Selections methods */
   get items () {
     return Array.from(this.container.querySelectorAll(this._selector('item')))
-        .filter(item => this.toContainer(item) === this.container)
-        .filter(item => !item.classList.contains('cocooned-item--hidden'))
+      .filter(item => this.toContainer(item) === this.container)
+      .filter(item => !item.classList.contains('cocooned-item--hidden'))
   }
 
   toContainer (node) {

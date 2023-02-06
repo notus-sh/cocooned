@@ -19,7 +19,7 @@ describe('reorderableMixin', () => {
 
   describe('selectors', () => {
     it('add up trigger selector', () => {
-      expect(given.extended.selectors).toEqual(expect.objectContaining({ 'triggers.up':  ['.cocooned-move-up'] }))
+      expect(given.extended.selectors).toEqual(expect.objectContaining({ 'triggers.up': ['.cocooned-move-up'] }))
     })
 
     it('add down trigger selector', () => {

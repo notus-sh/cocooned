@@ -14,7 +14,7 @@ describe('cocoonSupportMixin', () => {
 
   describe('selectors', () => {
     it('add cocoon item selector', () => {
-      expect(given.extended.selectors['item']).toContain('.nested-fields')
+      expect(given.extended.selectors.item).toContain('.nested-fields')
     })
 
     it('add cocoon add trigger selector', () => {

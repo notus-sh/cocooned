@@ -26,7 +26,7 @@ class Move extends Trigger {
     throw new TypeError('_move() must be defined in subclasses')
   }
 
-  _findPivotItem(origin, method) {
+  _findPivotItem (origin, method) {
     let sibling = origin
 
     do {

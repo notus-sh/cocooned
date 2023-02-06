@@ -5,7 +5,7 @@ const cocoonSupportMixin = (Base) => class extends Base {
 
   static get selectors () {
     const selectors = super.selectors
-    selectors['item'].push('.nested-fields')
+    selectors.item.push('.nested-fields')
     selectors['triggers.add'].push('.add_fields')
     selectors['triggers.remove'].push('.remove_fields')
 
@@ -14,8 +14,8 @@ const cocoonSupportMixin = (Base) => class extends Base {
 }
 
 const findInsertionNode = function (trigger) {
-  const insertionNode = trigger.data('association-insertion-node');
-  const insertionTraversal = trigger.data('association-insertion-traversal');
+  const insertionNode = trigger.data('association-insertion-node')
+  const insertionTraversal = trigger.data('association-insertion-traversal')
 
   if (!insertionNode) return trigger.parent()
   if (typeof insertionNode === 'function') return insertionNode(trigger)

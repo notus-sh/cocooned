@@ -20,7 +20,7 @@ describe('jQueryPluginMixin', () => {
     afterEach(() => jest.restoreAllMocks())
 
     given('mock', () => jest.fn())
-    given('html', () => `<section></section><section></section>`)
+    given('html', () => '<section></section><section></section>')
 
     it('create a Cocooned instance', () => {
       jQuery('section:first').cocooned()
