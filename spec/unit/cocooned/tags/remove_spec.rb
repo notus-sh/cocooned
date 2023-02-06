@@ -53,6 +53,10 @@ describe Cocooned::Tags::Remove, :tag do
     expect(tag(class: %i[one two]).attribute('class').value.split).to include('one', 'two', 'cocooned-remove')
   end
 
+  it 'has a data attribute to identify it as a trigger' do
+    expect(tag.attribute('data-cocooned-trigger').value).to eq('remove')
+  end
+
   it 'outputs an input field' do
     expect(html.at('input')).not_to be_nil
   end

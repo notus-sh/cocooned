@@ -22,6 +22,10 @@ module Cocooned
         end
       end
 
+      def html_data
+        super.merge(cocooned_trigger: :remove)
+      end
+
       def new_record?
         !!form.object.try(:new_record?)
       end

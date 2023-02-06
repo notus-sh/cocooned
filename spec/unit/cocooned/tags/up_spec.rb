@@ -17,4 +17,8 @@ describe Cocooned::Tags::Up, :tag do
   it 'supports more classes' do
     expect(tag(class: %i[one two]).attribute('class').value.split).to include('one', 'two', 'cocooned-move-up')
   end
+
+  it 'has a data attribute to identify it as a trigger' do
+    expect(tag.attribute('data-cocooned-trigger').value).to eq('up')
+  end
 end

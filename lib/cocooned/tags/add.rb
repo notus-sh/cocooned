@@ -53,7 +53,7 @@ module Cocooned
       end
 
       def html_data
-        super.merge(association_options)
+        super.merge(association_options, cocooned_trigger: :add)
       end
     end
   end

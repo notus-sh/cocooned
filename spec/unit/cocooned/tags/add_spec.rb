@@ -30,6 +30,10 @@ describe Cocooned::Tags::Add, :tag do
     expect(tag(class: %i[one two]).attribute('class').value.split).to include('one', 'two', 'cocooned-add')
   end
 
+  it 'has a data attribute to identify it as a trigger' do
+    expect(tag.attribute('data-cocooned-trigger').value).to eq('add')
+  end
+
   it 'has a data attribute for association' do
     expect(tag.attribute('data-association').value).to eq(association.to_s)
   end
