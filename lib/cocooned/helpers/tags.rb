@@ -2,7 +2,7 @@
 
 module Cocooned
   module Helpers
-    # Cocooned helpers output action link to interact with a dynamic nested form.
+    # Cocooned tags helpers output action link to interact with a dynamic nested form.
     #
     # Each action has its dedicated helper:
     #

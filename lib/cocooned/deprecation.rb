@@ -20,7 +20,7 @@ module Cocooned
   # Deprecated methods
   module Deprecated # :nodoc:
     module Helpers # :nodoc:
-      module Tags
+      module Tags # :nodoc:
         # @deprecated: Please use {#cocooned_add_item_link} instead
         def link_to_add_association(*args, &block)
           cocooned_add_item_link(*args, &block)
