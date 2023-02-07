@@ -18,7 +18,6 @@ module Cocooned
       def html_classes
         (super + %w[cocooned-remove remove_fields]).tap do |classes|
           classes << (new_record? ? :dynamic : :existing)
-          classes << :destroyed if marked_for_destruction?
         end
       end
 

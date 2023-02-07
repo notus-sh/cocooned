@@ -39,16 +39,6 @@ describe Cocooned::Tags::Remove, :tag do
     expect(tag.attribute('class').value.split).to include('existing')
   end
 
-  it 'does not have a .destroyed class for alive record' do
-    allow(record).to receive(:marked_for_destruction?).and_return(false)
-    expect(tag.attribute('class').value.split).not_to include('destroyed')
-  end
-
-  it 'has a .destroyed class for record marked for destruction' do
-    allow(record).to receive(:marked_for_destruction?).and_return(true)
-    expect(tag.attribute('class').value.split).to include('destroyed')
-  end
-
   it 'supports more classes' do
     expect(tag(class: %i[one two]).attribute('class').value.split).to include('one', 'two', 'cocooned-remove')
   end
