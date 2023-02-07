@@ -47,7 +47,7 @@ describe('Base', () => {
     given('html', () => `
       <div data-cocooned-container>
         <div data-cocooned-item>
-          <a data-cocooned-trigger="remove" class="existing destroyed" href="#">Remove</a>
+          <a data-cocooned-trigger="remove" data-cocooned-persisted="true" href="#">Remove</a>
           <input type="hidden" name="items[0][_destroy]" value="true" />
         </div>
       </div>

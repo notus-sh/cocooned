@@ -18,12 +18,12 @@ const getAddLink = function (container, item = 0) {
   return getAddLinks(container).item(item)
 }
 
-const getRemoveLinks = function (container, selector = '') {
-  return container.querySelectorAll(`[data-cocooned-trigger="remove"]${selector}`)
+const getRemoveLinks = function (container) {
+  return container.querySelectorAll('[data-cocooned-trigger="remove"]')
 }
 
-const getRemoveLink = function (container, selector = '', item = 0) {
-  return getRemoveLinks(container, selector).item(item)
+const getRemoveLink = function (container, item = 0) {
+  return getRemoveLinks(container).item(item)
 }
 
 const getMoveUpLinks = function (container) {

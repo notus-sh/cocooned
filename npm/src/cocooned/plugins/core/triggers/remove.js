@@ -27,12 +27,18 @@ class Remove extends Trigger {
   }
 
   _remove () {
-    this._trigger.matches('.dynamic') ? this._item.remove() : this._markForDestruction()
+    this._removable() ? this._item.remove() : this._markForDestruction()
+  }
+
+  _removable () {
+    return this._trigger.matches('.dynamic') ||
+      ('cocoonedPersisted' in this._trigger.dataset && this._trigger.dataset.cocoonedPersisted === 'false')
   }
 
   _markForDestruction () {
-    this._item.querySelectorAll('input[required], select[required]').forEach(input => input.removeAttribute('required'))
     this._item.querySelector('input[type=hidden][name$="[_destroy]"]').setAttribute('value', 'true')
+    this._item.querySelectorAll('input[required], select[required]')
+      .forEach(input => input.removeAttribute('required'))
   }
 }
 

@@ -64,7 +64,7 @@ describe('A basic Cocooned setup', () => {
   describe('with items including a remove link', () => {
     given('template', () => `
       <div data-cocooned-item>
-        <a data-cocooned-trigger="remove" class="dynamic" href="#">Remove</a>
+        <a data-cocooned-trigger="remove" data-cocooned-persisted="false" href="#">Remove</a>
       </div>
     `)
 
@@ -106,7 +106,7 @@ describe('A basic Cocooned setup', () => {
       given('existing', () => `
         <div data-cocooned-item>
           <input type="hidden" name="list[items_attributes][0][_destroy]" value="true" />
-          <a data-cocooned-trigger="remove" class="existing destroyed" href="#">Remove</a>
+          <a data-cocooned-trigger="remove" data-cocooned-persisted="true" href="#">Remove</a>
         </div>
       `)
       given('item', () => document.querySelector('.cocooned-item'))

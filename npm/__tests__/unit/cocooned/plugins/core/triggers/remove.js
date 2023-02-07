@@ -18,7 +18,7 @@ describe('Remove', () => {
   given('html', () => `
     <div data-cocooned-container>
       <div data-cocooned-item>
-        <a data-cocooned-trigger="remove" class="dynamic" href="#">Remove</a>
+        <a data-cocooned-trigger="remove" data-cocooned-persisted="false" href="#">Remove</a>
       </div>
     </div>
   `)
@@ -75,7 +75,7 @@ describe('Remove', () => {
         <div data-cocooned-container>
           <div data-cocooned-item>
             <input type="hidden" name="items[0][_destroy]" required />
-            <a data-cocooned-trigger="remove" class="existing" href="#">Remove</a>
+            <a data-cocooned-trigger="remove" data-cocooned-persisted="true" href="#">Remove</a>
           </div>
         </div>
       `)

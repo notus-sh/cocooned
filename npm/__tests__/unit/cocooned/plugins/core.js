@@ -111,7 +111,7 @@ describe('coreMixin', () => {
       given('count', () => faker.datatype.number({ min: 1, max: 5 }))
       given('template', () => `
         <div data-cocooned-item>
-          <a data-cocooned-trigger="remove" class="dynamic" href="#">Remove</a>
+          <a data-cocooned-trigger="remove" data-cocooned-persisted="false" href="#">Remove</a>
         </div>
       `)
       given('html', () => `

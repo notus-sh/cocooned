@@ -16,17 +16,15 @@ module Cocooned
       end
 
       def html_classes
-        (super + %w[cocooned-remove remove_fields]).tap do |classes|
-          classes << (new_record? ? :dynamic : :existing)
-        end
+        super + %w[cocooned-remove remove_fields]
       end
 
       def html_data
-        super.merge(cocooned_trigger: :remove)
+        super.merge(cocooned_trigger: :remove, cocooned_persisted: persisted?)
       end
 
-      def new_record?
-        !!form.object.try(:new_record?)
+      def persisted?
+        !!form.object.try(:persisted?)
       end
 
       def marked_for_destruction?
