@@ -3,8 +3,7 @@
 import Cocooned from '@notus.sh/cocooned'
 import { jest } from '@jest/globals'
 import { faker } from '@cocooned/tests/support/faker'
-import { clickEvent } from '@cocooned/tests/support/helpers'
-import { getItems, getAddLink } from '@cocooned/tests/support/selectors'
+import { clickEvent, getItems, getAddLink } from '@cocooned/tests/support/helpers'
 
 describe('A Cocooned setup with options for the limit plugin', () => {
   beforeEach(() => {
@@ -15,16 +14,16 @@ describe('A Cocooned setup with options for the limit plugin', () => {
   })
 
   given('html', () => `
-    <section>
+    <section data-cocooned-container>
       <div>
-        <a class="cocooned-add" href="#"
+        <a data-cocooned-trigger="add" href="#"
            data-association="items"
            data-template="template">Add</a>
         <template data-name="template">${given.template}</template>
       </div>
     </section>
   `)
-  given('template', () => '<div class="cocooned-item"></div>')
+  given('template', () => '<div data-cocooned-item></div>')
   given('container', () => document.querySelector('section'))
   given('limit', () => faker.datatype.number({ min: 2, max: 5 }))
   given('addLink', () => getAddLink(given.container))

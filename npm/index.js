@@ -16,7 +16,8 @@ class Cocooned extends reorderableMixin(limitMixin(cocoonSupportMixin(Base))) {
   }
 
   static start () {
-    document.querySelectorAll('*[data-cocooned-options]').forEach(element => Cocooned.create(element))
+    document.querySelectorAll('[data-cocooned-container], [data-cocooned-options]')
+      .forEach(element => Cocooned.create(element))
   }
 }
 

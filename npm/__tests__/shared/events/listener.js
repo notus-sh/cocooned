@@ -1,6 +1,6 @@
-/* global given, jQuery */
 /* eslint jest/no-export: "off" -- This is a shared examples */
 
+import { Base as Cocooned } from '@notus.sh/cocooned/src/cocooned/base'
 import { jest } from '@jest/globals'
 
 export default ({ listen, dispatch, args = new Set(['link', 'node', 'cocooned']) }) => {
@@ -23,7 +23,7 @@ export default ({ listen, dispatch, args = new Set(['link', 'node', 'cocooned'])
         return new Promise(resolve => {
           const listener = jest.fn(e => {
             expect(e).toHaveProperty('detail.link')
-            expect(e.detail.link).toBeInstanceOf(jQuery)
+            expect(e.detail.link).toBeInstanceOf(HTMLAnchorElement)
             resolve()
           })
 
@@ -38,7 +38,7 @@ export default ({ listen, dispatch, args = new Set(['link', 'node', 'cocooned'])
         return new Promise(resolve => {
           const listener = jest.fn(e => {
             expect(e).toHaveProperty('detail.node')
-            expect(e.detail.node).toBeInstanceOf(jQuery)
+            expect(e.detail.node.dataset).toHaveProperty('cocoonedItem')
             resolve()
           })
 
@@ -53,7 +53,8 @@ export default ({ listen, dispatch, args = new Set(['link', 'node', 'cocooned'])
         return new Promise(resolve => {
           const listener = jest.fn(e => {
             expect(e).toHaveProperty('detail.nodes')
-            expect(e.detail.nodes).toBeInstanceOf(jQuery)
+
+            e.detail.nodes.forEach(node => expect(node.dataset).toHaveProperty('cocoonedItem'))
             resolve()
           })
 
@@ -68,7 +69,7 @@ export default ({ listen, dispatch, args = new Set(['link', 'node', 'cocooned'])
         return new Promise(resolve => {
           const listener = jest.fn(e => {
             expect(e).toHaveProperty('detail.cocooned')
-            expect(e.detail.cocooned).toBe(given.cocooned)
+            expect(e.detail.cocooned).toBeInstanceOf(Cocooned)
             resolve()
           })
 

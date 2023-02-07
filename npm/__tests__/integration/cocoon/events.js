@@ -2,33 +2,34 @@
 
 import Cocooned from '@notus.sh/cocooned'
 import { jest } from '@jest/globals'
-import { setup, clickEvent } from '@cocooned/tests/support/helpers'
-import { getAddLink, getRemoveLink } from '@cocooned/tests/support/selectors'
+import { clickEvent, getAddLink, getRemoveLink } from '@cocooned/tests/support/helpers'
 
 describe('A Cocoon setup using Cocoon events', () => {
-  given('template', () => `
+  beforeEach(() => {
+    document.body.innerHTML = given.html
+    given.cocooned.start()
+  })
+
+  given('html', () => `
     <section>
-      ${given.existing}
+      ${given.template}
 
       <div>
-        <a class="cocooned-add" href="#"
+        <a data-cocooned-trigger="add" href="#"
            data-association="items"
            data-template="template">Add</a>
-        <template data-name="template">${given.insertionTemplate}</template>
+        <template data-name="template">${given.template}</template>
       </div>
     </section>
   `)
-  given('insertionTemplate', () => `
-    <div class="cocooned-item">
-      <a class="cocooned-remove dynamic" href="#">Remove</a>
+  given('template', () => `
+    <div data-cocooned-item>
+      <a data-cocooned-trigger="remove" class="dynamic" href="#">Remove</a>
     </div>
   `)
-  given('existing', () => given.insertionTemplate)
   given('container', () => document.querySelector('section'))
   given('cocooned', () => new Cocooned(given.container))
   given('addLink', () => getAddLink(given.container))
-
-  beforeEach(() => setup(document, given))
 
   describe('when add link is clicked', () => {
     it('fires a before-insert event', () => {

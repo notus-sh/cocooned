@@ -15,7 +15,7 @@ describe('A Cocoon setup using Cocoon classes', () => {
       ${given.template}
 
       <div>
-        <a class="add_fields" href="#"
+        <a class="cocooned-add" href="#"
            data-association="items"
            data-template="template">Add</a>
         <template data-name="template">${given.template}</template>
@@ -23,13 +23,13 @@ describe('A Cocoon setup using Cocoon classes', () => {
     </section>
   `)
   given('template', () => `
-    <div class="nested-fields">
-      <a class="remove_fields dynamic" href="#">Remove</a>
+    <div class="cocooned-item">
+      <a class="cocooned-remove dynamic" href="#">Remove</a>
     </div>
   `)
   given('container', () => document.querySelector('section'))
   given('cocooned', () => new Cocooned(given.container))
-  given('addLink', () => given.container.querySelector('.add_fields'))
+  given('addLink', () => given.container.querySelector('.cocooned-add'))
 
   describe('when add link is clicked', () => {
     it('fires a before-insert event', () => {
@@ -45,7 +45,7 @@ describe('A Cocoon setup using Cocoon classes', () => {
     beforeEach(() => given.addLink.dispatchEvent(clickEvent()))
 
     describe('when remove link is clicked', () => {
-      given('removeLink', () => given.container.querySelector('.remove_fields'))
+      given('removeLink', () => given.container.querySelector('.cocooned-remove'))
 
       it('fires a before-remove event', () => {
         const listener = jest.fn()

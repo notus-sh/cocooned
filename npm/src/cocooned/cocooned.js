@@ -10,7 +10,8 @@ class Cocooned extends coreMixin(Base) {
   }
 
   static start () {
-    document.querySelectorAll('*[data-cocooned-options]').forEach(element => this.constructor.create(element))
+    document.querySelectorAll('[data-cocooned-container], [data-cocooned-options]')
+      .forEach(element => this.constructor.create(element))
   }
 }
 

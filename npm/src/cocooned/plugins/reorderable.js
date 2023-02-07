@@ -15,7 +15,11 @@ const reorderableMixin = (Base) => class extends Base {
   }
 
   static get selectors () {
-    return { ...super.selectors, 'triggers.up': ['.cocooned-move-up'], 'triggers.down': ['.cocooned-move-down'] }
+    return {
+      ...super.selectors,
+      'triggers.up': ['[data-cocooned-trigger="up"]', '.cocooned-move-up'],
+      'triggers.down': ['[data-cocooned-trigger="down"]', '.cocooned-move-down']
+    }
   }
 
   start () {

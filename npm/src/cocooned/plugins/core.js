@@ -4,7 +4,11 @@ import { clickHandler, delegatedClickHandler } from '../events/handlers'
 
 const coreMixin = (Base) => class extends Base {
   static get selectors () {
-    return { ...super.selectors, 'triggers.add': ['.cocooned-add'], 'triggers.remove': ['.cocooned-remove'] }
+    return {
+      ...super.selectors,
+      'triggers.add': ['[data-cocooned-trigger="add"]', '.cocooned-add'],
+      'triggers.remove': ['[data-cocooned-trigger="remove"]', '.cocooned-remove']
+    }
   }
 
   start () {

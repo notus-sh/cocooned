@@ -67,8 +67,8 @@ class Base {
 
   static get selectors () {
     return {
-      container: ['.cocooned-container'],
-      item: ['.cocooned-item']
+      container: ['[data-cocooned-container]', '.cocooned-container'],
+      item: ['[data-cocooned-item]', '.cocooned-item']
     }
   }
 
@@ -96,6 +96,7 @@ class Base {
   }
 
   start () {
+    this.container.dataset.cocoonedContainer = true
     this.container.dataset.cocoonedUuid = this._uuid
     instances[this._uuid] = this
 

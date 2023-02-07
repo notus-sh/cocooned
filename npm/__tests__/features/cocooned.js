@@ -2,8 +2,7 @@
 
 import Cocooned from '@notus.sh/cocooned'
 import { jest } from '@jest/globals'
-import { clickEvent } from '@cocooned/tests/support/helpers'
-import { getItem, getItems, getAddLink, getRemoveLink } from '@cocooned/tests/support/selectors'
+import { clickEvent, getItem, getItems, getAddLink, getRemoveLink } from '@cocooned/tests/support/helpers'
 
 describe('A basic Cocooned setup', () => {
   beforeEach(() => {
@@ -13,15 +12,15 @@ describe('A basic Cocooned setup', () => {
     cocooned.start()
   })
 
-  given('template', () => '<div class="cocooned-item"></div>')
+  given('template', () => '<div data-cocooned-item></div>')
   given('existing', () => given.template)
   given('container', () => document.querySelector('section'))
   given('html', () => `
-    <section>
+    <section data-cocooned-container>
       ${given.existing}
 
       <div>
-        <a class="cocooned-add" href="#"
+        <a data-cocooned-trigger="add" href="#"
            data-association="items"
            data-template="template">Add</a>
         <template data-name="template">${given.template}</template>
@@ -33,8 +32,8 @@ describe('A basic Cocooned setup', () => {
     expect(getItems(given.container).length).toEqual(1)
   })
 
-  it('add a class to container', () => {
-    expect(given.container.classList).toContain('cocooned-container')
+  it('associates a Cocooned instances to the container', () => {
+    expect(given.container.dataset).toHaveProperty('cocoonedUuid')
   })
 
   describe('when add link is clicked', () => {
@@ -64,8 +63,8 @@ describe('A basic Cocooned setup', () => {
 
   describe('with items including a remove link', () => {
     given('template', () => `
-      <div class="cocooned-item">
-        <a class="cocooned-remove dynamic" href="#">Remove</a>
+      <div data-cocooned-item>
+        <a data-cocooned-trigger="remove" class="dynamic" href="#">Remove</a>
       </div>
     `)
 
@@ -105,9 +104,9 @@ describe('A basic Cocooned setup', () => {
 
     describe('with existing items marked for destruction', () => {
       given('existing', () => `
-        <div class="cocooned-item">
+        <div data-cocooned-item>
           <input type="hidden" name="list[items_attributes][0][_destroy]" value="true" />
-          <a class="cocooned-remove existing destroyed" href="#">Remove</a>
+          <a data-cocooned-trigger="remove" class="existing destroyed" href="#">Remove</a>
         </div>
       `)
       given('item', () => document.querySelector('.cocooned-item'))

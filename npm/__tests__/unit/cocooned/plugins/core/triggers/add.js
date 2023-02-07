@@ -5,10 +5,9 @@ import { Builder } from '@notus.sh/cocooned/src/cocooned/plugins/core/triggers/a
 import { Add } from '@notus.sh/cocooned/src/cocooned/plugins/core/triggers/add'
 import { jest } from '@jest/globals'
 import { faker } from '@cocooned/tests/support/faker'
-import { clickEvent } from '@cocooned/tests/support/helpers'
-import { getItems, getAddLink } from '@cocooned/tests/support/selectors'
+import { clickEvent, getItems, getAddLink } from '@cocooned/tests/support/helpers'
 
-import itBehavesLikeAnEventListener from '@cocooned/tests/shared/events/customListener'
+import itBehavesLikeAnEventListener from '@cocooned/tests/shared/events/listener'
 import itBehavesLikeACancellableEvent from '@cocooned/tests/shared/events/cancelable'
 
 describe('Add', () => {
@@ -16,18 +15,18 @@ describe('Add', () => {
 
   given('add', () => new Add(given.addTrigger, new Cocooned(given.container), given.options))
   given('addTrigger', () => getAddLink(given.container))
-  given('container', () => document.querySelector('.cocooned-container'))
+  given('container', () => document.querySelector('[data-cocooned-container]'))
   given('builder', () => {
     const template = document.querySelector('template[data-name="template"]')
     return new Builder(template.content, 'new_item')
   })
   given('options', () => ({ builder: given.builder, node: given.addTrigger.parentElement, method: 'before' }))
 
-  given('template', () => '<div class="cocooned-item"></div>')
+  given('template', () => '<div data-cocooned-item></div>')
   given('html', () => `
-    <div class="cocooned-container">
+    <div data-cocooned-container>
       <div>
-        <a class="cocooned-add" href="#">Add</a>
+        <a data-cocooned-trigger="add" href="#">Add</a>
       </div>
     </div>
     <template data-name="template">${given.template}</template>
@@ -162,9 +161,9 @@ describe('Add', () => {
 
       given('node', () => given.container.querySelector('.node'))
       given('html', () => `
-        <div class="cocooned-container">
+        <div data-cocooned-container>
           <div class="node"></div>
-          <a class="cocooned-add" href="#">Add</a>
+          <a data-cocooned-trigger="add" href="#">Add</a>
         </div>
         <template data-name="template">${given.template}</template>
       `)
@@ -192,7 +191,7 @@ describe('Add', () => {
         given('options', () => ({ builder: given.builder, node: given.node, method }))
 
         it('insert new item at the right place', () => {
-          expect(finder(given.node).classList).toContain('cocooned-item')
+          expect(finder(given.node).dataset).toHaveProperty('cocoonedItem')
         })
       })
 
@@ -204,7 +203,7 @@ describe('Add', () => {
         })
 
         it('inserts an item', () => {
-          expect(given.container.firstElementChild.classList).toContain('cocooned-item')
+          expect(given.container.firstElementChild.dataset).toHaveProperty('cocoonedItem')
         })
       })
     })

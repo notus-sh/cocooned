@@ -7,7 +7,7 @@ import { clickEvent } from '@cocooned/tests/support/helpers'
 describe('handlers', () => {
   beforeEach(() => { document.body.innerHTML = given.html })
 
-  given('html', () => '<section><a class="trigger" href="#">Trigger</a></section>')
+  given('html', () => '<section><a data-trigger class="trigger" href="#">Trigger</a></section>')
   given('container', () => document.querySelector('section'))
   given('trigger', () => document.querySelector('a'))
 
@@ -29,6 +29,14 @@ describe('handlers', () => {
     it('set up event delegations', () => {
       const listener = jest.fn()
       given.container.addEventListener('click', delegatedClickHandler('.trigger', listener))
+      given.trigger.dispatchEvent(clickEvent())
+
+      expect(listener).toHaveBeenCalled()
+    })
+
+    it('accepts attribute selector', () => {
+      const listener = jest.fn()
+      given.container.addEventListener('click', delegatedClickHandler('*[data-trigger]', listener))
       given.trigger.dispatchEvent(clickEvent())
 
       expect(listener).toHaveBeenCalled()

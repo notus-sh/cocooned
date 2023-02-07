@@ -17,13 +17,13 @@
   </div>
 
   <h3>Items</h3>
-  <div class="nested-form" data-cocooned-options="<%= { reorderable: true, limit: 5 }.to_json %>">
+  <%= cocooned_container(reorderable: true, limit: 5) do %>
     <%= form.fields_for :items do |item_form| %>
       <%= render 'lists/form/item', :f => item_form %>
     <% end %>
 
     <div><%= cocooned_add_item_link 'Add item', form, :items, partial: 'lists/form/item' %></div>
-  </div>
+  <% end %>
 
   <div class="actions">
     <%= form.submit %>

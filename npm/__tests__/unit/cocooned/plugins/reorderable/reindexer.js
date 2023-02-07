@@ -4,27 +4,30 @@ import { Reindexer } from '@notus.sh/cocooned/src/cocooned/plugins/reorderable/r
 import { Base as Cocooned } from '@notus.sh/cocooned/src/cocooned/base'
 import { jest } from '@jest/globals'
 import { faker } from '@cocooned/tests/support/faker'
-import { asInt, clickEvent } from '@cocooned/tests/support/helpers'
-import { getItems } from '@cocooned/tests/support/selectors'
+import { clickEvent, getItems } from '@cocooned/tests/support/helpers'
 
-import itBehavesLikeAnEventListener from '@cocooned/tests/shared/events/customListener'
+import itBehavesLikeAnEventListener from '@cocooned/tests/shared/events/listener'
 import itBehavesLikeACancellableEvent from '@cocooned/tests/shared/events/cancelable'
+
+function asInt (value) {
+  return parseInt(value, 10)
+}
 
 describe('Reindexer', () => {
   beforeEach(() => { document.body.innerHTML = given.html })
 
   given('reindexer', () => new Reindexer(given.cocooned))
   given('cocooned', () => new Cocooned(given.container))
-  given('container', () => document.querySelector('.cocooned-container'))
+  given('container', () => document.querySelector('[data-cocooned-container]'))
   given('count', () => faker.datatype.number({ min: 2, max: 5 }))
   given('item', () => faker.helpers.arrayElement(Array.from(getItems(given.container))))
   given('template', () => `
-    <div class="cocooned-item">
+    <div data-cocooned-item>
       <input type="hidden" name="items[0][position]" />
     </div>
   `)
   given('html', () => `
-    <div class="cocooned-container">
+    <div data-cocooned-container>
       ${Array.from(Array(given.count), () => given.template).join('')}
     </div>
   `)

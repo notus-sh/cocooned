@@ -5,7 +5,7 @@ import { Builder } from '@notus.sh/cocooned/src/cocooned/plugins/core/triggers/a
 import { deprecator } from '@notus.sh/cocooned/src/cocooned/deprecation'
 import { jest } from '@jest/globals'
 import { faker } from '@cocooned/tests/support/faker'
-import { getAddLink } from '@cocooned/tests/support/selectors'
+import { getAddLink } from '@cocooned/tests/support/helpers'
 
 describe('Extractor', () => {
   beforeEach(() => { document.body.innerHTML = given.html })
@@ -13,7 +13,7 @@ describe('Extractor', () => {
   given('extractor', () => new Extractor(given.addTrigger))
   given('addTrigger', () => getAddLink(document))
   given('html', () => `
-    <a class="cocooned-add" href="#">Add</a>
+    <a data-cocooned-trigger="add" href="#">Add</a>
   `)
 
   describe('extract', () => {
@@ -26,7 +26,7 @@ describe('Extractor', () => {
     describe('with data-count', () => {
       given('count', () => faker.datatype.number({ min: 2, max: 5 }))
       given('html', () => `
-        <a class="cocooned-add"
+        <a data-cocooned-trigger="add"
            data-count="${given.count}"
            href="#">Add</a>
       `)
@@ -39,7 +39,7 @@ describe('Extractor', () => {
     describe('with data-association-insertion-count', () => {
       given('count', () => faker.datatype.number({ min: 2, max: 5 }))
       given('html', () => `
-        <a class="cocooned-add"
+        <a data-cocooned-trigger="add"
            data-association-insertion-count="${given.count}"
            href="#">Add</a>
       `)
@@ -52,7 +52,7 @@ describe('Extractor', () => {
     describe('with data-association and data-template', () => {
       given('template', () => '<p>Template content</p>')
       given('html', () => `
-        <a class="cocooned-add"
+        <a data-cocooned-trigger="add"
            data-association="item"
            data-template="template"
            href="#">Add</a>
@@ -76,7 +76,7 @@ describe('Extractor', () => {
     describe('with data-association-insertion-method', () => {
       given('method', () => 'any')
       given('html', () => `
-        <a class="cocooned-add"
+        <a data-cocooned-trigger="add"
            data-association-insertion-method="${given.method}"
            href="#">Add</a>
       `)
@@ -92,7 +92,7 @@ describe('Extractor', () => {
       describe('when missing', () => {
         given('html', () => `
           <div class="node">
-            <a class="cocooned-add" href="#">Add</a>
+            <a data-cocooned-trigger="add" href="#">Add</a>
           </div>
         `)
 
@@ -103,7 +103,7 @@ describe('Extractor', () => {
 
       describe('when "this"', () => {
         given('html', () => `
-          <a class="cocooned-add"
+          <a data-cocooned-trigger="add"
              data-association-insertion-node="this"
              href="#">Add</a>
         `)
@@ -116,7 +116,7 @@ describe('Extractor', () => {
       describe('when expressed as a selector', () => {
         given('html', () => `
           <div class="node"></div>
-          <a class="cocooned-add"
+          <a data-cocooned-trigger="add"
              data-association-insertion-node=".node"
              href="#">Add</a>
         `)
@@ -132,7 +132,7 @@ describe('Extractor', () => {
           given('deprecator', () => deprecator('3.0'))
           given('html', () => `
             <div class="node"></div>
-            <a class="cocooned-add"
+            <a data-cocooned-trigger="add"
                data-association-insertion-node=".node"
                data-association-insertion-traversal="prev"
                href="#">Add</a>

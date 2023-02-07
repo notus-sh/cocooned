@@ -9,7 +9,7 @@ describe Cocooned::Tags::Add, :tag do
   let(:builders) { Cocooned::Association::Builder }
   let(:renderers) { Cocooned::Association::Renderer }
 
-  let(:item) { '<div class="cocooned-item"></div>'.html_safe }
+  let(:item) { '<div data-cocooned-item></div>'.html_safe }
   let(:template) { ActionView::Base.empty }
   let(:association) { :contacts }
   let(:record) { Person.new }
