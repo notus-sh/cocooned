@@ -9,7 +9,7 @@ describe Cocooned::Tags::Add, :tag do
   let(:builders) { Cocooned::Association::Builder }
   let(:renderers) { Cocooned::Association::Renderer }
 
-  let(:item) { '<div class="cocooned-item"></div>'.html_safe }
+  let(:item) { '<div data-cocooned-item></div>'.html_safe }
   let(:template) { ActionView::Base.empty }
   let(:association) { :contacts }
   let(:record) { Person.new }
@@ -28,6 +28,10 @@ describe Cocooned::Tags::Add, :tag do
 
   it 'supports more classes' do
     expect(tag(class: %i[one two]).attribute('class').value.split).to include('one', 'two', 'cocooned-add')
+  end
+
+  it 'has a data attribute to identify it as a trigger' do
+    expect(tag.attribute('data-cocooned-trigger').value).to eq('add')
   end
 
   it 'has a data attribute for association' do

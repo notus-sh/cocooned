@@ -3,8 +3,7 @@
 import Cocooned from '@notus.sh/cocooned'
 import { jest } from '@jest/globals'
 import { faker } from '@cocooned/tests/support/faker'
-import { clickEvent } from '@cocooned/tests/support/helpers'
-import { getMoveUpLink, getMoveDownLink } from '@cocooned/tests/support/selectors'
+import { clickEvent, getMoveUpLink, getMoveDownLink } from '@cocooned/tests/support/helpers'
 
 describe('A Cocooned setup with options for the reorderable plugin', () => {
   beforeEach(() => {
@@ -18,17 +17,17 @@ describe('A Cocooned setup with options for the reorderable plugin', () => {
   given('count', () => faker.datatype.number({ min: 3, max: 8 }))
   given('index', () => faker.datatype.number({ min: 1, max: given.count - 2 }))
   given('template', () => `
-    <div class="cocooned-item">
-      <a class="cocooned-move-up" href="#">Up</a>
-      <a class="cocooned-move-down" href="#">Down</a>
+    <div data-cocooned-item>
+      <a data-cocooned-trigger="up" href="#">Up</a>
+      <a data-cocooned-trigger="down" href="#">Down</a>
       <input type="hidden" name="list[items_attributes][new_items][position]" value="0" />
     </div>
   `)
   given('html', () => `
-    <section>
+    <section data-cocooned-container>
       ${Array.from(Array(given.count), () => given.template).join('\n')}
       <div>
-        <a class="cocooned-add" href="#"
+        <a data-cocooned-trigger="add" href="#"
            data-association="items"
            data-template="template">Add</a>
         <template data-name="template">${given.template}</template>

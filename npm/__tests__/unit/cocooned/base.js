@@ -3,7 +3,7 @@
 import { Base } from '@notus.sh/cocooned/src/cocooned/base'
 import { jest } from '@jest/globals'
 import { faker } from '@cocooned/tests/support/faker'
-import { getItem } from '@cocooned/tests/support/selectors'
+import { getItem } from '@cocooned/tests/support/helpers'
 
 describe('Base', () => {
   beforeEach(() => {
@@ -12,13 +12,11 @@ describe('Base', () => {
   })
 
   given('instance', () => new Base(given.container, { transitions: true }))
-  given('container', () => document.querySelector('.cocooned-container'))
+  given('container', () => document.querySelector('[data-cocooned-container]'))
   given('count', () => faker.datatype.number({ min: 1, max: 5 }))
-  given('items', () => Array.from(Array(given.count), () => `
-    <div class="cocooned-item"></div>
-  `))
+  given('items', () => Array.from(Array(given.count), () => '<div data-cocooned-item></div>'))
   given('html', () => `
-    <div class="cocooned-container">
+    <div data-cocooned-container>
       ${given.items.join('')}
     </div>
   `)
@@ -47,9 +45,9 @@ describe('Base', () => {
 
   describe('with items marked for destruction', () => {
     given('html', () => `
-      <div class="cocooned-container">
-        <div class="cocooned-item">
-          <a class="cocooned-remove existing destroyed" href="#">Remove</a>
+      <div data-cocooned-container>
+        <div data-cocooned-item>
+          <a data-cocooned-trigger="remove" data-cocooned-persisted="true" href="#">Remove</a>
           <input type="hidden" name="items[0][_destroy]" value="true" />
         </div>
       </div>
@@ -75,13 +73,11 @@ describe('Base', () => {
     })
 
     describe('with nested containers', () => {
-      given('nested', () => Array.from(Array(given.count), (_, i) => `
-        <div class="cocooned-item nested"></div>
-      `))
+      given('nested', () => Array.from(Array(given.count), () => '<div data-cocooned-item class="nested"></div>'))
       given('html', () => `
-        <div class="cocooned-container">
+        <div data-cocooned-container>
           ${given.items.join('')}
-          <div class="cocooned-container">
+          <div data-cocooned-container>
             ${given.nested.join('')}
           </div>
         </div>
@@ -99,7 +95,7 @@ describe('Base', () => {
 
     describe('with hidden items', () => {
       given('items', () => Array.from(Array(given.count), () => `
-        <div class="cocooned-item cocooned-item--hidden"></div>
+        <div data-cocooned-item class="cocooned-item--hidden"></div>
       `))
 
       it('ignores them', () => {
@@ -111,7 +107,7 @@ describe('Base', () => {
   describe('toContainer', () => {
     given('origin', () => document.querySelector('.origin'))
     given('items', () => [`
-      <div class="cocooned-item">
+      <div data-cocooned-item>
         <div class="origin"></div>
       </div>
     `])
@@ -124,7 +120,7 @@ describe('Base', () => {
   describe('toItem', () => {
     given('origin', () => document.querySelector('.origin'))
     given('items', () => [`
-      <div class="cocooned-item">
+      <div data-cocooned-item>
         <div class="origin"></div>
       </div>
     `])
@@ -136,22 +132,20 @@ describe('Base', () => {
 
   describe('contains', () => {
     describe('when given node is one of the container items', () => {
-      given('item', () => document.querySelector('.cocooned-item'))
-
       it('returns true', () => {
-        expect(given.instance.contains(given.item)).toBeTruthy()
+        expect(given.instance.contains(getItem(given.container))).toBeTruthy()
       })
     })
 
     describe('when given node is not one of container items', () => {
-      it('returns true', () => {
+      it('returns false', () => {
         expect(given.instance.contains(given.container)).toBeFalsy()
       })
     })
   })
 
   const itBehavesLikeAVisibilityMethod = ({ expected, other, toggle }) => {
-    given('item', () => document.querySelector('.cocooned-item'))
+    given('item', () => getItem(given.container))
 
     it(`adds a ${expected} class to item`, () => {
       toggle(given.item)

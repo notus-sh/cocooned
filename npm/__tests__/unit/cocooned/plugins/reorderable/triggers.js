@@ -4,26 +4,25 @@ import { Base as Cocooned } from '@notus.sh/cocooned/src/cocooned/base'
 import { Up, Down } from '@notus.sh/cocooned/src/cocooned/plugins/reorderable/triggers'
 import { jest } from '@jest/globals'
 import { faker } from '@cocooned/tests/support/faker'
-import { clickEvent } from '@cocooned/tests/support/helpers'
-import { getItems, getMoveUpLink, getMoveDownLink } from '@cocooned/tests/support/selectors'
+import { clickEvent, getItems, getMoveUpLink, getMoveDownLink } from '@cocooned/tests/support/helpers'
 
-import itBehavesLikeAnEventListener from '@cocooned/tests/shared/events/customListener'
+import itBehavesLikeAnEventListener from '@cocooned/tests/shared/events/listener'
 import itBehavesLikeACancellableEvent from '@cocooned/tests/shared/events/cancelable'
 
 describe('Move', () => {
   beforeEach(() => { document.body.innerHTML = given.html })
 
-  given('container', () => document.querySelector('.cocooned-container'))
+  given('container', () => document.querySelector('[data-cocooned-container]'))
   given('count', () => faker.datatype.number({ min: 2, max: 5 }))
   given('template', () => `
-    <div class="cocooned-item">
-      <a class="cocooned-move-up" href="#">Up</a>
-      <a class="cocooned-move-down" href="#">Down</a>
+    <div data-cocooned-item>
+      <a data-cocooned-trigger="up" href="#">Up</a>
+      <a data-cocooned-trigger="down" href="#">Down</a>
       <input type="hidden" name="items[0][position]" />
     </div>
   `)
   given('html', () => `
-    <div class="cocooned-container">
+    <div data-cocooned-container>
       ${Array.from(Array(given.count), () => given.template).join('\n')}
     </div>
   `)
@@ -34,7 +33,7 @@ describe('Move', () => {
       given.move.handle(clickEvent())
 
       const items = getItems(given.container)
-      const item = given.moveTrigger.closest('.cocooned-item')
+      const item = given.moveTrigger.closest('[data-cocooned-item]')
       const index = Array.from(items).findIndex(i => i === item)
 
       expect(index).toEqual(given.index)
@@ -117,7 +116,7 @@ describe('Move', () => {
           given.move.handle(clickEvent())
 
           const items = getItems(given.container)
-          const item = given.moveTrigger.closest('.cocooned-item')
+          const item = given.moveTrigger.closest('[data-cocooned-item]')
           const index = Array.from(items).findIndex(i => i === item)
 
           expect(index).toEqual(given.index - 1)
@@ -127,9 +126,9 @@ describe('Move', () => {
 
         describe('when item is persisted', () => {
           given('template', () => `
-            <div class="cocooned-item">
-              <a class="cocooned-move-up" href="#">Up</a>
-              <a class="cocooned-move-down" href="#">Down</a>
+            <div data-cocooned-item>
+              <a data-cocooned-trigger="up" href="#">Up</a>
+              <a data-cocooned-trigger="down" href="#">Down</a>
               <input type="hidden" name="items[0][position]" />
             </div>
             <!-- Inserted by Rails-->
@@ -140,7 +139,7 @@ describe('Move', () => {
             given.move.handle(clickEvent())
 
             const items = getItems(given.container)
-            const item = given.moveTrigger.closest('.cocooned-item')
+            const item = given.moveTrigger.closest('[data-cocooned-item]')
             const index = Array.from(items).findIndex(i => i === item)
 
             expect(index).toEqual(given.index - 1)
@@ -168,7 +167,7 @@ describe('Move', () => {
           given.move.handle(clickEvent())
 
           const items = getItems(given.container)
-          const item = given.moveTrigger.closest('.cocooned-item')
+          const item = given.moveTrigger.closest('[data-cocooned-item]')
           const index = Array.from(items).findIndex(i => i === item)
 
           expect(index).toEqual(given.index + 1)
@@ -178,9 +177,9 @@ describe('Move', () => {
 
         describe('when item is persisted', () => {
           given('template', () => `
-            <div class="cocooned-item">
-              <a class="cocooned-move-up" href="#">Up</a>
-              <a class="cocooned-move-down" href="#">Down</a>
+            <div data-cocooned-item>
+              <a data-cocooned-trigger="up" href="#">Up</a>
+              <a data-cocooned-trigger="down" href="#">Down</a>
               <input type="hidden" name="items[0][position]" />
             </div>
             <!-- Inserted by Rails-->
@@ -191,7 +190,7 @@ describe('Move', () => {
             given.move.handle(clickEvent())
 
             const items = getItems(given.container)
-            const item = given.moveTrigger.closest('.cocooned-item')
+            const item = given.moveTrigger.closest('[data-cocooned-item]')
             const index = Array.from(items).findIndex(i => i === item)
 
             expect(index).toEqual(given.index + 1)

@@ -4,8 +4,7 @@ import { reorderableMixin } from '@notus.sh/cocooned/src/cocooned/plugins/reorde
 import { Base } from '@notus.sh/cocooned/src/cocooned/base'
 import { jest } from '@jest/globals'
 import { faker } from '@cocooned/tests/support/faker'
-import { clickEvent } from '@cocooned/tests/support/helpers'
-import { getMoveUpLink, getMoveDownLink } from '@cocooned/tests/support/selectors'
+import { clickEvent, getMoveUpLink, getMoveDownLink } from '@cocooned/tests/support/helpers'
 
 describe('reorderableMixin', () => {
   given('extended', () => reorderableMixin(Base))
@@ -19,11 +18,15 @@ describe('reorderableMixin', () => {
 
   describe('selectors', () => {
     it('add up trigger selector', () => {
-      expect(given.extended.selectors).toEqual(expect.objectContaining({ 'triggers.up': ['.cocooned-move-up'] }))
+      expect(given.extended.selectors).toEqual(
+        expect.objectContaining({ 'triggers.up': ['[data-cocooned-trigger="up"]', '.cocooned-move-up'] })
+      )
     })
 
     it('add down trigger selector', () => {
-      expect(given.extended.selectors).toEqual(expect.objectContaining({ 'triggers.down': ['.cocooned-move-down'] }))
+      expect(given.extended.selectors).toEqual(
+        expect.objectContaining({ 'triggers.down': ['[data-cocooned-trigger="down"]', '.cocooned-move-down'] })
+      )
     })
   })
 
@@ -51,19 +54,19 @@ describe('reorderableMixin', () => {
     })
 
     given('instance', () => new given.extended(given.container, given.options)) // eslint-disable-line new-cap
-    given('container', () => document.querySelector('.cocooned-container'))
+    given('container', () => document.querySelector('[data-cocooned-container]'))
     given('form', () => document.querySelector('form'))
     given('count', () => faker.datatype.number({ min: 2, max: 5 }))
     given('template', () => `
-      <div class="cocooned-item">
-        <a class="cocooned-move-up" href="#">Up</a>
-        <a class="cocooned-move-down" href="#">Down</a>
+      <div data-cocooned-item>
+        <a data-cocooned-trigger="up" href="#">Up</a>
+        <a data-cocooned-trigger="down" href="#">Down</a>
         <input type="hidden" name="items[0][position]" />
       </div>
     `)
     given('html', () => `
       <form>
-        <div class="cocooned-container">
+        <div data-cocooned-container>
           ${Array.from(Array(given.count), () => given.template).join('\n')}
         </div>
       </form>

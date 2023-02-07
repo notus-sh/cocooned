@@ -2,22 +2,21 @@
 
 import jQuery from 'jquery'
 import { jest } from '@jest/globals'
-import { clickEvent } from '@cocooned/tests/support/helpers'
-import { getAddLink } from '@cocooned/tests/support/selectors'
+import { clickEvent, getAddLink } from '@cocooned/tests/support/helpers'
 
 describe('A Cocooned setup with jQuery integration', () => {
   given('html', () => `
-    <section data-cocooned-options="{}">
+    <section data-cocooned-container>
       <div>
-        <a class="cocooned-add" href="#"
+        <a data-cocooned-trigger="add" href="#"
            data-association="items"
            data-template="template">Add</a>
         <template data-name="template">${given.template}</template>
       </div>
     </section>
   `)
-  given('template', () => '<div class="cocooned-item"></div>')
-  given('container', () => document.querySelector('section'))
+  given('template', () => '<div data-cocooned-item></div>')
+  given('container', () => document.querySelector('[data-cocooned-container]'))
 
   beforeEach(async () => {
     document.body.innerHTML = given.html
@@ -32,13 +31,13 @@ describe('A Cocooned setup with jQuery integration', () => {
   })
 
   it('instanciates Cocooned instances on startup', () => {
-    expect(given.container.classList).toContain('cocooned-container')
+    expect(given.container.dataset).toHaveProperty('cocoonedUuid')
   })
 
   describe('when an event is fired', () => {
     it('triggers jQuery event listeners', () => {
       const listener = jest.fn()
-      $(given.container).on('cocoon:before-insert', listener)
+      $(given.container).on('cocooned:before-insert', listener)
       getAddLink(given.container).dispatchEvent(clickEvent())
 
       expect(listener).toHaveBeenCalled()

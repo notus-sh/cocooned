@@ -10,6 +10,10 @@ module Cocooned
       def html_classes
         super + %w[cocooned-move-up]
       end
+
+      def html_data
+        super.merge(cocooned_trigger: :up)
+      end
     end
   end
 end

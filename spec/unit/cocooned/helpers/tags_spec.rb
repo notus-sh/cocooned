@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Cocooned::Helpers do
+describe Cocooned::Helpers::Tags do
   let(:template) { ActionView::Base.empty }
   let(:form) { ActionView::Helpers::FormBuilder.new('person', record, template, {}) }
   let(:association) { :contacts }

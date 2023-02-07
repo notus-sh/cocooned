@@ -1,4 +1,4 @@
-<div class="cocooned-item">
+<%= cocooned_item do %>
   <%= cocooned_remove_item_link "Remove", f %>
   <%= cocooned_move_item_up_link 'Move up', f %>
   <%= cocooned_move_item_down_link 'Move down', f %>
@@ -6,4 +6,4 @@
   <%= f.label :label %>
   <%= f.text_field :label %>
   <%= f.hidden_field :position %>
-</div>
+<% end %>

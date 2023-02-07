@@ -19,38 +19,22 @@ describe Cocooned::Tags::Remove, :tag do
     expect(tag.attribute('class').value.split).to include('remove_fields')
   end
 
-  it 'has a .dynamic class for new records' do
-    allow(record).to receive(:new_record?).and_return(true)
-    expect(tag.attribute('class').value.split).to include('dynamic')
-  end
-
-  it 'does not have a .dynamic class for persisted records' do
-    allow(record).to receive(:new_record?).and_return(false)
-    expect(tag.attribute('class').value.split).not_to include('dynamic')
-  end
-
-  it 'does not have an .existing class for new records' do
-    allow(record).to receive(:new_record?).and_return(true)
-    expect(tag.attribute('class').value.split).not_to include('existing')
-  end
-
-  it 'has an .existing class for persisted records' do
-    allow(record).to receive(:new_record?).and_return(false)
-    expect(tag.attribute('class').value.split).to include('existing')
-  end
-
-  it 'does not have a .destroyed class for alive record' do
-    allow(record).to receive(:marked_for_destruction?).and_return(false)
-    expect(tag.attribute('class').value.split).not_to include('destroyed')
-  end
-
-  it 'has a .destroyed class for record marked for destruction' do
-    allow(record).to receive(:marked_for_destruction?).and_return(true)
-    expect(tag.attribute('class').value.split).to include('destroyed')
-  end
-
   it 'supports more classes' do
     expect(tag(class: %i[one two]).attribute('class').value.split).to include('one', 'two', 'cocooned-remove')
+  end
+
+  it 'has a data attribute to identify it as a trigger' do
+    expect(tag.attribute('data-cocooned-trigger').value).to eq('remove')
+  end
+
+  it 'has a data attribute to identify new records' do
+    allow(record).to receive(:persisted?).and_return(false)
+    expect(tag.attribute('data-cocooned-persisted').value).to eq('false')
+  end
+
+  it 'has a data attribute to identify persisted records' do
+    allow(record).to receive(:persisted?).and_return(true)
+    expect(tag.attribute('data-cocooned-persisted').value).to eq('true')
   end
 
   it 'outputs an input field' do

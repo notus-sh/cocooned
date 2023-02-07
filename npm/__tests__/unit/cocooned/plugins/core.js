@@ -4,19 +4,22 @@ import { coreMixin } from '@notus.sh/cocooned/src/cocooned/plugins/core'
 import { Base } from '@notus.sh/cocooned/src/cocooned/base'
 import { jest } from '@jest/globals'
 import { faker } from '@cocooned/tests/support/faker'
-import { clickEvent } from '@cocooned/tests/support/helpers'
-import { getAddLink, getAddLinks, getRemoveLink } from '@cocooned/tests/support/selectors'
+import { clickEvent, getAddLink, getAddLinks, getRemoveLink } from '@cocooned/tests/support/helpers'
 
 describe('coreMixin', () => {
   given('extended', () => coreMixin(Base))
 
   describe('selectors', () => {
     it('add add trigger selector', () => {
-      expect(given.extended.selectors).toEqual(expect.objectContaining({ 'triggers.add': ['.cocooned-add'] }))
+      expect(given.extended.selectors).toEqual(
+        expect.objectContaining({ 'triggers.add': ['[data-cocooned-trigger="add"]', '.cocooned-add'] })
+      )
     })
 
     it('add remove trigger selector', () => {
-      expect(given.extended.selectors).toEqual(expect.objectContaining({ 'triggers.remove': ['.cocooned-remove'] }))
+      expect(given.extended.selectors).toEqual(
+        expect.objectContaining({ 'triggers.remove': ['[data-cocooned-trigger="remove"]', '.cocooned-remove'] })
+      )
     })
   })
 
@@ -27,15 +30,15 @@ describe('coreMixin', () => {
     })
 
     given('instance', () => new given.extended(given.container, given.options)) // eslint-disable-line new-cap
-    given('container', () => document.querySelector('.cocooned-container'))
-    given('template', () => '<div class="cocooned-item"></div>')
+    given('container', () => document.querySelector('[data-cocooned-container]'))
+    given('template', () => '<div data-cocooned-item></div>')
 
     describe('with add triggers', () => {
       describe('when inside container', () => {
         given('html', () => `
-          <div class="cocooned-container">
+          <div data-cocooned-container>
             <div>
-              <a class="cocooned-add"
+              <a data-cocooned-trigger="add"
                  data-association="item"
                  data-template="template"
                  href="#">Add</a>
@@ -55,11 +58,11 @@ describe('coreMixin', () => {
 
       describe('when outside container', () => {
         given('html', () => `
-          <div class="cocooned-container"></div>
-          <a class="cocooned-add"
+          <div data-cocooned-container class="container"></div>
+          <a data-cocooned-trigger="add"
              data-association="item"
              data-template="template"
-             data-association-insertion-node=".cocooned-container"
+             data-association-insertion-node=".container"
              data-association-insertion-method="prepend"
              href="#">Add</a>
           <template data-name="template">${given.template}</template>
@@ -76,19 +79,19 @@ describe('coreMixin', () => {
 
       describe('with multiple add triggers', () => {
         given('html', () => `
-          <div class="cocooned-container">
+          <div data-cocooned-container class="container">
             <div>
-              <a class="cocooned-add"
+              <a data-cocooned-trigger="add"
                  data-association="item"
                  data-template="template-inside"
                  href="#">Add</a>
               <template data-name="template-inside">${given.template}</template>
             </div>
           </div>
-          <a class="cocooned-add"
+          <a data-cocooned-trigger="add"
              data-association="item"
              data-template="template-outside"
-             data-association-insertion-node=".cocooned-container"
+             data-association-insertion-node=".container"
              data-association-insertion-method="prepend"
              href="#">Add</a>
           <template data-name="template-outside">${given.template}</template>
@@ -107,12 +110,12 @@ describe('coreMixin', () => {
     describe('with remove triggers', () => {
       given('count', () => faker.datatype.number({ min: 1, max: 5 }))
       given('template', () => `
-        <div class="cocooned-item">
-          <a class="cocooned-remove dynamic" href="#">Remove</a>
+        <div data-cocooned-item>
+          <a data-cocooned-trigger="remove" data-cocooned-persisted="false" href="#">Remove</a>
         </div>
       `)
       given('html', () => `
-        <div class="cocooned-container">
+        <div data-cocooned-container>
           ${Array.from(Array(given.count), () => given.template).join('\n')}
         </div>
       `)

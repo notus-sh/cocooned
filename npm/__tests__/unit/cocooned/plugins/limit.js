@@ -22,11 +22,11 @@ describe('limitMixin', () => {
     })
 
     given('instance', () => new given.extended(given.container, given.options)) // eslint-disable-line new-cap
-    given('container', () => document.querySelector('.cocooned-container'))
+    given('container', () => document.querySelector('[data-cocooned-container]'))
     given('count', () => faker.datatype.number({ min: 2, max: 5 }))
-    given('template', () => '<div class="cocooned-item"></div>')
+    given('template', () => '<div data-cocooned-item></div>')
     given('html', () => `
-      <div class="cocooned-container">
+      <div data-cocooned-container>
         ${Array.from(Array(given.count), () => given.template).join('\n')}
       </div>
     `)

@@ -3,10 +3,9 @@
 import { Base as Cocooned } from '@notus.sh/cocooned/src/cocooned/base'
 import { Remove } from '@notus.sh/cocooned/src/cocooned/plugins/core/triggers/remove'
 import { jest } from '@jest/globals'
-import { clickEvent } from '@cocooned/tests/support/helpers'
-import { getItem, getItems, getRemoveLink } from '@cocooned/tests/support/selectors'
+import { clickEvent, getItem, getItems, getRemoveLink } from '@cocooned/tests/support/helpers'
 
-import itBehavesLikeAnEventListener from '@cocooned/tests/shared/events/customListener'
+import itBehavesLikeAnEventListener from '@cocooned/tests/shared/events/listener'
 import itBehavesLikeACancellableEvent from '@cocooned/tests/shared/events/cancelable'
 
 describe('Remove', () => {
@@ -14,12 +13,12 @@ describe('Remove', () => {
 
   given('remove', () => new Remove(given.removeTrigger, new Cocooned(given.container)))
   given('removeTrigger', () => getRemoveLink(given.container))
-  given('container', () => document.querySelector('.cocooned-container'))
+  given('container', () => document.querySelector('[data-cocooned-container]'))
   given('item', () => getItem(given.container))
   given('html', () => `
-    <div class="cocooned-container">
-      <div class="cocooned-item">
-        <a class="cocooned-remove dynamic" href="#">Remove</a>
+    <div data-cocooned-container>
+      <div data-cocooned-item>
+        <a data-cocooned-trigger="remove" data-cocooned-persisted="false" href="#">Remove</a>
       </div>
     </div>
   `)
@@ -73,10 +72,10 @@ describe('Remove', () => {
 
     describe('with an existing item', () => {
       given('html', () => `
-        <div class="cocooned-container">
-          <div class="cocooned-item">
+        <div data-cocooned-container>
+          <div data-cocooned-item>
             <input type="hidden" name="items[0][_destroy]" required />
-            <a class="cocooned-remove existing" href="#">Remove</a>
+            <a data-cocooned-trigger="remove" data-cocooned-persisted="true" href="#">Remove</a>
           </div>
         </div>
       `)
