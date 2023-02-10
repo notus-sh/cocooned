@@ -144,7 +144,7 @@ describe('Base', () => {
     })
   })
 
-  const itBehavesLikeAVisibilityMethod = ({ expected, other, toggle }) => {
+  const itBehavesLikeAVisibilityMethod = ({ expected, other, toggle, display }) => {
     given('item', () => getItem(given.container))
 
     it(`adds a ${expected} class to item`, () => {
@@ -176,6 +176,13 @@ describe('Base', () => {
 
         expect(listener).toHaveBeenCalledTimes(1)
       })
+
+      it(`sets element display`, () => {
+        toggle(given.item)
+        given.item.dispatchEvent(new Event('transitionend'))
+
+        expect(given.item.style.display).toEqual(display)
+      })
     })
 
     describe('without transitions', () => {
@@ -187,6 +194,11 @@ describe('Base', () => {
 
         expect(listener).toHaveBeenCalled()
       })
+
+      it(`sets element display`, () => {
+        toggle(given.item)
+        expect(given.item.style.display).toEqual(display)
+      })
     })
   }
 
@@ -194,7 +206,8 @@ describe('Base', () => {
     itBehavesLikeAVisibilityMethod({
       expected: 'cocooned-item--hidden',
       other: 'cocooned-item--visible',
-      toggle: (...args) => given.instance.hide(...args)
+      toggle: (...args) => given.instance.hide(...args),
+      display: 'none'
     })
   })
 
@@ -202,7 +215,8 @@ describe('Base', () => {
     itBehavesLikeAVisibilityMethod({
       expected: 'cocooned-item--visible',
       other: 'cocooned-item--hidden',
-      toggle: (...args) => given.instance.show(...args)
+      toggle: (...args) => given.instance.show(...args),
+      display: ''
     })
   })
 })
