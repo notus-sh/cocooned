@@ -7,10 +7,17 @@ describe Cocooned::Helpers::Tags do
   let(:options) { { rel: :nofollow } }
   let(:record) { Person.new }
 
-  shared_examples 'a tag helper' do |klass|
+  shared_examples 'a tag helper' do |klass, as|
     before { allow(tag).to receive(:render) }
 
     let(:tag) { double }
+
+    it 'uses correct rendering mode' do
+      allow(klass).to expectations(receive(:new)).and_return(tag)
+      method.call('label', *positional_arguments, options)
+
+      expect(tag).to have_received(:render).with(as: as)
+    end
 
     it 'supports explicit label' do
       allow(klass).to expectations(receive(:new)).and_return(tag)
@@ -41,10 +48,8 @@ describe Cocooned::Helpers::Tags do
     end
   end
 
-  describe '#cocooned_add_item_link' do
-    subject(:method) { template.method(:cocooned_add_item_link) }
-
-    it_behaves_like 'a tag helper', Cocooned::Tags::Add do
+  shared_examples 'a tag helper to add' do |as|
+    it_behaves_like 'a tag helper', Cocooned::Tags::Add, as do
       def expectations(receiver)
         receiver.with(template, form, association, options)
       end
@@ -55,10 +60,20 @@ describe Cocooned::Helpers::Tags do
     end
   end
 
-  describe '#cocooned_remove_item_link' do
-    subject(:method) { template.method(:cocooned_remove_item_link) }
+  describe '#cocooned_add_item_link' do
+    subject(:method) { template.method(:cocooned_add_item_link) }
 
-    it_behaves_like 'a tag helper', Cocooned::Tags::Remove do
+    it_behaves_like 'a tag helper to add', :link
+  end
+
+  describe '#cocooned_add_item_button' do
+    subject(:method) { template.method(:cocooned_add_item_button) }
+
+    it_behaves_like 'a tag helper to add', :button
+  end
+
+  shared_examples 'a tag helper to remove' do |as|
+    it_behaves_like 'a tag helper', Cocooned::Tags::Remove, as do
       def expectations(receiver)
         receiver.with(template, form, options)
       end
@@ -69,10 +84,44 @@ describe Cocooned::Helpers::Tags do
     end
   end
 
+  describe '#cocooned_remove_item_link' do
+    subject(:method) { template.method(:cocooned_remove_item_link) }
+
+    it_behaves_like 'a tag helper to remove', :link
+  end
+
+  describe '#cocooned_remove_item_button' do
+    subject(:method) { template.method(:cocooned_remove_item_button) }
+
+    it_behaves_like 'a tag helper to remove', :button
+  end
+
+  shared_examples 'a tag helper to move up' do |as|
+    it_behaves_like 'a tag helper', Cocooned::Tags::Up, as do
+      def expectations(receiver)
+        receiver.with(template, options)
+      end
+
+      def positional_arguments
+        []
+      end
+    end
+  end
+
   describe '#cocooned_move_item_up_link' do
     subject(:method) { template.method(:cocooned_move_item_up_link) }
 
-    it_behaves_like 'a tag helper', Cocooned::Tags::Up do
+    it_behaves_like 'a tag helper to move up', :link
+  end
+
+  describe '#cocooned_move_item_up_button' do
+    subject(:method) { template.method(:cocooned_move_item_up_button) }
+
+    it_behaves_like 'a tag helper to move up', :button
+  end
+
+  shared_examples 'a tag helper to move down' do |as|
+    it_behaves_like 'a tag helper', Cocooned::Tags::Down, as do
       def expectations(receiver)
         receiver.with(template, options)
       end
@@ -86,15 +135,13 @@ describe Cocooned::Helpers::Tags do
   describe '#cocooned_move_item_down_link' do
     subject(:method) { template.method(:cocooned_move_item_down_link) }
 
-    it_behaves_like 'a tag helper', Cocooned::Tags::Down do
-      def expectations(receiver)
-        receiver.with(template, options)
-      end
+    it_behaves_like 'a tag helper to move down', :link
+  end
 
-      def positional_arguments
-        []
-      end
-    end
+  describe '#cocooned_move_item_down_button' do
+    subject(:method) { template.method(:cocooned_move_item_down_button) }
+
+    it_behaves_like 'a tag helper to move down', :button
   end
 
   context 'with deprecated methods', deprecation: '3.0' do
