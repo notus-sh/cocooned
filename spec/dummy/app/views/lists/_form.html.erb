@@ -22,7 +22,13 @@
       <%= render 'lists/form/item', :f => item_form %>
     <% end %>
 
-    <div><%= cocooned_add_item_link 'Add item', form, :items, partial: 'lists/form/item' %></div>
+    <div>
+      <% if @use == :link %>
+        <%= cocooned_add_item_link 'Add item', form, :items, partial: 'lists/form/item' %>
+      <% else %>
+        <%= cocooned_add_item_button 'Add item', form, :items, partial: 'lists/form/item' %>
+      <% end %>
+    </div>
   <% end %>
 
   <div class="actions">

@@ -7,17 +7,17 @@ module Cocooned
     module Containers
       # Wrap content with the expected markup for a Cocooned container.
       #
-      # This is nothing more than a wrapper around `ActionView::Base#content_tag`
-      # to automatically add default classes and data-attributes that define a
-      # Cocooned container.
+      # This is a wrapper around `ActionView::Base#content_tag` to automatically
+      # add default classes and data-attributes that define a Cocooned
+      # container.
       #
-      # ==== Signatures
+      # = Signatures
       #
       #   cocooned_container(*arguments, **options) do
       #     # Container content
       #   end
       #
-      # ==== Parameters
+      # = Parameters
       #
       # `cocooned_container` supports following options:
       #
@@ -39,17 +39,16 @@ module Cocooned
 
       # Wrap content with the expected markup for a Cocooned item.
       #
-      # This is nothing more than a wrapper around `ActionView::Base#content_tag`
-      # to automatically add default classes and data-attributes that define a
-      # Cocooned item.
+      # This is a wrapper around `ActionView::Base#content_tag` to automatically
+      # add default classes and data-attributes that define a Cocooned item.
       #
-      # ==== Signatures
+      # = Signatures
       #
       #   cocooned_item(*arguments, **options) do
       #     # Item content
       #   end
       #
-      # ==== Parameters
+      # = Parameters
       #
       # Any argument or option supported by `ActionView::Base#content_tag` will
       # be forwarded.

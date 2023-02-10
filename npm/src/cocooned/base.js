@@ -135,10 +135,12 @@ class Base {
   }
 
   hide (item, callback) {
-    return toggle(item, 'cocooned-item--visible', 'cocooned-item--hidden', this.options.transitions, callback)
+    return toggle(item, 'cocooned-item--visible', 'cocooned-item--hidden', this.options.transitions,
+                  () => { item.style.display = 'none'; if (callback) { callback() } })
   }
 
   show (item, callback) {
+    item.style.display = null
     return toggle(item, 'cocooned-item--hidden', 'cocooned-item--visible', this.options.transitions, callback)
   }
 

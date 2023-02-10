@@ -1,7 +1,13 @@
 <%= cocooned_item do %>
-  <%= cocooned_remove_item_link "Remove", f %>
-  <%= cocooned_move_item_up_link 'Move up', f %>
-  <%= cocooned_move_item_down_link 'Move down', f %>
+  <% if @use == :link %>
+    <%= cocooned_remove_item_link "Remove", f %>
+    <%= cocooned_move_item_up_link 'Move up', f %>
+    <%= cocooned_move_item_down_link 'Move down', f %>
+  <% else %>
+    <%= cocooned_remove_item_button "Remove", f %>
+    <%= cocooned_move_item_up_button 'Move up', f %>
+    <%= cocooned_move_item_down_button 'Move down', f %>
+  <% end %>
 
   <%= f.label :label %>
   <%= f.text_field :label %>

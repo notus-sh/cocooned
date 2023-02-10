@@ -14,10 +14,13 @@ class ListsController < ApplicationController
   # GET /lists/new
   def new
     @list = List.new
+    @use = params[:use]&.to_sym || :link
   end
 
   # GET /lists/1/edit
-  def edit; end
+  def edit
+    @use = params[:use]&.to_sym || :link
+  end
 
   # POST /lists
   def create

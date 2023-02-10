@@ -30,8 +30,8 @@ module Cocooned
         super(template, form, **options, &block)
       end
 
-      def render
-        template.safe_join([super, html_template])
+      def render(as: :link)
+        template.safe_join([super(as: as), html_template])
       end
 
       protected
