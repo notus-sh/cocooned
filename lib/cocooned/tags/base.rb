@@ -26,8 +26,11 @@ module Cocooned
         @label_block = block if block_given?
       end
 
-      def render
-        template.link_to('#', html_options) { label }
+      def render(as: :link)
+        return template.link_to('#', html_options) { label } if as == :link
+        return form.button(html_options) { label } if as == :button
+
+        raise ArgumentError, "Unsupported value for :as. Expected :link or :button, got #{as}."
       end
 
       protected

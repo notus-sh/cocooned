@@ -5,8 +5,8 @@ module Cocooned
     class Remove < Base # :nodoc:
       include Cocooned::TagsHelper::AssociationLabel
 
-      def render
-        template.safe_join([hidden_field, super])
+      def render(as: :link)
+        template.safe_join([hidden_field, super(as: as)])
       end
 
       protected

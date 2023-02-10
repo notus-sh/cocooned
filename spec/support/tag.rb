@@ -1,19 +1,30 @@
 # frozen_string_literal: true
 
 module TagHelper
-  def html(*args, **options, &block)
-    tag = described_class.create(template, *(args + [form, try(:association)].compact), **options, &block)
-    Nokogiri::HTML(tag.render)
+  module LinkHelper
+    def html(*args, **options, &block)
+      tag = described_class.create(template, *(args + [form, try(:association)].compact), **options, &block)
+      Nokogiri::HTML5.fragment(tag.render(as: :link))
+    end
+
+    def tag(*args, **options, &block)
+      html(*args, **options, &block).at('a')
+    end
   end
 
-  def link(*args, **options, &block)
-    html(*args, **options, &block).at('a')
-  end
+  module ButtonHelper
+    def html(*args, **options, &block)
+      tag = described_class.create(template, *(args + [form, try(:association)].compact), **options, &block)
+      Nokogiri::HTML5.fragment(tag.render(as: :button))
+    end
 
-  alias tag link
+    def tag(*args, **options, &block)
+      html(*args, **options, &block).at('button')
+    end
+  end
 end
 
 RSpec.configure do |config|
-  # Include deprecation helpers in tests tagged as helper tests.
-  config.include TagHelper, :tag
+  config.include TagHelper::LinkHelper, tag: :link
+  config.include TagHelper::ButtonHelper, tag: :button
 end

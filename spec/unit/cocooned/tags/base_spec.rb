@@ -2,9 +2,9 @@
 
 require_relative './shared/tag'
 
-describe Cocooned::Tags::Base, :tag do
+describe Cocooned::Tags::Base do
   let(:template) { ActionView::Base.empty }
-  let(:form) { double }
+  let(:form) { ActionView::Helpers::FormBuilder.new('person', nil, template, {}) }
 
   describe '.create' do
     it 'creates a new tag' do
@@ -20,5 +20,15 @@ describe Cocooned::Tags::Base, :tag do
     end
   end
 
-  it_behaves_like 'an action tag builder', :base
+  context 'when rendered as a link', tag: :link do
+    it_behaves_like 'an action tag builder', :base
+
+    it 'has a neutral URL as href' do
+      expect(tag.attribute('href').value).to eq('#')
+    end
+  end
+
+  context 'when rendered as a button', tag: :button do
+    it_behaves_like 'an action tag builder', :base
+  end
 end

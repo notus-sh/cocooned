@@ -44,10 +44,6 @@ RSpec.shared_examples 'an action tag builder', :tag do |action|
     end
   end
 
-  it 'has a neutral URL as href' do
-    expect(tag.attribute('href').value).to eq('#')
-  end
-
   it 'forwards options to ActionView helper' do
     expect(tag(rel: :nofollow).attribute('rel').value).to eq('nofollow')
   end
