@@ -28,7 +28,7 @@ module Cocooned
 
       def render(as: :link)
         return template.link_to('#', html_options) { label } if as == :link
-        return form.button(html_options) { label } if as == :button
+        return template.button_tag(type: :button, **html_options) { label } if as == :button
 
         raise ArgumentError, "Unsupported value for :as. Expected :link or :button, got #{as}."
       end

@@ -75,5 +75,9 @@ describe Cocooned::Tags::Remove do
 
   context 'when rendered as a button', tag: :button do
     it_behaves_like 'an action tag builder to remove'
+
+    it 'is of button type' do
+      expect(tag.attribute('type').value).to eq('button')
+    end
   end
 end

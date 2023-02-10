@@ -260,5 +260,9 @@ describe Cocooned::Tags::Add do
 
   context 'when rendered as a button', tag: :button do
     it_behaves_like 'an action tag builder to add'
+
+    it 'is of button type' do
+      expect(tag.attribute('type').value).to eq('button')
+    end
   end
 end
