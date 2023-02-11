@@ -112,8 +112,12 @@ class Base {
       return Promise.resolve(after())
     }
 
-    const keyframes = [{ height: `${item.scrollHeight}px`, opacity: 1 }, { height: 0, opacity: 0 }]
-    return item.animate(keyframes, { duration: 450, easing: 'ease-in-out' }).finished.then(() => after())
+    const keyframes = [
+      { height: `${item.scrollHeight}px`, opacity: 1 },
+      { height: `${item.scrollHeight}px`, opacity: 0 },
+      { height: 0, opacity: 0 }
+    ]
+    return item.animate(keyframes, { duration: 300, easing: 'ease-in-out' }).finished.then(() => after())
   }
 
   show (item, options) {
@@ -128,7 +132,11 @@ class Base {
       return promise
     }
 
-    const keyframes = [{ height: 0, opacity: 0 }, { height: `${item.dataset.scrollHeight}px`, opacity: 1 }]
+    const keyframes = [
+      { height: 0, opacity: 0 },
+      { height: `${item.dataset.scrollHeight}px`, opacity: 0 },
+      { height: `${item.dataset.scrollHeight}px`, opacity: 1 }
+    ]
     return item.animate(keyframes, { duration: 450, easing: 'ease-in-out' }).finished.then(() => item)
   }
 
