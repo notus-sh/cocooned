@@ -7,21 +7,6 @@ function uuidv4 () {
   )
 }
 
-const scopedStyles = `
-  .cocooned-item { overflow: hidden; transition: opacity .45s ease-out, max-height .45s ease-out; }
-  .cocooned-item--visible { opacity: 1; max-height: 100%; }
-  .cocooned-item--hidden { opacity: 0; max-height: 0%; }
-`
-
-function createScopedStyles (container, styles) {
-  const element = container.ownerDocument.createElement('style')
-  element.setAttribute('scoped', 'scoped')
-  element.setAttribute('type', 'text/css')
-  element.innerHTML = styles
-
-  return element
-}
-
 function hideMarkedForDestruction (cocooned, items) {
   items.forEach(item => {
     const destroy = item.querySelector('input[type=hidden][name$="[_destroy]"]')
@@ -32,38 +17,37 @@ function hideMarkedForDestruction (cocooned, items) {
       return
     }
 
-    cocooned.hide(item)
+    cocooned.hide(item, { animate: false })
   })
 }
 
-function toggle (item, removedClass, addedClass, useTransitions, callback) {
-  if (typeof callback === 'function' && useTransitions) {
-    item.addEventListener('transitionend', callback, { once: true })
+function defaultAnimator(item, fetch = false) {
+  if (fetch) {
+    item.dataset.cocoonedScrollHeight = item.scrollHeight
   }
 
-  if (item.classList.contains(removedClass)) {
-    item.classList.replace(removedClass, addedClass)
-  } else {
-    item.classList.add(addedClass)
-  }
-
-  if (typeof callback === 'function' && !useTransitions) {
-    callback()
-  }
+  return [
+    { height: `${item.dataset.cocoonedScrollHeight}px`, opacity: 1 },
+    { height: `${item.dataset.cocoonedScrollHeight}px`, opacity: 0 },
+    { height: 0, opacity: 0 }
+  ]
 }
 
 const instances = Object.create(null)
 
 class Base {
   static get defaultOptions () {
-    return {}
+    const element = document.createElement('div')
+    return {
+      animate: ('animate' in element && typeof element.animate == 'function'),
+      animator: defaultAnimator,
+      duration: 450
+    }
   }
 
   static get eventNamespaces () {
     return ['cocooned']
   }
-
-  static scopedStyles = scopedStyles
 
   static get selectors () {
     return {
@@ -80,7 +64,6 @@ class Base {
     this._container = container
     this._uuid = uuidv4()
     this._options = this.constructor._normalizeOptions({
-      ...this._options,
       ...this.constructor.defaultOptions,
       ...('cocoonedOptions' in container.dataset ? JSON.parse(container.dataset.cocoonedOptions) : {}),
       ...(options || {})
@@ -100,9 +83,6 @@ class Base {
     this.container.dataset.cocoonedUuid = this._uuid
     instances[this._uuid] = this
 
-    this.container.classList.add('cocooned-container')
-    this.container.prepend(createScopedStyles(this.container, this.constructor.scopedStyles))
-
     const hideDestroyed = () => { hideMarkedForDestruction(this, this.items) }
 
     hideDestroyed()
@@ -119,7 +99,7 @@ class Base {
   get items () {
     return Array.from(this.container.querySelectorAll(this._selector('item')))
       .filter(item => this.toContainer(item) === this.container)
-      .filter(item => !item.classList.contains('cocooned-item--hidden'))
+      .filter(item => !('display' in item.style && item.style.display === 'none'))
   }
 
   toContainer (node) {
@@ -134,14 +114,27 @@ class Base {
     return this.items.includes(this.toItem(node))
   }
 
-  hide (item, callback) {
-    return toggle(item, 'cocooned-item--visible', 'cocooned-item--hidden', this.options.transitions,
-                  () => { item.style.display = 'none'; if (callback) { callback() } })
+  hide (item, options = {}) {
+    const opts = this._animationOptions(options)
+    const keyframes = opts.animator(item, true)
+    const after = () => item.style.display = 'none'
+
+    if (!opts.animate) {
+      return Promise.resolve(after()).then(() => item)
+    }
+    return item.animate(keyframes, opts.duration).finished.then(after).then(() => item)
   }
 
-  show (item, callback) {
-    item.style.display = null
-    return toggle(item, 'cocooned-item--hidden', 'cocooned-item--visible', this.options.transitions, callback)
+  show (item, options = {}) {
+    const opts = this._animationOptions(options)
+    const keyframes = opts.animator(item, false).reverse()
+    const before = () => item.style.display = null
+
+    const promise = Promise.resolve(before())
+    if (!opts.animate) {
+      return promise.then(() => item)
+    }
+    return promise.then(() => item.animate(keyframes, opts.duration).finished).then(() => item)
   }
 
   /* Protected and private attributes and methods */
@@ -149,10 +142,10 @@ class Base {
     return options
   }
 
-  __uuid
   _container
+  _options
+  __uuid
   __emitter
-  _options = { transitions: !(typeof process !== 'undefined' && process.env.NODE_ENV === 'test') }
 
   get _emitter () {
     if (typeof this.__emitter === 'undefined') {
@@ -168,6 +161,11 @@ class Base {
 
   _selector (name) {
     return this._selectors(name).join(', ')
+  }
+
+  _animationOptions (options) {
+    const defaults = (({ animate, animator, duration }) => ({ animate, animator, duration }))(this._options)
+    return { ...defaults, ...options }
   }
 }
 

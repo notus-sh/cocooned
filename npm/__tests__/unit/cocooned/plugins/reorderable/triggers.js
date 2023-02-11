@@ -77,10 +77,11 @@ describe('Move', () => {
     })
 
     describe('an after-move event', () => {
-      it('is triggered', () => {
+      it('is triggered', async () => {
         const listener = jest.fn()
         given.container.addEventListener('cocooned:after-move', listener)
         given.move.handle(clickEvent())
+        await new Promise(process.nextTick)
 
         expect(listener).toHaveBeenCalled()
       })
@@ -112,8 +113,9 @@ describe('Move', () => {
       describe('with a pivot item', () => {
         given('index', () => faker.datatype.number({ min: 1, max: given.count - 1 }))
 
-        it('moves item up', () => {
+        it('moves item up', async () => {
           given.move.handle(clickEvent())
+          await new Promise(process.nextTick)
 
           const items = getItems(given.container)
           const item = given.moveTrigger.closest('[data-cocooned-item]')
@@ -135,8 +137,9 @@ describe('Move', () => {
             <input type="hidden" value="" name="items[0][id]" id="items_1_id" />
           `)
 
-          it('moves item up', () => {
+          it('moves item up', async () => {
             given.move.handle(clickEvent())
+            await new Promise(process.nextTick)
 
             const items = getItems(given.container)
             const item = given.moveTrigger.closest('[data-cocooned-item]')
@@ -163,8 +166,9 @@ describe('Move', () => {
       describe('with a pivot item', () => {
         given('index', () => faker.datatype.number({ min: 0, max: given.count - 2 }))
 
-        it('moves item down', () => {
+        it('moves item down', async () => {
           given.move.handle(clickEvent())
+          await new Promise(process.nextTick)
 
           const items = getItems(given.container)
           const item = given.moveTrigger.closest('[data-cocooned-item]')
@@ -186,8 +190,9 @@ describe('Move', () => {
             <input type="hidden" value="" name="items[0][id]" id="items_1_id" />
           `)
 
-          it('moves item down', () => {
+          it('moves item down', async () => {
             given.move.handle(clickEvent())
+            await new Promise(process.nextTick)
 
             const items = getItems(given.container)
             const item = given.moveTrigger.closest('[data-cocooned-item]')
