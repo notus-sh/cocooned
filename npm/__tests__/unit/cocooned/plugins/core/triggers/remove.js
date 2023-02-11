@@ -40,10 +40,11 @@ describe('Remove', () => {
     })
 
     describe('an after-remove event', () => {
-      it('is triggered', () => {
+      it('is triggered', async () => {
         const listener = jest.fn()
         given.container.addEventListener('cocooned:after-remove', listener)
         given.remove.handle(clickEvent())
+        await new Promise(process.nextTick)
 
         expect(listener).toHaveBeenCalled()
       })
@@ -62,8 +63,10 @@ describe('Remove', () => {
 
   describe('handle', () => {
     describe('with a dynamic item', () => {
-      it('remove item from document', () => {
+      it('remove item from document', async () => {
         given.remove.handle(clickEvent())
+        await new Promise(process.nextTick)
+
         expect(getItems(given.container)).toHaveLength(0)
       })
 
@@ -80,23 +83,31 @@ describe('Remove', () => {
         </div>
       `)
 
-      it('does not remove item from document', () => {
+      it('does not remove item from document', async () => {
         given.remove.handle(clickEvent())
+        await new Promise(process.nextTick)
+
         expect(getItems(given.container)).toHaveLength(1)
       })
 
-      it('hides item', () => {
+      it('hides item', async () => {
         given.remove.handle(clickEvent())
-        expect(given.item.classList).toContain('cocooned-item--hidden')
+        await new Promise(process.nextTick)
+
+        expect(given.item.style?.display).toEqual('none')
       })
 
-      it('marks item for destruction', () => {
+      it('marks item for destruction', async () => {
         given.remove.handle(clickEvent())
+        await new Promise(process.nextTick)
+
         expect(given.item.querySelector('input').getAttribute('value')).toBeTruthy()
       })
 
-      it('removes required on inputs', () => {
+      it('removes required on inputs', async () => {
         given.remove.handle(clickEvent())
+        await new Promise(process.nextTick)
+
         expect(given.item.querySelector('input').getAttributeNames()).not.toContain('required')
       })
 

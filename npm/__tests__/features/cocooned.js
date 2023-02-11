@@ -72,31 +72,35 @@ describe('A basic Cocooned setup', () => {
       given('addLink', () => getAddLink(given.container))
       given('removeLink', () => getRemoveLink(given.container))
 
-      it('removes an item from the container', () => {
+      it('removes an item from the container', async () => {
         given.removeLink.dispatchEvent(clickEvent())
+        await new Promise(process.nextTick)
 
         expect(getItems(given.container).length).toEqual(0)
       })
 
-      it('removes only one item from the container', () => {
+      it('removes only one item from the container', async () => {
         given.addLink.dispatchEvent(clickEvent())
         given.removeLink.dispatchEvent(clickEvent())
+        await new Promise(process.nextTick)
 
         expect(getItems(given.container).length).toEqual(1)
       })
 
-      it('removes the correct item from the container', () => {
+      it('removes the correct item from the container', async () => {
         given.addLink.dispatchEvent(clickEvent())
         const inserted = Array.from(getItems(given.container)).pop()
         getRemoveLink(inserted).dispatchEvent(clickEvent())
+        await new Promise(process.nextTick)
 
         expect(getItems(given.container)).not.toContain(inserted)
       })
 
-      it('triggers a before-remove event', () => {
+      it('triggers a before-remove event', async () => {
         const listener = jest.fn()
         given.container.addEventListener('cocooned:before-remove', listener)
         given.removeLink.dispatchEvent(clickEvent())
+        await new Promise(process.nextTick)
 
         expect(listener).toHaveBeenCalled()
       })
@@ -112,7 +116,7 @@ describe('A basic Cocooned setup', () => {
       given('item', () => document.querySelector('.cocooned-item'))
 
       it('hides those item when instanced', () => {
-        expect(getItem(given.container).classList).toContain('cocooned-item--hidden')
+        expect(getItem(given.container).style?.display).toEqual('none')
       })
     })
   })

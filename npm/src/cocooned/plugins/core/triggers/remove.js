@@ -7,7 +7,7 @@ class Remove extends Trigger {
       return false
     }
 
-    this._hide(this._item, () => {
+    this._hide(this._item).then(() => {
       this._remove()
       this._notify('after-remove', event)
     })

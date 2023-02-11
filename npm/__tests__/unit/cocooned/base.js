@@ -11,7 +11,7 @@ describe('Base', () => {
     given.instance.start()
   })
 
-  given('instance', () => new Base(given.container, { transitions: true }))
+  given('instance', () => new Base(given.container))
   given('container', () => document.querySelector('[data-cocooned-container]'))
   given('count', () => faker.datatype.number({ min: 1, max: 5 }))
   given('items', () => Array.from(Array(given.count), () => '<div data-cocooned-item></div>'))
@@ -31,18 +31,6 @@ describe('Base', () => {
     })
   })
 
-  describe('when created', () => {
-    given('styles', () => given.container.firstElementChild)
-
-    it('inject styles to container', () => {
-      expect(given.styles.tagName).toEqual('STYLE')
-    })
-
-    it('inject scoped styles to container', () => {
-      expect(given.styles.getAttribute('scoped')).toBeTruthy()
-    })
-  })
-
   describe('with items marked for destruction', () => {
     given('html', () => `
       <div data-cocooned-container>
@@ -54,7 +42,7 @@ describe('Base', () => {
     `)
 
     it('hides them', () => {
-      expect(getItem(document).classList).toContain('cocooned-item--hidden')
+      expect(getItem(document).style?.display).toEqual('none')
     })
   })
 
@@ -95,7 +83,7 @@ describe('Base', () => {
 
     describe('with hidden items', () => {
       given('items', () => Array.from(Array(given.count), () => `
-        <div data-cocooned-item class="cocooned-item--hidden"></div>
+        <div data-cocooned-item style="display: none"></div>
       `))
 
       it('ignores them', () => {
@@ -144,68 +132,47 @@ describe('Base', () => {
     })
   })
 
-  const itBehavesLikeAVisibilityMethod = ({ expected, other, toggle, display }) => {
+  const itBehavesLikeAVisibilityMethod = ({ toggle, display }) => {
     given('item', () => getItem(given.container))
 
-    it(`adds a ${expected} class to item`, () => {
+    it(`sets element display`, () => {
       toggle(given.item)
-      expect(given.item.classList).toContain(expected)
+      expect(given.item.style?.display).toEqual(display)
     })
 
-    it(`removes ${other} class if present`, () => {
-      given.item.classList.add(other)
-      toggle(given.item)
-
-      expect(given.item.classList).not.toContain(other)
-    })
-
-    describe('with transitions', () => {
-      it('supports callback', () => {
-        const listener = jest.fn()
-        toggle(given.item, listener)
-        given.item.dispatchEvent(new Event('transitionend'))
-
-        expect(listener).toHaveBeenCalled()
+    describe.skip('when animated', () => { // Element.animate is not available in JSDOM :/
+      it(`returns a Promise`, () => {
+        expect(toggle(given.item, { animate: true })).toBeInstanceOf(Promise)
       })
 
-      it('supports single use callback', () => {
-        const listener = jest.fn()
-        toggle(given.item, listener)
-        given.item.dispatchEvent(new Event('transitionend'))
-        given.item.dispatchEvent(new Event('transitionend'))
-
-        expect(listener).toHaveBeenCalledTimes(1)
-      })
-
-      it(`sets element display`, () => {
-        toggle(given.item)
-        given.item.dispatchEvent(new Event('transitionend'))
-
-        expect(given.item.style.display).toEqual(display)
+      it(`returns a Promise with the toggled item as param`, () => {
+        return new Promise(resolve => {
+          toggle(given.item, { animate: true }).then(value => {
+            expect(value).toEqual(given.item)
+            resolve()
+          })
+        })
       })
     })
 
-    describe('without transitions', () => {
-      given('instance', () => new Base(given.container, { transitions: false }))
-
-      it('triggers callback automatically', () => {
-        const listener = jest.fn()
-        toggle(given.item, listener)
-
-        expect(listener).toHaveBeenCalled()
+    describe('when not animated', () => {
+      it(`returns a Promise`, () => {
+        expect(toggle(given.item, { animate: false })).toBeInstanceOf(Promise)
       })
 
-      it(`sets element display`, () => {
-        toggle(given.item)
-        expect(given.item.style.display).toEqual(display)
+      it(`returns a Promise with the toggled item as param`, () => {
+        return new Promise(resolve => {
+          toggle(given.item, { animate: false }).then(value => {
+            expect(value).toEqual(given.item)
+            resolve()
+          })
+        })
       })
     })
   }
 
   describe('hide', () => {
     itBehavesLikeAVisibilityMethod({
-      expected: 'cocooned-item--hidden',
-      other: 'cocooned-item--visible',
       toggle: (...args) => given.instance.hide(...args),
       display: 'none'
     })
@@ -213,10 +180,8 @@ describe('Base', () => {
 
   describe('show', () => {
     itBehavesLikeAVisibilityMethod({
-      expected: 'cocooned-item--visible',
-      other: 'cocooned-item--hidden',
       toggle: (...args) => given.instance.show(...args),
-      display: ''
+      display: '' // Even if we set it to null
     })
   })
 })

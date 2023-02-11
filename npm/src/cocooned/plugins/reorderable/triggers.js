@@ -11,9 +11,9 @@ class Move extends Trigger {
       return false
     }
 
-    this._hide(this._item, () => {
+    this._hide(this._item).then(() => {
       this._move()
-      this._show(this._item, () => this._notify('after-move', event))
+      this._show(this._item).then(() => this._notify('after-move', event))
     })
   }
 
@@ -42,8 +42,14 @@ class Move extends Trigger {
 
 class Up extends Move {
   /* Protected and private attributes and methods */
+  #pivotItem
+
   get _pivotItem () {
-    return this._findPivotItem(this._item, 'previousElementSibling')
+    if (typeof this.#pivotItem === 'undefined') {
+      this.#pivotItem = this._findPivotItem(this._item, 'previousElementSibling')
+    }
+
+    return this.#pivotItem
   }
 
   _move () {
@@ -53,8 +59,14 @@ class Up extends Move {
 
 class Down extends Move {
   /* Protected and private attributes and methods */
+  #pivotItem
+
   get _pivotItem () {
-    return this._findPivotItem(this._item, 'nextElementSibling')
+    if (typeof this.#pivotItem === 'undefined') {
+      this.#pivotItem = this._findPivotItem(this._item, 'nextElementSibling')
+    }
+
+    return this.#pivotItem
   }
 
   _move () {

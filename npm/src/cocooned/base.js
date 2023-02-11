@@ -7,21 +7,6 @@ function uuidv4 () {
   )
 }
 
-const scopedStyles = `
-  .cocooned-item { overflow: hidden; transition: opacity .45s ease-out, max-height .45s ease-out; }
-  .cocooned-item--visible { opacity: 1; max-height: 100%; }
-  .cocooned-item--hidden { opacity: 0; max-height: 0%; }
-`
-
-function createScopedStyles (container, styles) {
-  const element = container.ownerDocument.createElement('style')
-  element.setAttribute('scoped', 'scoped')
-  element.setAttribute('type', 'text/css')
-  element.innerHTML = styles
-
-  return element
-}
-
 function hideMarkedForDestruction (cocooned, items) {
   items.forEach(item => {
     const destroy = item.querySelector('input[type=hidden][name$="[_destroy]"]')
@@ -32,24 +17,8 @@ function hideMarkedForDestruction (cocooned, items) {
       return
     }
 
-    cocooned.hide(item)
+    cocooned.hide(item, { animate: false })
   })
-}
-
-function toggle (item, removedClass, addedClass, useTransitions, callback) {
-  if (typeof callback === 'function' && useTransitions) {
-    item.addEventListener('transitionend', callback, { once: true })
-  }
-
-  if (item.classList.contains(removedClass)) {
-    item.classList.replace(removedClass, addedClass)
-  } else {
-    item.classList.add(addedClass)
-  }
-
-  if (typeof callback === 'function' && !useTransitions) {
-    callback()
-  }
 }
 
 const instances = Object.create(null)
@@ -62,8 +31,6 @@ class Base {
   static get eventNamespaces () {
     return ['cocooned']
   }
-
-  static scopedStyles = scopedStyles
 
   static get selectors () {
     return {
@@ -100,9 +67,6 @@ class Base {
     this.container.dataset.cocoonedUuid = this._uuid
     instances[this._uuid] = this
 
-    this.container.classList.add('cocooned-container')
-    this.container.prepend(createScopedStyles(this.container, this.constructor.scopedStyles))
-
     const hideDestroyed = () => { hideMarkedForDestruction(this, this.items) }
 
     hideDestroyed()
@@ -119,7 +83,7 @@ class Base {
   get items () {
     return Array.from(this.container.querySelectorAll(this._selector('item')))
       .filter(item => this.toContainer(item) === this.container)
-      .filter(item => !item.classList.contains('cocooned-item--hidden'))
+      .filter(item => !('display' in item.style && item.style.display === 'none'))
   }
 
   toContainer (node) {
@@ -134,14 +98,38 @@ class Base {
     return this.items.includes(this.toItem(node))
   }
 
-  hide (item, callback) {
-    return toggle(item, 'cocooned-item--visible', 'cocooned-item--hidden', this.options.transitions,
-                  () => { item.style.display = 'none'; if (callback) { callback() } })
+  hide (item, options = {}) {
+    const opts = { animate: this._options.animate, ...options }
+    // Ensure we can animate it to reappear even if hidden without animation
+    item.dataset.scrollHeight = item.scrollHeight
+
+    const after = () => {
+      item.style.display = 'none'
+      return item
+    }
+
+    if (!opts.animate || !('animate' in item && typeof item.animate == 'function')) {
+      return Promise.resolve(after())
+    }
+
+    const keyframes = [{ height: `${item.scrollHeight}px`, opacity: 1 }, { height: 0, opacity: 0 }]
+    return item.animate(keyframes, { duration: 450, easing: 'ease-in-out' }).finished.then(() => after())
   }
 
-  show (item, callback) {
-    item.style.display = null
-    return toggle(item, 'cocooned-item--hidden', 'cocooned-item--visible', this.options.transitions, callback)
+  show (item, options) {
+    const opts = { animate: this._options.animate, ...options }
+    const before = () => {
+      item.style.display = null
+      return item
+    }
+
+    const promise = Promise.resolve(before())
+    if (!opts.animate || !('animate' in item && typeof item.animate == 'function')) {
+      return promise
+    }
+
+    const keyframes = [{ height: 0, opacity: 0 }, { height: `${item.dataset.scrollHeight}px`, opacity: 1 }]
+    return item.animate(keyframes, { duration: 450, easing: 'ease-in-out' }).finished.then(() => item)
   }
 
   /* Protected and private attributes and methods */
@@ -152,7 +140,7 @@ class Base {
   __uuid
   _container
   __emitter
-  _options = { transitions: !(typeof process !== 'undefined' && process.env.NODE_ENV === 'test') }
+  _options = { animate: !(typeof process !== 'undefined' && process.env.NODE_ENV === 'test') }
 
   get _emitter () {
     if (typeof this.__emitter === 'undefined') {
