@@ -9,6 +9,14 @@ describe('Base', () => {
     it('detects animation support', () => {
       expect(Base.defaultOptions).toEqual(expect.objectContaining({ animate: false }))
     })
+
+    it('returns default animation options', () => {
+      expect(Base.defaultOptions).toEqual(expect.objectContaining({
+        animate: expect.any(Boolean),
+        animator: expect.any(Function),
+        duration: expect.any(Number),
+      }))
+    })
   })
 
   beforeEach(() => {

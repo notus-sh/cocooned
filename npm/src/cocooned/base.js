@@ -21,12 +21,28 @@ function hideMarkedForDestruction (cocooned, items) {
   })
 }
 
+function defaultAnimator(item, fetch = false) {
+  if (fetch) {
+    item.dataset.cocoonedScrollHeight = item.scrollHeight
+  }
+
+  return [
+    { height: `${item.dataset.cocoonedScrollHeight}px`, opacity: 1 },
+    { height: `${item.dataset.cocoonedScrollHeight}px`, opacity: 0 },
+    { height: 0, opacity: 0 }
+  ]
+}
+
 const instances = Object.create(null)
 
 class Base {
   static get defaultOptions () {
     const element = document.createElement('div')
-    return { animate: ('animate' in element && typeof element.animate == 'function') }
+    return {
+      animate: ('animate' in element && typeof element.animate == 'function'),
+      animator: defaultAnimator,
+      duration: 450
+    }
   }
 
   static get eventNamespaces () {
@@ -99,45 +115,26 @@ class Base {
   }
 
   hide (item, options = {}) {
-    const opts = { animate: this._options.animate, ...options }
-    // Ensure we can animate it to reappear even if hidden without animation
-    item.dataset.scrollHeight = item.scrollHeight
-
-    const after = () => {
-      item.style.display = 'none'
-      return item
-    }
+    const opts = this._animationOptions(options)
+    const keyframes = opts.animator(item, true)
+    const after = () => item.style.display = 'none'
 
     if (!opts.animate) {
-      return Promise.resolve(after())
+      return Promise.resolve(after()).then(() => item)
     }
-
-    const keyframes = [
-      { height: `${item.scrollHeight}px`, opacity: 1 },
-      { height: `${item.scrollHeight}px`, opacity: 0 },
-      { height: 0, opacity: 0 }
-    ]
-    return item.animate(keyframes, { duration: 300, easing: 'ease-in-out' }).finished.then(() => after())
+    return item.animate(keyframes, opts.duration).finished.then(after).then(() => item)
   }
 
-  show (item, options) {
-    const opts = { animate: this._options.animate, ...options }
-    const before = () => {
-      item.style.display = null
-      return item
-    }
+  show (item, options = {}) {
+    const opts = this._animationOptions(options)
+    const keyframes = opts.animator(item, false).reverse()
+    const before = () => item.style.display = null
 
     const promise = Promise.resolve(before())
     if (!opts.animate) {
-      return promise
+      return promise.then(() => item)
     }
-
-    const keyframes = [
-      { height: 0, opacity: 0 },
-      { height: `${item.dataset.scrollHeight}px`, opacity: 0 },
-      { height: `${item.dataset.scrollHeight}px`, opacity: 1 }
-    ]
-    return item.animate(keyframes, { duration: 450, easing: 'ease-in-out' }).finished.then(() => item)
+    return promise.then(() => item.animate(keyframes, opts.duration).finished).then(() => item)
   }
 
   /* Protected and private attributes and methods */
@@ -164,6 +161,11 @@ class Base {
 
   _selector (name) {
     return this._selectors(name).join(', ')
+  }
+
+  _animationOptions (options) {
+    const defaults = (({ animate, animator, duration }) => ({ animate, animator, duration }))(this._options)
+    return { ...defaults, ...options }
   }
 }
 
