@@ -25,7 +25,8 @@ const instances = Object.create(null)
 
 class Base {
   static get defaultOptions () {
-    return {}
+    const element = document.createElement('div')
+    return { animate: ('animate' in element && typeof element.animate == 'function') }
   }
 
   static get eventNamespaces () {
@@ -47,7 +48,6 @@ class Base {
     this._container = container
     this._uuid = uuidv4()
     this._options = this.constructor._normalizeOptions({
-      ...this._options,
       ...this.constructor.defaultOptions,
       ...('cocoonedOptions' in container.dataset ? JSON.parse(container.dataset.cocoonedOptions) : {}),
       ...(options || {})
@@ -108,7 +108,7 @@ class Base {
       return item
     }
 
-    if (!opts.animate || !('animate' in item && typeof item.animate == 'function')) {
+    if (!opts.animate) {
       return Promise.resolve(after())
     }
 
@@ -124,7 +124,7 @@ class Base {
     }
 
     const promise = Promise.resolve(before())
-    if (!opts.animate || !('animate' in item && typeof item.animate == 'function')) {
+    if (!opts.animate) {
       return promise
     }
 
@@ -137,10 +137,10 @@ class Base {
     return options
   }
 
-  __uuid
   _container
+  _options
+  __uuid
   __emitter
-  _options = { animate: !(typeof process !== 'undefined' && process.env.NODE_ENV === 'test') }
 
   get _emitter () {
     if (typeof this.__emitter === 'undefined') {

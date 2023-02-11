@@ -1,11 +1,16 @@
 /* global given */
 
 import { Base } from '@notus.sh/cocooned/src/cocooned/base'
-import { jest } from '@jest/globals'
 import { faker } from '@cocooned/tests/support/faker'
 import { getItem } from '@cocooned/tests/support/helpers'
 
 describe('Base', () => {
+  describe('defaultOptions', () => {
+    it('detects animation support', () => {
+      expect(Base.defaultOptions).toEqual(expect.objectContaining({ animate: false }))
+    })
+  })
+
   beforeEach(() => {
     document.body.innerHTML = given.html
     given.instance.start()
