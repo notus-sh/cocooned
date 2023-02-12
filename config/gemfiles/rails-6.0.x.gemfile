@@ -6,6 +6,7 @@ gemspec path: '../..'
 
 group :development, :test do
   gem 'jquery-rails'
+  gem 'psych', '< 4.0.0'
   gem 'rails', '~> 6.0.0'
   gem 'sqlite3'
 
