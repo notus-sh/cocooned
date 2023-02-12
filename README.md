@@ -4,7 +4,12 @@
 
 Cocooned makes it easier to handle nested forms in a Rails project.
 
-Cocooned is form builder-agnostic: it works with standard Rails (>= 5.0, < 7.0) form helpers, [Formtastic](https://github.com/justinfrench/formtastic) or [SimpleForm](https://github.com/plataformatec/simple_form).
+Cocooned is form builder-agnostic: it works with standard Rails (>= 5.0, < 7.1) form helpers, [Formtastic](https://github.com/justinfrench/formtastic) or [SimpleForm](https://github.com/plataformatec/simple_form).
+
+1. [Background](#some-background)
+2. [Installation](#installation)
+3. [Getting started](#getting-started)
+4. [Going further with plugins](#going-further-with-plugins)
 
 ## Some Background
 
@@ -14,37 +19,75 @@ However, the project seems to have only received minimal fixes since 2018 and ma
 
 Cocooned is almost a complete rewrite of Cocoon, with more functionnalities, a more fluent API (I hope) and integration with modern toolchains (including webpacker).
 
-**For now, Cocooned is completely compatible with Cocoon and can be used as a drop-in replacement** as long as we talk about Ruby code. Just change the name of the gem in your Gemfile and you're done. It will work the same (but will add a bunch of deprecation warning to your logs).
+**For now, Cocooned is completely compatible with Cocoon and can be used as a drop-in replacement** as long as we talk about Ruby code. Just change the name of the gem in your Gemfile and you're done. It will work the same (but will add a bunch of deprecation warning to your logs). **This compatibility layer with the original Cocoon API will be dropped in Cocooned 3.0.**
 
-**This compatibility layer with the original Cocoon API will be dropped in Cocooned 3.0.**
-
-On the JavaScript side, Cocoon 1.2.13 introduced the original browser event as a third parameter to all event handlers. Meanwhile, Cocooned already started to use this positional parameter to pass the Cocooned object instance (since 1.3.0). To get access to the original event, [you'll have to change your handlers and use `event.originalEvent`](#javascript-callbacks).
+On the JavaScript side, Cocooned 2.0 removed the dependency to jQuery. This means event handlers can not use any positional arguments other than the default `event`. See [JavaScript callbacks](#javascript-callbacks) for details.
 
 ## Installation
 
 Inside your `Gemfile` add the following:
 
 ```ruby
-gem "cocooned"
+gem 'cocooned'
 ```
 
-### Load Cocooned styles and scripts
+### Load Cocooned JavaScript
 
-If you use Sprockets, you have to require `cocooned` in your `application.js` and `application.css`, so it compiles with the asset pipeline.
+Cocooned comes with an NPM companion package: [`@notus.sh/cocooned`](https://www.npmjs.com/package/@notus.sh/cocooned).
+It bundles JavaScript files to handles in-browser interactions with your nested forms.
 
-If you use Yarn to manage your non-Ruby dependencies and/or Webpack to build your assets, you can install the [`@notus.sh/cocooned` companion package](https://www.npmjs.com/package/@notus.sh/cocooned).
+If you use import maps (Rails 7.0+ default), add it with:
 
-## Usage
+```shell
+$ bin/importmap pin @notus.sh/cocooned
+```
+
+If you use Yarn and Webpack (Rails 5.1+ default), add it with:
+
+```shell
+$ yarn add @notus.sh/cocooned
+```
+
+Once installed, load it into your application with:
+
+```javascript
+import Cocooned from '@notus.sh/cocooned'
+Cocooned.start()
+```
+
+If you still use Sprockets to bundle your javascripts (Rails 3.1+ default), you can either install the companion package from npmjs.org with the package manager of your choice, configure Sprockets to look for files in your application's `/node_modules` directory and load it as above (recommended) or require `cocooned` in your `application.js` with:
+
+```javascript
+//= require 'cocooned'
+```
+
+**This compatibility with aging Rails assets pipelines will be removed in Cocooned 3.0.**
+
+## Getting started
 
 For all the following examples, we will consider modelisation of an administrable list with items.
 Here are the two ActiveRecord models : `List` and `Item`:
 
 ```ruby
-class Item < ApplicationRecord
+# == Schema Info
+#
+# Table name: lists
+#
+#  id           :integer(11)    not null, primary key
+#  name         :string
+class List < ApplicationRecord
   has_many :items, inverse_of: :list
   accepts_nested_attributes_for :items, reject_if: :all_blank, allow_destroy: true
 end
 
+# == Schema Info
+#
+# Table name: items
+#
+#  id           :integer(11)    not null, primary key
+#  list_id      :integer(11)    not null
+#  description  :text
+#  done         :bool           not null, default(false)
 class Item < ApplicationRecord
   belongs_to :list
 end
@@ -52,74 +95,57 @@ end
 
 We will build a form where we can dynamically add and remove items to a list.
 
-### Strong Parameters Gotcha
-
-To destroy nested models, Rails uses a virtual attribute called `_destroy`.
-When `_destroy` is set, the nested model will be deleted. If the record has previously been persisted, Rails generate and use an automatic `id` field to fetch the wannabe destroyed record.
-
-When using Rails > 4.0 (or strong parameters), you need to explicitly add both `:id` and `:_destroy` to the list of permitted parameters.
-
-E.g. in your `ListsController`:
-
-```ruby
-  def list_params
-    params.require(:list).permit(:name, tasks_attributes: [:id, :description, :done, :_destroy])
-  end
-```
-
-### Has One Gotcha
-
-If you have a `has_one` association, then you (probably) need to set `force_non_association_create: true` on `link_to_add_association` or the associated object will be destroyed every time the edit form is rendered (which is probably not what you expect).
-
-See the [original merge request](https://github.com/nathanvda/cocoon/pull/247) for more details.
-
 ### Basic form
 
 [Rails natively supports nested forms](https://guides.rubyonrails.org/form_helpers.html#nested-forms) but does not support adding or removing nested items.
 
 ```erb
 <% # `app/views/lists/_form.html.erb` %>
-<%= form_for @list do |f| %>
-  <%= f.input :name %>
+<%= form_for @list do |form| %>
+  <%= form.text_field :name %>
   
   <h3>Items</h3>
-  <%= f.fields_for :tasks do |item_form| %>
-    <% # This block is repeated for every task in @list.items %>
+  <%= form.fields_for :tasks do |item_form| %>
     <%= item_form.label :description %>
     <%= item_form.text_field :description %>
     <%= item_form.check_box :done %>
   <% end %>
   
-  <%= f.submit "Save" %>
+  <%= form.submit "Save" %>
 <% end %>
 ```
 
 To enable Cocooned on this form, we need to:
 
 1. Move the nested form to a partial
-2. Add a way to add a new item to the collection
-3. Add a way to remove an item from the collection
-4. Initialize Cocooned to handle this form
+2. Signal to Cocooned it should handle your form
+3. Add a way to add a new item to the list
+4. Add a way to remove an item from the collection
 
 Let's do it.
 
-#### 1. Move the nested form to a partial
+### 1. Move the nested form to a partial
 
-We now have two files:
+Change your main form as follow:
 
-```erb
+```diff
 <% # `app/views/lists/_form.html.erb` %>
 <%= form_for @list do |form| %>
-  <%= form.input :name %>
+  <%= form.text_field :name %>
   
   <h3>Items</h3>
   <%= form.fields_for :items do |item_form|
-    <%= render 'item_fields', f: item_form %>
+-   <%= item_form.label :description %>
+-   <%= item_form.text_field :description %>
+-   <%= item_form.check_box :done %>
++   <%= render 'item_fields', f: item_form %>
   <% end %>
     
   <%= form.submit "Save" %>
 <% end %>
 ```
+
+And create a new file where items fields are defined:
 
 ```erb
 <% # `app/views/lists/_item_fields.html.erb` %>
@@ -128,23 +154,56 @@ We now have two files:
 <%= f.check_box :done %>
 ```
 
-#### 2. Add a way to add a new item to the collection
+### 2. Signal to Cocooned it should handle your form
 
-```erb
+Change your main form as follow:
+
+```diff
 <% # `app/views/lists/_form.html.erb` %>
 <%= form_for @list do |form| %>
   <%= form.input :name %>
   
   <h3>Items</h3>
-  <div id="items">
++ <%= cocooned_container do %>
+    <%= form.fields_for :tasks do |item_form| %>
+      <%= render 'item_fields', f: item_form %>
+    <% end %>
++ <% end %>
+  
+  <%= form.submit "Save" %>
+<% end %>
+```
+
+And your sub form as follow:
+
+```diff
+<% # `app/views/lists/_item_fields.html.erb` %>
++ <%= cocooned_item do %>
+    <%= f.label :description %>
+    <%= f.text_field :description %>
+    <%= f.check_box :done %>
++ <% end %>
+```
+
+The `cocooned_container` and `cocooned_item` helpers will set for you the HTML attributes the Cocooned JavaScript expect to find to hook on.
+
+### 3. Add a way to add a new item to the list
+
+Change your main form as follow:
+
+```diff
+<% # `app/views/lists/_form.html.erb` %>
+<%= form_for @list do |form| %>
+  <%= form.input :name %>
+  
+  <h3>Items</h3>
+  <%= cocooned_container do %>
     <%= form.fields_for :tasks do |item_form| %>
       <%= render 'item_fields', f: item_form %>
     <% end %>
     
-    <div class="links">
-      <%= cocooned_add_item_link 'Add an item', form, :items %>
-    </div>
-  </div>
+    <p><%= cocooned_add_item_link 'Add an item', form, :items %></p>
+  <% end %>
   
   <%= form.submit "Save" %>
 <% end %>
@@ -152,122 +211,88 @@ We now have two files:
 
 By default, a new item will be inserted just before the immediate parent of the 'Add an item' link. You can have a look at the documentation of `cocooned_add_item_link` for more information about how to change that but we'll keep it simple for now.
 
-#### 3. Add a way to remove an item from the collection
+### 4. Add a way to remove an item from the collection
 
-```erb
+Change your sub form as follow:
+
+```diff
 <% # `app/views/lists/_item_fields.html.erb` %>
-<div class="cocooned-item">
+<%= cocooned_item do %>
   <%= f.label :description %>
   <%= f.text_field :description %>
   <%= f.check_box :done %>
-  <%= cocooned_remove_item_link 'Remove', f %>
-</div>
++ <%= cocooned_remove_item_link 'Remove', f %>
+<% end %>
 ```
-
-The `cocooned-item` class is required for the `cocooned_remove_item_link` to work correctly.
-
-#### 4. Initialize Cocooned to handle this form
-
-Cocooned will detect on page load forms it should handle and initialize itself.
-This detection is based on the presence of a `data-cocooned-options` attribute on the nested forms container.
-
-```erb
-<% # `app/views/lists/_form.html.erb` %>
-<%= form_for @list do |form| %>
-  <%= form.input :name %>
-  
-  <h3>Items</h3>
-  <div id="items" data-cocooned-options="<%= {}.to_json %>">
-    <%= form.fields_for :tasks do |item_form| %>
-      <%= render 'item_fields', f: item_form %>
-    <% end %>
-    
-    <div class="links">
-      <%= cocooned_add_item_link 'Add an item', form, :items %>
-    </div>
-  </div>
-  
-  <%= form.submit "Save" %>
-</div>
-``` 
 
 You're done!
 
-### Wait, what's the point of `data-cocooned-options` if it's to be empty?
+### Gotchas
 
-For simple use cases as the one we just demonstrated, the `data-cocooned-options` attributes only triggers the Cocooned initialization on page load. But you can use it to pass additional options to the Cocooned javascript and enable plugins.
+#### Strong Parameters Gotcha
+
+To destroy nested models, Rails uses a virtual attribute called `_destroy`. When `_destroy` is set, the nested model will be deleted. If a record has previously been persisted, Rails generates and uses an additional `id` field.
+
+When using Rails > 4.0 (or strong parameters), you need to explicitly add both `:id` and `:_destroy` to the list of permitted parameters in your controller.
+
+In our example:
+
+```ruby
+  def list_params
+    params.require(:list).permit(:name, tasks_attributes: [:id, :description, :done, :_destroy])
+  end
+```
+
+#### Has One Gotcha
+
+If you have a `has_one` association, then you (probably) need to set `force_non_association_create: true` on `cocooned_add_item_link` or the associated object will be destroyed every time the edit form is rendered (which is probably not what you expect).
+
+See the [original merge request](https://github.com/nathanvda/cocoon/pull/247) for more details.
+
+## Going further with plugins
 
 For now, Cocooned supports two plugins:
 
-* **Limit**, to set a maximum limit of items that can be added to the association
-* **Reorderable**, that will automatically update `position` fields when you add or remove an item or when you reorder associated items.
+* **Limit**, to set a maximum limit of items the association can contain
+* **Reorderable**, that will automatically update a `position` field in each of your sub forms when you add, remove or move an item.
 
-#### The limit plugin
+### The limit plugin
 
-The limit plugin is autoloaded when needed and does not require anything more than you specifiying the maximum number of items allowed in the association.
+The limit plugin requires you specify the maximum number of items allowed in the association. To do so, pass a `:limit` option to the `cocooned_container` helper:
 
 ```erb
-<% # `app/views/lists/_form.html.erb` %>
-<%= form_for @list do |form| %>
-  <%= form.input :name %>
-  
-  <h3>Items</h3>
-  <div id="items" data-cocooned-options="<%= { limit: 12 }.to_json %>">
-    <%= form.fields_for :tasks do |item_form| %>
-      <%= render 'item_fields', f: item_form %>
-    <% end %>
-    
-    <div class="links">
-      <%= cocooned_add_item_link 'Add an item', form, :items %>
-    </div>
-  </div>
-  
-  <%= form.submit "Save" %>
+<%= cocooned_container limit: 12 do %>
+  <% # […] %>
 <% end %>
 ```
 
-#### The reorderable plugin
+### The reorderable plugin
 
-The reorderable plugin is autoloaded when activated and does not support any particular options.
+**Important:** To use the reorderable plugin, your model must have a `position` numeric attribute you will use to order collections.
 
-```erb
-<% # `app/views/lists/_form.html.haml` %>
-<%= form_for @list do |form| %>
-  <%= form.input :name %>
-  
-  <h3>Items</h3>
-  <div id="items" data-cocooned-options="<%= { reorderable: true }.to_json %>">
-    <%= form.fields_for :tasks do |item_form| %>
-      <%= render 'item_fields', f: item_form %>
-    <% end %>
-    
-    <div class="links">
-      <%= cocooned_add_item_link 'Add an item', form, :items %>
-    </div>
-  </div>
-    
-  <%= form.submit "Save" %>
-<% end %>
-```
+The reorderable plugin can be activated in two ways through the `cocooned_container` helper:
 
-However, you need to edit your nested partial to add the links that allow your users to move an item up or down in the collection and to add a `position` field.
+- With a boolean: `cocooned_container reorderable: true`  
+  Will use plugin's defaults (and start counting positions at 1)
+- With a configuration hash: `cocooned_container reorderable: { startAt: 0 }`  
+  Will use given `:startAt` as base position
 
-```erb
+To be able to move items up and down in your form and for positions to be saved, you need to change your sub form as follow:
+
+```diff
 <% # `app/views/lists/_item_fields.html.erb` %>
-<div class="cocooned-item">
+<%= cocooned_item do %>
   <%= f.label :description %>
   <%= f.text_field :description %>
   <%= f.check_box :done %>
-  <%= f.hidden_field :position %>
-  <%= cocooned_move_item_up_link 'Up', f %>
-  <%= cocooned_move_item_down_link 'Down', f %>
++ <%= f.hidden_field :position %>
++ <%= cocooned_move_item_up_link 'Up', f %>
++ <%= cocooned_move_item_down_link 'Down', f %>
   <%= cocooned_remove_item_link 'Remove', f %>
-</div>
+<% end %>
 ```
 
-Also, remember the strong parameters gotcha we mentioned earlier.
-
-Of course, it means your model must have a `position` attribute you will use to sort collections.
+Remember to add `:position` as a permitted parameter in your controller.
 
 ## How it works
 
