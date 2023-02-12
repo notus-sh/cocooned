@@ -7,7 +7,7 @@ jobs:
     strategy:
       matrix:
         ruby: [2.6, 2.7, 3.0, 3.1]
-        gemfiles: [Gemfile, config/gemfiles/rails-6.0.x.gemfile, config/gemfiles/rails-6.1.x.gemfile]
+        gemfile: [Gemfile, config/gemfiles/rails-6.0.x.gemfile, config/gemfiles/rails-6.1.x.gemfile]
         exclude:
           # Exclude rubies < 2.7 for ActiveModel < 7.0
           - ruby: 2.6
