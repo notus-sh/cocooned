@@ -47,11 +47,13 @@ module Cocooned
         @html_options ||= begin
           options[:class] = html_classes
           options[:data] = html_data
+          # TODO: Replace with compact_blank when dropping support for Rails 6.0
           options.reject { |_, value| value.blank? }
         end
       end
 
       def html_classes
+        # TODO: Replace with compact_blank when dropping support for Rails 6.0
         Array.wrap(options.delete(:class)).flat_map { |k| k.to_s.split(' ') }.reject(&:blank?)
       end
     end

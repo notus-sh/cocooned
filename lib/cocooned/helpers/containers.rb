@@ -62,6 +62,7 @@ module Cocooned
       protected
 
       def cocooned_wrapper_defaults(options, additional_classes, mark)
+        # TODO: Replace with compact_blank when dropping support for Rails 6.0
         classes = Array.wrap(options.delete(:class)).flat_map { |k| k.to_s.split(' ') }.reject(&:blank?)
 
         { class: (classes + additional_classes), data: { mark => true } }

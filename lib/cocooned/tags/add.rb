@@ -7,6 +7,7 @@ module Cocooned
         protected
 
         def association_options
+          # TODO: Replace with compact_blank when dropping support for Rails 6.0
           {
             association: association,
             template: html_template_name,
