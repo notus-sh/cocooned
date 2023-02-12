@@ -47,12 +47,12 @@ module Cocooned
         @html_options ||= begin
           options[:class] = html_classes
           options[:data] = html_data
-          options.compact_blank
+          options.reject { |_, value| value.blank? }
         end
       end
 
       def html_classes
-        Array.wrap(options.delete(:class)).flat_map { |k| k.to_s.split(' ') }.compact_blank
+        Array.wrap(options.delete(:class)).flat_map { |k| k.to_s.split(' ') }.reject(&:blank?)
       end
     end
   end
