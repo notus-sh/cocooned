@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Cocooned::Helpers::Containers, :action_view do
+RSpec.describe Cocooned::Helpers::Containers, :action_view do
   let(:template) { ActionView::Base.empty }
 
   shared_examples 'a container helper' do |class_name, attribute_name|

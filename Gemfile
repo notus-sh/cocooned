@@ -14,6 +14,9 @@ group :development, :test do
   gem 'webrick'
 
   gem 'byebug', '~> 11.1'
+  gem 'formtastic', '~> 4.0'
   gem 'nokogiri'
+  gem 'rspec-rails', '~> 6.0'
   gem 'simplecov', require: false
+  gem 'simple_form', '~> 5.1'
 end

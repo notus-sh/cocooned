@@ -7,6 +7,7 @@ module Cocooned
         protected
 
         def association_options
+          # TODO: Replace with compact_blank when dropping support for Rails 6.0
           {
             association: association,
             template: html_template_name,
@@ -14,7 +15,7 @@ module Cocooned
             association_insertion_node: options.delete(:insertion_node),
             association_insertion_method: options.delete(:insertion_method),
             association_insertion_traversal: options.delete(:insertion_traversal)
-          }.compact_blank
+          }.reject { |_, value| value.blank? }
         end
       end
 

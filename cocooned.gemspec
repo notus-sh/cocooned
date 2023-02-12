@@ -33,7 +33,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'formtastic', '~> 4.0'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rspec', '~> 3.11'
-  spec.add_development_dependency 'rspec-rails', '~> 6.0'
+  spec.add_development_dependency 'rspec-rails', '>= 5.0'
   spec.add_development_dependency 'rubocop'
   spec.add_development_dependency 'rubocop-performance'
   spec.add_development_dependency 'rubocop-rails'

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Cocooned::Railtie do
+RSpec.describe Cocooned::Railtie do
   subject(:view) { ActionView::Base.empty }
 
   it { is_expected.to respond_to(:cocooned_container) }

@@ -2,7 +2,7 @@
 
 require_relative './shared/tag'
 
-describe Cocooned::Tags::Base do
+RSpec.describe Cocooned::Tags::Base do
   let(:template) { ActionView::Base.empty }
   let(:form) { ActionView::Helpers::FormBuilder.new('person', nil, template, {}) }
 
