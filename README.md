@@ -1,6 +1,6 @@
 # Cocooned
 
-[![Build Status](https://travis-ci.org/notus-sh/cocooned.png?branch=master)](https://travis-ci.org/notus-sh/cocooned)
+![Build status](https://github.com/notus-sh/cocooned/actions/workflows/unit-tests.yml/badge.svg?branch=master)
 
 Cocooned makes it easier to handle nested forms in a Rails project.
 
