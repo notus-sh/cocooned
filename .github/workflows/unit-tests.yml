@@ -41,5 +41,7 @@ jobs:
         with:
           node-version: lts/*
           cache: 'yarn'
+      - name: Install dependencies
+        run: yarn install
       - name: Run tests
         run: yarn run test
