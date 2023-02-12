@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Cocooned::Association::Renderer do
+RSpec.describe Cocooned::Association::Renderer do
   subject(:renderer) { described_class.new(template, form, association, record, options) }
 
   let(:template) { ActionView::Base.empty }

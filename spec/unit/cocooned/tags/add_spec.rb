@@ -3,7 +3,7 @@
 require_relative './shared/association_tag'
 require_relative './shared/tag'
 
-describe Cocooned::Tags::Add do
+RSpec.describe Cocooned::Tags::Add do
   before { allow(template).to receive(:render).and_return(item) }
 
   let(:builders) { Cocooned::Association::Builder }

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Cocooned::Deprecation do
+RSpec.describe Cocooned::Deprecation do
   describe '.[]' do
     it 'returns a deprecator instance' do
       expect(described_class[]).to be_an_instance_of(described_class)

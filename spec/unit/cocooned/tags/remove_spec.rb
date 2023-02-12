@@ -3,7 +3,7 @@
 require_relative './shared/association_tag'
 require_relative './shared/tag'
 
-describe Cocooned::Tags::Remove do
+RSpec.describe Cocooned::Tags::Remove do
   let(:template) { ActionView::Base.empty }
   let(:record) { Person.new }
   let(:form) { ActionView::Helpers::FormBuilder.new('person[contacts_attributes][0]', record, template, {}) }
