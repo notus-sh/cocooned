@@ -1,5 +1,9 @@
 name: Unit tests
-on: [push]
+on:
+  push:
+    branches: [master, next]
+  pull_request:
+    branches:  [master, next]
 jobs:
   # Ruby unit tests
   rspec:
