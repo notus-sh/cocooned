@@ -9,7 +9,7 @@ group :development, :test do
   gem 'rails', '~> 6.0.0'
   gem 'sqlite3'
 
-  gem 'rspec-rails', '~> 5.0'
   gem 'nokogiri'
+  gem 'rspec-rails', '~> 5.0'
   gem 'simplecov', require: false
 end

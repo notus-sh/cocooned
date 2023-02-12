@@ -11,11 +11,9 @@ namespace :test do
     desc 'Rebuild integration tests templates'
     task prepare: :environment do
       templates = %i[link button].to_h do |use|
-        response = ListsController.action(:new).call({
-          'REQUEST_METHOD' => 'GET',
-          'QUERY_STRING' => "use=#{use}",
-          'rack.input' => ''
-        })
+        response = ListsController.action(:new).call({ 'REQUEST_METHOD' => 'GET',
+                                                       'QUERY_STRING' => "use=#{use}",
+                                                       'rack.input' => '' })
 
         [use, Nokogiri::HTML(response.last.body).at('body > form')]
       end

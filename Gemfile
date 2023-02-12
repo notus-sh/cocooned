@@ -14,7 +14,7 @@ group :development, :test do
   gem 'webrick'
 
   gem 'byebug', '~> 11.1'
-  gem 'rspec-rails', '~> 6.0'
   gem 'nokogiri'
+  gem 'rspec-rails', '~> 6.0'
   gem 'simplecov', require: false
 end
