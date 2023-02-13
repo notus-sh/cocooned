@@ -13,17 +13,25 @@ Gem::Specification.new do |spec|
 
   spec.summary      = 'Unobtrusive Rails nested forms handling, with or without jQuery.'
   spec.description  = 'Easier nested form. Supports standard Rails forms, Formtastic and SimpleForm.'
-  spec.homepage     = 'http://github.com/notus-sh/cocooned'
+  spec.homepage     = 'https://github.com/notus-sh/cocooned'
 
   raise 'RubyGems 2.0 or newer is required.' unless spec.respond_to?(:metadata)
+  spec.metadata = {
+    'allowed_push_host' => 'https://rubygems.org',
 
-  spec.metadata['allowed_push_host'] = 'https://rubygems.org'
+    'bug_tracker_uri'   => 'https://github.com/notus-sh/cocooned/issues',
+    'changelog_uri'     => 'https://github.com/notus-sh/cocooned/blob/master/CHANGELOG.md',
+    'homepage_uri'      => 'https://github.com/notus-sh/cocooned',
+    'source_code_uri'   => 'https://github.com/notus-sh/cocooned',
+    'funding_uri'       => 'https://opencollective.com/notus-sh'
+  }
 
   spec.require_paths = ['lib']
+
+  excluded_dirs = %r{^(.github|config|npm|spec)/}
+  excluded_files = %w[.gitignore .rspec Gemfile Gemfile.lock Rakefile package.json yarn.lock]
   spec.files = `git ls-files -z`.split("\x0").reject do |f|
-    f.match(%r{^(config|gemfiles|npm|spec)/}) ||
-      %w[.gitignore .rspec .travis.yml].include?(f) ||
-      %w[Gemfile Gemfile.lock package.json yarn.lock].include?(f)
+    f.match(excluded_dirs) || excluded_files.include?(f)
   end
   spec.required_ruby_version = '>= 2.6'
 

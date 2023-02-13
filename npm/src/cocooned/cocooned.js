@@ -3,6 +3,10 @@ import { coreMixin } from './plugins/core'
 
 class Cocooned extends coreMixin(Base) {
   static create (container, options) {
+    if ('cocoonedUuid' in container.dataset) {
+      return Cocooned.getInstance(container.dataset.cocoonedUuid)
+    }
+
     const cocooned = new this.constructor(container, options)
     cocooned.start()
 
@@ -15,6 +19,7 @@ class Cocooned extends coreMixin(Base) {
   }
 }
 
+export default Cocooned
 export {
   Cocooned
 }

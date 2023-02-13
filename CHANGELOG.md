@@ -1,36 +1,43 @@
 # Change History / Release Notes
 
-## Version 2.0.0 (Not released yet)
+## Version 2.0.0
 
 ### Breaking changes
+
+#### Features dropped without any replacements
+
+* Use of a function as `data-association-insertion-node` on add triggers support have been dropped (#18)  
+  As HTML dataset are `DOMStringMap`, they only support strings as values. The only way to use a function to loop up for insertion node on an add trigger was to use jQuery (ex: `$(addTrigger).data('association-insertion-node', (add) => {})`).
+* `data-remove-timeout` on remove triggers (#18)  
+  Items are now removed at the end of their hiding animation.
 
 #### Events listener now use `CustomEvent`s (#17)
 
 Cocooned events have been rewritten around `CustomEvent`s and standard `addEventListener` / `dispatchEvent`.
 You should either rewrite your event binding with `addEventListener` or change your jQuery ones as follow:
 
-```javascript
+```diff
 - $(element).on('cocooned:event', (e, node, cocooned) => {
 + $(element).on('cocooned:event', e => {
 +   { node, cocooned } = e.detail // Use nodes in 'cocooned:before-reindex' / 'cocooned:after-reindex' events
   })
 ```
 
-### Use of a function as `data-association-insertion-node` on add triggers support have been dropped (#18)
-
-As HTML dataset are `DOMStringMap`, they only support strings as values. The only way to use a function to loop up for insertion node on an add trigger was to use jQuery (ex: `$(addTrigger).data('association-insertion-node', (add) => {})`).
-
-### `data-remove-timeout` on remove triggers support have been dropped (#18)
-
-Removing (or moving) items have been rewritten around scoped CSS transitions instead of jQuery animation functions. There is currently no way to customize scoped styles to adjust animation details or timing.
-
 ### Deprecations
 
-These features are now deprecated and will be removed in Cocooned 3.0:
+These features are now deprecated and emit a warning message:
 
-* `data-association-insertion-traversal` on add triggers (#18)
-  Usually set through the `:insertion_traversal` option on `cocooned_add_item_link` / `link_to_add_association`.
+* `:insertion_traversal` option on `cocooned_add_item_link` (#18)
   Use a more specific selector as `data-association-insertion-node` (set through `:insertion_node`) instead.
+* Importing `@notus.sh/cocooned/cocooned` in your JavaScript files (#22)  
+  Import Cocooned from either `@notus.sh/cocooned`, `@notus.sh/cocooned/jquery` or `@notus.sh/cocooned/src/cocooned/cocooned` instead.
+
+These features are now deprecated but don't emit any warning message (sorry):
+
+* Containers identified only by the `data-cocooned-options` attribute (#26)  
+  Use the `cocooned_container` helper in your forms.
+* Containers identified only by the `.cocooned-item` class (#26)  
+  Use the `cocooned_item` helper in your forms.
 
 These features were already deprecated but now emit a warning message:
 
@@ -40,17 +47,34 @@ These features were already deprecated but now emit a warning message:
 * `:render_option` option on `cocooned_add_item_link` / `link_to_add_association`  
   Use `:form_options` and/or `:locals` instead.
 
+These features were already deprecated but (still) don't emit any warning message (sorry):
+
+* Events in `cocoon` namespace (replaced by `cocooned`)
+* Triggers only identified by Cocoon classes (`.add_fields`, `.remove_fields`)
+* Cocoon auto-start logic (non-identified containers)
+
+All deprecated features will be removed in the next major release.
+
+### New features
+
+* Add support for association scoped label to `cocooned_move_item_up_link` and `cocooned_move_item_down_link` (#11)
+* Replace dependency to jQuery by an optional jQuery integration (#22)
+* Introduce `cocooned_container` and `cocooned_item` helpers to ease forms markup construction (#26) 
+* Allow to choose between links or buttons for triggers (#27)
+* Use Web Animation API for animations instead of CSS / jQuery (#29)
 
 ### Bug fixes and other changes
 
-* Use HTML `<template>` instead of a data-attribute to pass subform template to JavaScript (#12)
-* Add support for association scoped label to `cocooned_move_item_up_link` and `cocooned_move_item_down_link` (#11)
-* Refactor helpers as tag classes (#10)
-* Integrate deprecation messages with ActiveSupport::Deprecation (#9)
-* Rewrite JavaScript code as ESM modules (#6) and ECMAScript 5 classes (#7)
+* Rewrite JavaScript tests suite with [Jest](https://jestjs.io/) (#2) (replace Jasmine, now deprecated)
 * Reorganize JavaScript code and tests into the `npm` folder (#5)
-* Rewrite JavaScript tests suite with [Jest](https://jestjs.io/)  
-  In replacement of the deprecated Jasmine JavaScript tests runner.
+* Rewrite JavaScript code to use ESM modules (#6) and modern ECMAScript idioms (#7, #14)
+* Integrate deprecation messages with ActiveSupport::Deprecation (#9)
+* Refactor helpers as tag classes (#10)
+* Use HTML `<template>` instead of a data-attribute to pass subform template to JavaScript (#12)
+* Split JavaScript monolith into smaller classes with minimal public API (#8, #18, #21)
+* Isolate and unit test Cocoon compatibility code (#23)
+* Use data-attributes instead of classes to hook JavaScript on (#26)
+* Switch from Travis CI to Github actions (#30)
 
 ## Version 1.4.1
 
