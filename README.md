@@ -9,7 +9,11 @@ Cocooned is form builder-agnostic: it works with standard Rails (>= 5.0, < 7.1) 
 1. [Background](#some-background)
 2. [Installation](#installation)
 3. [Getting started](#getting-started)
-4. [Going further with plugins](#going-further-with-plugins)
+4. [Links or buttons ?](#links-or-buttons)
+5. [Going further with plugins](#plugins)
+6. [JavaScript](#javascript)
+7. [Styling](#styling-forms)
+8. [Migration from a previous version](#migration-from-a-previous-version) or from Cocoon
 
 ## Some Background
 
@@ -19,9 +23,9 @@ However, the project seems to have only received minimal fixes since 2018 and ma
 
 Cocooned is almost a complete rewrite of Cocoon, with more functionnalities, a more fluent API (I hope) and integration with modern toolchains (including webpacker).
 
-**For now, Cocooned is completely compatible with Cocoon and can be used as a drop-in replacement** as long as we talk about Ruby code. Just change the name of the gem in your Gemfile and you're done. It will work the same (but will add a bunch of deprecation warning to your logs). **This compatibility layer with the original Cocoon API will be dropped in Cocooned 3.0.**
+**For now, Cocooned is completely compatible with Cocoon and can be used as a drop-in replacement** as long as we talk about Ruby code. Just change the name of the gem in your Gemfile and you're done. It will work the same (but will add a bunch of deprecation warning to your logs). **This compatibility layer with the original Cocoon API will be dropped in the next major release.**
 
-On the JavaScript side, Cocooned 2.0 removed the dependency to jQuery. This means event handlers can not use any positional arguments other than the default `event`. See [JavaScript callbacks](#javascript-callbacks) for details.
+On the JavaScript side, Cocooned 2.0 removed the dependency to jQuery (Yeah! :tada:). This means event handlers can not use any positional arguments other than the default `event`. See [JavaScript](#javascript) for details.
 
 ## Installation
 
@@ -48,6 +52,8 @@ If you use Yarn and Webpack (Rails 5.1+ default), add it with:
 $ yarn add @notus.sh/cocooned
 ```
 
+**Note:** To ensure you will always get the version of the companion package that match with the gem version, you should specify the same version constraint you used for the `cocooned` gem in your `Gemfile`.
+
 Once installed, load it into your application with:
 
 ```javascript
@@ -61,7 +67,7 @@ If you still use Sprockets to bundle your javascripts (Rails 3.1+ default), you 
 //= require 'cocooned'
 ```
 
-**This compatibility with aging Rails assets pipelines will be removed in Cocooned 3.0.**
+**This compatibility with aging Rails assets pipelines will be removed in the next major release.**
 
 ## Getting started
 
@@ -124,6 +130,8 @@ To enable Cocooned on this form, we need to:
 
 Let's do it.
 
+**Note:** In this example, we will use Cocooned helpers named with a `_link` suffix. If you want to use buttons in your forms instead, the same helpers exist with a `_button` suffix.
+
 ### 1. Move the nested form to a partial
 
 Change your main form as follow:
@@ -185,7 +193,7 @@ And your sub form as follow:
 + <% end %>
 ```
 
-The `cocooned_container` and `cocooned_item` helpers will set for you the HTML attributes the Cocooned JavaScript expect to find to hook on.
+The `cocooned_container` and `cocooned_item` helpers will set for you the HTML attributes the Cocooned JavaScript expect to find to hook on. They will politely forward any option supported by ActionView's `content_tag`.
 
 ### 3. Add a way to add a new item to the list
 
@@ -249,9 +257,20 @@ If you have a `has_one` association, then you (probably) need to set `force_non_
 
 See the [original merge request](https://github.com/nathanvda/cocoon/pull/247) for more details.
 
-## Going further with plugins
+## Links or buttons?
 
-For now, Cocooned supports two plugins:
+Each helper provided by Cocooned with a name ending with `link` has its `_button` equivalent, to generate a `<button type="button" />` instead of a `<a href="#" />`:
+
+- `cocooned_add_item_link` <=> `cocooned_add_item_button`
+- `cocooned_remove_item_link` <=> `cocooned_remove_item_button`
+- `cocooned_move_item_up_link` <=> `cocooned_move_item_up_button`
+- `cocooned_move_item_down_link` <=> `cocooned_move_item_down_button`
+
+While all `_link` helpers can accept any option supported by ActionView's `link_to` and will forward it polytely, `_button` helpers will do the same with options supported by ActionView's `button_tag`.
+
+## Plugins
+
+Cocooned comes with two built-in plugins:
 
 * **Limit**, to set a maximum limit of items the association can contain
 * **Reorderable**, that will automatically update a `position` field in each of your sub forms when you add, remove or move an item.
@@ -268,7 +287,7 @@ The limit plugin requires you specify the maximum number of items allowed in the
 
 ### The reorderable plugin
 
-**Important:** To use the reorderable plugin, your model must have a `position` numeric attribute you will use to order collections.
+**Important:** To use the reorderable plugin, your model must have a `position` numeric attribute you use to order collections (as in [acts_as_list](https://rubygems.org/gems/acts_as_list)).
 
 The reorderable plugin can be activated in two ways through the `cocooned_container` helper:
 
@@ -294,52 +313,67 @@ To be able to move items up and down in your form and for positions to be saved,
 
 Remember to add `:position` as a permitted parameter in your controller.
 
-## How it works
+## Javascript
 
-Cocooned defines some helper functions:
+For more documentation about the JavaScript bundled in the companion package, please refer to [its own documentation](https://github.com/notus-sh/cocooned/blob/master/npm/README.md).
 
-* `cocooned_add_item_link` will build a link that, when clicked, dynamically adds a new partial form for the given association. [Have a look at the documentation for available options](https://github.com/notus-sh/cocooned/blob/master/lib/cocooned/helpers.rb#L21).
-* `cocooned_remove_item_link` will build a link that, when clicked, dynamically removes the surrounding partial form. [Have a look at the documentation for available options](https://github.com/notus-sh/cocooned/blob/master/lib/cocooned/helpers.rb#L143).
-* `cocooned_move_item_up_link` and `cocooned_move_item_down_link` will build links that, when clicked, will move the surrounding partial form one step up or down in the collection. [Have a look at the documentation for available options](https://github.com/notus-sh/cocooned/blob/master/lib/cocooned/helpers.rb#L178).
+## Styling forms
 
-### Javascript callbacks
+Cocooned now uses exclusively data-attribute to hook JavaScript methods on but usual styles are still here and will stay so you style your forms:
 
-When your collection is modified, the following events can be triggered:
+`.cocooned-container` on a container
+`.cocooned-item` on an item
+`.cocooned-add` on an add trigger (link or button)
+`.cocooned-remove` on a remove trigger (link or button)
+`.cocooned-move-up` on a move up trigger (link or button)
+`.cocooned-move-down` on a move down trigger (link or button)
 
-* `cocooned:before-insert`: called before inserting a new nested child, can be [canceled](#canceling-an-action)
-* `cocooned:after-insert`: called after inserting
-* `cocooned:before-remove`: called before removing the nested child, can be [canceled](#canceling-an-action)
-* `cocooned:after-remove`: called after removal
+## Migration from a previous version
 
-The limit plugin can trigger its own event:
+### From Cocooned ~1.0
 
-* `cocooned:limit-reached`: called when the limit is reached (before a new item will be inserted)
+#### Forms markup
 
-And so does the reorderable plugin:
+Cocooned 2.0 introduced the `cocooned_container` and `cocooned_item` helpers to respectively wrap the container where items will be added and each of the items.
 
-* `cocooned:before-move`: called before moving the nested child, can be [canceled](#canceling-an-action)
-* `cocooned:after-move`: called after moving
-* `cocooned:before-reindex`: called before updating the `position` fields of nested items, can be [canceled](#canceling-an-action) (even if I honestly don't know why you would)
-* `cocooned:after-reindex`: called after `position` fields update
+If you used Cocooned ~1.0, you should modify your main forms as follow:
 
-To listen to the events in your JavaScript:
-
-```javascript
-container.addEventListener('cocooned:before-insert', event => {
-  /* Do something */
-});
+```diff
+- <div data-cocooned-options="<%= {}.to_json %>">
++ <%= cocooned_container do %>
+    <% # […] %>
++ <% end %>
+- </div>
 ```
 
-Event handlers receive a `CustomEvent` with following detail:
+And your nested partials:
 
-* `event.detail.link`, the clicked link
-* `event.detail.node`, the nested item that will be added, removed or moved.  
-  Does not exist in `cocooned:limit-reached` and `cocooned:*-reindex` events 
-* `event.nodes`, the nested items that will be or just have been reindexed.  
-  On `cocooned:*-reindex` events only 
-* `event.detail.cocooned`, the Cocooned instance handling the nested association.
-* `event.detail.originalEvent`, the original (browser) event.
+```diff
+- <div class="cocooned-item">
++ <%= cocooned_item do %>
+    <% # […] %>
++ <% end %>
+- </div>
+```
 
-#### Canceling an action
+Support for the `data-cocooned-options` attribute to identify a container and the `.cocooned-item` class to identify an item is still here but it is not the recommended way to tag your containers and items anymore.
 
-You can cancel an action within the `cocooned:before-<action>` callback by calling `event.preventDefault()` or `event.stopPropagation()`.
+**Compatibility with older markup will be dropped in the next major release.**
+
+#### Bundled styles
+
+Cocooned ~2.0 does not provide any styles anymore. If you used to require (with Sprockets) or import the cocooned stylesheets into your application, you need to remove it.
+
+**Empty files are included to not break your assets pipeline but will be removed in the next major release.**
+
+### From Cocoon (any version)
+
+Cocoon uses a `.nested_fields` class to identify items in a nested form and nothing to identify containers new items will be added to.
+
+If you used Cocoon, you should:
+
+1. Modify your forms and sub forms to use the `cocooned_container` and `cocooned_item` helpers. (See above for examples)
+2. Replace calls to `link_to_add_association` by `cocooned_add_item_link`
+3. Replace calls to `link_to_remove_association` by `cocooned_remove_item_link`
+
+**Compatibility with the original Cocoon API will be dropped in the next major release.**
