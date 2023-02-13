@@ -192,6 +192,8 @@ You can cancel an action within the `cocooned:before-<action>` callback using `e
 
 ## Migration from a previous version
 
+These migrations steps only highlight major changes. When upgrading from a previous version, always refer to [the CHANGELOG](https://github.com/notus-sh/cocooned/blob/master/CHANGELOG.md) for new features and breaking changes.
+
 ### From Cocooned ~1.0
 
 Cocooned events have been rewritten around `CustomEvent`s and standard `addEventListener` / `dispatchEvent` in version 2.0. This does not allow more than a single `event` parameter in listeners, in opposition to what was in use with jQuery listeners.

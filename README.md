@@ -9,8 +9,9 @@ Cocooned is form builder-agnostic: it works with standard Rails (>= 5.0, < 7.1) 
 1. [Background](#some-background)
 2. [Installation](#installation)
 3. [Getting started](#getting-started)
-4. [Links or buttons ?](#links-or-buttons)
-5. [Going further with plugins](#plugins)
+4. [Going further with plugins](#plugins)
+5. [Links or buttons ?](#links-or-buttons)
+5. [I18n integration](#internationalisation)
 6. [JavaScript](#javascript)
 7. [Styling](#styling-forms)
 8. [Migration from a previous version](#migration-from-a-previous-version) or from Cocoon
@@ -111,7 +112,7 @@ We will build a form where we can dynamically add and remove items to a list.
   <%= form.text_field :name %>
   
   <h3>Items</h3>
-  <%= form.fields_for :tasks do |item_form| %>
+  <%= form.fields_for :items do |item_form| %>
     <%= item_form.label :description %>
     <%= item_form.text_field :description %>
     <%= item_form.check_box :done %>
@@ -173,7 +174,7 @@ Change your main form as follow:
   
   <h3>Items</h3>
 + <%= cocooned_container do %>
-    <%= form.fields_for :tasks do |item_form| %>
+    <%= form.fields_for :items do |item_form| %>
       <%= render 'item_fields', f: item_form %>
     <% end %>
 + <% end %>
@@ -206,18 +207,18 @@ Change your main form as follow:
   
   <h3>Items</h3>
   <%= cocooned_container do %>
-    <%= form.fields_for :tasks do |item_form| %>
+    <%= form.fields_for :items do |item_form| %>
       <%= render 'item_fields', f: item_form %>
     <% end %>
-    
-    <p><%= cocooned_add_item_link 'Add an item', form, :items %></p>
++   
++   <p><%= cocooned_add_item_link 'Add an item', form, :items %></p>
   <% end %>
   
   <%= form.submit "Save" %>
 <% end %>
 ```
 
-By default, a new item will be inserted just before the immediate parent of the 'Add an item' link. You can have a look at the documentation of `cocooned_add_item_link` for more information about how to change that but we'll keep it simple for now.
+By default, new items will be inserted just before the immediate parent of the 'Add an item' link. You can have a look at the documentation of `cocooned_add_item_link` for more information about how to change that but we'll keep it simple for now.
 
 ### 4. Add a way to remove an item from the collection
 
@@ -256,17 +257,6 @@ In our example:
 If you have a `has_one` association, then you (probably) need to set `force_non_association_create: true` on `cocooned_add_item_link` or the associated object will be destroyed every time the edit form is rendered (which is probably not what you expect).
 
 See the [original merge request](https://github.com/nathanvda/cocoon/pull/247) for more details.
-
-## Links or buttons?
-
-Each helper provided by Cocooned with a name ending with `link` has its `_button` equivalent, to generate a `<button type="button" />` instead of a `<a href="#" />`:
-
-- `cocooned_add_item_link` <=> `cocooned_add_item_button`
-- `cocooned_remove_item_link` <=> `cocooned_remove_item_button`
-- `cocooned_move_item_up_link` <=> `cocooned_move_item_up_button`
-- `cocooned_move_item_down_link` <=> `cocooned_move_item_down_button`
-
-While all `_link` helpers can accept any option supported by ActionView's `link_to` and will forward it polytely, `_button` helpers will do the same with options supported by ActionView's `button_tag`.
 
 ## Plugins
 
@@ -313,6 +303,30 @@ To be able to move items up and down in your form and for positions to be saved,
 
 Remember to add `:position` as a permitted parameter in your controller.
 
+## Links or buttons?
+
+Each helper provided by Cocooned with a name ending with `link` has its `_button` equivalent, to generate a `<button type="button" />` instead of a `<a href="#" />`:
+
+- `cocooned_add_item_link` <=> `cocooned_add_item_button` ([Documentation](https://github.com/notus-sh/cocooned/blob/master/lib/cocooned/helpers/tags/add.rb))
+- `cocooned_remove_item_link` <=> `cocooned_remove_item_button` ([Documentation](https://github.com/notus-sh/cocooned/blob/master/lib/cocooned/helpers/tags/remove.rb))
+- `cocooned_move_item_up_link` <=> `cocooned_move_item_up_button` ([Documentation](https://github.com/notus-sh/cocooned/blob/master/lib/cocooned/helpers/tags/up.rb))
+- `cocooned_move_item_down_link` <=> `cocooned_move_item_down_button` ([Documentation](https://github.com/notus-sh/cocooned/blob/master/lib/cocooned/helpers/tags/down.rb))
+
+While all `_link` helpers can accept any option supported by ActionView's `link_to` and will forward it politely, `_button` helpers will do the same with options supported by ActionView's `button_tag`.
+
+## Internationalisation
+
+The label of any action trigger can be given explicitly as helper's first argument or as a block, just as you can do with ActionView's `link_to` or `button_to`.
+
+Additionally, Cocooned helpers will lookup I18n translations for a default label based on the action name (`add`, `remove`, `up`, `down`) and the association name. For `add` triggers, the association name used is the same as passed as argument. Other triggers extract the association name from form's `#object_name`.
+
+You can declare default labels in your translation files with following keys:
+
+- `cocooned.{association}.{action}` (Ex: `cocooned.items.add`)
+- `cocooned.defaults.{action}`
+
+If no translation is found, the default label will be the humanized action name.
+
 ## Javascript
 
 For more documentation about the JavaScript bundled in the companion package, please refer to [its own documentation](https://github.com/notus-sh/cocooned/blob/master/npm/README.md).
@@ -321,14 +335,16 @@ For more documentation about the JavaScript bundled in the companion package, pl
 
 Cocooned now uses exclusively data-attribute to hook JavaScript methods on but usual styles are still here and will stay so you style your forms:
 
-`.cocooned-container` on a container
-`.cocooned-item` on an item
-`.cocooned-add` on an add trigger (link or button)
-`.cocooned-remove` on a remove trigger (link or button)
-`.cocooned-move-up` on a move up trigger (link or button)
-`.cocooned-move-down` on a move down trigger (link or button)
+- `.cocooned-container` on a container
+- `.cocooned-item` on an item
+- `.cocooned-add` on an add trigger (link or button)
+- `.cocooned-remove` on a remove trigger (link or button)
+- `.cocooned-move-up` on a move up trigger (link or button)
+- `.cocooned-move-down` on a move down trigger (link or button)
 
 ## Migration from a previous version
+
+These migrations steps only highlight major changes. When upgrading from a previous version, always refer to [the CHANGELOG](https://github.com/notus-sh/cocooned/blob/master/CHANGELOG.md) for new features and breaking changes.
 
 ### From Cocooned ~1.0
 
@@ -375,5 +391,6 @@ If you used Cocoon, you should:
 1. Modify your forms and sub forms to use the `cocooned_container` and `cocooned_item` helpers. (See above for examples)
 2. Replace calls to `link_to_add_association` by `cocooned_add_item_link`
 3. Replace calls to `link_to_remove_association` by `cocooned_remove_item_link`
+4. Rename your I18n keys to use the `cocooned` namespace instead of `cocoon`
 
 **Compatibility with the original Cocoon API will be dropped in the next major release.**
