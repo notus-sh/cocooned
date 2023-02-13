@@ -25,12 +25,19 @@ You should either rewrite your event binding with `addEventListener` or change y
 
 ### Deprecations
 
-These features are now deprecated:
+These features are now deprecated and emit a warning message:
 
 * `:insertion_traversal` option on `cocooned_add_item_link` (#18)
   Use a more specific selector as `data-association-insertion-node` (set through `:insertion_node`) instead.
 * Importing `@notus.sh/cocooned/cocooned` in your JavaScript files (#22)  
   Import Cocooned from either `@notus.sh/cocooned`, `@notus.sh/cocooned/jquery` or `@notus.sh/cocooned/src/cocooned/cocooned` instead.
+
+These features are now deprecated but don't emit any warning message (sorry):
+
+* Containers identified only by the `data-cocooned-options` attribute (#26)  
+  Use the `cocooned_container` helper in your forms.
+* Containers identified only by the `.cocooned-item` class (#26)  
+  Use the `cocooned_item` helper in your forms.
 
 These features were already deprecated but now emit a warning message:
 
@@ -40,9 +47,11 @@ These features were already deprecated but now emit a warning message:
 * `:render_option` option on `cocooned_add_item_link` / `link_to_add_association`  
   Use `:form_options` and/or `:locals` instead.
 
-These features were already deprecated and (still) don't emit any warning message (sorry):
+These features were already deprecated but (still) don't emit any warning message (sorry):
 
 * Events in `cocoon` namespace (replaced by `cocooned`)
+* Triggers only identified by Cocoon classes (`.add_fields`, `.remove_fields`)
+* Cocoon auto-start logic (non-identified containers)
 
 All deprecated features will be removed in the next major release.
 
