@@ -2,16 +2,15 @@
   "name": "@<%= scope %>/<%= spec.name %>",
   "version": "<%= spec.version %>",
   "license": "<%= spec.licenses.first %>",
-
-  "description": "Companion package for the cocooned Ruby gem.",
-  "homepage": "<%= spec.homepage %>#readme",
-  "repository": "<%= spec.homepage %>",
-  "bugs": {
-    "url": "<%= spec.homepage %>/issues"
-  },
-
   "author": <%= contributors.first.to_json %>,
   "contributors": <%= contributors.collect { |c| { name: c[:name], email: c[:email] } }.to_json %>,
+
+  "description": "Companion package for the cocooned Ruby gem.",
+  "homepage": "<%= spec.metadata['homepage_uri'] %>",
+
+  "repository": "<%= spec.metadata['homepage_uri'] %>",
+  "bugs": "<%= spec.metadata['source_code_uri'] %>",
+  "funding": "<%= spec.metadata['funding_uri'] %>",
 
   "browser": true
 }
