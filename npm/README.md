@@ -80,6 +80,8 @@ Cocooned.start()
 
 ## Usage
 
+**Note:** Classes, methods and options other than those documented here can not be considered as a public API and are subject to changes between versions. See (and feel free to collaborate to) [this issue](https://github.com/notus-sh/cocooned/issues/3) for a future stable public API.
+
 ```javascript
 import Cocooned from '@notus.sh/cocooned'
 
