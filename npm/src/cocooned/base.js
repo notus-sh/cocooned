@@ -21,7 +21,7 @@ function hideMarkedForDestruction (cocooned, items) {
   })
 }
 
-function defaultAnimator(item, fetch = false) {
+function defaultAnimator (item, fetch = false) {
   if (fetch) {
     item.dataset.cocoonedScrollHeight = item.scrollHeight
   }
@@ -39,7 +39,7 @@ class Base {
   static get defaultOptions () {
     const element = document.createElement('div')
     return {
-      animate: ('animate' in element && typeof element.animate == 'function'),
+      animate: ('animate' in element && typeof element.animate === 'function'),
       animator: defaultAnimator,
       duration: 450
     }
@@ -117,7 +117,7 @@ class Base {
   hide (item, options = {}) {
     const opts = this._animationOptions(options)
     const keyframes = opts.animator(item, true)
-    const after = () => item.style.display = 'none'
+    const after = () => { item.style.display = 'none' }
 
     if (!opts.animate) {
       return Promise.resolve(after()).then(() => item)
@@ -128,7 +128,7 @@ class Base {
   show (item, options = {}) {
     const opts = this._animationOptions(options)
     const keyframes = opts.animator(item, false).reverse()
-    const before = () => item.style.display = null
+    const before = () => { item.style.display = null }
 
     const promise = Promise.resolve(before())
     if (!opts.animate) {

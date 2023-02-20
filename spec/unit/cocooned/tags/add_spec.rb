@@ -3,6 +3,7 @@
 require_relative './shared/association_tag'
 require_relative './shared/tag'
 
+# rubocop:disable RSpec/MultipleMemoizedHelpers
 RSpec.describe Cocooned::Tags::Add do
   before { allow(template).to receive(:render).and_return(item) }
 
@@ -266,3 +267,4 @@ RSpec.describe Cocooned::Tags::Add do
     end
   end
 end
+# rubocop:enable RSpec/MultipleMemoizedHelpers

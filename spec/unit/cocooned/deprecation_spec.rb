@@ -10,9 +10,11 @@ RSpec.describe Cocooned::Deprecation do
       expect(described_class['4.0'].deprecation_horizon).to eq('4.0')
     end
 
+    # rubocop:disable RSpec/IdenticalEqualityAssertion
     it 'always returns the same deprecator instance for a version' do
       expect(described_class['4.0']).to be(described_class['4.0'])
     end
+    # rubocop:enable RSpec/IdenticalEqualityAssertion
   end
 
   context 'with an instance' do

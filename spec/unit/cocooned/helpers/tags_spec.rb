@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable RSpec/MultipleMemoizedHelpers
 RSpec.describe Cocooned::Helpers::Tags do
   let(:template) { ActionView::Base.empty }
   let(:form) { ActionView::Helpers::FormBuilder.new('person', record, template, {}) }
@@ -180,3 +181,4 @@ RSpec.describe Cocooned::Helpers::Tags do
     end
   end
 end
+# rubocop:enable RSpec/MultipleMemoizedHelpers

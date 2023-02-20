@@ -17,6 +17,12 @@ group :development, :test do
   gem 'formtastic', '~> 4.0'
   gem 'nokogiri'
   gem 'rspec-rails', '~> 6.0'
-  gem 'simplecov', require: false
   gem 'simple_form', '~> 5.1'
+
+  gem 'rubocop', require: false
+  gem 'rubocop-performance', require: false
+  gem 'rubocop-rails', require: false
+  gem 'rubocop-rake', require: false
+  gem 'rubocop-rspec', require: false
+  gem 'simplecov', require: false
 end

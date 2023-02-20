@@ -37,7 +37,7 @@ describe('A Cocooned setup with jQuery integration', () => {
   describe('when an event is fired', () => {
     it('triggers jQuery event listeners', () => {
       const listener = jest.fn()
-      $(given.container).on('cocooned:before-insert', listener)
+      jQuery(given.container).on('cocooned:before-insert', listener)
       getAddLink(given.container).dispatchEvent(clickEvent())
 
       expect(listener).toHaveBeenCalled()

@@ -1,31 +1,16 @@
----
 require:
   - rubocop-performance
   - rubocop-rails
   - rubocop-rake
   - rubocop-rspec
 
-inherit_mode:
-  merge:
-    - Exclude
-
 AllCops:
+  NewCops: enable
   TargetRubyVersion: 2.6
-  Exclude:
-    - 'spec/dummy/bin/*'
-
-Metrics/BlockLength:
-  Exclude:
-    - '**/cocooned.gemspec'
-    - 'dev/**/*.rake'
-    - 'spec/dummy/db/schema.rb'
-    - 'spec/unit/**/*.rb'
 
 Naming/FileName:
   Exclude:
     - 'dev/**/*.gemfile'
 
-RSpec/NestedGroups:
-  Max: 4
-RSpec/MultipleMemoizedHelpers:
-  Max: 8
+Rails/CompactBlank:
+  Enabled: false # As long as we support Rails 6.0

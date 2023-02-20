@@ -13,7 +13,7 @@ const cocoonSupportMixin = (Base) => class extends Base {
   }
 }
 
-const findInsertionNode = function (trigger) {
+const findInsertionNode = function (trigger, $) {
   const insertionNode = trigger.data('association-insertion-node')
   const insertionTraversal = trigger.data('association-insertion-traversal')
 
@@ -23,9 +23,9 @@ const findInsertionNode = function (trigger) {
   return insertionNode === 'this' ? trigger : $(insertionNode)
 }
 
-const findContainer = function (trigger) {
+const findContainer = function (trigger, $) {
   const $trigger = $(trigger)
-  const insertionNode = findInsertionNode($trigger)
+  const insertionNode = findInsertionNode($trigger, $)
   const insertionMethod = $trigger.data('association-insertion-method') || 'before'
 
   if (['before', 'after', 'replaceWith'].includes(insertionMethod)) return insertionNode.parent()
@@ -33,7 +33,9 @@ const findContainer = function (trigger) {
 }
 
 const cocoonAutoStart = function (jQuery) {
-  jQuery('.add_fields').map((_i, adder) => findContainer(adder)).each((_i, container) => jQuery(container).cocooned())
+  jQuery('.add_fields')
+    .map((_i, adder) => findContainer(adder, jQuery))
+    .each((_i, container) => jQuery(container).cocooned())
 }
 
 export {

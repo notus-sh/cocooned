@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Rails/I18nLocaleTexts
 class ListsController < ApplicationController
   before_action :set_list, only: %i[show edit update destroy]
 
@@ -63,3 +64,4 @@ class ListsController < ApplicationController
     )
   end
 end
+# rubocop:enable Rails/I18nLocaleTexts

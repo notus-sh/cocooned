@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new
+
 namespace :test do
   namespace :integration do
     # rubocop:disable Rails/RakeEnvironment, Rake/Desc
@@ -24,3 +27,5 @@ namespace :test do
     end
   end
 end
+
+task default: :spec

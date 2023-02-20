@@ -19,6 +19,7 @@ npm_files = {
   File.join(npm_dest_dir, 'LICENSE') => './LICENSE'
 }
 
+# rubocop:disable Metrics/BlockLength
 namespace :npm do
   # rubocop:disable Rails/RakeEnvironment
   # npm related tasks does not need to load Rails environment
@@ -57,6 +58,7 @@ namespace :npm do
   end
   # rubocop:enable Rails/RakeEnvironment
 end
+# rubocop:enable Metrics/BlockLength
 
 desc 'Build packages and push them to their respective repository'
 task releases: [:release, 'npm:release']

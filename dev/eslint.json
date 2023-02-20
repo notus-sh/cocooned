@@ -1,8 +1,7 @@
 {
   "extends": "standard",
   "env": {
-    "browser": true,
-    "jquery": true
+    "browser": true
   },
   "parserOptions": {
     "ecmaVersion": "latest",
