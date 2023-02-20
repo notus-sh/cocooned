@@ -17,13 +17,13 @@ AllCops:
 Metrics/BlockLength:
   Exclude:
     - '**/cocooned.gemspec'
-    - 'config/**/*.rake'
+    - 'dev/**/*.rake'
     - 'spec/dummy/db/schema.rb'
     - 'spec/unit/**/*.rb'
 
 Naming/FileName:
   Exclude:
-    - 'config/**/*.gemfile'
+    - 'dev/**/*.gemfile'
 
 RSpec/NestedGroups:
   Max: 4

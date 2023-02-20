@@ -5,7 +5,7 @@
   "browser": true,
   "description": "Development dependencies description file. For the real package.json, see ./npm",
   "scripts": {
-    "build": "rollup --config config/rollup.config.js --bundleConfigAsCjs",
+    "build": "rollup --config dev/rollup.config.js --bundleConfigAsCjs",
     "test": "yarn run jest:esm --config npm/__tests__/jest.config.js --showSeed",
     "jest:esm": "NODE_NO_WARNINGS=1 yarn node --experimental-vm-modules $(yarn bin jest)"
   },
