@@ -75,6 +75,7 @@ All deprecated features will be removed in the next major release.
 * Isolate and unit test Cocoon compatibility code (#23)
 * Use data-attributes instead of classes to hook JavaScript on (#26)
 * Switch from Travis CI to Github actions (#30)
+* Add Ruby 3.2 to CI (#32)
 
 ## Version 1.4.1
 
