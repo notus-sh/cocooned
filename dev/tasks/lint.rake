@@ -3,13 +3,13 @@
 # Ruby
 require 'rubocop/rake_task'
 RuboCop::RakeTask.new do |task|
-  task.options = ['--config', 'config/linters/ruby.yml']
+  task.options = ['--config', 'dev/linters/ruby.yml']
 end
 
 # JavaScript
 # rubocop:disable Rails/RakeEnvironment
 # eslint related tasks does not need to load Rails environment
-eslint_args = ['--no-eslintrc', '--config config/linters/js.json']
+eslint_args = ['--no-eslintrc', '--config dev/linters/js.json']
 eslint_path = ['npm/src', 'npm/__tests__/']
 
 namespace :eslint do

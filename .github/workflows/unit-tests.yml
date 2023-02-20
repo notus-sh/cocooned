@@ -11,16 +11,16 @@ jobs:
     strategy:
       matrix:
         ruby: [2.6, 2.7, 3.0, 3.1, 3.2]
-        gemfile: [Gemfile, config/gemfiles/rails-6.0.x.gemfile, config/gemfiles/rails-6.1.x.gemfile]
+        gemfile: [Gemfile, dev/gemfiles/rails-6.0.x.gemfile, dev/gemfiles/rails-6.1.x.gemfile]
         exclude:
           # Exclude rubies < 2.7 for ActiveModel < 7.0
           - ruby: 2.6
             gemfile: Gemfile
           # Exclude rubies > 3.0 for ActiveModel < 6.1
           - ruby: 3.1
-            gemfile: config/gemfiles/rails-6.0.x.gemfile
+            gemfile: dev/gemfiles/rails-6.0.x.gemfile
           - ruby: 3.2
-            gemfile: config/gemfiles/rails-6.0.x.gemfile
+            gemfile: dev/gemfiles/rails-6.0.x.gemfile
     env: # $BUNDLE_GEMFILE must be set at the job level, so it is set for all steps
       BUNDLE_GEMFILE: ${{ github.workspace }}/${{ matrix.gemfile }}
     steps:
