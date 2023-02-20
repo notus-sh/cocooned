@@ -1,6 +1,7 @@
 # Cocooned
 
-![Build status](https://github.com/notus-sh/cocooned/actions/workflows/unit-tests.yml/badge.svg?branch=master)
+[![Unit tests](https://github.com/notus-sh/cocooned/actions/workflows/unit-tests.yml/badge.svg?branch=main)](https://github.com/notus-sh/cocooned/actions/workflows/unit-tests.yml)
+[![Gem Version](https://badge.fury.io/rb/composite_content.svg)](https://badge.fury.io/rb/cocooned)
 
 Cocooned makes it easier to handle nested forms in a Rails project.
 
