@@ -6,6 +6,7 @@
   "description": "Development dependencies description file. For the real package.json, see ./npm",
   "scripts": {
     "build": "rollup --config dev/rollup.config.js --bundleConfigAsCjs",
+    "lint": "eslint --no-eslintrc --config dev/eslint.json npm/",
     "test": "yarn run jest:esm --config npm/__tests__/jest.config.js --showSeed",
     "jest:esm": "NODE_NO_WARNINGS=1 yarn node --experimental-vm-modules $(yarn bin jest)"
   },
