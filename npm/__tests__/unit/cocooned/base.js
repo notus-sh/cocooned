@@ -14,7 +14,7 @@ describe('Base', () => {
       expect(Base.defaultOptions).toEqual(expect.objectContaining({
         animate: expect.any(Boolean),
         animator: expect.any(Function),
-        duration: expect.any(Number),
+        duration: expect.any(Number)
       }))
     })
   })
@@ -148,17 +148,17 @@ describe('Base', () => {
   const itBehavesLikeAVisibilityMethod = ({ toggle, display }) => {
     given('item', () => getItem(given.container))
 
-    it(`sets element display`, () => {
+    it('sets element display', () => {
       toggle(given.item)
       expect(given.item.style?.display).toEqual(display)
     })
 
     describe.skip('when animated', () => { // Element.animate is not available in JSDOM :/
-      it(`returns a Promise`, () => {
+      it('returns a Promise', () => {
         expect(toggle(given.item, { animate: true })).toBeInstanceOf(Promise)
       })
 
-      it(`returns a Promise with the toggled item as param`, () => {
+      it('returns a Promise with the toggled item as param', () => {
         return new Promise(resolve => {
           toggle(given.item, { animate: true }).then(value => {
             expect(value).toEqual(given.item)
@@ -169,11 +169,11 @@ describe('Base', () => {
     })
 
     describe('when not animated', () => {
-      it(`returns a Promise`, () => {
+      it('returns a Promise', () => {
         expect(toggle(given.item, { animate: false })).toBeInstanceOf(Promise)
       })
 
-      it(`returns a Promise with the toggled item as param`, () => {
+      it('returns a Promise with the toggled item as param', () => {
         return new Promise(resolve => {
           toggle(given.item, { animate: false }).then(value => {
             expect(value).toEqual(given.item)
