@@ -11,7 +11,7 @@ module Cocooned
 
       class << self
         def create(template, *args, **kwargs, &block)
-          return new(template, *args, **kwargs, &block) if block_given?
+          return new(template, *args, **kwargs, &block) if block
           return new(template, *args, **kwargs) unless args.first.is_a?(String)
 
           label = args.shift
@@ -23,7 +23,7 @@ module Cocooned
         @template = template
         @form = form
         @options = options.dup.symbolize_keys
-        @label_block = block if block_given?
+        @label_block = block if block
       end
 
       def render(as: :link)
@@ -54,7 +54,7 @@ module Cocooned
 
       def html_classes
         # TODO: Replace with compact_blank when dropping support for Rails 6.0
-        Array.wrap(options.delete(:class)).flat_map { |k| k.to_s.split(' ') }.reject(&:blank?)
+        Array.wrap(options.delete(:class)).flat_map { |k| k.to_s.split }.reject(&:blank?)
       end
     end
   end

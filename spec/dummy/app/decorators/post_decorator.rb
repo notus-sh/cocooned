@@ -6,7 +6,7 @@ class PostDecorator
   end
 
   def formatted_created_at
-    @post.created_at.to_formatted_s(:short)
+    @post.created_at.to_fs(:short)
   end
 
   def method_missing(method, *args)

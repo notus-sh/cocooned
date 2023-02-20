@@ -7,7 +7,7 @@ module Cocooned
 
       def default_label
         keys = default_label_i18n_keys.collect(&:to_sym) + [action.to_s.humanize]
-        I18n.translate(keys.first, default: keys.drop(1))
+        I18n.t(keys.first, default: keys.drop(1))
       end
 
       def default_label_i18n_keys

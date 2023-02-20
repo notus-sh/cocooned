@@ -16,14 +16,16 @@ Gem::Specification.new do |spec|
   spec.homepage     = 'https://github.com/notus-sh/cocooned'
 
   raise 'RubyGems 2.0 or newer is required.' unless spec.respond_to?(:metadata)
+
   spec.metadata = {
     'allowed_push_host' => 'https://rubygems.org',
+    'rubygems_mfa_required' => 'true',
 
-    'bug_tracker_uri'   => 'https://github.com/notus-sh/cocooned/issues',
-    'changelog_uri'     => 'https://github.com/notus-sh/cocooned/blob/master/CHANGELOG.md',
-    'homepage_uri'      => 'https://github.com/notus-sh/cocooned',
-    'source_code_uri'   => 'https://github.com/notus-sh/cocooned',
-    'funding_uri'       => 'https://opencollective.com/notus-sh'
+    'bug_tracker_uri' => 'https://github.com/notus-sh/cocooned/issues',
+    'changelog_uri' => 'https://github.com/notus-sh/cocooned/blob/master/CHANGELOG.md',
+    'homepage_uri' => 'https://github.com/notus-sh/cocooned',
+    'source_code_uri' => 'https://github.com/notus-sh/cocooned',
+    'funding_uri' => 'https://opencollective.com/notus-sh'
   }
 
   spec.require_paths = ['lib']
@@ -39,13 +41,8 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'bundler', '~> 2.1'
   spec.add_development_dependency 'formtastic', '~> 4.0'
-  spec.add_development_dependency 'rake'
+  spec.add_development_dependency 'rake', '~> 13.0'
   spec.add_development_dependency 'rspec', '~> 3.11'
   spec.add_development_dependency 'rspec-rails', '>= 5.0'
-  spec.add_development_dependency 'rubocop'
-  spec.add_development_dependency 'rubocop-performance'
-  spec.add_development_dependency 'rubocop-rails'
-  spec.add_development_dependency 'rubocop-rake'
-  spec.add_development_dependency 'rubocop-rspec'
   spec.add_development_dependency 'simple_form', '~> 5.1'
 end

@@ -94,6 +94,7 @@ RSpec.describe Cocooned::Association::Builder do
       end
     end
 
+    # rubocop:disable RSpec/NestedGroups
     context 'when object respond to #build_association' do
       let(:object) { model.new }
       let(:model) do
@@ -120,6 +121,7 @@ RSpec.describe Cocooned::Association::Builder do
         end
       end
     end
+    # rubocop:enable RSpec/NestedGroups
 
     context 'with :force_non_association_create' do
       subject(:builder) { described_class.new(person, :alumni, force_non_association_create: true) }
