@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
     'rubygems_mfa_required' => 'true',
 
     'bug_tracker_uri' => 'https://github.com/notus-sh/cocooned/issues',
-    'changelog_uri' => 'https://github.com/notus-sh/cocooned/blob/master/CHANGELOG.md',
+    'changelog_uri' => 'https://github.com/notus-sh/cocooned/blob/main/CHANGELOG.md',
     'homepage_uri' => 'https://github.com/notus-sh/cocooned',
     'source_code_uri' => 'https://github.com/notus-sh/cocooned',
     'funding_uri' => 'https://opencollective.com/notus-sh'
