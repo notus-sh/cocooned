@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Version 2.0.0 (2023-03-07)
 
+* Drop support for Rails < 6.0
+
 ### Breaking changes
 
 #### Features dropped without any replacements
