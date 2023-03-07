@@ -11,8 +11,11 @@ Gem::Specification.new do |spec|
   spec.authors      = ['Gaël-Ian Havard', 'Nathan Van der Auwera']
   spec.email        = ['gael-ian@notus.sh', 'nathan@dixis.com']
 
-  spec.summary      = 'Unobtrusive Rails nested forms handling, with or without jQuery.'
-  spec.description  = 'Easier nested form. Supports standard Rails forms, Formtastic and SimpleForm.'
+  spec.summary      = 'Form builder agnostic handling of Rails nested forms'
+  spec.description  = <<-DESC.gsub(/\s+/, ' ')
+    Easier nested form in Rails with capabilities to add, remove, reorder or limit nested items.
+    Works with standard Rails form builder, Formtastic or SimpleForm, and with or without jQuery.
+  DESC
   spec.homepage     = 'https://github.com/notus-sh/cocooned'
 
   raise 'RubyGems 2.0 or newer is required.' unless spec.respond_to?(:metadata)
