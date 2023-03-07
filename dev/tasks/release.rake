@@ -1,64 +1,66 @@
 # frozen_string_literal: true
 
 require 'bundler/gem_tasks'
+require 'erb'
 require 'json'
 
-spec = Bundler.load_gemspec('./cocooned.gemspec')
-npm_scope = 'notus.sh'
+class NpmTasks < ::Rake::TaskLib
+  SCOPE = 'notus.sh'
 
-npm_src_dir = './npm'
-npm_dest_dir = './dist'
-CLOBBER.include 'dist'
+  attr_reader :dest, :gemspec, :src
 
-assets_dir = './app/assets/'
+  def initialize(gemspec, src, dest)
+    super()
+    @gemspec = Bundler.load_gemspec(gemspec)
+    @src = File.absolute_path(src)
+    @dest = File.absolute_path(dest)
 
-npm_files = {
-  File.join(npm_dest_dir, 'cocooned.js') => File.join(assets_dir, 'javascripts', 'cocooned.js'),
-  File.join(npm_dest_dir, 'cocooned.css') => File.join(assets_dir, 'stylesheets', 'cocooned.css'),
-  File.join(npm_dest_dir, 'README.md') => File.join(npm_src_dir, 'README.md'),
-  File.join(npm_dest_dir, 'LICENSE') => './LICENSE'
-}
+    setup_tasks
+  end
 
-# rubocop:disable Metrics/BlockLength
-namespace :npm do
-  # rubocop:disable Rails/RakeEnvironment
-  # npm related tasks does not need to load Rails environment
-  npm_files.each do |dest, src|
-    file dest => src do
-      cp src, dest
+  protected
+
+  def setup_tasks
+    namespace(:npm) do
+      desc 'Build package.json from template'
+      task :'package.json' do
+        template = ERB.new(File.read(File.join(src, 'package.json.erb')))
+        generated = template.result_with_hash(scope: SCOPE, gemspec: gemspec, contributors: contributors)
+        File.write(File.join(src, 'package.json'), JSON.pretty_generate(JSON.parse(generated)))
+      end
+
+      desc 'Ensure the destination directory exist'
+      task :dest do
+        FileUtils.mkdir_p(dest)
+      end
+
+      desc "Build package tarball into the pkg directory"
+      task build: %i[package.json dest] do
+        system("cd #{src} && npm pack --pack-destination #{dest}/")
+      end
+
+      desc "Build and push package to npmjs.com"
+      task release: %i[build] do
+        system("npm publish #{tarball} --access public")
+      end
     end
   end
 
-  desc 'Build package.json from template'
-  task :'package-json' do
-    contributors = []
-    spec.authors.each_with_index do |name, i|
-      next if spec.email[i].nil?
+  def tarball
+    Dir["#{dest}/#{SCOPE}-#{gemspec.name}-#{gemspec.version}.tgz"].first
+  end
 
-      contributors << {
-        name: name.dup.force_encoding('UTF-8'),
-        email: spec.email[i].dup.force_encoding('UTF-8')
-      }
+  def contributors
+    @contributors ||= begin
+      authors = Array.new(gemspec.authors.size) { |i| [gemspec.email[i], gemspec.authors[i]] }
+      authors.collect do |(email, name)|
+        { name: name.dup.force_encoding('UTF-8'), email: email.dup.force_encoding('UTF-8') }
+      end
     end
-
-    template = ERB.new(File.read(File.join(npm_src_dir, 'package.json.erb')))
-    content = template.result_with_hash(scope: npm_scope, spec: spec, contributors: contributors)
-    File.write(File.join(npm_dest_dir, 'package.json'),
-               JSON.pretty_generate(JSON.parse(content)))
   end
-
-  desc "Build #{npm_scope}-#{spec.name}-#{spec.version}.tgz into the pkg directory"
-  task build: (%i[package-json] + npm_files.keys) do
-    system("cd #{npm_dest_dir} && npm pack && mv ./#{npm_scope}-#{spec.name}-#{spec.version}.tgz ../pkg/")
-  end
-
-  desc "Build and push #{npm_scope}-#{spec.name}-#{spec.version}.tgz to https://npmjs.org"
-  task release: %i[build] do
-    system("npm publish ./pkg/#{npm_scope}-#{spec.name}-#{spec.version}.tgz --access public")
-  end
-  # rubocop:enable Rails/RakeEnvironment
 end
-# rubocop:enable Metrics/BlockLength
+
+NpmTasks.new('./cocooned.gemspec', './npm', './pkg')
 
 desc 'Build packages and push them to their respective repository'
 task releases: [:release, 'npm:release']

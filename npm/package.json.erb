@@ -1,16 +1,16 @@
 {
-  "name": "@<%= scope %>/<%= spec.name %>",
-  "version": "<%= spec.version %>",
-  "license": "<%= spec.licenses.first %>",
+  "name": "@<%= scope %>/<%= gemspec.name %>",
+  "version": "<%= gemspec.version %>",
+  "license": "<%= gemspec.licenses.first %>",
   "author": <%= contributors.first.to_json %>,
-  "contributors": <%= contributors.collect { |c| { name: c[:name], email: c[:email] } }.to_json %>,
+  "contributors": <%= contributors.to_json %>,
 
   "description": "Companion package for the cocooned Ruby gem.",
-  "homepage": "<%= spec.metadata['homepage_uri'] %>",
+  "homepage": "<%= gemspec.metadata['homepage_uri'] %>",
 
-  "repository": "<%= spec.metadata['homepage_uri'] %>",
-  "bugs": "<%= spec.metadata['source_code_uri'] %>",
-  "funding": "<%= spec.metadata['funding_uri'] %>",
+  "repository": "<%= gemspec.metadata['homepage_uri'] %>",
+  "bugs": "<%= gemspec.metadata['source_code_uri'] %>",
+  "funding": "<%= gemspec.metadata['funding_uri'] %>",
 
   "browser": true
 }
