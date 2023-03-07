@@ -3,9 +3,9 @@
 [![Unit tests](https://github.com/notus-sh/cocooned/actions/workflows/unit-tests.yml/badge.svg?branch=main)](https://github.com/notus-sh/cocooned/actions/workflows/unit-tests.yml)
 [![Gem Version](https://badge.fury.io/rb/composite_content.svg)](https://badge.fury.io/rb/cocooned)
 
-Cocooned makes it easier to handle nested forms in a Rails project.
+Cocooned makes it easier to handle nested forms in Rails.
 
-Cocooned is form builder-agnostic: it works with standard Rails (>= 5.0, < 7.1) form helpers, [Formtastic](https://github.com/justinfrench/formtastic) or [SimpleForm](https://github.com/plataformatec/simple_form).
+Cocooned is form builder-agnostic: it works with standard Rails (>= 6.0, < 7.1) form helpers, [Formtastic](https://github.com/justinfrench/formtastic) or [SimpleForm](https://github.com/plataformatec/simple_form).
 
 1. [Background](#some-background)
 2. [Installation](#installation)
@@ -21,17 +21,15 @@ Cocooned is form builder-agnostic: it works with standard Rails (>= 5.0, < 7.1) 
 
 Cocooned is a fork of [Cocoon](https://github.com/nathanvda/cocoon) by [Nathan Van der Auwera](https://github.com/nathanvda). He and all Cocoon contributors did a great job to maintain it for years. Many thanks to them!
 
-However, the project seems to have only received minimal fixes since 2018 and many pull requests, even simple ones, have been on hold for a long time. In 2019, as I needed a more than what Cocoon provided at this time, I had the choice to either maintain an extension or to fork it and integrate everything that was waiting and more.
+However, the project seems to have only received minimal fixes since 2018 and many pull requests, even simple ones, have been on hold for a long time. In 2019, as I needed more than what Cocoon provided at this time, I had the choice to either maintain an extension or to fork it and integrate everything that was waiting and more.
 
-Cocooned is almost a complete rewrite of Cocoon, with more functionnalities, a more fluent API (I hope) and integration with modern toolchains (including webpacker).
+Over the time, Cocooned turned into an almost complete rewrite of Cocoon with more functionnalities, a more fluent API (I hope) and integration with modern toolchains. Still, **Cocooned is completely compatible with Cocoon and can be used as a drop-in replacement** as long as we talk about Ruby code. Change the name of the gem in your Gemfile and you're done. **This compatibility layer with the original Cocoon API will be dropped in the next major release.**
 
-**For now, Cocooned is completely compatible with Cocoon and can be used as a drop-in replacement** as long as we talk about Ruby code. Just change the name of the gem in your Gemfile and you're done. It will work the same (but will add a bunch of deprecation warning to your logs). **This compatibility layer with the original Cocoon API will be dropped in the next major release.**
-
-On the JavaScript side, Cocooned 2.0 removed the dependency to jQuery (Yeah! :tada:). This means event handlers can not use any positional arguments other than the default `event`. See [JavaScript](#javascript) for details.
+On the JavaScript side, Cocooned 2.0 removed the dependency to jQuery (Yeah! :tada:). See [JavaScript](#javascript) for details.
 
 ## Installation
 
-Inside your `Gemfile` add the following:
+Add `cocooned` to your `Gemfile`:
 
 ```ruby
 gem 'cocooned'
@@ -101,7 +99,7 @@ class Item < ApplicationRecord
 end
 ```
 
-We will build a form where we can dynamically add and remove items to a list.
+We will build a form where we can dynamically add items to a list, remove or reorder them.
 
 ### Basic form
 
@@ -195,7 +193,7 @@ And your sub form as follow:
 + <% end %>
 ```
 
-The `cocooned_container` and `cocooned_item` helpers will set for you the HTML attributes the Cocooned JavaScript expect to find to hook on. They will politely forward any option supported by ActionView's `content_tag`.
+The `cocooned_container` and `cocooned_item` helpers will set for you the HTML attributes the JavaScript part of Cocooned expect to find to hook on. They will forward any option supported by ActionView's `content_tag`.
 
 ### 3. Add a way to add a new item to the list
 
@@ -306,14 +304,14 @@ Remember to add `:position` as a permitted parameter in your controller.
 
 ## Links or buttons?
 
-Each helper provided by Cocooned with a name ending with `link` has its `_button` equivalent, to generate a `<button type="button" />` instead of a `<a href="#" />`:
+Each helper provided by Cocooned with a name ending with `_link` has its `_button` equivalent, to generate a `<button type="button" />` instead of a `<a href="#" />`:
 
 - `cocooned_add_item_link` <=> `cocooned_add_item_button` ([Documentation](https://github.com/notus-sh/cocooned/blob/master/lib/cocooned/helpers/tags/add.rb))
 - `cocooned_remove_item_link` <=> `cocooned_remove_item_button` ([Documentation](https://github.com/notus-sh/cocooned/blob/master/lib/cocooned/helpers/tags/remove.rb))
 - `cocooned_move_item_up_link` <=> `cocooned_move_item_up_button` ([Documentation](https://github.com/notus-sh/cocooned/blob/master/lib/cocooned/helpers/tags/up.rb))
 - `cocooned_move_item_down_link` <=> `cocooned_move_item_down_button` ([Documentation](https://github.com/notus-sh/cocooned/blob/master/lib/cocooned/helpers/tags/down.rb))
 
-While all `_link` helpers can accept any option supported by ActionView's `link_to` and will forward it politely, `_button` helpers will do the same with options supported by ActionView's `button_tag`.
+While all `_link` helpers accept and will politely forward any option supported by ActionView's `link_to`, `_button` helpers will do the same with options supported by ActionView's `button_tag`.
 
 ## Internationalisation
 
@@ -334,7 +332,7 @@ For more documentation about the JavaScript bundled in the companion package, pl
 
 ## Styling forms
 
-Cocooned now uses exclusively data-attribute to hook JavaScript methods on but usual styles are still here and will stay so you style your forms:
+Cocooned now uses exclusively data-attribute to hook JavaScript methods on but usual classes are still here and will stay so you can style your forms:
 
 - `.cocooned-container` on a container
 - `.cocooned-item` on an item
@@ -345,7 +343,7 @@ Cocooned now uses exclusively data-attribute to hook JavaScript methods on but u
 
 ## Migration from a previous version
 
-These migrations steps only highlight major changes. When upgrading from a previous version, always refer to [the CHANGELOG](https://github.com/notus-sh/cocooned/blob/master/CHANGELOG.md) for new features and breaking changes.
+These migrations steps only highlight major changes. When upgrading from a previous version, always refer to [the CHANGELOG](https://github.com/notus-sh/cocooned/blob/main/CHANGELOG.md) for new features and breaking changes.
 
 ### From Cocooned ~1.0
 

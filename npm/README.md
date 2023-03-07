@@ -2,9 +2,9 @@
 
 This is a companion package for the [cocooned Ruby gem](https://rubygems.org/gems/cocooned).
 
-Cocooned makes it easier to handle nested forms in a Rails project.
+Cocooned makes it easier to handle nested forms in Rails.
 
-Cocooned is form builder-agnostic: it works with standard Rails (>= 5.0, < 7.1) form helpers, [Formtastic](https://github.com/justinfrench/formtastic) or [SimpleForm](https://github.com/plataformatec/simple_form).
+Cocooned is form builder-agnostic: it works with standard Rails (>= 6.0, < 7.1) form helpers, [Formtastic](https://github.com/justinfrench/formtastic) or [SimpleForm](https://github.com/plataformatec/simple_form).
 
 1. [Installation](#installation)
 2. [Import](#import), default, custom or with [jQuery integration](#jquery-integration)
@@ -194,7 +194,7 @@ You can cancel an action within the `cocooned:before-<action>` callback using `e
 
 ## Migration from a previous version
 
-These migrations steps only highlight major changes. When upgrading from a previous version, always refer to [the CHANGELOG](https://github.com/notus-sh/cocooned/blob/master/CHANGELOG.md) for new features and breaking changes.
+These migrations steps only highlight major changes. When upgrading from a previous version, always refer to [the CHANGELOG](https://github.com/notus-sh/cocooned/blob/main/CHANGELOG.md) for new features and breaking changes.
 
 ### From Cocooned ~1.0
 
