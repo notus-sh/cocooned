@@ -76,6 +76,7 @@ All deprecated features will be removed in the next major release.
 * Use data-attributes instead of classes to hook JavaScript on (#26)
 * Switch from Travis CI to Github actions (#30)
 * Add Ruby 3.2 to CI (#32)
+* Adapt NPM packaging scripts (#35)
 
 ## Version 1.4.1
 
