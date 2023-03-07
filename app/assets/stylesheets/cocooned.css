@@ -1,9 +1,1 @@
-
-.cocooned-visible-item {
-  transition: opacity .45s ease-out;
-  opacity: 1;
-}
-
-.cocooned-hidden-item {
-  opacity: 0;
-}
+/* TODO: Remove in 3.0 */

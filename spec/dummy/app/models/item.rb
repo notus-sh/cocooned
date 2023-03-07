@@ -2,7 +2,8 @@
 
 class Item < ApplicationRecord
   # Relations
-  belongs_to :list
+  belongs_to :list,
+             inverse_of: :items
 
   # Validations
   validates :label,

@@ -1,0 +1,17 @@
+{
+  "extends": "standard",
+  "env": {
+    "browser": true
+  },
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "overrides": [
+    {
+      "files": ["npm/__tests__/{features,integration,shared,unit}/**/*.js"],
+      "plugins": ["jest", "jest-dom"],
+      "extends": ["plugin:jest/recommended", "plugin:jest-dom/recommended"]
+    }
+  ]
+}

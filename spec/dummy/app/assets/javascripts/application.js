@@ -1,2 +1,2 @@
 //= require jquery
-//= require cocoon
+//= require cocooned

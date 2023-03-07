@@ -1,16 +1,17 @@
+# Dependency managers
 /.bundle/
-/.yardoc
-/_yardoc/
-/coverage/
-/doc/
-/pkg/
-/dist/
-/spec/reports/
-/tmp/
-
 /node_modules/
 /vendor/bundle/
 
+# Code coverage
+/coverage/
+
+# Development files
+/tmp/
 spec/dummy/db/*.sqlite3
 spec/dummy/log/*.log
 spec/dummy/tmp/
+
+# Releases
+/npm/package.json
+/pkg/

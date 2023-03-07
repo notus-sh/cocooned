@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Rails/I18nLocaleTexts
 class ListsController < ApplicationController
   before_action :set_list, only: %i[show edit update destroy]
 
@@ -14,10 +15,13 @@ class ListsController < ApplicationController
   # GET /lists/new
   def new
     @list = List.new
+    @use = params[:use]&.to_sym || :link
   end
 
   # GET /lists/1/edit
-  def edit; end
+  def edit
+    @use = params[:use]&.to_sym || :link
+  end
 
   # POST /lists
   def create
@@ -60,3 +64,4 @@ class ListsController < ApplicationController
     )
   end
 end
+# rubocop:enable Rails/I18nLocaleTexts
