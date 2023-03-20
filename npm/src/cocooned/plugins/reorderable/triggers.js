@@ -1,4 +1,4 @@
-import { Trigger } from '../../trigger'
+import { Trigger } from '../../trigger.js'
 
 class Move extends Trigger {
   handle (event) {

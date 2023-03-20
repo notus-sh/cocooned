@@ -1,7 +1,7 @@
-import { Cocooned as Base } from './src/cocooned/cocooned'
-import { limitMixin } from './src/cocooned/plugins/limit'
-import { reorderableMixin } from './src/cocooned/plugins/reorderable'
-import { cocoonSupportMixin } from './src/integrations/cocoon'
+import { Cocooned as Base } from './src/cocooned/cocooned.js'
+import { limitMixin } from './src/cocooned/plugins/limit.js'
+import { reorderableMixin } from './src/cocooned/plugins/reorderable.js'
+import { cocoonSupportMixin } from './src/integrations/cocoon.js'
 
 class Cocooned extends reorderableMixin(limitMixin(cocoonSupportMixin(Base))) {
   static create (container, options = {}) {

@@ -1,4 +1,4 @@
-import { Emitter } from './events/emitter'
+import { Emitter } from './events/emitter.js'
 
 // Borrowed from <https://stackoverflow.com/a/2117523>
 function uuidv4 () {

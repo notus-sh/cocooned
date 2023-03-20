@@ -1,5 +1,5 @@
-import Cocooned from './jquery'
-import { deprecator } from './src/cocooned/deprecation'
+import Cocooned from './jquery.js'
+import { deprecator } from './src/cocooned/deprecation.js'
 
 deprecator('3.0').warn(
   'Loading @notus.sh/cocooned/cocooned is deprecated',

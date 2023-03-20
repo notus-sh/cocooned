@@ -4,7 +4,7 @@ require 'bundler/gem_tasks'
 require 'erb'
 require 'json'
 
-class NpmTasks < ::Rake::TaskLib
+class NpmTasks < Rake::TaskLib # :nodoc:
   SCOPE = 'notus.sh'
 
   attr_reader :dest, :gemspec, :src
@@ -20,6 +20,7 @@ class NpmTasks < ::Rake::TaskLib
 
   protected
 
+  # rubocop:disable Rails/RakeEnvironment, Metrics/AbcSize, Metrics/MethodLength
   def setup_tasks
     namespace(:npm) do
       desc 'Build package.json from template'
@@ -34,17 +35,18 @@ class NpmTasks < ::Rake::TaskLib
         FileUtils.mkdir_p(dest)
       end
 
-      desc "Build package tarball into the pkg directory"
+      desc 'Build package tarball into the pkg directory'
       task build: %i[package.json dest] do
         system("cd #{src} && npm pack --pack-destination #{dest}/")
       end
 
-      desc "Build and push package to npmjs.com"
+      desc 'Build and push package to npmjs.com'
       task release: %i[build] do
         system("npm publish #{tarball} --access public")
       end
     end
   end
+  # rubocop:enable Rails/RakeEnvironment, Metrics/AbcSize, Metrics/MethodLength
 
   def tarball
     Dir["#{dest}/#{SCOPE}-#{gemspec.name}-#{gemspec.version}.tgz"].first

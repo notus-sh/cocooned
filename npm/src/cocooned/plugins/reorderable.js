@@ -1,6 +1,6 @@
-import { Up, Down } from './reorderable/triggers'
-import { Reindexer } from './reorderable/reindexer'
-import { delegatedClickHandler } from '../events/handlers'
+import { Up, Down } from './reorderable/triggers.js'
+import { Reindexer } from './reorderable/reindexer.js'
+import { delegatedClickHandler } from '../events/handlers.js'
 
 function clickHandler (selector, cocooned, TriggerClass) {
   return delegatedClickHandler(selector, (e) => {

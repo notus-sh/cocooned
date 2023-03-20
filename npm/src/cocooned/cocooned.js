@@ -1,5 +1,5 @@
-import { Base } from './base'
-import { coreMixin } from './plugins/core'
+import { Base } from './base.js'
+import { coreMixin } from './plugins/core.js'
 
 class Cocooned extends coreMixin(Base) {
   static create (container, options) {
