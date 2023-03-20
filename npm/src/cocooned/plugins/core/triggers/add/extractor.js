@@ -1,5 +1,5 @@
-import { Builder } from './builder'
-import { deprecator, Traverser } from '../../../../deprecation'
+import { Builder } from './builder.js'
+import { deprecator, Traverser } from '../../../../deprecation.js'
 
 class Extractor {
   constructor (trigger) {

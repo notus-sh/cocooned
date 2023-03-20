@@ -1,7 +1,7 @@
 /* global jQuery, $ */
-import Cocooned from './index'
-import { jQueryPluginMixin } from './src/integrations/jquery'
-import { cocoonAutoStart } from './src/integrations/cocoon'
+import Cocooned from './index.js'
+import { jQueryPluginMixin } from './src/integrations/jquery.js'
+import { cocoonAutoStart } from './src/integrations/cocoon.js'
 
 // Expose a jQuery plugin
 jQueryPluginMixin(jQuery, Cocooned)

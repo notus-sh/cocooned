@@ -1,4 +1,4 @@
-import { Traverser } from './deprecation/traverser'
+import { Traverser } from './deprecation/traverser.js'
 
 class Deprecator {
   logger

@@ -47,15 +47,15 @@ Cocooned.start()
 If you know you'll not use the plugin, you can load the core version:
 
 ```javascript
-import Cocooned from '@notus.sh/cocooned/src/cocooned/cocooned'
+import Cocooned from '@notus.sh/cocooned/src/cocooned/cocooned.js'
 Cocooned.start()
 ```
 
 If you want only one of the plugins, you can load the core Cocooned and extend it with the plugin:
 
 ```javascript
-import { Cocooned as Base } from '@notus.sh/cocooned/src/cocooned/cocooned'
-import { limitMixin } from '@notus.sh/cocooned/src/cocooned/plugins/limit'
+import { Cocooned as Base } from '@notus.sh/cocooned/src/cocooned/cocooned.js'
+import { limitMixin } from '@notus.sh/cocooned/src/cocooned/plugins/limit.js'
 
 class Cocooned extends limitMixin(Base) {
   static create (container, options) {
@@ -102,7 +102,7 @@ Options can also be provided as a JSON string in a `data-cocooned-options` on yo
 Cocooned does not require jQuery (anymore) but comes with a jQuery integration (inherited from previous versions). If you use jQuery, you may want to use Cocooned with jQuery:
 
 ```javascript
-import Cocooned from '@notus.sh/cocooned/jquery'
+import Cocooned from '@notus.sh/cocooned/jquery.js'
 ```
 
 **Note:** You don't need to call `Cocooned.start()` here as the jQuery integration automatically bind it to `$.ready`.

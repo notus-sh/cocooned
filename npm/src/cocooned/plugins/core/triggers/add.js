@@ -1,6 +1,6 @@
-import { Trigger } from '../../../trigger'
-import { Extractor } from './add/extractor'
-import { Validator } from './add/validator'
+import { Trigger } from '../../../trigger.js'
+import { Extractor } from './add/extractor.js'
+import { Validator } from './add/validator.js'
 
 let counter = 0
 

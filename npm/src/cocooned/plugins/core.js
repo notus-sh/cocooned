@@ -1,6 +1,6 @@
-import { Add } from './core/triggers/add'
-import { Remove } from './core/triggers/remove'
-import { clickHandler, delegatedClickHandler } from '../events/handlers'
+import { Add } from './core/triggers/add.js'
+import { Remove } from './core/triggers/remove.js'
+import { clickHandler, delegatedClickHandler } from '../events/handlers.js'
 
 const coreMixin = (Base) => class extends Base {
   static get selectors () {
