@@ -16,7 +16,7 @@ Gem::Specification.new do |spec|
     Easier nested form in Rails with capabilities to add, remove, reorder or limit nested items.
     Works with standard Rails form builder, Formtastic or SimpleForm, and with or without jQuery.
   DESC
-  spec.homepage     = 'https://github.com/notus-sh/cocooned'
+  spec.homepage = 'https://github.com/notus-sh/cocooned'
 
   raise 'RubyGems 2.0 or newer is required.' unless spec.respond_to?(:metadata)
 
