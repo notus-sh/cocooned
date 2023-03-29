@@ -259,7 +259,6 @@ DEPENDENCIES
   simple_form (~> 5.1)
   simplecov
   sqlite3
-  tzinfo-data
   web-console (>= 4.1.0)
 
 BUNDLED WITH
