@@ -11,9 +11,7 @@ group :development, :test do
   gem 'rails'
   gem 'shakapacker', '~> 6.6.0'
   gem 'sqlite3'
-
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
-  gem 'web-console', '>= 4.1.0'
 
   gem 'formtastic', '~> 4.0'
   gem 'nokogiri'
