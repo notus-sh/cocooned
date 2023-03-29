@@ -7,13 +7,13 @@ gemspec
 
 group :development, :test do
   # Dummy app dependencies
-  gem 'rails'
-  gem 'sqlite3'
+  gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'puma'
+  gem 'rails'
   gem 'shakapacker', '~> 6.6.0'
+  gem 'sqlite3'
+  gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
   gem 'web-console', '>= 4.1.0'
-  gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 
   gem 'formtastic', '~> 4.0'
   gem 'nokogiri'
