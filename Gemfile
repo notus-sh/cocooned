@@ -7,13 +7,12 @@ gemspec
 
 group :development, :test do
   # Dummy app dependencies
-  gem 'jquery-rails'
+  gem 'puma'
   gem 'rails'
-  gem 'sprockets-rails' # Optional in Rails 7.0+
+  gem 'shakapacker', '~> 6.6.0'
   gem 'sqlite3'
-  gem 'webrick'
+  gem 'byebug', platforms: %i[mri mingw x64_mingw]
 
-  gem 'byebug', '~> 11.1'
   gem 'formtastic', '~> 4.0'
   gem 'nokogiri'
   gem 'rspec-rails', '~> 6.0'
