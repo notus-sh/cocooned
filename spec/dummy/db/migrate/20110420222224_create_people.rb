@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreatePeople < ActiveRecord::Migration[5.0]
+class CreatePeople < ActiveRecord::Migration[6.0]
   def change
     create_table :people do |t|
       # Attributes
