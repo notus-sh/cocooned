@@ -7,9 +7,10 @@ import { clickEvent } from '@cocooned/tests/support/helpers'
 describe('handlers', () => {
   beforeEach(() => { document.body.innerHTML = given.html })
 
-  given('html', () => '<section><a data-trigger class="trigger" href="#">Trigger</a></section>')
+  given('html', () => '<section><a data-trigger class="trigger" href="#"><span>Inner</span> Trigger</a></section>')
   given('container', () => document.querySelector('section'))
   given('trigger', () => document.querySelector('a'))
+  given('innerTrigger', () => document.querySelector('span'))
 
   describe('clickHandler', () => {
     it('prevents event default behavior', () => {
@@ -38,6 +39,14 @@ describe('handlers', () => {
       const listener = jest.fn()
       given.container.addEventListener('click', delegatedClickHandler('*[data-trigger]', listener))
       given.trigger.dispatchEvent(clickEvent())
+
+      expect(listener).toHaveBeenCalled()
+    })
+
+    it('accepts events triggered on nested targets', () => {
+      const listener = jest.fn()
+      given.container.addEventListener('click', delegatedClickHandler('*[data-trigger]', listener))
+      given.innerTrigger.dispatchEvent(clickEvent())
 
       expect(listener).toHaveBeenCalled()
     })
