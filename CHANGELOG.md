@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## Version 2.0.1 (2023-05-09)
+
+### Fixed
+
+* Support nested event target in delegated event handlers (#42)
+
 ### Changed
 
 * Rewrite dummy app with Rails 6 and webpacker (#40)
