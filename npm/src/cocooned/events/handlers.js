@@ -8,7 +8,7 @@ function clickHandler (callback) {
 function delegatedClickHandler (selector, callback) {
   return e => {
     const { target } = e
-    if (!target.matches(selector)) {
+    if (null === target.closest(selector)) {
       return
     }
 
