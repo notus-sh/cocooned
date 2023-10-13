@@ -5,10 +5,7 @@ import { jest } from '@jest/globals'
 import { faker } from '@cocooned/tests/support/faker'
 import { clickEvent, getAddLink, getRemoveLink, getMoveUpLink, getMoveDownLink } from '@cocooned/tests/support/helpers'
 
-// TODO: When officially supported, replace with:
-// import fixtures from '@cocooned/tests/fixtures/rails.json' assert { type: 'json' }
-import { readFile } from 'fs/promises'
-const fixtures = JSON.parse(await readFile(new URL('./../fixtures/rails.json', import.meta.url)))
+import fixtures from '@cocooned/tests/fixtures/rails.json' assert { type: 'json' }
 
 describe('A Rails generated Cocooned setup', () => {
   beforeEach(() => {
