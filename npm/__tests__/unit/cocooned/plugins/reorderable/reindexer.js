@@ -19,7 +19,7 @@ describe('Reindexer', () => {
   given('reindexer', () => new Reindexer(given.cocooned))
   given('cocooned', () => new Cocooned(given.container))
   given('container', () => document.querySelector('[data-cocooned-container]'))
-  given('count', () => faker.datatype.number({ min: 2, max: 5 }))
+  given('count', () => faker.number.int({ min: 2, max: 5 }))
   given('item', () => faker.helpers.arrayElement(Array.from(getItems(given.container))))
   given('template', () => `
     <div data-cocooned-item>
@@ -91,7 +91,7 @@ describe('Reindexer', () => {
 
     describe('with startAt', () => {
       given('reindexer', () => new Reindexer(given.cocooned, given.startAt))
-      given('startAt', () => faker.datatype.number({ min: 2, max: 5 }))
+      given('startAt', () => faker.number.int({ min: 2, max: 5 }))
 
       it('updates position fields', () => {
         given.reindexer.reindex(clickEvent())

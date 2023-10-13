@@ -2,13 +2,13 @@
 # frozen_string_literal: true
 
 ENV['RAILS_ENV'] ||= 'development'
-ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../../../Gemfile', __dir__)
+ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../Gemfile', __dir__)
 
 require 'bundler/setup'
-require 'webpacker'
-require 'webpacker/webpack_runner'
+require 'shakapacker'
+require 'shakapacker/webpack_runner'
 
 APP_ROOT = File.expand_path('..', __dir__)
 Dir.chdir(APP_ROOT) do
-  Webpacker::WebpackRunner.run(ARGV)
+  Shakapacker::WebpackRunner.run(ARGV)
 end

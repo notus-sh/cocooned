@@ -25,7 +25,7 @@ describe('A Cocooned setup with options for the limit plugin', () => {
   `)
   given('template', () => '<div data-cocooned-item></div>')
   given('container', () => document.querySelector('section'))
-  given('limit', () => faker.datatype.number({ min: 2, max: 5 }))
+  given('limit', () => faker.number.int({ min: 2, max: 5 }))
   given('addLink', () => getAddLink(given.container))
 
   it('limits how many items can be added to the container', () => {

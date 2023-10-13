@@ -40,7 +40,7 @@ Gem::Specification.new do |spec|
   end
   spec.required_ruby_version = '>= 2.6'
 
-  spec.add_dependency 'rails', '>= 6.0', '<= 7.1'
+  spec.add_dependency 'rails', '>= 6.0', '<= 7.2'
 
   spec.add_development_dependency 'bundler', '~> 2.1'
   spec.add_development_dependency 'formtastic', '~> 4.0'

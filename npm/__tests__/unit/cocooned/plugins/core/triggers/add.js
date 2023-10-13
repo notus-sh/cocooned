@@ -146,7 +146,7 @@ describe('Add', () => {
 
       given('options', () => ({
         builder: given.builder,
-        count: faker.datatype.number({ min: 2, max: 5 }),
+        count: faker.number.int({ min: 2, max: 5 }),
         node: given.addTrigger.parentElement,
         method: 'before'
       }))

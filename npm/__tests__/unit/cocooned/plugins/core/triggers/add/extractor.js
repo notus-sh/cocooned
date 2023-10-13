@@ -24,7 +24,7 @@ describe('Extractor', () => {
     })
 
     describe('with data-count', () => {
-      given('count', () => faker.datatype.number({ min: 2, max: 5 }))
+      given('count', () => faker.number.int({ min: 2, max: 5 }))
       given('html', () => `
         <a data-cocooned-trigger="add"
            data-count="${given.count}"
@@ -37,7 +37,7 @@ describe('Extractor', () => {
     })
 
     describe('with data-association-insertion-count', () => {
-      given('count', () => faker.datatype.number({ min: 2, max: 5 }))
+      given('count', () => faker.number.int({ min: 2, max: 5 }))
       given('html', () => `
         <a data-cocooned-trigger="add"
            data-association-insertion-count="${given.count}"

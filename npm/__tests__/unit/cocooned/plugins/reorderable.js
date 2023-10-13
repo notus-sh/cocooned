@@ -8,7 +8,7 @@ import { clickEvent, getMoveUpLink, getMoveDownLink } from '@cocooned/tests/supp
 
 describe('reorderableMixin', () => {
   given('extended', () => reorderableMixin(Base))
-  given('startAt', () => faker.datatype.number({ min: 2, max: 5 }))
+  given('startAt', () => faker.number.int({ min: 2, max: 5 }))
 
   describe('defaultOptions', () => {
     it('merges default options', () => {
@@ -56,7 +56,7 @@ describe('reorderableMixin', () => {
     given('instance', () => new given.extended(given.container, given.options)) // eslint-disable-line new-cap
     given('container', () => document.querySelector('[data-cocooned-container]'))
     given('form', () => document.querySelector('form'))
-    given('count', () => faker.datatype.number({ min: 2, max: 5 }))
+    given('count', () => faker.number.int({ min: 2, max: 5 }))
     given('template', () => `
       <div data-cocooned-item>
         <a data-cocooned-trigger="up" href="#">Up</a>

@@ -675,7 +675,7 @@
   function delegatedClickHandler (selector, callback) {
     return e => {
       const { target } = e;
-      if (null === target.closest(selector)) {
+      if (target.closest(selector) === null) {
         return
       }
 

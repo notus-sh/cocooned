@@ -26,7 +26,7 @@ describe('Base', () => {
 
   given('instance', () => new Base(given.container))
   given('container', () => document.querySelector('[data-cocooned-container]'))
-  given('count', () => faker.datatype.number({ min: 1, max: 5 }))
+  given('count', () => faker.number.int({ min: 1, max: 5 }))
   given('items', () => Array.from(Array(given.count), () => '<div data-cocooned-item></div>'))
   given('html', () => `
     <div data-cocooned-container>

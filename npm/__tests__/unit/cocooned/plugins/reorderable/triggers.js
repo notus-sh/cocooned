@@ -13,7 +13,7 @@ describe('Move', () => {
   beforeEach(() => { document.body.innerHTML = given.html })
 
   given('container', () => document.querySelector('[data-cocooned-container]'))
-  given('count', () => faker.datatype.number({ min: 2, max: 5 }))
+  given('count', () => faker.number.int({ min: 2, max: 5 }))
   given('template', () => `
     <div data-cocooned-item>
       <a data-cocooned-trigger="up" href="#">Up</a>
@@ -111,7 +111,7 @@ describe('Move', () => {
       })
 
       describe('with a pivot item', () => {
-        given('index', () => faker.datatype.number({ min: 1, max: given.count - 1 }))
+        given('index', () => faker.number.int({ min: 1, max: given.count - 1 }))
 
         it('moves item up', async () => {
           given.move.handle(clickEvent())
@@ -164,7 +164,7 @@ describe('Move', () => {
       })
 
       describe('with a pivot item', () => {
-        given('index', () => faker.datatype.number({ min: 0, max: given.count - 2 }))
+        given('index', () => faker.number.int({ min: 0, max: given.count - 2 }))
 
         it('moves item down', async () => {
           given.move.handle(clickEvent())

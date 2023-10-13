@@ -7,7 +7,7 @@ import { faker } from '@cocooned/tests/support/faker'
 
 describe('limitMixin', () => {
   given('extended', () => limitMixin(Base))
-  given('limit', () => faker.datatype.number({ min: 2, max: 5 }))
+  given('limit', () => faker.number.int({ min: 2, max: 5 }))
 
   describe('defaultOptions', () => {
     it('merges default options', () => {
@@ -23,7 +23,7 @@ describe('limitMixin', () => {
 
     given('instance', () => new given.extended(given.container, given.options)) // eslint-disable-line new-cap
     given('container', () => document.querySelector('[data-cocooned-container]'))
-    given('count', () => faker.datatype.number({ min: 2, max: 5 }))
+    given('count', () => faker.number.int({ min: 2, max: 5 }))
     given('template', () => '<div data-cocooned-item></div>')
     given('html', () => `
       <div data-cocooned-container>
