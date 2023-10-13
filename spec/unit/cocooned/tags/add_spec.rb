@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative './shared/association_tag'
-require_relative './shared/tag'
+require_relative 'shared/association_tag'
+require_relative 'shared/tag'
 
 # rubocop:disable RSpec/MultipleMemoizedHelpers
 RSpec.describe Cocooned::Tags::Add do

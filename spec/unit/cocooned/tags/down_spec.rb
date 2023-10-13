@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative './shared/tag'
+require_relative 'shared/tag'
 
 RSpec.describe Cocooned::Tags::Down do
   let(:template) { ActionView::Base.empty }
