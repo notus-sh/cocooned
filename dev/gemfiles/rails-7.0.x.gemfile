@@ -7,7 +7,7 @@ gemspec path: '../..'
 group :development, :test do
   gem 'psych', '< 4.0.0'
   gem 'puma'
-  gem 'rails', '~> 6.0.0'
+  gem 'rails', '~> 7.0.0'
   gem 'shakapacker', '~> 6.6.0'
   gem 'sqlite3'
 
