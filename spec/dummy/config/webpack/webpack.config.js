@@ -1,5 +1,5 @@
-const { webpackConfig } = require('shakapacker')
+const { generateWebpackConfig } = require('shakapacker')
+const options = {}
 
-// See the shakacode/shakapacker README and docs directory for advice on customizing your webpackConfig.
-
-module.exports = webpackConfig
+// This results in a new object copied from the mutable global
+module.exports = generateWebpackConfig(options)

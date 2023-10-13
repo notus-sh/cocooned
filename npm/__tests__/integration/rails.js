@@ -54,8 +54,8 @@ describe('A Rails generated Cocooned setup', () => {
         }
       })
 
-      given('count', () => faker.datatype.number({ min: 3, max: 5 }))
-      given('index', () => faker.datatype.number({ min: 1, max: given.count - 2 }))
+      given('count', () => faker.number.int({ min: 3, max: 5 }))
+      given('index', () => faker.number.int({ min: 1, max: given.count - 2 }))
 
       describe('when move up link is clicked', () => {
         given('moveLink', () => getMoveUpLink(given.container, given.index))

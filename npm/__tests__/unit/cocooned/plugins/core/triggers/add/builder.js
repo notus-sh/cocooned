@@ -6,7 +6,7 @@ import { faker } from '@cocooned/tests/support/faker'
 describe('Builder', () => {
   given('builder', () => new Builder(given.template.content, given.association))
   given('association', () => 'new_person')
-  given('id', () => faker.random.numeric(5))
+  given('id', () => faker.string.numeric(5))
 
   const replacements = [
     {

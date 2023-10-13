@@ -14,8 +14,8 @@ describe('A Cocooned setup with options for the reorderable plugin', () => {
   })
 
   given('container', () => document.querySelector('section'))
-  given('count', () => faker.datatype.number({ min: 3, max: 8 }))
-  given('index', () => faker.datatype.number({ min: 1, max: given.count - 2 }))
+  given('count', () => faker.number.int({ min: 3, max: 8 }))
+  given('index', () => faker.number.int({ min: 1, max: given.count - 2 }))
   given('template', () => `
     <div data-cocooned-item>
       <a data-cocooned-trigger="up" href="#">Up</a>
