@@ -673,14 +673,27 @@
   }
 
   function delegatedClickHandler (selector, callback) {
+    const handler = clickHandler$1(callback);
+
     return e => {
       const { target } = e;
       if (target.closest(selector) === null) {
         return
       }
 
-      e.preventDefault();
-      callback(e);
+      handler(e);
+    }
+  }
+
+  function itemDelegatedClickHandler (container, selector, callback) {
+    const delegatedHandler = delegatedClickHandler(selector, callback);
+
+    return e => {
+      if (!container.contains(e.target)) {
+        return
+      }
+
+      delegatedHandler(e);
     }
   }
 
@@ -707,7 +720,7 @@
 
       this.container.addEventListener(
         'click',
-        delegatedClickHandler(this._selector('triggers.remove'), (e) => {
+        itemDelegatedClickHandler(this, this._selector('triggers.remove'), (e) => {
           const trigger = new Remove(e.target, this);
           trigger.handle(e);
         })
@@ -866,8 +879,8 @@
     }
   }
 
-  function clickHandler (selector, cocooned, TriggerClass) {
-    return delegatedClickHandler(selector, (e) => {
+  function clickHandler (cocooned, selector, TriggerClass) {
+    return itemDelegatedClickHandler(cocooned, selector, (e) => {
       const trigger = new TriggerClass(e.target, cocooned);
       trigger.handle(e);
     })
@@ -900,8 +913,8 @@
         form.addEventListener('submit', e => this._reindexer.reindex(e));
       }
 
-      this.container.addEventListener('click', clickHandler(this._selector('triggers.up'), this, Up));
-      this.container.addEventListener('click', clickHandler(this._selector('triggers.down'), this, Down));
+      this.container.addEventListener('click', clickHandler(this, this._selector('triggers.up'), Up));
+      this.container.addEventListener('click', clickHandler(this, this._selector('triggers.down'), Down));
     }
 
     /* Protected and private attributes and methods */
