@@ -26,6 +26,10 @@ const coreMixin = (Base) => class extends Base {
     this.container.addEventListener(
       'click',
       delegatedClickHandler(this._selector('triggers.remove'), (e) => {
+        if (!this.contains(e.target)) {
+          return
+        }
+
         const trigger = new Remove(e.target, this)
         trigger.handle(e)
       })

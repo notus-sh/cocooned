@@ -4,6 +4,10 @@ import { delegatedClickHandler } from '../events/handlers.js'
 
 function clickHandler (selector, cocooned, TriggerClass) {
   return delegatedClickHandler(selector, (e) => {
+    if (!cocooned.contains(e.target)) {
+      return
+    }
+
     const trigger = new TriggerClass(e.target, cocooned)
     trigger.handle(e)
   })
