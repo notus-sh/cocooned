@@ -6,18 +6,32 @@ function clickHandler (callback) {
 }
 
 function delegatedClickHandler (selector, callback) {
+  const handler = clickHandler(callback)
+
   return e => {
     const { target } = e
     if (target.closest(selector) === null) {
       return
     }
 
-    e.preventDefault()
-    callback(e)
+    handler(e)
+  }
+}
+
+function itemDelegatedClickHandler (container, selector, callback) {
+  const delegatedHandler = delegatedClickHandler(selector, callback)
+
+  return e => {
+    if (!container.contains(e.target)) {
+      return
+    }
+
+    delegatedHandler(e)
   }
 }
 
 export {
   clickHandler,
-  delegatedClickHandler
+  delegatedClickHandler,
+  itemDelegatedClickHandler
 }

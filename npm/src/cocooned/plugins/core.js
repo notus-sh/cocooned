@@ -1,6 +1,6 @@
 import { Add } from './core/triggers/add.js'
 import { Remove } from './core/triggers/remove.js'
-import { clickHandler, delegatedClickHandler } from '../events/handlers.js'
+import { clickHandler, itemDelegatedClickHandler } from '../events/handlers.js'
 
 const coreMixin = (Base) => class extends Base {
   static get selectors () {
@@ -25,11 +25,7 @@ const coreMixin = (Base) => class extends Base {
 
     this.container.addEventListener(
       'click',
-      delegatedClickHandler(this._selector('triggers.remove'), (e) => {
-        if (!this.contains(e.target)) {
-          return
-        }
-
+      itemDelegatedClickHandler(this, this._selector('triggers.remove'), (e) => {
         const trigger = new Remove(e.target, this)
         trigger.handle(e)
       })
