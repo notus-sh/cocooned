@@ -38,7 +38,7 @@ describe('Deprecator', () => {
       expect(given.warn).toHaveBeenCalled()
     })
 
-    it('outputs a uniaue deprecation warning to console', () => {
+    it('outputs a unique deprecation warning to console', () => {
       given.deprecator.warn('A feature is deprecated')
       given.deprecator.warn('A feature is deprecated')
 
@@ -55,7 +55,7 @@ describe('Deprecator', () => {
       expect(given.emitted).toMatch(new RegExp(`It will be removed from ${given.package} ${given.version}.$`))
     })
 
-    it('supports optionnal alternative', () => {
+    it('supports optional alternative', () => {
       given.deprecator.warn('A feature is deprecated', 'another feature')
       expect(given.emitted).toMatch(/, use another feature instead\./)
     })

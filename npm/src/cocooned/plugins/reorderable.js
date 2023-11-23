@@ -1,9 +1,9 @@
 import { Up, Down } from './reorderable/triggers.js'
 import { Reindexer } from './reorderable/reindexer.js'
-import { delegatedClickHandler } from '../events/handlers.js'
+import { itemDelegatedClickHandler } from '../events/handlers.js'
 
-function clickHandler (selector, cocooned, TriggerClass) {
-  return delegatedClickHandler(selector, (e) => {
+function clickHandler (cocooned, selector, TriggerClass) {
+  return itemDelegatedClickHandler(cocooned, selector, (e) => {
     const trigger = new TriggerClass(e.target, cocooned)
     trigger.handle(e)
   })
@@ -36,8 +36,8 @@ const reorderableMixin = (Base) => class extends Base {
       form.addEventListener('submit', e => this._reindexer.reindex(e))
     }
 
-    this.container.addEventListener('click', clickHandler(this._selector('triggers.up'), this, Up))
-    this.container.addEventListener('click', clickHandler(this._selector('triggers.down'), this, Down))
+    this.container.addEventListener('click', clickHandler(this, this._selector('triggers.up'), Up))
+    this.container.addEventListener('click', clickHandler(this, this._selector('triggers.down'), Down))
   }
 
   /* Protected and private attributes and methods */

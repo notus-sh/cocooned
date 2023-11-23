@@ -1,6 +1,10 @@
 /* global given */
 
-import { clickHandler, delegatedClickHandler } from '@notus.sh/cocooned/src/cocooned/events/handlers'
+import {
+  clickHandler,
+  delegatedClickHandler,
+  itemDelegatedClickHandler
+} from '@notus.sh/cocooned/src/cocooned/events/handlers'
 import { jest } from '@jest/globals'
 import { clickEvent } from '@cocooned/tests/support/helpers'
 
@@ -68,6 +72,31 @@ describe('handlers', () => {
 
         given.container.addEventListener('click', delegatedClickHandler('.trigger', listener))
         given.trigger.dispatchEvent(clickEvent())
+      })
+    })
+  })
+
+  describe('itemDelegatedClickHandler', () => {
+    given('contains', () => jest.fn().mockReturnValue(true))
+    given('cocooned', () => ({ contains: given.contains }))
+
+    it('set up event delegations', () => {
+      const listener = jest.fn()
+      given.container.addEventListener('click', itemDelegatedClickHandler(given.cocooned, '.trigger', listener))
+      given.trigger.dispatchEvent(clickEvent())
+
+      expect(listener).toHaveBeenCalled()
+    })
+
+    describe('when cocooned instance does not contain event target', () => {
+      given('contains', () => jest.fn().mockReturnValue(false))
+
+      it('prevents callback', () => {
+        const listener = jest.fn()
+        given.container.addEventListener('click', itemDelegatedClickHandler(given.cocooned, '.trigger', listener))
+        given.trigger.dispatchEvent(clickEvent())
+
+        expect(listener).not.toHaveBeenCalled()
       })
     })
   })
