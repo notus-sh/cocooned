@@ -39,7 +39,7 @@ module Cocooned
         model = if reflection.collection?
                   dummy.send(association).build
                 else
-                  dummy.send("build_#{association}")
+                  dummy.send(:"build_#{association}")
                 end
         model = model.dup if model.frozen?
         model
