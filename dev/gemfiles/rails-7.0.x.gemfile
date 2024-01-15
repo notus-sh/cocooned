@@ -13,7 +13,7 @@ group :development, :test do
 
   gem 'formtastic', '~> 5.0'
   gem 'nokogiri'
-  gem 'rspec-rails', '~> 5.0'
+  gem 'rspec-rails', '~> 6.0'
   gem 'simplecov', require: false
   gem 'simple_form', '~> 5.1'
 end
