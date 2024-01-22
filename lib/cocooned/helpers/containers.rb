@@ -31,10 +31,11 @@ module Cocooned
       # will be forwarded.
       def cocooned_container(*args, &block)
         options = args.extract_options!.dup
+        name = args.shift || :div
         defaults = cocooned_wrapper_defaults(options, %w[cocooned-container], :'cocooned-container')
         defaults[:data][:cocooned_options] = options.extract!(:limit, :reorderable).to_json
 
-        content_tag(:div, *args, **options.deep_merge(defaults), &block)
+        content_tag(name, *args, **options.deep_merge(defaults), &block)
       end
 
       # Wrap content with the expected markup for a Cocooned item.
@@ -54,9 +55,10 @@ module Cocooned
       # be forwarded.
       def cocooned_item(*args, &block)
         options = args.extract_options!.dup
+        name = args.shift || :div
         defaults = cocooned_wrapper_defaults(options, %w[cocooned-item nested-fields], :'cocooned-item')
 
-        content_tag(:div, *args, **options.deep_merge(defaults), &block)
+        content_tag(name, *args, **options.deep_merge(defaults), &block)
       end
 
       protected

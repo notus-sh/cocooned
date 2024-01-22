@@ -2,7 +2,7 @@
 
 module ActionViewHelper
   def container(string)
-    Nokogiri::HTML(string).at('div')
+    Nokogiri::HTML(string).at('body > *')
   end
 end
 
