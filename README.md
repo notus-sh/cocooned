@@ -193,7 +193,7 @@ And your sub form as follow:
 + <% end %>
 ```
 
-The `cocooned_container` and `cocooned_item` helpers will set for you the HTML attributes the JavaScript part of Cocooned expect to find to hook on. They will forward any option supported by ActionView's `content_tag`.
+The `cocooned_container` and `cocooned_item` helpers will set for you the HTML attributes the JavaScript part of Cocooned expect to find to hook on. They will forward any option supported by ActionView's `content_tag` and accept a tag name as first argument if you don't want to use the default `<div>`.
 
 ### 3. Add a way to add a new item to the list
 
