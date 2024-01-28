@@ -4,7 +4,7 @@ This is a companion package for the [cocooned Ruby gem](https://rubygems.org/gem
 
 Cocooned makes it easier to handle nested forms in Rails.
 
-Cocooned is form builder-agnostic: it works with standard Rails (>= 6.0, < 7.1) form helpers, [Formtastic](https://github.com/justinfrench/formtastic) or [SimpleForm](https://github.com/plataformatec/simple_form).
+Cocooned is form builder-agnostic: it works with standard Rails (>= 6.0, < 7.2) form helpers, [Formtastic](https://github.com/justinfrench/formtastic) or [SimpleForm](https://github.com/plataformatec/simple_form).
 
 1. [Installation](#installation)
 2. [Import](#import), default, custom or with [jQuery integration](#jquery-integration)
@@ -95,7 +95,19 @@ const cocooned = Cocooned.create(document.querySelector('a selector to match con
 const cocooned = Cocooned.create(document.querySelector('a selector to match container'), { limit: 12 })
 ```
 
-Options can also be provided as a JSON string in a `data-cocooned-options` on your container HTML tag. This is the recommended way to pass options from Ruby-land.
+Options can also be provided as a JSON string in a `data-cocooned-options` on your container HTML tag. This is the recommended way to pass options from Ruby-land (and is bundled in the `coconned_container` helper provided by the [cocooned Ruby gem](https://rubygems.org/gems/cocooned)).
+
+### Complex nested forms
+
+Although they come with their own challenges, as building a comprehensive interface for your users or dealing with validations on multiple levels, in some complex use cases you have no choices but to build forms with multiple levels of sub-components you may want to manage with Cocooned.
+
+As Cocooned is commonly initialized on page load with `Cocooned.start()`, action triggers in dynamically added child items (to add grand-child items) or to manipulate grand-child items (to delete them or to move them up or down if you use the reorderable plugin) will not be handled at first.
+
+To handle them, you need to tell Cocooned to initialize their event handlers when a new item is added with:
+
+```javascript
+document.addEventListener('cocooned:after-insert', e => Cocooned.create(e.detail.node))
+```
 
 ### jQuery integration
 
@@ -135,7 +147,7 @@ Duration of animations, in milliseconds. Defaults to 450.
 
 A function returning animation keyframes, either an array of keyframe objects or a keyframe object whose properties are arrays of values to iterate over. See [Keyframe Formats documentation](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API/Keyframe_Formats) for more details.
 
-For an example of the expected function behavior, [look at the default animator](https://github.com/notus-sh/cocooned/blob/master/npm/src/cocooned/base.js#L24)
+For an example of the expected function behavior, [look at the default animator](https://github.com/notus-sh/cocooned/blob/main/npm/src/cocooned/base.js#L24)
 
 ### Plugins options
 
