@@ -10,7 +10,7 @@ group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'puma'
   gem 'rails'
-  gem 'shakapacker', '~> 7.1.0'
+  gem 'shakapacker', '7.2.2'
   gem 'sqlite3'
 
   gem 'formtastic', '~> 5.0'
