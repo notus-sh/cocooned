@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 * Add support for custom tag name to container helpers (#55, #56)  
   `cocooned_container` and `cocooned_item` now support an optional tag name as their first argument (as `content_tag` do) when the default `<div/>` is not appropriate.  
   **Warning:** This change is not supposed to break anything as helpers prototypes stays the same and no other positional argument where really expected before. However, depending on how you used these helpers with previous releases, you may encounter unexpected side effects.
+* Documentation about nested use cases and event initialization (#59)
 
 ### Fixed
 
