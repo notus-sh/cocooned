@@ -23,6 +23,21 @@ describe('Builder', () => {
       desc: 'both singular',
       template: '<input type="text" id="contacts_new_person_name" name="contacts[new_person][name]">',
       expected: (id) => `<input type="text" id="contacts_${id}_name" name="contacts[${id}][name]">`
+    },
+    {
+      desc: 'nested',
+      template: `
+        <input type="text" id="contacts_new_person_name" name="contacts[new_person][name]">
+        <template>
+          <input type="text" id="contacts_new_person_new_attribute" name="contacts[new_person][new_attribute]">
+        </template>
+      `,
+      expected: (id) => `
+        <input type="text" id="contacts_${id}_name" name="contacts[${id}][name]">
+        <template>
+          <input type="text" id="contacts_${id}_new_attribute" name="contacts[${id}][new_attribute]">
+        </template>
+      `
     }
   ]
 
