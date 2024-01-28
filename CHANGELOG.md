@@ -12,6 +12,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   `cocooned_container` and `cocooned_item` now support an optional tag name as their first argument (as `content_tag` do) when the default `<div/>` is not appropriate.  
   **Warning:** This change is not supposed to break anything as helpers prototypes stays the same and no other positional argument where really expected before. However, depending on how you used these helpers with previous releases, you may encounter unexpected side effects.
 
+### Fixed
+
+* Replacements operated on a newly built item in some nested use cases (#52, #57)  
+  Replacements are now done recursively in nested templates if any exists. This should fix field naming in newly built items when multiple Cocooned instance are nested and correct naming of sub-items depends on generated names for their parent.
+
 ### Changed
 
 * Update test matrix (#54)  
