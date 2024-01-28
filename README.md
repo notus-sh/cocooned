@@ -257,6 +257,10 @@ If you have a `has_one` association, then you (probably) need to set `force_non_
 
 See the [original merge request](https://github.com/nathanvda/cocoon/pull/247) for more details.
 
+#### Complex nested forms
+
+If you want to build complex forms with multiple levels of nesting, make sure you [initialize Cocooned event handlers correctly for dynamically added child items](https://github.com/notus-sh/cocooned/blob/main/npm/README.md#complex-nested-forms) or your form won't behave as you might expect.
+
 ## Plugins
 
 Cocooned comes with two built-in plugins:
@@ -306,10 +310,10 @@ Remember to add `:position` as a permitted parameter in your controller.
 
 Each helper provided by Cocooned with a name ending with `_link` has its `_button` equivalent, to generate a `<button type="button" />` instead of a `<a href="#" />`:
 
-- `cocooned_add_item_link` <=> `cocooned_add_item_button` ([Documentation](https://github.com/notus-sh/cocooned/blob/master/lib/cocooned/helpers/tags/add.rb))
-- `cocooned_remove_item_link` <=> `cocooned_remove_item_button` ([Documentation](https://github.com/notus-sh/cocooned/blob/master/lib/cocooned/helpers/tags/remove.rb))
-- `cocooned_move_item_up_link` <=> `cocooned_move_item_up_button` ([Documentation](https://github.com/notus-sh/cocooned/blob/master/lib/cocooned/helpers/tags/up.rb))
-- `cocooned_move_item_down_link` <=> `cocooned_move_item_down_button` ([Documentation](https://github.com/notus-sh/cocooned/blob/master/lib/cocooned/helpers/tags/down.rb))
+- `cocooned_add_item_link` <=> `cocooned_add_item_button` ([Documentation](https://github.com/notus-sh/cocooned/blob/main/lib/cocooned/helpers/tags/add.rb))
+- `cocooned_remove_item_link` <=> `cocooned_remove_item_button` ([Documentation](https://github.com/notus-sh/cocooned/blob/main/lib/cocooned/helpers/tags/remove.rb))
+- `cocooned_move_item_up_link` <=> `cocooned_move_item_up_button` ([Documentation](https://github.com/notus-sh/cocooned/blob/main/lib/cocooned/helpers/tags/up.rb))
+- `cocooned_move_item_down_link` <=> `cocooned_move_item_down_button` ([Documentation](https://github.com/notus-sh/cocooned/blob/main/lib/cocooned/helpers/tags/down.rb))
 
 While all `_link` helpers accept and will politely forward any option supported by ActionView's `link_to`, `_button` helpers will do the same with options supported by ActionView's `button_tag`.
 
@@ -328,7 +332,7 @@ If no translation is found, the default label will be the humanized action name.
 
 ## Javascript
 
-For more documentation about the JavaScript bundled in the companion package, please refer to [its own documentation](https://github.com/notus-sh/cocooned/blob/master/npm/README.md).
+For more documentation about the JavaScript bundled in the companion package, please refer to [its own documentation](https://github.com/notus-sh/cocooned/blob/main/npm/README.md).
 
 ## Styling forms
 
