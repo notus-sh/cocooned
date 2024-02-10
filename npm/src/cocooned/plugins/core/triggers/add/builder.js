@@ -68,7 +68,7 @@ class Builder {
   #documentFragment
   #replacements
 
-  #applyReplacements(node, id) {
+  #applyReplacements (node, id) {
     this.#replacements.forEach(replacement => {
       node.querySelectorAll(`*[${replacement.attribute}]`).forEach(node => replacement.apply(node, id))
     })
