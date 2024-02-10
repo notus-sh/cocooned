@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Fixed
+
+* Template lookup in nested use cases (#61)  
+  Template lookup used to be done on the whole HTML document so add triggers can be declared anywhere inside or outside a Cocooned container. In nested use cases, this could lead to incorrect template being used to build grand-child items when multiple child items had been built since the last form save. Lookup is now done first inside the closest Cocooned item if any to ensure the correct template will be used.
+
 ## Version 2.1.0 (2024-01-28)
 
 ### Added
