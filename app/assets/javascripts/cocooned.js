@@ -318,7 +318,7 @@
     #documentFragment
     #replacements
 
-    #applyReplacements(node, id) {
+    #applyReplacements (node, id) {
       this.#replacements.forEach(replacement => {
         node.querySelectorAll(`*[${replacement.attribute}]`).forEach(node => replacement.apply(node, id));
       });
@@ -441,8 +441,9 @@
   }
 
   class Extractor {
-    constructor (trigger) {
+    constructor (trigger, cocooned) {
       this.#trigger = trigger;
+      this.#cocooned = cocooned;
     }
 
     extract () {
@@ -459,6 +460,7 @@
     }
 
     /* Protected and private attributes and methods */
+    #cocooned
     #trigger
 
     get #dataset () {
@@ -470,7 +472,8 @@
         return null
       }
 
-      const template = document.querySelector(`template[data-name="${this.#dataset.template}"]`);
+      const find = node => node?.querySelector(`template[data-name="${this.#dataset.template}"]`);
+      const template = find(this.#cocooned.toItem(this.#trigger)) || find(document);
       if (template === null) {
         return null
       }
@@ -574,7 +577,7 @@
 
   class Add extends Trigger {
     static create (trigger, cocooned) {
-      const extractor = new Extractor(trigger);
+      const extractor = new Extractor(trigger, cocooned);
       return new Add(trigger, cocooned, extractor.extract())
     }
 
