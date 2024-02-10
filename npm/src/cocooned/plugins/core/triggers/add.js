@@ -10,7 +10,7 @@ function uniqueId () {
 
 class Add extends Trigger {
   static create (trigger, cocooned) {
-    const extractor = new Extractor(trigger)
+    const extractor = new Extractor(trigger, cocooned)
     return new Add(trigger, cocooned, extractor.extract())
   }
 

@@ -2,8 +2,9 @@ import { Builder } from './builder.js'
 import { deprecator, Traverser } from '../../../../deprecation.js'
 
 class Extractor {
-  constructor (trigger) {
+  constructor (trigger, cocooned) {
     this.#trigger = trigger
+    this.#cocooned = cocooned
   }
 
   extract () {
@@ -20,6 +21,7 @@ class Extractor {
   }
 
   /* Protected and private attributes and methods */
+  #cocooned
   #trigger
 
   get #dataset () {
@@ -31,7 +33,8 @@ class Extractor {
       return null
     }
 
-    const template = document.querySelector(`template[data-name="${this.#dataset.template}"]`)
+    const find = node => node?.querySelector(`template[data-name="${this.#dataset.template}"]`)
+    const template = find(this.#cocooned.toItem(this.#trigger)) || find(document)
     if (template === null) {
       return null
     }
