@@ -204,6 +204,20 @@ Event handlers receive a `CustomEvent` with following detail:
 
 You can cancel an action within the `cocooned:before-<action>` callback using `event.preventDefault()`.
 
+## Attribute substitutions on create
+
+New items need to have a bunch of attributes updated before insert to make their `name`, `id` and `for` attributes consistent and unique. If you need additional substitutions to be made, you can configure them with:
+
+```javascript
+import Cocooned from '@notus.sh/cocooned'
+
+// These 4 replacements are already set by default.
+Cocooned.registerReplacement('name', '[', ']')
+Cocooned.registerReplacement('id', '_') // Same start and end? Don't repeat yourself
+Cocooned.registerReplacement('for', '_')
+Cocooned.registerReplacement('input', '_') // Trix compatibility.
+```
+
 ## Migration from a previous version
 
 These migrations steps only highlight major changes. When upgrading from a previous version, always refer to [the CHANGELOG](https://github.com/notus-sh/cocooned/blob/main/CHANGELOG.md) for new features and breaking changes.
