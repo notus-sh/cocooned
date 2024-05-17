@@ -23,6 +23,37 @@ describe('coreMixin', () => {
     })
   })
 
+  describe('replacements', () => {
+    it('returns default replacements', () => {
+      expect(given.extended.replacements).toEqual(expect.arrayContaining([
+        { attribute: 'for', delimiters: ['_'] },
+        { attribute: 'id', delimiters: ['_'] },
+        { attribute: 'name', delimiters: ['[', ']'] }
+      ]))
+    })
+
+    it('returns replacements for Trix compatibility', () => {
+      expect(given.extended.replacements).toEqual(expect.arrayContaining([
+        { attribute: 'input', delimiters: ['_'] }
+      ]))
+    })
+
+    describe('when extended', () => {
+      beforeEach(() => {
+        given.extended.registerReplacement(given.attribute, given.delimiter)
+      })
+
+      given('attribute', () => faker.lorem.word())
+      given('delimiter', () => faker.string.fromCharacters('_.-/'))
+
+      it('returns registered additional replacement', () => {
+        expect(given.extended.replacements).toEqual(expect.arrayContaining([
+          { attribute: given.attribute, delimiters: [given.delimiter] }
+        ]))
+      })
+    })
+  })
+
   describe('when instanciated', () => {
     beforeEach(() => {
       document.body.innerHTML = given.html
@@ -32,39 +63,6 @@ describe('coreMixin', () => {
     given('instance', () => new given.extended(given.container, given.options)) // eslint-disable-line new-cap
     given('container', () => document.querySelector('[data-cocooned-container]'))
     given('template', () => '<div data-cocooned-item></div>')
-
-    describe('replacements', () => {
-      given('html', () => `<div data-cocooned-container>${given.template}</div>`)
-
-      it('returns default replacements', () => {
-        expect(given.instance.replacements).toEqual(expect.arrayContaining([
-            { attribute: 'for', delimiters: ['_'] },
-            { attribute: 'id', delimiters: ['_'] },
-            { attribute: 'name', delimiters: ['[', ']'] }
-        ]))
-      })
-
-      it('returns replacements for Trix compatibility', () => {
-        expect(given.instance.replacements).toEqual(expect.arrayContaining([
-          { attribute: 'input', delimiters: ['_'] }
-        ]))
-      })
-
-      describe('when extended', () => {
-        beforeEach(() => {
-          given.extended.registerReplacement(given.attribute, given.delimiter)
-        })
-
-        given('attribute', () => faker.lorem.word())
-        given('delimiter', () => faker.string.fromCharacters('_.-/'))
-
-        it('returns registered additional replacement', () => {
-          expect(given.instance.replacements).toEqual(expect.arrayContaining([
-            { attribute: given.attribute, delimiters: [given.delimiter] }
-          ]))
-        })
-      })
-    })
 
     describe('with add triggers', () => {
       describe('when inside container', () => {

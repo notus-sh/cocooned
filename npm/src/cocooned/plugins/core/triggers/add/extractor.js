@@ -1,5 +1,4 @@
 import { Builder } from './builder.js'
-import { Replacement } from './replacement.js'
 import { deprecator, Traverser } from '../../../../deprecation.js'
 
 class Extractor {
@@ -40,11 +39,9 @@ class Extractor {
       return null
     }
 
-    const association = `new_${this.#dataset.association}`;
-
     return new Builder(
       template.content,
-      this.#cocooned.replacements.map(r => new Replacement(r.attribute, association, ...r.delimiters))
+      this.#cocooned.replacementsFor(`new_${this.#dataset.association}`)
     );
   }
 

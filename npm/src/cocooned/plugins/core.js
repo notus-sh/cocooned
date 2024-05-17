@@ -1,5 +1,6 @@
 import { Add } from './core/triggers/add.js'
 import { Remove } from './core/triggers/remove.js'
+import { Replacement } from './core/triggers/add/replacement.js'
 import { clickHandler, itemDelegatedClickHandler } from '../events/handlers.js'
 
 const coreMixin = (Base) => class extends Base {
@@ -9,6 +10,12 @@ const coreMixin = (Base) => class extends Base {
 
   static get replacements () {
     return this.__replacements;
+  }
+
+  static replacementsFor (association) {
+    return this.replacements.map(r => {
+      return new Replacement(r.attribute, association, ...r.delimiters)
+    })
   }
 
   static get selectors () {
@@ -40,8 +47,8 @@ const coreMixin = (Base) => class extends Base {
     )
   }
 
-  get replacements () {
-    return this.constructor.replacements;
+  replacementsFor (association) {
+    return this.constructor.replacementsFor(association);
   }
 
   /* Protected and private attributes and methods */

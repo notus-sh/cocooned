@@ -3,19 +3,13 @@
 import { coreMixin } from '@notus.sh/cocooned/src/cocooned/plugins/core'
 import { Base } from '@notus.sh/cocooned/src/cocooned/base'
 import { Builder } from '@notus.sh/cocooned/src/cocooned/plugins/core/triggers/add/builder'
-import { Replacement } from '@notus.sh/cocooned/src/cocooned/plugins/core/triggers/add/replacement'
 import { faker } from '@cocooned/tests/support/faker'
 
 describe('Builder', () => {
   given('extended', () => coreMixin(Base))
   given('builder', () => new Builder(given.template.content, given.replacements))
-  given('association', () => 'new_person')
   given('id', () => faker.string.numeric(5))
-  given('replacements', () => {
-    return given.extended.replacements.map(r => {
-      return new Replacement(r.attribute, 'new_person', ...r.delimiters)
-    })
-  })
+  given('replacements', () => given.extended.replacementsFor('new_person'))
 
   const replacements = [
     {
