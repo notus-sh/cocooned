@@ -3,6 +3,14 @@ import { Remove } from './core/triggers/remove.js'
 import { clickHandler, itemDelegatedClickHandler } from '../events/handlers.js'
 
 const coreMixin = (Base) => class extends Base {
+  static registerReplacement (attribute, ...delimiters) {
+    this.__replacements.push({ attribute, delimiters })
+  }
+
+  static get replacements () {
+    return this.__replacements;
+  }
+
   static get selectors () {
     return {
       ...super.selectors,
@@ -31,6 +39,21 @@ const coreMixin = (Base) => class extends Base {
       })
     )
   }
+
+  get replacements () {
+    return this.constructor.replacements;
+  }
+
+  /* Protected and private attributes and methods */
+  static __replacements = [
+    // Default attributes
+    { attribute: 'for', delimiters: ['_'] },
+    { attribute: 'id', delimiters: ['_'] },
+    { attribute: 'name', delimiters: ['[', ']'] },
+
+    // Compatibility with Trix. See #65 on Github.
+    { attribute: 'input', delimiters: ['_'] },
+  ];
 }
 
 export {

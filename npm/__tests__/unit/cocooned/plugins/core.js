@@ -33,6 +33,39 @@ describe('coreMixin', () => {
     given('container', () => document.querySelector('[data-cocooned-container]'))
     given('template', () => '<div data-cocooned-item></div>')
 
+    describe('replacements', () => {
+      given('html', () => `<div data-cocooned-container>${given.template}</div>`)
+
+      it('returns default replacements', () => {
+        expect(given.instance.replacements).toEqual(expect.arrayContaining([
+            { attribute: 'for', delimiters: ['_'] },
+            { attribute: 'id', delimiters: ['_'] },
+            { attribute: 'name', delimiters: ['[', ']'] }
+        ]))
+      })
+
+      it('returns replacements for Trix compatibility', () => {
+        expect(given.instance.replacements).toEqual(expect.arrayContaining([
+          { attribute: 'input', delimiters: ['_'] }
+        ]))
+      })
+
+      describe('when extended', () => {
+        beforeEach(() => {
+          given.extended.registerReplacement(given.attribute, given.delimiter)
+        })
+
+        given('attribute', () => faker.lorem.word())
+        given('delimiter', () => faker.string.fromCharacters('_.-/'))
+
+        it('returns registered additional replacement', () => {
+          expect(given.instance.replacements).toEqual(expect.arrayContaining([
+            { attribute: given.attribute, delimiters: [given.delimiter] }
+          ]))
+        })
+      })
+    })
+
     describe('with add triggers', () => {
       describe('when inside container', () => {
         given('html', () => `

@@ -1,12 +1,21 @@
 /* global given */
 
+import { coreMixin } from '@notus.sh/cocooned/src/cocooned/plugins/core'
+import { Base } from '@notus.sh/cocooned/src/cocooned/base'
 import { Builder } from '@notus.sh/cocooned/src/cocooned/plugins/core/triggers/add/builder'
+import { Replacement } from '@notus.sh/cocooned/src/cocooned/plugins/core/triggers/add/replacement'
 import { faker } from '@cocooned/tests/support/faker'
 
 describe('Builder', () => {
-  given('builder', () => new Builder(given.template.content, given.association))
+  given('extended', () => coreMixin(Base))
+  given('builder', () => new Builder(given.template.content, given.replacements))
   given('association', () => 'new_person')
   given('id', () => faker.string.numeric(5))
+  given('replacements', () => {
+    return given.extended.replacements.map(r => {
+      return new Replacement(r.attribute, 'new_person', ...r.delimiters)
+    })
+  })
 
   const replacements = [
     {
@@ -37,6 +46,17 @@ describe('Builder', () => {
         <template>
           <input type="text" id="contacts_${id}_new_attribute" name="contacts[${id}][new_attribute]">
         </template>
+      `
+    },
+    {
+      desc: 'Trix editor',
+      template: `
+        <input type="hidden" id="contacts_new_person_name_trix_input">
+        <trix-editor id="contacts_new_person_name" input="contacts_new_person_name_trix_input"></trix-editor>
+      `,
+      expected: (id) => `
+        <input type="hidden" id="contacts_${id}_name_trix_input">
+        <trix-editor id="contacts_${id}_name" input="contacts_${id}_name_trix_input"></trix-editor>
       `
     }
   ]
