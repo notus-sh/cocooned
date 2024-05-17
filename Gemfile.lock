@@ -300,7 +300,7 @@ DEPENDENCIES
   shakapacker (= 7.2.2)
   simple_form (~> 5.1)
   simplecov
-  sqlite3
+  sqlite3 (~> 1.4)
 
 BUNDLED WITH
    2.5.3
