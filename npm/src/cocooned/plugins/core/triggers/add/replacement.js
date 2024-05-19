@@ -8,10 +8,10 @@ const reHasRegExpChar = RegExp(reRegExpChar.source)
 class Replacement {
   attribute
 
-  constructor (attribute, name, startDelimiter, endDelimiter = null) {
+  constructor (attribute, association, startDelimiter, endDelimiter = null) {
     this.attribute = attribute
 
-    this.#name = name
+    this.#association = association
     this.#startDelimiter = startDelimiter
     this.#endDelimiter = endDelimiter || startDelimiter
   }
@@ -26,7 +26,7 @@ class Replacement {
   }
 
   /* Protected and private attributes and methods */
-  #name
+  #association
   #startDelimiter
   #endDelimiter
 
@@ -35,7 +35,7 @@ class Replacement {
   }
 
   get #regexp () {
-    const escaped = this.#escape(`${this.#startDelimiter}${this.#name}${this.#endDelimiter}`)
+    const escaped = this.#escape(`${this.#startDelimiter}${this.#association}${this.#endDelimiter}`)
     return new RegExp(`${escaped}(.*?)`, 'g')
   }
 
