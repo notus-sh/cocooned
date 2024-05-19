@@ -7,13 +7,15 @@ const reHasRegExpChar = RegExp(reRegExpChar.source)
 
 class Replacement {
   attribute
+  tag
 
-  constructor (attribute, association, startDelimiter, endDelimiter = null) {
+  constructor ({ tag = '*', attribute, association, delimiters }) {
     this.attribute = attribute
+    this.tag = tag
 
     this.#association = association
-    this.#startDelimiter = startDelimiter
-    this.#endDelimiter = endDelimiter || startDelimiter
+    this.#startDelimiter = delimiters[0]
+    this.#endDelimiter = delimiters[delimiters.length - 1]
   }
 
   apply (node, id) {

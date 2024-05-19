@@ -4,8 +4,8 @@ import { Replacement } from './core/triggers/add/replacement.js'
 import { clickHandler, itemDelegatedClickHandler } from '../events/handlers.js'
 
 const coreMixin = (Base) => class extends Base {
-  static registerReplacement (attribute, ...delimiters) {
-    this.__replacements.push({ attribute, delimiters })
+  static registerReplacement ({ tag = '*', attribute, delimiters }) {
+    this.__replacements.push({ tag, attribute, delimiters })
   }
 
   static get replacements () {
@@ -13,9 +13,7 @@ const coreMixin = (Base) => class extends Base {
   }
 
   static replacementsFor (association) {
-    return this.replacements.map(r => {
-      return new Replacement(r.attribute, association, ...r.delimiters)
-    })
+    return this.replacements.map(r => new Replacement({ association, ...r }))
   }
 
   static get selectors () {
@@ -54,12 +52,12 @@ const coreMixin = (Base) => class extends Base {
   /* Protected and private attributes and methods */
   static __replacements = [
     // Default attributes
-    { attribute: 'for', delimiters: ['_'] },
-    { attribute: 'id', delimiters: ['_'] },
-    { attribute: 'name', delimiters: ['[', ']'] },
+    { tag: 'label', attribute: 'for', delimiters: ['_'] },
+    { tag: '*', attribute: 'id', delimiters: ['_'] },
+    { tag: '*', attribute: 'name', delimiters: ['[', ']'] },
 
     // Compatibility with Trix. See #65 on Github.
-    { attribute: 'input', delimiters: ['_'] },
+    { tag: 'trix-editor', attribute: 'input', delimiters: ['_'] },
   ];
 }
 

@@ -16,7 +16,9 @@ class Builder {
 
   #applyReplacements (node, id) {
     this.#replacements.forEach(replacement => {
-      node.querySelectorAll(`*[${replacement.attribute}]`).forEach(node => replacement.apply(node, id))
+      node.querySelectorAll(`${replacement.tag}[${replacement.attribute}]`).forEach(node => {
+        return replacement.apply(node, id)
+      })
     })
 
     node.querySelectorAll('template').forEach(template => {
