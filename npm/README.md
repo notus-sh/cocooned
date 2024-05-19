@@ -211,11 +211,15 @@ New items need to have a bunch of attributes updated before insert to make their
 ```javascript
 import Cocooned from '@notus.sh/cocooned'
 
-// These 4 replacements are already set by default.
-Cocooned.registerReplacement('name', '[', ']')
-Cocooned.registerReplacement('id', '_') // Same start and end? Don't repeat yourself
-Cocooned.registerReplacement('for', '_')
-Cocooned.registerReplacement('input', '_') // Trix compatibility.
+/**
+ * These 4 replacements are already set by default.
+ */
+Cocooned.registerReplacement({ attribute: 'name', delimiters: ['[', ']'] })
+// Same start and end? Don't repeat yourself.
+Cocooned.registerReplacement({ attribute: 'id', delimiters: ['_'] })
+// You can target specific tags (else '*' is implied).
+Cocooned.registerReplacement({ tag: 'label', attribute: 'for', delimiters: ['_'] })
+Cocooned.registerReplacement({ tag: 'trix-editor', attribute: 'input', delimiters: ['_'] })
 ```
 
 ## Migration from a previous version
