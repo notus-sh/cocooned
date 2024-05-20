@@ -23,6 +23,37 @@ describe('coreMixin', () => {
     })
   })
 
+  describe('replacements', () => {
+    it('returns default replacements', () => {
+      expect(given.extended.replacements).toEqual(expect.arrayContaining([
+        { tag: 'label', attribute: 'for', delimiters: ['_'] },
+        { tag: '*', attribute: 'id', delimiters: ['_'] },
+        { tag: '*', attribute: 'name', delimiters: ['[', ']'] }
+      ]))
+    })
+
+    it('returns replacements for Trix compatibility', () => {
+      expect(given.extended.replacements).toEqual(expect.arrayContaining([
+        { tag: 'trix-editor', attribute: 'input', delimiters: ['_'] }
+      ]))
+    })
+
+    describe('when extended', () => {
+      beforeEach(() => {
+        given.extended.registerReplacement({ attribute: given.attribute, delimiters: [given.delimiter] })
+      })
+
+      given('attribute', () => faker.lorem.word())
+      given('delimiter', () => faker.string.fromCharacters('_.-/'))
+
+      it('returns registered additional replacement', () => {
+        expect(given.extended.replacements).toEqual(expect.arrayContaining([
+          { attribute: given.attribute, delimiters: [given.delimiter], tag: '*' }
+        ]))
+      })
+    })
+  })
+
   describe('when instanciated', () => {
     beforeEach(() => {
       document.body.innerHTML = given.html

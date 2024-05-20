@@ -39,7 +39,10 @@ class Extractor {
       return null
     }
 
-    return new Builder(template.content, `new_${this.#dataset.association}`)
+    return new Builder(
+      template.content,
+      this.#cocooned.replacementsFor(`new_${this.#dataset.association}`)
+    );
   }
 
   _extractCount () {

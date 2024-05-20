@@ -1,6 +1,7 @@
 /* global given */
 
-import { Base as Cocooned } from '@notus.sh/cocooned/src/cocooned/base'
+import { coreMixin } from '@notus.sh/cocooned/src/cocooned/plugins/core'
+import { Base } from '@notus.sh/cocooned/src/cocooned/base'
 import { Builder } from '@notus.sh/cocooned/src/cocooned/plugins/core/triggers/add/builder'
 import { Add } from '@notus.sh/cocooned/src/cocooned/plugins/core/triggers/add'
 import { jest } from '@jest/globals'
@@ -13,12 +14,16 @@ import itBehavesLikeACancellableEvent from '@cocooned/tests/shared/events/cancel
 describe('Add', () => {
   beforeEach(() => { document.body.innerHTML = given.html })
 
-  given('add', () => new Add(given.addTrigger, new Cocooned(given.container), given.options))
+  given('extended', () => coreMixin(Base))
+  given('add', () => new Add(given.addTrigger, new given.extended(given.container), given.options))
   given('addTrigger', () => getAddLink(given.container))
   given('container', () => document.querySelector('[data-cocooned-container]'))
   given('builder', () => {
     const template = document.querySelector('template[data-name="template"]')
-    return new Builder(template.content, 'new_item')
+    return new Builder(
+      template.content,
+      given.extended.replacementsFor('new_item')
+    )
   })
   given('options', () => ({ builder: given.builder, node: given.addTrigger.parentElement, method: 'before' }))
 

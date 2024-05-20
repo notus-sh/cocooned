@@ -1,6 +1,7 @@
 /* global given */
 
-import { Base as Cocooned } from '@notus.sh/cocooned/src/cocooned/base'
+import { coreMixin } from '@notus.sh/cocooned/src/cocooned/plugins/core'
+import { Base } from '@notus.sh/cocooned/src/cocooned/base'
 import { Extractor } from '@notus.sh/cocooned/src/cocooned/plugins/core/triggers/add/extractor'
 import { Builder } from '@notus.sh/cocooned/src/cocooned/plugins/core/triggers/add/builder'
 import { deprecator } from '@notus.sh/cocooned/src/cocooned/deprecation'
@@ -11,7 +12,8 @@ import { getAddLink } from '@cocooned/tests/support/helpers'
 describe('Extractor', () => {
   beforeEach(() => { document.body.innerHTML = given.html })
 
-  given('extractor', () => new Extractor(given.addTrigger, new Cocooned(given.container)))
+  given('extended', () => coreMixin(Base))
+  given('extractor', () => new Extractor(given.addTrigger, new given.extended(given.container)))
   given('container', () => document.querySelector('[data-cocooned-container]'))
   given('addTrigger', () => getAddLink(document))
   given('html', () => `
