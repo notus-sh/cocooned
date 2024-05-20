@@ -13,6 +13,7 @@ describe('Extractor', () => {
   beforeEach(() => { document.body.innerHTML = given.html })
 
   given('extended', () => coreMixin(Base))
+  // eslint-disable-next-line new-cap
   given('extractor', () => new Extractor(given.addTrigger, new given.extended(given.container)))
   given('container', () => document.querySelector('[data-cocooned-container]'))
   given('addTrigger', () => getAddLink(document))

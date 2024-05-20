@@ -43,8 +43,8 @@ class Replacement {
 
   #escape (string) {
     return (string && reHasRegExpChar.test(string))
-        ? string.replace(reRegExpChar, '\\$&')
-        : (string || '')
+      ? string.replace(reRegExpChar, '\\$&')
+      : (string || '')
   }
 }
 
