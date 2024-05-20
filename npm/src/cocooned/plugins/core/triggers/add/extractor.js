@@ -42,7 +42,7 @@ class Extractor {
     return new Builder(
       template.content,
       this.#cocooned.replacementsFor(`new_${this.#dataset.association}`)
-    );
+    )
   }
 
   _extractCount () {

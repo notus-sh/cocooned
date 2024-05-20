@@ -9,7 +9,7 @@ const coreMixin = (Base) => class extends Base {
   }
 
   static get replacements () {
-    return this.__replacements;
+    return this.__replacements
   }
 
   static replacementsFor (association) {
@@ -46,7 +46,7 @@ const coreMixin = (Base) => class extends Base {
   }
 
   replacementsFor (association) {
-    return this.constructor.replacementsFor(association);
+    return this.constructor.replacementsFor(association)
   }
 
   /* Protected and private attributes and methods */
@@ -57,8 +57,8 @@ const coreMixin = (Base) => class extends Base {
     { tag: '*', attribute: 'name', delimiters: ['[', ']'] },
 
     // Compatibility with Trix. See #65 on Github.
-    { tag: 'trix-editor', attribute: 'input', delimiters: ['_'] },
-  ];
+    { tag: 'trix-editor', attribute: 'input', delimiters: ['_'] }
+  ]
 }
 
 export {

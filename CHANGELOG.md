@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## Version 2.2.0 (2024-05-20)
+
+## Added
+
+* Compatibility with Trix (ActionText editor) (#65)
+* Allow to setup custom replacements on newly built items before insert (#65) 
+
 ## Version 2.1.1 (2024-02-10)
 
 ### Fixed

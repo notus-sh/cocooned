@@ -15,6 +15,7 @@ describe('Add', () => {
   beforeEach(() => { document.body.innerHTML = given.html })
 
   given('extended', () => coreMixin(Base))
+  // eslint-disable-next-line new-cap
   given('add', () => new Add(given.addTrigger, new given.extended(given.container), given.options))
   given('addTrigger', () => getAddLink(given.container))
   given('container', () => document.querySelector('[data-cocooned-container]'))

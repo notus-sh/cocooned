@@ -10,7 +10,7 @@ describe('Builder', () => {
   given('builder', () => {
     return new Builder(
       given.template.content,
-        given.extended.replacementsFor('new_person')
+      given.extended.replacementsFor('new_person')
     )
   })
   given('id', () => faker.string.numeric(5))
