@@ -248,63 +248,10 @@
     }
   }
 
-  /**
-   * Borrowed from Lodash
-   * See https://lodash.com/docs/#escapeRegExp
-   */
-  const reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
-  const reHasRegExpChar = RegExp(reRegExpChar.source);
-
-  class Replacement {
-    attribute
-
-    constructor (attribute, name, startDelimiter, endDelimiter = null) {
-      this.attribute = attribute;
-
-      this.#name = name;
-      this.#startDelimiter = startDelimiter;
-      this.#endDelimiter = endDelimiter || startDelimiter;
-    }
-
-    apply (node, id) {
-      const value = node.getAttribute(this.attribute);
-      if (!this.#regexp.test(value)) {
-        return
-      }
-
-      node.setAttribute(this.attribute, value.replace(this.#regexp, this.#replacement(id)));
-    }
-
-    /* Protected and private attributes and methods */
-    #name
-    #startDelimiter
-    #endDelimiter
-
-    #replacement (id) {
-      return `${this.#startDelimiter}${id}${this.#endDelimiter}$1`
-    }
-
-    get #regexp () {
-      const escaped = this.#escape(`${this.#startDelimiter}${this.#name}${this.#endDelimiter}`);
-      return new RegExp(`${escaped}(.*?)`, 'g')
-    }
-
-    #escape (string) {
-      return (string && reHasRegExpChar.test(string))
-        ? string.replace(reRegExpChar, '\\$&')
-        : (string || '')
-    }
-  }
-
   class Builder {
-    constructor (documentFragment, association) {
+    constructor (documentFragment, replacements) {
       this.#documentFragment = documentFragment;
-      this.#association = association;
-      this.#replacements = [
-        new Replacement('for', association, '_'),
-        new Replacement('id', association, '_'),
-        new Replacement('name', association, '[', ']')
-      ];
+      this.#replacements = replacements;
     }
 
     build (id) {
@@ -314,13 +261,14 @@
     }
 
     /* Protected and private attributes and methods */
-    #association
     #documentFragment
     #replacements
 
     #applyReplacements (node, id) {
       this.#replacements.forEach(replacement => {
-        node.querySelectorAll(`*[${replacement.attribute}]`).forEach(node => replacement.apply(node, id));
+        node.querySelectorAll(`${replacement.tag}[${replacement.attribute}]`).forEach(node => {
+          return replacement.apply(node, id)
+        });
       });
 
       node.querySelectorAll('template').forEach(template => {
@@ -478,7 +426,10 @@
         return null
       }
 
-      return new Builder(template.content, `new_${this.#dataset.association}`)
+      return new Builder(
+        template.content,
+        this.#cocooned.replacementsFor(`new_${this.#dataset.association}`)
+      )
     }
 
     _extractCount () {
@@ -675,6 +626,56 @@
     }
   }
 
+  /**
+   * Borrowed from Lodash
+   * See https://lodash.com/docs/#escapeRegExp
+   */
+  const reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
+  const reHasRegExpChar = RegExp(reRegExpChar.source);
+
+  class Replacement {
+    attribute
+    tag
+
+    constructor ({ tag = '*', attribute, association, delimiters }) {
+      this.attribute = attribute;
+      this.tag = tag;
+
+      this.#association = association;
+      this.#startDelimiter = delimiters[0];
+      this.#endDelimiter = delimiters[delimiters.length - 1];
+    }
+
+    apply (node, id) {
+      const value = node.getAttribute(this.attribute);
+      if (!this.#regexp.test(value)) {
+        return
+      }
+
+      node.setAttribute(this.attribute, value.replace(this.#regexp, this.#replacement(id)));
+    }
+
+    /* Protected and private attributes and methods */
+    #association
+    #startDelimiter
+    #endDelimiter
+
+    #replacement (id) {
+      return `${this.#startDelimiter}${id}${this.#endDelimiter}$1`
+    }
+
+    get #regexp () {
+      const escaped = this.#escape(`${this.#startDelimiter}${this.#association}${this.#endDelimiter}`);
+      return new RegExp(`${escaped}(.*?)`, 'g')
+    }
+
+    #escape (string) {
+      return (string && reHasRegExpChar.test(string))
+        ? string.replace(reRegExpChar, '\\$&')
+        : (string || '')
+    }
+  }
+
   function clickHandler$1 (callback) {
     return e => {
       e.preventDefault();
@@ -708,6 +709,18 @@
   }
 
   const coreMixin = (Base) => class extends Base {
+    static registerReplacement ({ tag = '*', attribute, delimiters }) {
+      this.__replacements.push({ tag, attribute, delimiters });
+    }
+
+    static get replacements () {
+      return this.__replacements
+    }
+
+    static replacementsFor (association) {
+      return this.replacements.map(r => new Replacement({ association, ...r }))
+    }
+
     static get selectors () {
       return {
         ...super.selectors,
@@ -736,6 +749,21 @@
         })
       );
     }
+
+    replacementsFor (association) {
+      return this.constructor.replacementsFor(association)
+    }
+
+    /* Protected and private attributes and methods */
+    static __replacements = [
+      // Default attributes
+      { tag: 'label', attribute: 'for', delimiters: ['_'] },
+      { tag: '*', attribute: 'id', delimiters: ['_'] },
+      { tag: '*', attribute: 'name', delimiters: ['[', ']'] },
+
+      // Compatibility with Trix. See #65 on Github.
+      { tag: 'trix-editor', attribute: 'input', delimiters: ['_'] }
+    ]
   };
 
   let Cocooned$1 = class Cocooned extends coreMixin(Base) {

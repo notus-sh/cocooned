@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## Version 2.2.1 (2024-05-20)
+
+## Fixed
+
+* Add UMD build of Coconned missing in 2.2.0 
+
 ## Version 2.2.0 (2024-05-20)
 
 ## Added
