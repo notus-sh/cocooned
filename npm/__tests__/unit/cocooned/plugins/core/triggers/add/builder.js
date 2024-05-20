@@ -7,9 +7,13 @@ import { faker } from '@cocooned/tests/support/faker'
 
 describe('Builder', () => {
   given('extended', () => coreMixin(Base))
-  given('builder', () => new Builder(given.template.content, given.replacements))
+  given('builder', () => {
+    return new Builder(
+      given.template.content,
+        given.extended.replacementsFor('new_person')
+    )
+  })
   given('id', () => faker.string.numeric(5))
-  given('replacements', () => given.extended.replacementsFor('new_person'))
 
   const replacements = [
     {
