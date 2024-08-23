@@ -4,6 +4,7 @@
   "type": "module",
   "browser": true,
   "description": "Development dependencies description file. For the real package.json, see ./npm",
+  "packageManager": "yarn@1.x.x",
   "scripts": {
     "build": "rollup --config dev/rollup.config.js --bundleConfigAsCjs",
     "lint": "eslint --no-eslintrc --config dev/eslint.json npm/",

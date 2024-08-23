@@ -17,7 +17,6 @@ RSpec.configure do |config|
   # Due to use of specific per-future-release deprecator, we have to silence each of them.
   config.before(:all) do
     Cocooned::Deprecation['3.0'].behavior = :silence
-    Cocooned::Deprecation.behavior = :silence
   end
 
   # Include deprecation helpers in tests tagged with `deprecation: 'version'`.

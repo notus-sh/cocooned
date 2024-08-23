@@ -6,7 +6,7 @@ module Cocooned
       include Cocooned::TagsHelper::AssociationLabel
 
       def render(as: :link)
-        template.safe_join([hidden_field, super(as: as)])
+        template.safe_join([hidden_field, super])
       end
 
       protected

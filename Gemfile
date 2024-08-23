@@ -10,8 +10,8 @@ group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'puma'
   gem 'rails'
-  gem 'shakapacker', '7.2.2'
-  gem 'sqlite3', '~> 1.4'
+  gem 'shakapacker', '8.0.1'
+  gem 'sqlite3', '~> 2.0'
 
   gem 'formtastic', '~> 5.0'
   gem 'nokogiri'
@@ -23,5 +23,6 @@ group :development, :test do
   gem 'rubocop-rails', require: false
   gem 'rubocop-rake', require: false
   gem 'rubocop-rspec', require: false
+  gem 'rubocop-rspec_rails', require: false
   gem 'simplecov', require: false
 end

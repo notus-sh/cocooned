@@ -13,7 +13,7 @@ module Cocooned
 
     def initialize(deprecation_horizon = nil, gem_name = 'Cocooned')
       deprecation_horizon ||= format('%<major>d.0', major: Gem::Version.new(Cocooned::VERSION).segments.first + 1)
-      super(deprecation_horizon, gem_name)
+      super
     end
   end
 

@@ -31,7 +31,7 @@ module Cocooned
       end
 
       def render(as: :link)
-        template.safe_join([super(as: as), html_template])
+        template.safe_join([super, html_template])
       end
 
       protected

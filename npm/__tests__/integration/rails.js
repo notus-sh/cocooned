@@ -5,7 +5,7 @@ import { jest } from '@jest/globals'
 import { faker } from '@cocooned/tests/support/faker'
 import { clickEvent, getAddLink, getRemoveLink, getMoveUpLink, getMoveDownLink } from '@cocooned/tests/support/helpers'
 
-import fixtures from '@cocooned/tests/fixtures/rails.json' assert { type: 'json' }
+import fixtures from '@cocooned/tests/fixtures/rails.json'
 
 describe('A Rails generated Cocooned setup', () => {
   beforeEach(() => {
