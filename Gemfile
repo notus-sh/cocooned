@@ -11,7 +11,7 @@ group :development, :test do
   gem 'puma'
   gem 'rails'
   gem 'shakapacker', '7.2.2'
-  gem 'sqlite3', '~> 1.4'
+  gem 'sqlite3', '~> 2.0'
 
   gem 'formtastic', '~> 5.0'
   gem 'nokogiri'
