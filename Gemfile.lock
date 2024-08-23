@@ -234,6 +234,9 @@ GEM
       rubocop (~> 1.0)
     rubocop-rspec (3.0.4)
       rubocop (~> 1.61)
+    rubocop-rspec_rails (2.30.0)
+      rubocop (~> 1.61)
+      rubocop-rspec (~> 3, >= 3.0.1)
     ruby-progressbar (1.13.0)
     securerandom (0.3.1)
     semantic_range (3.0.0)
@@ -289,6 +292,7 @@ DEPENDENCIES
   rubocop-rails
   rubocop-rake
   rubocop-rspec
+  rubocop-rspec_rails
   shakapacker (= 8.0.1)
   simple_form (~> 5.1)
   simplecov
