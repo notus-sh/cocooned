@@ -38,9 +38,9 @@ Gem::Specification.new do |spec|
   spec.files = `git ls-files -z`.split("\x0").reject do |f|
     f.match(excluded_dirs) || excluded_files.include?(f)
   end
-  spec.required_ruby_version = '>= 2.6'
+  spec.required_ruby_version = '>= 2.7'
 
-  spec.add_dependency 'rails', '>= 6.1', '<= 8.0'
+  spec.add_dependency 'rails', '>= 7.0', '<= 8.0'
 
   spec.add_development_dependency 'bundler', '~> 2.1'
   spec.add_development_dependency 'rake', '~> 13.0'
