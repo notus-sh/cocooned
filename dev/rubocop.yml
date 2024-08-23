@@ -11,6 +11,3 @@ AllCops:
 Naming/FileName:
   Exclude:
     - 'dev/**/*.gemfile'
-
-Rails/CompactBlank:
-  Enabled: false # As long as we support Rails 6.0

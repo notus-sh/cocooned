@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Fixed
+
+* Add support for Rails v7.2 and drop support for Rails < 6.1 (#70)
+
 ## Version 2.2.1 (2024-05-20)
 
 ## Fixed
