@@ -15,7 +15,7 @@ group :development, :test do
 
   gem 'formtastic', '~> 5.0'
   gem 'nokogiri'
-  gem 'rspec-rails', '~> 6.0'
+  gem 'rspec-rails', '~> 7.0'
   gem 'simple_form', '~> 5.1'
 
   gem 'rubocop', require: false
