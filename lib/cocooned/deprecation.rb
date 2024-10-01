@@ -22,15 +22,15 @@ module Cocooned
     module Helpers # :nodoc:
       module Tags # :nodoc:
         # @deprecated: Please use {#cocooned_add_item_link} instead
-        def link_to_add_association(*args, &block)
-          cocooned_add_item_link(*args, &block)
+        def link_to_add_association(...)
+          cocooned_add_item_link(...)
         end
         deprecate link_to_add_association: 'Use :cocooned_add_link instead',
                   deprecator: Deprecation['3.0']
 
         # @deprecated: Please use {#cocooned_remove_item_link} instead
-        def link_to_remove_association(*args, &block)
-          cocooned_remove_item_link(*args, &block)
+        def link_to_remove_association(...)
+          cocooned_remove_item_link(...)
         end
         deprecate link_to_remove_association: 'Use :cocooned_remove_item_link instead',
                   deprecator: Deprecation['3.0']

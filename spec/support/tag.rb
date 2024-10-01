@@ -7,8 +7,8 @@ module TagHelper
       Nokogiri::HTML5.fragment(tag.render(as: :link))
     end
 
-    def tag(*args, **options, &block)
-      html(*args, **options, &block).at('a')
+    def tag(...)
+      html(...).at('a')
     end
   end
 
@@ -18,8 +18,8 @@ module TagHelper
       Nokogiri::HTML5.fragment(tag.render(as: :button))
     end
 
-    def tag(*args, **options, &block)
-      html(*args, **options, &block).at('button')
+    def tag(...)
+      html(...).at('button')
     end
   end
 end
