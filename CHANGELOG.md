@@ -6,9 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## Version 2.4.0 (2024-10-01)
+
 ### Fixed
 
-* Drop support for Rails < 7.0 (TODO: add PR number)
+* Drop support for Rails < 7.0 (#73, thanks @mattmenefee)
+
+### Changed
+
+* Reintroduce Ruby 2.7 to the test matrix (#80)  
+  So tested rubies are the same as supported Rails versions minimum requirements.
 
 ## Version 2.3.0 (2024-08-23)
 
