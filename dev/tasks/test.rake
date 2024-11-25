@@ -18,7 +18,7 @@ namespace :test do
                                                        'QUERY_STRING' => "use=#{use}",
                                                        'rack.input' => '' })
 
-        [use, Nokogiri::HTML(response.last.body).at('body > form')]
+        [use, Nokogiri::HTML(response.last.body).at('body > form').to_s.squish]
       end
 
       File.open('./npm/__tests__/fixtures/rails.json', 'w+') do |f|
