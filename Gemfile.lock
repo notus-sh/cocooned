@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     cocooned (2.4.1)
-      rails (>= 7.0, <= 8.1)
+      rails (>= 7.0, < 8.1)
 
 GEM
   remote: https://rubygems.org/
