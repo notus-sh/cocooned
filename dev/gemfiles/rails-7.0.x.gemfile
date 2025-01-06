@@ -6,6 +6,7 @@ gemspec path: '../..'
 
 group :development, :test do
   gem 'bigdecimal'
+  gem 'mutex_m'
   gem 'psych', '< 4.0.0'
   gem 'puma'
   gem 'rails', '~> 7.0.0'
