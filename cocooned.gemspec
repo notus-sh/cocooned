@@ -40,7 +40,7 @@ Gem::Specification.new do |spec|
   end
   spec.required_ruby_version = '>= 2.7'
 
-  spec.add_dependency 'rails', '>= 7.0', '< 8.1'
+  spec.add_dependency 'rails', '>= 7.0', '< 8.2'
 
   spec.add_development_dependency 'bundler', '~> 2.1'
   spec.add_development_dependency 'rake', '~> 13.0'
