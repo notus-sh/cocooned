@@ -58,10 +58,7 @@ class ListsController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def list_params
-    params.require(:list).permit(
-      :name,
-      items_attributes: %i[id label position _destroy]
-    )
+    params.expect(list: [:name, { items_attributes: %i[id label position _destroy] }])
   end
 end
 # rubocop:enable Rails/I18nLocaleTexts

@@ -7,7 +7,7 @@ gemspec
 
 group :development, :test do
   # Dummy app dependencies
-  gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'byebug', platforms: %i[mri windows]
   gem 'puma'
   gem 'rails'
   gem 'shakapacker', '8.3.0'

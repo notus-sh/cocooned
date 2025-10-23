@@ -14,6 +14,7 @@ jobs:
         gemfile: [
           dev/gemfiles/rails-7.1.x.gemfile,
           dev/gemfiles/rails-7.2.x.gemfile,
+          dev/gemfiles/rails-8.0.x.gemfile,
           Gemfile
         ]
         exclude:
@@ -22,11 +23,17 @@ jobs:
             gemfile: dev/gemfiles/rails-7.2.x.gemfile
           - ruby: "3.0"
             gemfile: dev/gemfiles/rails-7.2.x.gemfile
-          # Exclude rubies < 3.2 for ActiveModel ~> 8.0
+          # Exclude rubies < 3.2 for ActiveModel >= 8.0
+          - ruby: "2.7"
+            gemfile: dev/gemfiles/rails-8.0.x.gemfile
           - ruby: "2.7"
             gemfile: Gemfile
           - ruby: "3.0"
+            gemfile: dev/gemfiles/rails-8.0.x.gemfile
+          - ruby: "3.0"
             gemfile: Gemfile
+          - ruby: "3.1"
+            gemfile: dev/gemfiles/rails-8.0.x.gemfile
           - ruby: "3.1"
             gemfile: Gemfile
     env: # $BUNDLE_GEMFILE must be set at the job level, so it is set for all steps

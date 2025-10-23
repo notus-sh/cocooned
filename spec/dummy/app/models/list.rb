@@ -3,7 +3,7 @@
 class List < ApplicationRecord
   # Relations
   has_many :items,
-           -> { order('position') },
+           -> { order(:position) },
            inverse_of: :list,
            dependent: :destroy
 

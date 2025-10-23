@@ -1,0 +1,16 @@
+# frozen_string_literal: true
+
+source 'http://rubygems.org'
+
+gemspec path: '../..'
+
+group :development, :test do
+  gem 'puma'
+  gem 'rails', '~> 8.0.0'
+  gem 'sqlite3', '~> 2.0'
+
+  gem 'formtastic', '~> 5.0'
+  gem 'rspec-rails', '~> 7.0'
+  gem 'simplecov', require: false
+  gem 'simple_form', '~> 5.3'
+end
