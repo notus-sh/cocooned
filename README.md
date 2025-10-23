@@ -5,7 +5,7 @@
 
 Cocooned makes it easier to handle nested forms in Rails.
 
-Cocooned is form builder-agnostic: it works with standard Rails (>= 7.0, < 8.0) form helpers, [Formtastic](https://github.com/justinfrench/formtastic) or [SimpleForm](https://github.com/plataformatec/simple_form).
+Cocooned is form builder-agnostic: it works with standard Rails (>= 7.0, < 8.2) form helpers, [Formtastic](https://github.com/justinfrench/formtastic) or [SimpleForm](https://github.com/plataformatec/simple_form).
 
 1. [Background](#some-background)
 2. [Installation](#installation)
@@ -23,7 +23,7 @@ Cocooned is a fork of [Cocoon](https://github.com/nathanvda/cocoon) by [Nathan V
 
 However, the project seems to have only received minimal fixes since 2018 and many pull requests, even simple ones, have been on hold for a long time. In 2019, as I needed more than what Cocoon provided at this time, I had the choice to either maintain an extension or to fork it and integrate everything that was waiting and more.
 
-Over the time, Cocooned turned into an almost complete rewrite of Cocoon with more functionnalities, a more fluent API (I hope) and integration with modern toolchains. Still, **Cocooned is completely compatible with Cocoon and can be used as a drop-in replacement** as long as we talk about Ruby code. Change the name of the gem in your Gemfile and you're done. **This compatibility layer with the original Cocoon API will be dropped in the next major release.**
+Over the time, Cocooned turned into an almost complete rewrite of Cocoon with more functionnalities, a more fluent API (I hope) and integration with modern toolchains. Still, **Cocooned is compatible with Cocoon and can be used as a**(n almost) **drop-in replacement. This compatibility layer with the original Cocoon API will be dropped in the next major release.**
 
 On the JavaScript side, Cocooned 2.0 removed the dependency to jQuery (Yeah! :tada:). See [JavaScript](#javascript) for details.
 
@@ -40,15 +40,18 @@ gem 'cocooned'
 Cocooned comes with an NPM companion package: [`@notus.sh/cocooned`](https://www.npmjs.com/package/@notus.sh/cocooned).
 It bundles JavaScript files to handles in-browser interactions with your nested forms.
 
-If you use import maps (Rails 7.0+ default), add it with:
+Install it with your favorite package manager:
 
 ```shell
+# bun
+$ bun install @notus.sh/cocooned
+# importmap (Rails ~7.0 default)
 $ bin/importmap pin @notus.sh/cocooned
-```
-
-If you use Yarn and Webpack (Rails 5.1+ default), add it with:
-
-```shell
+# npm
+$ npm install @notus.sh/cocooned
+# pnpm
+$ pnpm add @notus.sh/cocooned
+# yarn
 $ yarn add @notus.sh/cocooned
 ```
 

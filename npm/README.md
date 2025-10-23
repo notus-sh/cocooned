@@ -4,7 +4,7 @@ This is a companion package for the [cocooned Ruby gem](https://rubygems.org/gem
 
 Cocooned makes it easier to handle nested forms in Rails.
 
-Cocooned is form builder-agnostic: it works with standard Rails (>= 7.0, < 8.0) form helpers, [Formtastic](https://github.com/justinfrench/formtastic) or [SimpleForm](https://github.com/plataformatec/simple_form).
+Cocooned is form builder-agnostic: it works with standard Rails (>= 7.0, < 8.2) form helpers, [Formtastic](https://github.com/justinfrench/formtastic) or [SimpleForm](https://github.com/plataformatec/simple_form).
 
 1. [Installation](#installation)
 2. [Import](#import), default, custom or with [jQuery integration](#jquery-integration)
@@ -15,15 +15,18 @@ Cocooned is form builder-agnostic: it works with standard Rails (>= 7.0, < 8.0) 
 
 ## Installation
 
-If you use import maps (Rails 7.0+ default), add it with:
+Install it with your favorite package manager:
 
 ```shell
+# bun
+$ bun install @notus.sh/cocooned
+# importmap (Rails ~7.0 default)
 $ bin/importmap pin @notus.sh/cocooned
-```
-
-If you use Yarn and Webpack (Rails 5.1+ default), add it with:
-
-```shell
+# npm
+$ npm install @notus.sh/cocooned
+# pnpm
+$ pnpm add @notus.sh/cocooned
+# yarn
 $ yarn add @notus.sh/cocooned
 ```
 
