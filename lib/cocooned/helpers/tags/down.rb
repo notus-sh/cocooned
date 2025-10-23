@@ -44,8 +44,8 @@ module Cocooned
         #
         # See the documentation of +ActionView::Base#link_to+ for additional
         # options.
-        def cocooned_move_item_down_link(*args, &block)
-          cocooned_link(Cocooned::Tags::Down, *args, &block)
+        def cocooned_move_item_down_link(...)
+          cocooned_link(Cocooned::Tags::Down, ...)
         end
 
         # Output a button to move an item down.
@@ -67,8 +67,8 @@ module Cocooned
         #
         # See the documentation of +ActionView::Helpers::FormBuilder#button+ for
         # valid options.
-        def cocooned_move_item_down_button(*args, &block)
-          cocooned_button(Cocooned::Tags::Down, *args, &block)
+        def cocooned_move_item_down_button(...)
+          cocooned_button(Cocooned::Tags::Down, ...)
         end
       end
     end

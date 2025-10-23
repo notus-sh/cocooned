@@ -25,9 +25,9 @@ module Cocooned
       include AssociationOptions
       include Cocooned::Deprecated::TagsHelper::AssociationOptions
 
-      def initialize(template, form, association, **options, &block)
+      def initialize(template, form, association, ...)
         @association = association
-        super(template, form, **options, &block)
+        super(template, form, ...)
       end
 
       def render(as: :link)

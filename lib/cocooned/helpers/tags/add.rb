@@ -107,8 +107,8 @@ module Cocooned
         #
         # See the documentation of +ActionView::Base#link_to+ for additional
         # options.
-        def cocooned_add_item_link(*args, &block)
-          cocooned_link(Cocooned::Tags::Add, *args, &block)
+        def cocooned_add_item_link(...)
+          cocooned_link(Cocooned::Tags::Add, ...)
         end
 
         # Output a button to add an item in a nested form.
@@ -127,8 +127,8 @@ module Cocooned
         #
         # See Cocooned::Helpers::Tags::Add main documentation for a reference of
         # supported options.
-        def cocooned_add_item_button(*args, &block)
-          cocooned_button(Cocooned::Tags::Add, *args, &block)
+        def cocooned_add_item_button(...)
+          cocooned_button(Cocooned::Tags::Add, ...)
         end
       end
     end
