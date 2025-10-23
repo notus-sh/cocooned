@@ -46,14 +46,14 @@ module Cocooned
 
       protected
 
-      def cocooned_link(klass, *args, &block)
+      def cocooned_link(klass, *args, &)
         options = args.extract_options!
-        klass.create(self, *args, **options, &block).render(as: :link)
+        klass.create(self, *args, **options, &).render(as: :link)
       end
 
-      def cocooned_button(klass, *args, &block)
+      def cocooned_button(klass, *args, &)
         options = args.extract_options!
-        klass.create(self, *args, **options, &block).render(as: :button)
+        klass.create(self, *args, **options, &).render(as: :button)
       end
     end
   end

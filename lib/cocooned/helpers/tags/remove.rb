@@ -45,8 +45,8 @@ module Cocooned
         #
         # See the documentation of +ActionView::Base#link_to+ for additional
         # options.
-        def cocooned_remove_item_link(*args, &block)
-          cocooned_link(Cocooned::Tags::Remove, *args, &block)
+        def cocooned_remove_item_link(...)
+          cocooned_link(Cocooned::Tags::Remove, ...)
         end
 
         # Output a button to remove an item (and an hidden field to mark
@@ -69,8 +69,8 @@ module Cocooned
         #
         # See the documentation of +ActionView::Base#link_to+ for additional
         # options.
-        def cocooned_remove_item_button(*args, &block)
-          cocooned_button(Cocooned::Tags::Remove, *args, &block)
+        def cocooned_remove_item_button(...)
+          cocooned_button(Cocooned::Tags::Remove, ...)
         end
       end
     end

@@ -2,8 +2,8 @@
 
 module TagHelper
   module LinkHelper
-    def html(*args, **options, &block)
-      tag = described_class.create(template, *(args + [form, try(:association)].compact), **options, &block)
+    def html(*args, **options, &)
+      tag = described_class.create(template, *(args + [form, try(:association)].compact), **options, &)
       Nokogiri::HTML5.fragment(tag.render(as: :link))
     end
 
@@ -13,8 +13,8 @@ module TagHelper
   end
 
   module ButtonHelper
-    def html(*args, **options, &block)
-      tag = described_class.create(template, *(args + [form, try(:association)].compact), **options, &block)
+    def html(*args, **options, &)
+      tag = described_class.create(template, *(args + [form, try(:association)].compact), **options, &)
       Nokogiri::HTML5.fragment(tag.render(as: :button))
     end
 
