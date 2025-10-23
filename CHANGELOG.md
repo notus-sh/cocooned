@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Changed
 
+## Version 2.5.0 (2025-10-23)
+
 * Upgrade to use `eslint ~> 9` (#103)
 * Configure dependabot to auto-update Github Actions (#99)
 * Drop support for Rails 7.1, Ruby 2.7 and Ruby 3.1 (#98)
