@@ -260,7 +260,7 @@ GEM
     ruby-progressbar (1.13.0)
     securerandom (0.4.1)
     semantic_range (3.1.0)
-    shakapacker (8.3.0)
+    shakapacker (9.2.0)
       activesupport (>= 5.2)
       package_json
       rack-proxy (>= 0.6.1)
@@ -316,7 +316,7 @@ DEPENDENCIES
   rubocop-rake
   rubocop-rspec
   rubocop-rspec_rails
-  shakapacker (= 8.3.0)
+  shakapacker (= 9.2.0)
   simple_form (~> 5.1)
   simplecov
   sqlite3 (~> 2.0)
@@ -410,7 +410,7 @@ CHECKSUMS
   ruby-progressbar (1.13.0) sha256=80fc9c47a9b640d6834e0dc7b3c94c9df37f08cb072b7761e4a71e22cff29b33
   securerandom (0.4.1) sha256=cc5193d414a4341b6e225f0cb4446aceca8e50d5e1888743fac16987638ea0b1
   semantic_range (3.1.0) sha256=9fc01ee40f2e5f81042e95d421837f688177dd603753b5eab41ff9bba50a34a1
-  shakapacker (8.3.0) sha256=bdf41f950792f049235bc15e6936811c11cfde920cf3436bc0438eaf0aba01c0
+  shakapacker (9.2.0) sha256=4224378a3b093cb29d0c5a084bca5af516206851d273d8121637c73d98ca8543
   simple_form (5.3.1) sha256=3891a36a89a7f8c69f1361624c5357591578a9e9c318257cd7b9cc7b6ce47460
   simplecov (0.22.0) sha256=fe2622c7834ff23b98066bb0a854284b2729a569ac659f82621fc22ef36213a5
   simplecov-html (0.13.2) sha256=bd0b8e54e7c2d7685927e8d6286466359b6f16b18cb0df47b508e8d73c777246
