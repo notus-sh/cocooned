@@ -4,7 +4,7 @@
   "dependencies": {
     "@notus.sh/cocooned": "link:../../npm",
     "@swc/core": "^1.13.5",
-    "shakapacker": "9.2.0",
+    "shakapacker": "9.4.0",
     "swc-loader": "^0.2.6",
     "webpack": "^5.76.3",
     "webpack-assets-manifest": "^6.2.1",
