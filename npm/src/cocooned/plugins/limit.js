@@ -9,7 +9,7 @@ const limitMixin = (Base) => class extends Base {
       return
     }
 
-    this.container.addEventListener('cocooned:before-insert', e => {
+    this._addEventListener(this.container, 'cocooned:before-insert', e => {
       if (this.items.length < this.options.limit) {
         return
       }

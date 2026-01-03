@@ -31,12 +31,12 @@ const coreMixin = (Base) => class extends Base {
       .map(element => Add.create(element, this))
       .filter(trigger => this.toContainer(trigger.insertionNode) === this.container)
 
-    this.addTriggers.forEach(add => add.trigger.addEventListener(
-      'click',
-      clickHandler((e) => add.handle(e))
-    ))
+    this.addTriggers.forEach(add => {
+      this._addEventListener(add.trigger, 'click', clickHandler((e) => add.handle(e)))
+    })
 
-    this.container.addEventListener(
+    this._addEventListener(
+      this.container,
       'click',
       itemDelegatedClickHandler(this, this._selector('triggers.remove'), (e) => {
         const trigger = new Remove(e.target, this)

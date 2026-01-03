@@ -1,4 +1,5 @@
 import { Emitter } from './events/emitter.js'
+import { DisposableListener } from './events/disposable_listener.js'
 
 // Borrowed from <https://stackoverflow.com/a/2117523>
 function uuidv4 () {
@@ -80,15 +81,29 @@ class Base {
 
   start () {
     this.container.dataset.cocoonedContainer = true
+    this._onDispose(() => delete this.container.dataset.cocoonedContainer)
+
     this.container.dataset.cocoonedUuid = this._uuid
+    this._onDispose(() => delete this.container.dataset.cocoonedUuid)
+
     instances[this._uuid] = this
+    this._onDispose(() => delete instances[this._uuid])
 
     const hideDestroyed = () => { hideMarkedForDestruction(this, this.items) }
 
     hideDestroyed()
-    this.container.ownerDocument.addEventListener('page:load', hideDestroyed)
-    this.container.ownerDocument.addEventListener('turbo:load', hideDestroyed)
-    this.container.ownerDocument.addEventListener('turbolinks:load', hideDestroyed)
+    this._addEventListener(this.container.ownerDocument, 'page:load', hideDestroyed)
+    this._addEventListener(this.container.ownerDocument, 'turbo:load', hideDestroyed)
+    this._addEventListener(this.container.ownerDocument, 'turbolinks:load', hideDestroyed)
+  }
+
+  [Symbol.dispose] () {
+    this.dispose()
+  }
+
+  dispose () {
+    this._disposer.dispose()
+    this._container = null
   }
 
   notify (node, eventType, eventData) {
@@ -144,8 +159,21 @@ class Base {
 
   _container
   _options
-  __uuid
+  __disposer
   __emitter
+  __uuid
+
+  _addEventListener (target, type, listener) {
+    this._disposer.use(new DisposableListener(target, type, listener))
+  }
+
+  get _disposer () {
+    if (typeof this.__disposer === 'undefined') {
+      this.__disposer = new DisposableStack()
+    }
+
+    return this.__disposer
+  }
 
   get _emitter () {
     if (typeof this.__emitter === 'undefined') {
@@ -153,6 +181,10 @@ class Base {
     }
 
     return this.__emitter
+  }
+
+  _onDispose (callback) {
+    this._disposer.defer(callback)
   }
 
   _selectors (name) {

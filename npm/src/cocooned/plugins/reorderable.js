@@ -28,16 +28,16 @@ const reorderableMixin = (Base) => class extends Base {
       return
     }
 
-    this.container.addEventListener('cocooned:after-insert', e => this._reindexer.reindex(e))
-    this.container.addEventListener('cocooned:after-remove', e => this._reindexer.reindex(e))
-    this.container.addEventListener('cocooned:after-move', e => this._reindexer.reindex(e))
+    this._addEventListener(this.container, 'cocooned:after-insert', e => this._reindexer.reindex(e))
+    this._addEventListener(this.container, 'cocooned:after-remove', e => this._reindexer.reindex(e))
+    this._addEventListener(this.container, 'cocooned:after-move', e => this._reindexer.reindex(e))
     const form = this.container.closest('form')
     if (form !== null) {
-      form.addEventListener('submit', e => this._reindexer.reindex(e))
+      this._addEventListener(form, 'submit', e => this._reindexer.reindex(e))
     }
 
-    this.container.addEventListener('click', clickHandler(this, this._selector('triggers.up'), Up))
-    this.container.addEventListener('click', clickHandler(this, this._selector('triggers.down'), Down))
+    this._addEventListener(this.container, 'click', clickHandler(this, this._selector('triggers.up'), Up))
+    this._addEventListener(this.container, 'click', clickHandler(this, this._selector('triggers.down'), Down))
   }
 
   /* Protected and private attributes and methods */
