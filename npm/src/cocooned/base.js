@@ -1,4 +1,5 @@
 import { Emitter } from './events/emitter.js'
+import { deprecator } from './deprecation.js'
 import { disposable, Listener } from './disposable.js'
 
 // Borrowed from <https://stackoverflow.com/a/2117523>
@@ -80,7 +81,7 @@ class Base {
   }
 
   start () {
-    if (!'cocoonedContainer' in this.container.dataset) {
+    if (!('cocoonedContainer' in this.container.dataset)) {
       deprecator('3.0').warn(
         'CSS classes based detection is deprecated',
         'cocooned_container Rails helper to declare containers'
