@@ -1,4 +1,6 @@
-class DisposableListener {
+import {disposable} from "../disposable.js";
+
+class Listener {
   constructor (eventTarget, type, listener) {
     this.#eventTarget = eventTarget
     this.#type = type
@@ -11,16 +13,14 @@ class DisposableListener {
     this.#eventTarget.removeEventListener(this.#type, this.#listener)
   }
 
-  [Symbol.dispose] () {
-    this.dispose()
-  }
-
   /* Protected and private attributes and methods */
   #eventTarget
   #type
   #listener
 }
 
+disposable(Listener)
+
 export {
-  DisposableListener
+  Listener
 }

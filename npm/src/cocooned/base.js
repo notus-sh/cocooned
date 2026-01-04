@@ -1,5 +1,5 @@
 import { Emitter } from './events/emitter.js'
-import { DisposableListener } from './events/disposable_listener.js'
+import { disposable, Listener } from './disposable.js'
 
 // Borrowed from <https://stackoverflow.com/a/2117523>
 function uuidv4 () {
@@ -63,7 +63,7 @@ class Base {
 
   constructor (container, options) {
     this._container = container
-    this._uuid = uuidv4()
+    this.__uuid = uuidv4()
     this._options = this.constructor._normalizeOptions({
       ...this.constructor.defaultOptions,
       ...('cocoonedOptions' in container.dataset ? JSON.parse(container.dataset.cocoonedOptions) : {}),
@@ -80,14 +80,19 @@ class Base {
   }
 
   start () {
-    this.container.dataset.cocoonedContainer = true
-    this._onDispose(() => delete this.container.dataset.cocoonedContainer)
+    if (!'cocoonedContainer' in this.container.dataset) {
+      deprecator('3.0').warn(
+        'CSS classes based detection is deprecated',
+        'cocooned_container Rails helper to declare containers'
+      )
+      this.container.dataset.cocoonedContainer = true
+    }
 
-    this.container.dataset.cocoonedUuid = this._uuid
+    this.container.dataset.cocoonedUuid = this.__uuid
     this._onDispose(() => delete this.container.dataset.cocoonedUuid)
 
-    instances[this._uuid] = this
-    this._onDispose(() => delete instances[this._uuid])
+    instances[this.__uuid] = this
+    this._onDispose(() => delete instances[this.__uuid])
 
     const hideDestroyed = () => { hideMarkedForDestruction(this, this.items) }
 
@@ -95,10 +100,6 @@ class Base {
     this._addEventListener(this.container.ownerDocument, 'page:load', hideDestroyed)
     this._addEventListener(this.container.ownerDocument, 'turbo:load', hideDestroyed)
     this._addEventListener(this.container.ownerDocument, 'turbolinks:load', hideDestroyed)
-  }
-
-  [Symbol.dispose] () {
-    this.dispose()
   }
 
   dispose () {
@@ -164,7 +165,7 @@ class Base {
   __uuid
 
   _addEventListener (target, type, listener) {
-    this._disposer.use(new DisposableListener(target, type, listener))
+    this._disposer.use(new Listener(target, type, listener))
   }
 
   get _disposer () {
@@ -200,6 +201,8 @@ class Base {
     return { ...defaults, ...options }
   }
 }
+
+disposable(Base)
 
 export {
   Base

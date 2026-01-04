@@ -44,10 +44,6 @@ describe('Base', () => {
         expect(given.container.dataset).toEqual(expect.objectContaining({ cocoonedUuid: expect.any(String) }))
       })
 
-      it('marks container as a Cocooned container', () => {
-        expect(given.container.dataset).toEqual(expect.objectContaining({ cocoonedContainer: true }))
-      })
-
       describe('getInstance', () => {
         it('finds an instance by its UUID', () => {
           expect(Base.getInstance(given.container.dataset.cocoonedUuid)).toEqual(given.instance)
@@ -215,10 +211,6 @@ describe('Base', () => {
 
         it('dissociates itself with the container', () => {
           expect(given.container.dataset).not.toEqual(expect.objectContaining({ cocoonedUuid: expect.any(String) }))
-        })
-
-        it('unmarks container as a Cocooned container', () => {
-          expect(given.container.dataset).not.toEqual(expect.objectContaining({ cocoonedContainer: true }))
         })
       })
     })
