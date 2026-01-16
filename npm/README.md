@@ -132,6 +132,31 @@ $('a selector to match container').cocooned()
 $('a selector to match container').cocooned(options)
 ```
 
+### Destroy a Cocooned instance
+
+Cocooned instances implements [JavaScript explicit resource management](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Resource_management#the_disposablestack_and_asyncdisposablestack_objects) and expose a `dipose` method to unset what their `start` method setups.
+
+To correctly destroy a Cocooned instance and prevent memory leaks, please use it.
+
+```javascript
+const cocooned = Cocooned.create(document.querySelector('a selector to match container'))
+
+// When you're done with this instance, dispose of it with:
+cocooned.dispose()
+```
+
+If you want your browser to automatically dispose of your Cocooned instance, you can create it with [a `using` declaration](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Resource_management#the_using_and_await_using_declarations) and it will be properly disposed when it goes out of scope.
+
+### Disposable objects are not supported everywhere
+
+By the time of writing this (early 2026), [not all major browsers support explicit resource management](https://caniuse.com/wf-explicit-resource-management) (mainly, Safari is late). When support is missing in a browser, Cocooned will emit a console warning to warn you.
+
+If your application needs to support such browsers, you'll need to import a polyfill of your choice. For example:
+
+1. [core-js](https://github.com/zloirock/core-js?tab=readme-ov-file#explicit-resource-management)
+2. [disposable-stack-polyfill](https://www.npmjs.com/package/disposablestack)
+3. [disposablestack](https://www.npmjs.com/package/disposablestack)
+
 ## Options
 
 ### Core options

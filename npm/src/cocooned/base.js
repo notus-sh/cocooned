@@ -1,4 +1,6 @@
 import { Emitter } from './events/emitter.js'
+import { deprecator } from './deprecation.js'
+import { disposable, Listener } from './disposable.js'
 
 // Borrowed from <https://stackoverflow.com/a/2117523>
 function uuidv4 () {
@@ -62,7 +64,7 @@ class Base {
 
   constructor (container, options) {
     this._container = container
-    this._uuid = uuidv4()
+    this.__uuid = uuidv4()
     this._options = this.constructor._normalizeOptions({
       ...this.constructor.defaultOptions,
       ...('cocoonedOptions' in container.dataset ? JSON.parse(container.dataset.cocoonedOptions) : {}),
@@ -79,16 +81,31 @@ class Base {
   }
 
   start () {
-    this.container.dataset.cocoonedContainer = true
-    this.container.dataset.cocoonedUuid = this._uuid
-    instances[this._uuid] = this
+    if (!('cocoonedContainer' in this.container.dataset)) {
+      deprecator('3.0').warn(
+        'CSS classes based detection is deprecated',
+        'cocooned_container Rails helper to declare containers'
+      )
+      this.container.dataset.cocoonedContainer = true
+    }
+
+    this.container.dataset.cocoonedUuid = this.__uuid
+    this._onDispose(() => delete this.container.dataset.cocoonedUuid)
+
+    instances[this.__uuid] = this
+    this._onDispose(() => delete instances[this.__uuid])
 
     const hideDestroyed = () => { hideMarkedForDestruction(this, this.items) }
 
     hideDestroyed()
-    this.container.ownerDocument.addEventListener('page:load', hideDestroyed)
-    this.container.ownerDocument.addEventListener('turbo:load', hideDestroyed)
-    this.container.ownerDocument.addEventListener('turbolinks:load', hideDestroyed)
+    this._addEventListener(this.container.ownerDocument, 'page:load', hideDestroyed)
+    this._addEventListener(this.container.ownerDocument, 'turbo:load', hideDestroyed)
+    this._addEventListener(this.container.ownerDocument, 'turbolinks:load', hideDestroyed)
+  }
+
+  dispose () {
+    this._disposer.dispose()
+    this._container = null
   }
 
   notify (node, eventType, eventData) {
@@ -144,8 +161,21 @@ class Base {
 
   _container
   _options
-  __uuid
+  __disposer
   __emitter
+  __uuid
+
+  _addEventListener (target, type, listener) {
+    this._disposer.use(new Listener(target, type, listener))
+  }
+
+  get _disposer () {
+    if (typeof this.__disposer === 'undefined') {
+      this.__disposer = new DisposableStack()
+    }
+
+    return this.__disposer
+  }
 
   get _emitter () {
     if (typeof this.__emitter === 'undefined') {
@@ -153,6 +183,10 @@ class Base {
     }
 
     return this.__emitter
+  }
+
+  _onDispose (callback) {
+    this._disposer.defer(callback)
   }
 
   _selectors (name) {
@@ -168,6 +202,8 @@ class Base {
     return { ...defaults, ...options }
   }
 }
+
+disposable(Base)
 
 export {
   Base
