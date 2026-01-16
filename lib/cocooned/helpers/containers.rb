@@ -32,10 +32,8 @@ module Cocooned
       def cocooned_container(*args, &)
         options = args.extract_options!.dup
         name = args.shift || :div
-        defaults = cocooned_wrapper_defaults(options, %w[cocooned-container], :'cocooned-container')
-        defaults[:data][:cocooned_options] = options.extract!(:limit, :reorderable).to_json
 
-        content_tag(name, *args, **options.deep_merge(defaults), &)
+        content_tag(name, *args, **cocooned_container_options(options), &)
       end
 
       # Wrap content with the expected markup for a Cocooned item.
@@ -56,17 +54,30 @@ module Cocooned
       def cocooned_item(*args, &)
         options = args.extract_options!.dup
         name = args.shift || :div
-        defaults = cocooned_wrapper_defaults(options, %w[cocooned-item nested-fields], :'cocooned-item')
 
-        content_tag(name, *args, **options.deep_merge(defaults), &)
+        content_tag(name, *args, **cocooned_item_options(options), &)
       end
 
       protected
 
-      def cocooned_wrapper_defaults(options, additional_classes, mark)
-        classes = Array.wrap(options.delete(:class)).flat_map { |k| k.to_s.split }.compact_blank
+      def cocooned_container_options(options)
+        options.deep_merge(
+          class: token_list(options.delete(:class), %w[cocooned-container]),
+          data: {
+            controller: [options.dig(:data, :controller), :cocooned].compact_blank.map(&:to_s).join(' '),
+            cocooned_container: true,
+            cocooned_options: options.extract!(:limit, :reorderable).to_json
+          }
+        )
+      end
 
-        { class: (classes + additional_classes), data: { mark => true } }
+      def cocooned_item_options(options)
+        options.deep_merge(
+          class: token_list(options.delete(:class), %w[cocooned-item nested-fields]),
+          data: {
+            cocooned_item: true
+          }
+        )
       end
     end
   end

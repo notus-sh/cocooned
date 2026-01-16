@@ -7,11 +7,13 @@ Cocooned makes it easier to handle nested forms in Rails.
 Cocooned is form builder-agnostic: it works with standard Rails (>= 7.0, < 8.2) form helpers, [Formtastic](https://github.com/justinfrench/formtastic) or [SimpleForm](https://github.com/plataformatec/simple_form).
 
 1. [Installation](#installation)
-2. [Import](#import), default, custom or with [jQuery integration](#jquery-integration)
-3. [Usage](#usage)
-4. [Options](#options)
-5. [Events](#events)
-6. [Migration from a previous version](#migration-from-a-previous-version) or from Cocoon
+2. [Import](#import), default, custom
+3. [Stimulus integration](#stimulus-integration)
+4. [jQuery integration](#jquery-integration)
+5. [Usage](#usage)
+6. [Options](#options)
+7. [Events](#events)
+8. [Migration from a previous version](#migration-from-a-previous-version) or from Cocoon
 
 ## Installation
 
@@ -111,6 +113,58 @@ To handle them, you need to tell Cocooned to initialize their event handlers whe
 ```javascript
 document.addEventListener('cocooned:after-insert', e => Cocooned.create(e.detail.node))
 ```
+
+### Stimulus integration
+
+Cocooned comes with an optional Stimulus integration, inspired by [`stimulus-use`](https://stimulus-use.github.io).
+
+#### Register the Cocooned Stimulus Controller
+
+If your application use Stimulus, instead of calling `Cocooned.start()`, you can register the Cocooned Stimulus Controller with:
+
+```javascript
+import { Application } from "@hotwired/stimulus"
+import { registerCocoonedController } from '@notus.sh/cocooned/src/integrations/stimulus.js'
+
+const Stimulus = Application.start()
+registerCocoonedController(Stimulus)
+```
+
+Cocooned setup will be delegated to Stimulus but will work exactly the same. As a bonus, Cocooned instances are properly disposed every time the built-in controller is disconnected.
+
+#### `useCocooned` behavior
+
+The `useCocooned` behavior should be called from the `connect` method of a Stimulus controller. It creates as Cocooned instance that will be disposed when the controller is disconnected and bind Cocooned events to controller methods.
+
+```javascript
+import { Controller } from '@hotwired/stimulus'
+import { useCocooned } from '@notus.sh/cocooned/src/integrations/stimulus.js'
+
+export default class extends Controller {
+  connect() {
+    useCocooned(this, options)
+  }
+}
+```
+
+Following options are supported:
+
+* `element`: `HTMLElement` to use as container. Use controller's `element` by default.
+* `cocooned`: Cocooned implementation to use to create instance. See [Customization](#customization)
+* `options`: Options to be passed to the created instance. See [Options](#options)
+* `events`: Array of event names that should be bound to controller methods. E.g.: `['after-insert', 'before-insert']`
+
+By default, all events emitted by Cocooned are supported and bound to the controller method that match with their camelized name:
+
+|Event name| Controller method |
+|---|---|
+|`after-insert`| `afterInsert` |
+|`after-move`| `afterMove` |
+|`after-remove`| `afterRemove` |
+|`before-insert`| `beforeInsert` |
+|`before-move`| `beforeMove` |
+|`before-remove`| `beforeRemove` |
+|`limit-reache`| `limitReached` |
 
 ### jQuery integration
 

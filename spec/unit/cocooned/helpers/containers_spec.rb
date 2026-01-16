@@ -65,6 +65,11 @@ RSpec.describe Cocooned::Helpers::Containers, :action_view do
       expect(container(html).attributes.keys).to include('data-cocooned-options')
     end
 
+    it 'has a controller data attribute' do
+      html = method.call { 'any' }
+      expect(container(html).attribute('data-controller').value.split).to include('cocooned')
+    end
+
     it 'extracts cocooned options' do
       html = method.call(options) { 'any' }
       expect(container(html).attributes.keys).not_to include(options.keys)
@@ -73,6 +78,11 @@ RSpec.describe Cocooned::Helpers::Containers, :action_view do
     it 'forwards cocooned options' do
       html = method.call(options) { 'any' }
       expect(container(html).attribute('data-cocooned-options').value).to eq(options.to_json)
+    end
+
+    it 'supports additional controller data attribute' do
+      html = method.call(data: { controller: 'custom' }) { 'any' }
+      expect(container(html).attribute('data-controller').value.split).to include('cocooned', 'custom')
     end
   end
 
