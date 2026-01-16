@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## Breaking changes
+
+* Proper instances cleanup through [explicit resource management](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Resource_management) (#115)  
+  Introduce a `dispose` method on Cocooned instances to clean up what was done in the `start` method: remove event listeners and delete references to the disposed instance, so it can be cleanly garbage collected.
+  This may require you to install a polyfill for `DisposableStack` and `[Symbol.dispose]()` to support older browsers. 
+
 ### Changed
 
 * Add Ruby 4.0 to the test matrix (#112)
