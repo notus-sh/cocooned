@@ -2,14 +2,20 @@ import Cocooned from './../../../index.js'
 import { Listener } from './../../cocooned/disposable.js'
 
 const defaultEvents = [
-  'afterInsert',
-  'afterMove',
-  'afterRemove',
-  'beforeInsert',
-  'beforeMove',
-  'beforeRemove',
-  'limitReached'
+  'after-insert',
+  'after-move',
+  'after-remove',
+  'before-insert',
+  'before-move',
+  'before-remove',
+  'limit-reached'
 ]
+
+function camelize(dashSeparated) {
+  return dashSeparated.toLowerCase().replace(/-(.)/g, function(match, group1) {
+    return group1.toUpperCase();
+  });
+}
 
 const dasherize = function (camelCase) {
   return camelCase.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`)
@@ -29,12 +35,15 @@ const useCocooned = function (controller, options = {}) {
       disposer.dispose()
       disconnect()
     },
-    ...events.reduce((handlers, methodName) => ({ ...handlers, [methodName]: (event) => {} }), {})
+    ...events
+        .map(eventName => camelize(eventName))
+        .reduce((handlers, methodName) => ({ ...handlers, [methodName]: (event) => {} }), {})
   }
   const start = () => {
     cocooned.create(element, cocoonedOptions)
-    events.forEach(methodName => {
-      disposer.use(new Listener(element, `cocooned:${dasherize(methodName)}`, (event) => {
+    events.forEach(eventName => {
+      const methodName = camelize(eventName)
+      disposer.use(new Listener(element, `cocooned:${eventName}`, (event) => {
         controller[methodName].call(controller, event)
       }))
     })

@@ -96,7 +96,7 @@ describe('useCocooned', () => {
 
   describe('with an events option', () => {
     beforeEach(() => {
-      useCocooned(given.controller, { events: ['afterInsert'] })
+      useCocooned(given.controller, { events: ['after-insert'] })
     })
 
     given('afterInsertEvent', () => new CustomEvent('cocooned:after-insert', { bubbles: true, cancelable: true }))
