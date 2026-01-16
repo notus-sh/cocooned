@@ -1,5 +1,5 @@
-import { Cocooned } from '../../../index.js'
-import { Listener } from '../../cocooned/disposable.js'
+import Cocooned from './../../../index.js'
+import { Listener } from './../../cocooned/disposable.js'
 
 const defaultEvents = [
   'afterInsert',
@@ -34,12 +34,14 @@ const useCocooned = function (controller, options = {}) {
   const start = () => {
     cocooned.create(element, cocoonedOptions)
     events.forEach(methodName => {
-      disposer.use(new Listener(element, `cocooned:${dasherize(methodName)}`, methods[methodName]))
+      disposer.use(new Listener(element, `cocooned:${dasherize(methodName)}`, (event) => {
+        controller[methodName].call(controller, event)
+      }))
     })
   }
 
   Object.assign(controller, methods)
-  methods.start()
+  start()
 
   return [start, methods.dispose]
 }
