@@ -1,4 +1,4 @@
-import {disposable} from "../disposable.js";
+import { disposable } from "../disposable.js";
 
 class Listener {
   constructor (eventTarget, type, listener) {
