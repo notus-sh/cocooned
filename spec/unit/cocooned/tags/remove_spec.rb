@@ -16,7 +16,7 @@ RSpec.describe Cocooned::Tags::Remove do
       expect(tag.attribute('class').value.split).to include('cocooned-remove')
     end
 
-    it 'has a compatibility class with the original Cocoon', deprecation: '3.0' do
+    it 'has a compatibility class with the original Cocoon', deprecation: '4.0' do
       expect(tag.attribute('class').value.split).to include('remove_fields')
     end
 

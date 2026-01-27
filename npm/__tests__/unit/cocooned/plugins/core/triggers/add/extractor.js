@@ -170,7 +170,7 @@ describe('Extractor', () => {
           beforeEach(() => { given.deprecator.logger = { warn: jest.fn() } })
           afterEach(() => jest.restoreAllMocks())
 
-          given('deprecator', () => deprecator('3.0'))
+          given('deprecator', () => deprecator('4.0'))
           given('html', () => `
             <div data-cocooned-container></div>
             <div class="node"></div>

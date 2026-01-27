@@ -79,7 +79,7 @@ class Extractor {
       return this.#trigger.ownerDocument.querySelector(node)
     }
 
-    deprecator('3.0').warn('associationInsertionTraversal is deprecated')
+    deprecator('4.0').warn('associationInsertionTraversal is deprecated')
     const traverser = new Traverser(this.#trigger, this.#dataset.associationInsertionTraversal)
 
     return traverser.resolve(node)

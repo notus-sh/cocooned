@@ -91,7 +91,7 @@ RSpec.describe Cocooned::Helpers::Containers, :action_view do
 
     it_behaves_like 'a container helper', 'cocooned-item', 'data-cocooned-item'
 
-    it 'has a legacy class', deprecation: '3.0' do
+    it 'has a legacy class', deprecation: '4.0' do
       html = method.call { 'any' }
       expect(container(html).attribute('class').value.split).to include('nested-fields')
     end

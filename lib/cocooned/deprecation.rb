@@ -26,14 +26,14 @@ module Cocooned
           cocooned_add_item_link(...)
         end
         deprecate link_to_add_association: 'Use :cocooned_add_link instead',
-                  deprecator: Deprecation['3.0']
+                  deprecator: Deprecation['4.0']
 
         # @deprecated: Please use {#cocooned_remove_item_link} instead
         def link_to_remove_association(...)
           cocooned_remove_item_link(...)
         end
         deprecate link_to_remove_association: 'Use :cocooned_remove_item_link instead',
-                  deprecator: Deprecation['3.0']
+                  deprecator: Deprecation['4.0']
       end
     end
 
@@ -44,7 +44,7 @@ module Cocooned
         def i18n_namespaces
           return super unless I18n.exists?(:cocoon)
 
-          Deprecation['3.0'].warn 'Support for the :cocoon i18n namespace will be removed in 3.0', caller_locations(3)
+          Deprecation['4.0'].warn 'Support for the :cocoon i18n namespace will be removed in 4.0', caller_locations(3)
           super + %w[cocoon]
         end
       end
@@ -57,7 +57,7 @@ module Cocooned
         def html_data
           return super unless data_keys.size.positive?
 
-          Deprecation['3.0'].warn 'Compatibility with options named data-* will be removed in 3.0', caller_locations(3)
+          Deprecation['4.0'].warn 'Compatibility with options named data-* will be removed in 4.0', caller_locations(3)
           html_data_normalize super.merge(data_options)
         end
 
@@ -78,7 +78,7 @@ module Cocooned
 
         def association_options
           if options.key? :insertion_traversal
-            Deprecation['3.0'].warn 'Support for the :insertion_traversal will be removed in 3.0', caller_locations(3)
+            Deprecation['4.0'].warn 'Support for the :insertion_traversal will be removed in 4.0', caller_locations(3)
           end
 
           super
@@ -91,7 +91,7 @@ module Cocooned
         def renderer_options
           return super unless options.key?(:render_options)
 
-          Deprecation['3.0'].warn 'Support for :render_options will be removed in 3.0', caller_locations(3)
+          Deprecation['4.0'].warn 'Support for :render_options will be removed in 4.0', caller_locations(3)
           legacy_options = options.delete(:render_options)
 
           super.tap do |opts|

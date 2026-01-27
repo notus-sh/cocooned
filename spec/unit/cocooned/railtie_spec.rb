@@ -11,7 +11,7 @@ RSpec.describe Cocooned::Railtie do
   it { is_expected.to respond_to(:cocooned_move_item_up_link) }
   it { is_expected.to respond_to(:cocooned_move_item_down_link) }
 
-  context 'with deprecated methods', deprecation: '3.0' do
+  context 'with deprecated methods', deprecation: '4.0' do
     it { is_expected.to respond_to(:link_to_add_association) }
     it { is_expected.to respond_to(:link_to_remove_association) }
   end

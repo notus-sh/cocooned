@@ -91,7 +91,7 @@ class Base {
 
   start () {
     if (!('cocoonedContainer' in this.container.dataset)) {
-      deprecator('3.0').warn(
+      deprecator('4.0').warn(
         'CSS classes based detection is deprecated',
         'cocooned_container Rails helper to declare containers'
       )

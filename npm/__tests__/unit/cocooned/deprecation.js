@@ -6,19 +6,19 @@ import { faker } from '@cocooned/tests/support/faker'
 
 describe('deprecator', () => {
   it('returns a configured Deprecator', () => {
-    const built = deprecator('3.0')
+    const built = deprecator('4.0')
 
-    expect(built.version).toEqual('3.0')
+    expect(built.version).toEqual('4.0')
     expect(built.package).toEqual('Cocooned')
     expect(built.logger).toBe(console)
   })
 
   it('returns always the same Deprecator for the same package name and version', () => {
-    expect(deprecator('3.0')).toBe(deprecator('3.0'))
+    expect(deprecator('4.0')).toBe(deprecator('4.0'))
   })
 
   it('returns different Deprecators for different package name or version', () => {
-    expect(deprecator('3.0')).not.toBe(deprecator('3.0', 'Package'))
+    expect(deprecator('4.0')).not.toBe(deprecator('4.0', 'Package'))
   })
 })
 

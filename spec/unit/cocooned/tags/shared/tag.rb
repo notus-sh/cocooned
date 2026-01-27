@@ -22,14 +22,14 @@ RSpec.shared_examples 'an action tag builder', :tag do |action|
       expect(tag.text).to eq('Translated')
     end
 
-    it 'does not warn about deprecation', deprecation: '3.0' do
-      with_deprecation_as_exception(Cocooned::Deprecation['3.0']) do
+    it 'does not warn about deprecation', deprecation: '4.0' do
+      with_deprecation_as_exception(Cocooned::Deprecation['4.0']) do
         expect { tag.text }.not_to raise_error
       end
     end
   end
 
-  context 'with translations available in the :cocooned namespace', deprecation: '3.0' do
+  context 'with translations available in the :cocooned namespace', deprecation: '4.0' do
     before { I18n.backend.store_translations(I18n.locale, cocoon: { defaults: { action => 'Translated' } }) }
     after { I18n.reload! }
 
@@ -38,7 +38,7 @@ RSpec.shared_examples 'an action tag builder', :tag do |action|
     end
 
     it 'warns about deprecation' do
-      with_deprecation_as_exception(Cocooned::Deprecation['3.0']) do
+      with_deprecation_as_exception(Cocooned::Deprecation['4.0']) do
         expect { tag.text }.to raise_error(ActiveSupport::DeprecationException)
       end
     end
@@ -68,13 +68,13 @@ RSpec.shared_examples 'an action tag builder', :tag do |action|
       expect(tag(data: { attr: 'any' }).attribute('data-attr')).not_to be_nil
     end
 
-    context 'when using older data-* options', deprecation: '3.0' do
+    context 'when using older data-* options', deprecation: '4.0' do
       it 'supports them as data-attributes' do
         expect(tag('data-attr': 'any').attribute('data-attr')).not_to be_nil
       end
 
       it 'warns about deprecation' do
-        with_deprecation_as_exception(Cocooned::Deprecation['3.0']) do
+        with_deprecation_as_exception(Cocooned::Deprecation['4.0']) do
           expect { tag('data-attr': 'any') }.to raise_error(ActiveSupport::DeprecationException)
         end
       end
