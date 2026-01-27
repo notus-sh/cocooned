@@ -13,8 +13,8 @@ Gem::Specification.new do |spec|
 
   spec.summary      = 'Form builder agnostic handling of Rails nested forms'
   spec.description  = <<-DESC.gsub(/\s+/, ' ')
-    Easier nested form in Rails with capabilities to add, remove, reorder or limit nested items.
-    Works with standard Rails form builder, Formtastic or SimpleForm, and with or without jQuery.
+    Rails nested form made easy, with standard Rails form builder, Formtastic or SimpleForm.
+    Unobtrusive and zero-dependencies JavaScript included, with optional integration with jQuery and Stimulus.
   DESC
   spec.homepage = 'https://github.com/notus-sh/cocooned'
 
