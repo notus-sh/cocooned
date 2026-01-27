@@ -116,7 +116,7 @@ document.addEventListener('cocooned:after-insert', e => Cocooned.create(e.detail
 
 ### Stimulus integration
 
-Cocooned comes with an optional Stimulus integration, inspired by [`stimulus-use`](https://stimulus-use.github.io).
+Cocooned comes with an optional Stimulus integration.
 
 #### Register the Cocooned Stimulus Controller
 
@@ -130,11 +130,20 @@ const Stimulus = Application.start()
 registerCocoonedController(Stimulus)
 ```
 
-Cocooned setup will be delegated to Stimulus but will work exactly the same. As a bonus, Cocooned instances are properly disposed every time the built-in controller is disconnected.
+Stimulus will connect an instance of the Cocooned controller to every `cocooned_container` in the DOM. That controller automatically create a Cocooned instance with its element as container and will properly dispose of it when disconnected.
 
-#### `useCocooned` behavior
+#### The `useCocooned` mixin
 
-The `useCocooned` behavior should be called from the `connect` method of a Stimulus controller. It creates as Cocooned instance that will be disposed when the controller is disconnected and bind Cocooned events to controller methods.
+For more complex scenarios, you can use the `useCocooned` mixin to integrate Cocooned functionalities to your own controllers.
+
+Some examples:
+
+* Create a Cocooned instance on a controller target instead of its main element
+* Use a custom Cooconed implementation with less plugins (or with your owns!)
+* Pass custom options to the created Cocooned instance
+* Add listener on Cocooned events
+
+Inspired by [`stimulus-use`](https://stimulus-use.github.io), `useCocooned` should be called from the `connect` method of a Stimulus controller. It creates a Cocooned instance that will be disposed when the controller is disconnected and bind Cocooned events to controller methods.
 
 ```javascript
 import { Controller } from '@hotwired/stimulus'
@@ -156,15 +165,17 @@ Following options are supported:
 
 By default, all events emitted by Cocooned are supported and bound to the controller method that match with their camelized name:
 
-|Event name| Controller method |
-|---|---|
-|`after-insert`| `afterInsert` |
-|`after-move`| `afterMove` |
-|`after-remove`| `afterRemove` |
-|`before-insert`| `beforeInsert` |
-|`before-move`| `beforeMove` |
-|`before-remove`| `beforeRemove` |
-|`limit-reache`| `limitReached` |
+| Event name      | Controller method |
+|-----------------|-------------------|
+| `after-insert`  | `afterInsert`     |
+| `after-move`    | `afterMove`       |
+| `after-remove`  | `afterRemove`     |
+| `before-insert` | `beforeInsert`    |
+| `before-move`   | `beforeMove`      |
+| `before-remove` | `beforeRemove`    |
+| `limit-reached` | `limitReached`    |
+
+You can also access the Cocooned instance through a `cocooned` method.
 
 ### jQuery integration
 
