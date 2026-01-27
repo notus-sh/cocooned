@@ -24,7 +24,7 @@ RSpec.describe Cocooned::Tags::Add do
       expect(tag.attribute('class').value.split).to include('cocooned-add')
     end
 
-    it 'has a compatibility class with the original Cocoon', deprecation: '3.0' do
+    it 'has a compatibility class with the original Cocoon', deprecation: '4.0' do
       expect(tag.attribute('class').value.split).to include('add_fields')
     end
 
@@ -103,8 +103,8 @@ RSpec.describe Cocooned::Tags::Add do
         expect(attr.value).to eq('parent')
       end
 
-      it 'warns about deprecation', deprecation: '3.0' do
-        with_deprecation_as_exception(Cocooned::Deprecation['3.0']) do
+      it 'warns about deprecation', deprecation: '4.0' do
+        with_deprecation_as_exception(Cocooned::Deprecation['4.0']) do
           expect { tag(insertion_traversal: :parent) }.to raise_error(ActiveSupport::DeprecationException)
         end
       end
@@ -194,7 +194,7 @@ RSpec.describe Cocooned::Tags::Add do
     it_behaves_like 'a renderer options forwarder', :partial, 'person'
     it_behaves_like 'a renderer options forwarder', :locals, { a: 1 }
 
-    context 'with render options', deprecation: '3.0' do
+    context 'with render options', deprecation: '4.0' do
       context 'with locals' do
         let(:render_options) { { locals: { a: 1 } } }
 
@@ -206,7 +206,7 @@ RSpec.describe Cocooned::Tags::Add do
         end
 
         it 'warns about deprecation' do
-          with_deprecation_as_exception(Cocooned::Deprecation['3.0']) do
+          with_deprecation_as_exception(Cocooned::Deprecation['4.0']) do
             expect { tag(render_options: render_options) }.to raise_error(ActiveSupport::DeprecationException)
           end
         end
@@ -223,7 +223,7 @@ RSpec.describe Cocooned::Tags::Add do
         end
 
         it 'warns about deprecation' do
-          with_deprecation_as_exception(Cocooned::Deprecation['3.0']) do
+          with_deprecation_as_exception(Cocooned::Deprecation['4.0']) do
             expect { tag(render_options: render_options) }.to raise_error(ActiveSupport::DeprecationException)
           end
         end
