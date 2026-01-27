@@ -36,247 +36,6 @@
     }
   }
 
-  // Borrowed from <https://stackoverflow.com/a/2117523>
-  function uuidv4 () {
-    return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
-      (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-    )
-  }
-
-  function hideMarkedForDestruction (cocooned, items) {
-    items.forEach(item => {
-      const destroy = item.querySelector('input[type=hidden][name$="[_destroy]"]');
-      if (destroy === null) {
-        return
-      }
-      if (destroy.getAttribute('value') !== 'true') {
-        return
-      }
-
-      cocooned.hide(item, { animate: false });
-    });
-  }
-
-  function defaultAnimator (item, fetch = false) {
-    if (fetch) {
-      item.dataset.cocoonedScrollHeight = item.scrollHeight;
-    }
-
-    return [
-      { height: `${item.dataset.cocoonedScrollHeight}px`, opacity: 1 },
-      { height: `${item.dataset.cocoonedScrollHeight}px`, opacity: 0 },
-      { height: 0, opacity: 0 }
-    ]
-  }
-
-  const instances = Object.create(null);
-
-  class Base {
-    static get defaultOptions () {
-      const element = document.createElement('div');
-      return {
-        animate: ('animate' in element && typeof element.animate === 'function'),
-        animator: defaultAnimator,
-        duration: 450
-      }
-    }
-
-    static get eventNamespaces () {
-      return ['cocooned']
-    }
-
-    static get selectors () {
-      return {
-        container: ['[data-cocooned-container]', '.cocooned-container'],
-        item: ['[data-cocooned-item]', '.cocooned-item']
-      }
-    }
-
-    static getInstance (uuid) {
-      return instances[uuid]
-    }
-
-    constructor (container, options) {
-      this._container = container;
-      this._uuid = uuidv4();
-      this._options = this.constructor._normalizeOptions({
-        ...this.constructor.defaultOptions,
-        ...('cocoonedOptions' in container.dataset ? JSON.parse(container.dataset.cocoonedOptions) : {}),
-        ...(options || {})
-      });
-    }
-
-    get container () {
-      return this._container
-    }
-
-    get options () {
-      return this._options
-    }
-
-    start () {
-      this.container.dataset.cocoonedContainer = true;
-      this.container.dataset.cocoonedUuid = this._uuid;
-      instances[this._uuid] = this;
-
-      const hideDestroyed = () => { hideMarkedForDestruction(this, this.items); };
-
-      hideDestroyed();
-      this.container.ownerDocument.addEventListener('page:load', hideDestroyed);
-      this.container.ownerDocument.addEventListener('turbo:load', hideDestroyed);
-      this.container.ownerDocument.addEventListener('turbolinks:load', hideDestroyed);
-    }
-
-    notify (node, eventType, eventData) {
-      return this._emitter.emit(node, eventType, eventData)
-    }
-
-    /* Selections methods */
-    get items () {
-      return Array.from(this.container.querySelectorAll(this._selector('item')))
-        .filter(item => this.toContainer(item) === this.container)
-        .filter(item => !('display' in item.style && item.style.display === 'none'))
-    }
-
-    toContainer (node) {
-      return node.closest(this._selector('container'))
-    }
-
-    toItem (node) {
-      return node.closest(this._selector('item'))
-    }
-
-    contains (node) {
-      return this.items.includes(this.toItem(node))
-    }
-
-    hide (item, options = {}) {
-      const opts = this._animationOptions(options);
-      const keyframes = opts.animator(item, true);
-      const after = () => { item.style.display = 'none'; };
-
-      if (!opts.animate) {
-        return Promise.resolve(after()).then(() => item)
-      }
-      return item.animate(keyframes, opts.duration).finished.then(after).then(() => item)
-    }
-
-    show (item, options = {}) {
-      const opts = this._animationOptions(options);
-      const keyframes = opts.animator(item, false).reverse();
-      const before = () => { item.style.display = null; };
-
-      const promise = Promise.resolve(before());
-      if (!opts.animate) {
-        return promise.then(() => item)
-      }
-      return promise.then(() => item.animate(keyframes, opts.duration).finished).then(() => item)
-    }
-
-    /* Protected and private attributes and methods */
-    static _normalizeOptions (options) {
-      return options
-    }
-
-    _container
-    _options
-    __uuid
-    __emitter
-
-    get _emitter () {
-      if (typeof this.__emitter === 'undefined') {
-        this.__emitter = new Emitter(this.constructor.eventNamespaces);
-      }
-
-      return this.__emitter
-    }
-
-    _selectors (name) {
-      return this.constructor.selectors[name]
-    }
-
-    _selector (name) {
-      return this._selectors(name).join(', ')
-    }
-
-    _animationOptions (options) {
-      const defaults = (({ animate, animator, duration }) => ({ animate, animator, duration }))(this._options);
-      return { ...defaults, ...options }
-    }
-  }
-
-  class Trigger {
-    constructor (trigger, cocooned) {
-      this._trigger = trigger;
-      this._cocooned = cocooned;
-    }
-
-    get trigger () {
-      return this._trigger
-    }
-
-    handle (event) {
-      throw new TypeError('handle() must be defined in subclasses')
-    }
-
-    /* Protected and private attributes and methods */
-    _cocooned
-    _trigger
-
-    get _item () {
-      return this._cocooned.toItem(this._trigger)
-    }
-
-    get _notified () {
-      return this._item
-    }
-
-    _notify (eventName, originalEvent) {
-      return this._cocooned.notify(this._notified, eventName, this._eventData(originalEvent))
-    }
-
-    _eventData (originalEvent) {
-      return { link: this._trigger, node: this._item, cocooned: this._cocooned, originalEvent }
-    }
-
-    _hide (node, callback) {
-      return this._cocooned.hide(node, callback)
-    }
-
-    _show (node, callback) {
-      return this._cocooned.show(node, callback)
-    }
-  }
-
-  class Builder {
-    constructor (documentFragment, replacements) {
-      this.#documentFragment = documentFragment;
-      this.#replacements = replacements;
-    }
-
-    build (id) {
-      const node = this.#documentFragment.cloneNode(true);
-      this.#applyReplacements(node, id);
-      return node
-    }
-
-    /* Protected and private attributes and methods */
-    #documentFragment
-    #replacements
-
-    #applyReplacements (node, id) {
-      this.#replacements.forEach(replacement => {
-        node.querySelectorAll(`${replacement.tag}[${replacement.attribute}]`).forEach(node => {
-          return replacement.apply(node, id)
-        });
-      });
-
-      node.querySelectorAll('template').forEach(template => {
-        this.#applyReplacements(template.content, id);
-      });
-    }
-  }
-
   class Traverser {
     constructor (origin, traversal) {
       this.#origin = origin;
@@ -388,6 +147,326 @@
     return deprecators[hash]
   }
 
+  class Listener {
+    constructor (eventTarget, type, listener) {
+      this.#eventTarget = eventTarget;
+      this.#type = type;
+      this.#listener = listener;
+
+      this.#eventTarget.addEventListener(this.#type, this.#listener);
+    }
+
+    dispose () {
+      this.#eventTarget.removeEventListener(this.#type, this.#listener);
+    }
+
+    /* Protected and private attributes and methods */
+    #eventTarget
+    #type
+    #listener
+  }
+
+  disposable(Listener);
+
+  if (typeof Symbol.dispose !== "symbol") {
+    console.warn(`
+    Cocooned use Disposable objects but they are not supported by your browser.
+    See Cocooned documentation for polyfill options.
+  `);
+  }
+
+  function disposable(klass) {
+    if (typeof Symbol.dispose !== "symbol") {
+      return
+    }
+
+    klass.prototype[Symbol.dispose] = klass.prototype.dispose;
+  }
+
+  // Borrowed from <https://stackoverflow.com/a/2117523>
+  function uuidv4 () {
+    return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+      (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    )
+  }
+
+  function hideMarkedForDestruction (cocooned, items) {
+    items.forEach(item => {
+      const destroy = item.querySelector('input[type=hidden][name$="[_destroy]"]');
+      if (destroy === null) {
+        return
+      }
+      if (destroy.getAttribute('value') !== 'true') {
+        return
+      }
+
+      cocooned.hide(item, { animate: false });
+    });
+  }
+
+  function defaultAnimator (item, fetch = false) {
+    if (fetch) {
+      item.dataset.cocoonedScrollHeight = item.scrollHeight;
+    }
+
+    return [
+      { height: `${item.dataset.cocoonedScrollHeight}px`, opacity: 1 },
+      { height: `${item.dataset.cocoonedScrollHeight}px`, opacity: 0 },
+      { height: 0, opacity: 0 }
+    ]
+  }
+
+  const canAnimate = (
+    'animate' in document.createElement('div') &&
+    typeof document.createElement('div').animate === 'function'
+  );
+
+  const shouldAnimate = (
+    'matchMedia' in window &&
+    !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  );
+
+  const instances = Object.create(null);
+
+  class Base {
+    static get defaultOptions () {
+      return {
+        animate: canAnimate && shouldAnimate,
+        animator: defaultAnimator,
+        duration: 450
+      }
+    }
+
+    static get eventNamespaces () {
+      return ['cocooned']
+    }
+
+    static get selectors () {
+      return {
+        container: ['[data-cocooned-container]', '.cocooned-container'],
+        item: ['[data-cocooned-item]', '.cocooned-item']
+      }
+    }
+
+    static getInstance (uuid) {
+      return instances[uuid]
+    }
+
+    constructor (container, options) {
+      this._container = container;
+      this.__uuid = uuidv4();
+      this._options = this.constructor._normalizeOptions({
+        ...this.constructor.defaultOptions,
+        ...('cocoonedOptions' in container.dataset ? JSON.parse(container.dataset.cocoonedOptions) : {}),
+        ...(options || {})
+      });
+    }
+
+    get container () {
+      return this._container
+    }
+
+    get options () {
+      return this._options
+    }
+
+    start () {
+      if (!('cocoonedContainer' in this.container.dataset)) {
+        deprecator('4.0').warn(
+          'CSS classes based detection is deprecated',
+          'cocooned_container Rails helper to declare containers'
+        );
+        this.container.dataset.cocoonedContainer = true;
+      }
+
+      this.container.dataset.cocoonedUuid = this.__uuid;
+      this._onDispose(() => delete this.container.dataset.cocoonedUuid);
+
+      instances[this.__uuid] = this;
+      this._onDispose(() => delete instances[this.__uuid]);
+
+      const hideDestroyed = () => { hideMarkedForDestruction(this, this.items); };
+
+      hideDestroyed();
+      this._addEventListener(this.container.ownerDocument, 'page:load', hideDestroyed);
+      this._addEventListener(this.container.ownerDocument, 'turbo:load', hideDestroyed);
+      this._addEventListener(this.container.ownerDocument, 'turbolinks:load', hideDestroyed);
+    }
+
+    dispose () {
+      this._disposer.dispose();
+      this._container = null;
+    }
+
+    notify (node, eventType, eventData) {
+      return this._emitter.emit(node, eventType, eventData)
+    }
+
+    /* Selections methods */
+    get items () {
+      return Array.from(this.container.querySelectorAll(this._selector('item')))
+        .filter(item => this.toContainer(item) === this.container)
+        .filter(item => !('display' in item.style && item.style.display === 'none'))
+    }
+
+    toContainer (node) {
+      return node.closest(this._selector('container'))
+    }
+
+    toItem (node) {
+      return node.closest(this._selector('item'))
+    }
+
+    contains (node) {
+      return this.items.includes(this.toItem(node))
+    }
+
+    hide (item, options = {}) {
+      const opts = this._animationOptions(options);
+      const keyframes = opts.animator(item, true);
+      const after = () => { item.style.display = 'none'; };
+
+      if (!opts.animate) {
+        return Promise.resolve(after()).then(() => item)
+      }
+      return item.animate(keyframes, opts.duration).finished.then(after).then(() => item)
+    }
+
+    show (item, options = {}) {
+      const opts = this._animationOptions(options);
+      const keyframes = opts.animator(item, false).reverse();
+      const before = () => { item.style.display = null; };
+
+      const promise = Promise.resolve(before());
+      if (!opts.animate) {
+        return promise.then(() => item)
+      }
+      return promise.then(() => item.animate(keyframes, opts.duration).finished).then(() => item)
+    }
+
+    /* Protected and private attributes and methods */
+    static _normalizeOptions (options) {
+      return options
+    }
+
+    _container
+    _options
+    __disposer
+    __emitter
+    __uuid
+
+    _addEventListener (target, type, listener) {
+      this._disposer.use(new Listener(target, type, listener));
+    }
+
+    get _disposer () {
+      if (typeof this.__disposer === 'undefined') {
+        this.__disposer = new DisposableStack();
+      }
+
+      return this.__disposer
+    }
+
+    get _emitter () {
+      if (typeof this.__emitter === 'undefined') {
+        this.__emitter = new Emitter(this.constructor.eventNamespaces);
+      }
+
+      return this.__emitter
+    }
+
+    _onDispose (callback) {
+      this._disposer.defer(callback);
+    }
+
+    _selectors (name) {
+      return this.constructor.selectors[name]
+    }
+
+    _selector (name) {
+      return this._selectors(name).join(', ')
+    }
+
+    _animationOptions (options) {
+      const defaults = (({ animate, animator, duration }) => ({ animate, animator, duration }))(this._options);
+      return { ...defaults, ...options }
+    }
+  }
+
+  disposable(Base);
+
+  class Trigger {
+    constructor (trigger, cocooned) {
+      this._trigger = trigger;
+      this._cocooned = cocooned;
+    }
+
+    get trigger () {
+      return this._trigger
+    }
+
+    handle (event) {
+      throw new TypeError('handle() must be defined in subclasses')
+    }
+
+    /* Protected and private attributes and methods */
+    _cocooned
+    _trigger
+
+    get _item () {
+      return this._cocooned.toItem(this._trigger)
+    }
+
+    get _notified () {
+      return this._item
+    }
+
+    _notify (eventName, originalEvent) {
+      return this._cocooned.notify(this._notified, eventName, this._eventData(originalEvent))
+    }
+
+    _eventData (originalEvent) {
+      return { link: this._trigger, node: this._item, cocooned: this._cocooned, originalEvent }
+    }
+
+    _hide (node, callback) {
+      return this._cocooned.hide(node, callback)
+    }
+
+    _show (node, callback) {
+      return this._cocooned.show(node, callback)
+    }
+  }
+
+  class Builder {
+    constructor (documentFragment, replacements) {
+      this.#documentFragment = documentFragment;
+      this.#replacements = replacements;
+    }
+
+    build (id) {
+      const node = this.#documentFragment.cloneNode(true);
+      this.#applyReplacements(node, id);
+      return node
+    }
+
+    /* Protected and private attributes and methods */
+    #documentFragment
+    #replacements
+
+    #applyReplacements (node, id) {
+      this.#replacements.forEach(replacement => {
+        node.querySelectorAll(`${replacement.tag}[${replacement.attribute}]`).forEach(node => {
+          return replacement.apply(node, id)
+        });
+      });
+
+      node.querySelectorAll('template').forEach(template => {
+        this.#applyReplacements(template.content, id);
+      });
+    }
+  }
+
   class Extractor {
     constructor (trigger, cocooned) {
       this.#trigger = trigger;
@@ -466,7 +545,7 @@
         return this.#trigger.ownerDocument.querySelector(node)
       }
 
-      deprecator('3.0').warn('associationInsertionTraversal is deprecated');
+      deprecator('4.0').warn('associationInsertionTraversal is deprecated');
       const traverser = new Traverser(this.#trigger, this.#dataset.associationInsertionTraversal);
 
       return traverser.resolve(node)
@@ -736,12 +815,12 @@
         .map(element => Add.create(element, this))
         .filter(trigger => this.toContainer(trigger.insertionNode) === this.container);
 
-      this.addTriggers.forEach(add => add.trigger.addEventListener(
-        'click',
-        clickHandler$1((e) => add.handle(e))
-      ));
+      this.addTriggers.forEach(add => {
+        this._addEventListener(add.trigger, 'click', clickHandler$1((e) => add.handle(e)));
+      });
 
-      this.container.addEventListener(
+      this._addEventListener(
+        this.container,
         'click',
         itemDelegatedClickHandler(this, this._selector('triggers.remove'), (e) => {
           const trigger = new Remove(e.target, this);
@@ -795,7 +874,7 @@
         return
       }
 
-      this.container.addEventListener('cocooned:before-insert', e => {
+      this._addEventListener(this.container, 'cocooned:before-insert', e => {
         if (this.items.length < this.options.limit) {
           return
         }
@@ -943,16 +1022,16 @@
         return
       }
 
-      this.container.addEventListener('cocooned:after-insert', e => this._reindexer.reindex(e));
-      this.container.addEventListener('cocooned:after-remove', e => this._reindexer.reindex(e));
-      this.container.addEventListener('cocooned:after-move', e => this._reindexer.reindex(e));
+      this._addEventListener(this.container, 'cocooned:after-insert', e => this._reindexer.reindex(e));
+      this._addEventListener(this.container, 'cocooned:after-remove', e => this._reindexer.reindex(e));
+      this._addEventListener(this.container, 'cocooned:after-move', e => this._reindexer.reindex(e));
       const form = this.container.closest('form');
       if (form !== null) {
-        form.addEventListener('submit', e => this._reindexer.reindex(e));
+        this._addEventListener(form, 'submit', e => this._reindexer.reindex(e));
       }
 
-      this.container.addEventListener('click', clickHandler(this, this._selector('triggers.up'), Up));
-      this.container.addEventListener('click', clickHandler(this, this._selector('triggers.down'), Down));
+      this._addEventListener(this.container, 'click', clickHandler(this, this._selector('triggers.up'), Up));
+      this._addEventListener(this.container, 'click', clickHandler(this, this._selector('triggers.down'), Down));
     }
 
     /* Protected and private attributes and methods */
@@ -1051,7 +1130,7 @@
 
   $(() => cocoonAutoStart($));
 
-  deprecator('3.0').warn(
+  deprecator('4.0').warn(
     'Loading @notus.sh/cocooned/cocooned is deprecated',
     '@notus.sh/cocooned/jquery, @notus.sh/cocooned or `@notus.sh/cocooned/src/cocooned/cocooned`'
   );
