@@ -230,7 +230,7 @@ Any Cocooned instance supports following options:
 
 #### `animate: [Boolean]`  
 
-Toggle animations when moving or removing an item from the form. Default value depend on detected support of the [Web Animation API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API).
+Toggle animations when moving or removing an item from the form. Default value depend on detected support of the [Web Animation API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API) and browser's accessibility settings about reduced motion.
 
 #### `duration: [Integer]`  
 
