@@ -35,13 +35,22 @@ function defaultAnimator (item, fetch = false) {
   ]
 }
 
+const canAnimate = (
+  'animate' in document.createElement('div') &&
+  typeof document.createElement('div').animate === 'function'
+)
+
+const shouldAnimate = (
+  'matchMedia' in window &&
+  !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+)
+
 const instances = Object.create(null)
 
 class Base {
   static get defaultOptions () {
-    const element = document.createElement('div')
     return {
-      animate: ('animate' in element && typeof element.animate === 'function'),
+      animate: canAnimate && shouldAnimate,
       animator: defaultAnimator,
       duration: 450
     }
