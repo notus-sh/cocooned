@@ -1,3 +1,3 @@
 //= require 'cocooned'
 
-/* TODO: Remove in 3.0 */
+/* TODO: Remove in 4.0 */
