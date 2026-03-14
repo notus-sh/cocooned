@@ -78,6 +78,8 @@ describe('Remove', () => {
         <div data-cocooned-container>
           <div data-cocooned-item>
             <input type="hidden" name="items[0][_destroy]" required />
+            <select name="items[0][category]" required><option>A</option></select>
+            <textarea name="items[0][description]" required></textarea>
             <a data-cocooned-trigger="remove" data-cocooned-persisted="true" href="#">Remove</a>
           </div>
         </div>
@@ -109,6 +111,20 @@ describe('Remove', () => {
         await new Promise(process.nextTick)
 
         expect(given.item.querySelector('input').getAttributeNames()).not.toContain('required')
+      })
+
+      it('removes required on selects', async () => {
+        given.remove.handle(clickEvent())
+        await new Promise(process.nextTick)
+
+        expect(given.item.querySelector('select').getAttributeNames()).not.toContain('required')
+      })
+
+      it('removes required on textareas', async () => {
+        given.remove.handle(clickEvent())
+        await new Promise(process.nextTick)
+
+        expect(given.item.querySelector('textarea').getAttributeNames()).not.toContain('required')
       })
 
       itBehavesLikeARemoteTrigger()

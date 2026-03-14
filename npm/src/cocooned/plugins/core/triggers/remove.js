@@ -37,8 +37,7 @@ class Remove extends Trigger {
 
   _markForDestruction () {
     this._item.querySelector('input[type=hidden][name$="[_destroy]"]').setAttribute('value', 'true')
-    this._item.querySelectorAll('input[required], select[required]')
-      .forEach(input => input.removeAttribute('required'))
+    this._item.querySelectorAll('[required]').forEach(input => input.removeAttribute('required'))
   }
 }
 
