@@ -40,7 +40,7 @@ class NpmTasks < Rake::TaskLib # :nodoc:
         system("cd #{src} && npm pack --pack-destination #{dest}/")
       end
 
-      desc 'Build and push package to npmjs.com'
+      desc 'Build and push package to npmjs.com - Remember to run npm login before'
       task release: %i[build] do
         system("npm publish #{tarball} --access public")
       end
