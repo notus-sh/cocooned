@@ -6,9 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## Version 3.0.1 (2026-03-15)
+
+### Fixed
+
+* Ensure `required` attributes is disabled on all input types (#127, thanks @mattmenefee)
+
+### Changed
+
+* Compatibility with `formtastic ~> 6.0` (#130)
+
 ## Version 3.0.0 (2026-01-27)
 
-## Breaking changes
+### Breaking changes
 
 * Respect browser accessibility settings on reduced motion to determinate the default value of the `animate` option (#120)  
   `animate` will be set to false by default if the `(prefers-reduced-motion: reduce)` media query matches.
@@ -18,7 +28,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 To not introduce too many breaking changes in a single release, removal of long-time deprecated features have been postponed to Cocooned 4.0 (#122)
 
-## Added
+### Added
 
 * Optional Stimulus integration (#119)
   Introduce two ways to integrate Cocooned with Stimulus: `registerCocoonedContainer` and `useCocooned`. See documentation for details.
