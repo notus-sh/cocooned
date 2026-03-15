@@ -13,7 +13,7 @@ group :development, :test do
   gem 'shakapacker', '9.6.1'
   gem 'sqlite3', '~> 2.0'
 
-  gem 'formtastic', '~> 5.0'
+  gem 'formtastic', '~> 6.0'
   gem 'nokogiri'
   gem 'rspec-rails', '~> 8.0'
   gem 'simple_form', '~> 5.1'
