@@ -64,7 +64,7 @@ module Cocooned
         options.deep_merge(
           class: token_list(options.delete(:class), %w[cocooned-container]),
           data: {
-            controller: [options.dig(:data, :controller), :cocooned].compact_blank.map(&:to_s).join(' '),
+            controller: [options.dig(:data, :controller), :cocooned].compact_blank.join(' '),
             cocooned_container: true,
             cocooned_options: options.extract!(:limit, :reorderable).to_json
           }

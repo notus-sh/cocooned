@@ -11,14 +11,10 @@ const defaultEvents = [
   'limit-reached'
 ]
 
-function camelize(dashSeparated) {
-  return dashSeparated.toLowerCase().replace(/-(.)/g, function(match, group1) {
-    return group1.toUpperCase();
-  });
-}
-
-const dasherize = function (camelCase) {
-  return camelCase.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`)
+function camelize (dashSeparated) {
+  return dashSeparated.toLowerCase().replace(/-(.)/g, function (match, group1) {
+    return group1.toUpperCase()
+  })
 }
 
 const useCocooned = function (controller, options = {}) {
@@ -36,15 +32,15 @@ const useCocooned = function (controller, options = {}) {
       disconnect()
     },
     ...events
-        .map(eventName => camelize(eventName))
-        .reduce((handlers, methodName) => ({ ...handlers, [methodName]: (event) => {} }), {})
+      .map(eventName => camelize(eventName))
+      .reduce((handlers, methodName) => ({ ...handlers, [methodName]: (event) => {} }), {})
   }
   const start = () => {
     cocooned.create(element, cocoonedOptions)
     events.forEach(eventName => {
       const methodName = camelize(eventName)
       disposer.use(new Listener(element, `cocooned:${eventName}`, (event) => {
-        controller[methodName].call(controller, event)
+        controller[methodName](event)
       }))
     })
   }
