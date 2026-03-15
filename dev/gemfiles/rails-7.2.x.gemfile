@@ -9,7 +9,7 @@ group :development, :test do
   gem 'rails', '~> 7.2.0'
   gem 'sqlite3', '~> 1.4'
 
-  gem 'formtastic', '~> 5.0'
+  gem 'formtastic', '~> 6.0'
   gem 'rspec-rails', '~> 8.0'
   gem 'simplecov', require: false
   gem 'simple_form', '~> 5.1'
