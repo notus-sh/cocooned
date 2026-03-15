@@ -37,7 +37,7 @@ describe('Base', () => {
         given.instance.start()
       })
 
-      given('count', () => faker.number.int({min: 1, max: 5}))
+      given('count', () => faker.number.int({ min: 1, max: 5 }))
       given('items', () => Array.from(Array(given.count), () => '<div data-cocooned-item></div>'))
 
       it('associates itself with the container', () => {
@@ -151,7 +151,7 @@ describe('Base', () => {
         })
       })
 
-      const itBehavesLikeAVisibilityMethod = ({toggle, display}) => {
+      const itBehavesLikeAVisibilityMethod = ({ toggle, display }) => {
         given('item', () => getItem(given.container))
 
         it('sets element display', () => {
@@ -161,12 +161,12 @@ describe('Base', () => {
 
         describe.skip('when animated', () => { // Element.animate is not available in JSDOM :/
           it('returns a Promise', () => {
-            expect(toggle(given.item, {animate: true})).toBeInstanceOf(Promise)
+            expect(toggle(given.item, { animate: true })).toBeInstanceOf(Promise)
           })
 
           it('returns a Promise with the toggled item as param', () => {
             return new Promise(resolve => {
-              toggle(given.item, {animate: true}).then(value => {
+              toggle(given.item, { animate: true }).then(value => {
                 expect(value).toEqual(given.item)
                 resolve()
               })
@@ -176,12 +176,12 @@ describe('Base', () => {
 
         describe('when not animated', () => {
           it('returns a Promise', () => {
-            expect(toggle(given.item, {animate: false})).toBeInstanceOf(Promise)
+            expect(toggle(given.item, { animate: false })).toBeInstanceOf(Promise)
           })
 
           it('returns a Promise with the toggled item as param', () => {
             return new Promise(resolve => {
-              toggle(given.item, {animate: false}).then(value => {
+              toggle(given.item, { animate: false }).then(value => {
                 expect(value).toEqual(given.item)
                 resolve()
               })
