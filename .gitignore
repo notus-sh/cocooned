@@ -1,7 +1,8 @@
 # Dependency managers
 /.bundle/
-/node_modules/
 /vendor/bundle/
+/node_modules/
+/.yarn
 
 # Code coverage
 /coverage/
@@ -11,6 +12,7 @@
 spec/dummy/db/*.sqlite3*
 spec/dummy/log/*.log
 spec/dummy/node_modules/
+spec/dummy/.yarn/
 spec/dummy/public/packs/
 spec/dummy/tmp/
 
